@@ -1,0 +1,25 @@
+# Compiled class file
+*.class
+
+# Log files
+*.log
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+.idea_modules/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Visual Studio Code files
+.vscode/
+
+# macOS specific files
+*.DS_Store
