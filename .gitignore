@@ -23,3 +23,6 @@ Thumbs.db
 
 # macOS specific files
 *.DS_Store
+
+
+out/
