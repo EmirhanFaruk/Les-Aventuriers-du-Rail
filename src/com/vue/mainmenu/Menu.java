@@ -1,8 +1,8 @@
 package com.vue.mainmenu;
 
-import com.gui.GameView;
+import com.vue.GameFrame;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -70,14 +70,14 @@ public class Menu extends JPanel
 
 
     // Le JFrame
-    private final GameView frame;
+    private final GameFrame frame;
 
     /**
      * Constructeur de Menu.
      * @param width largueur
      * @param height hauteur
      */
-    public Menu(int width, int height, GameView frame)
+    public Menu(int width, int height, GameFrame frame)
     {
         this.width = width;
         this.height = height;
@@ -214,7 +214,7 @@ public class Menu extends JPanel
         return frame.getDevice();
     }
 
-    public GameView getFrame()
+    public GameFrame getFrame()
     {
         return frame;
     }

@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class Home extends JPanel
 {
@@ -46,7 +45,7 @@ public class Home extends JPanel
         String s = findSlash(path);
         try
         {
-            home_image_file = ImageIO.read(new File(path + s + "src" + s + "resources" + s + "images" + s + "menu" + s + "Menu.png"));
+            home_image_file = ImageIO.read(new File(path + s + "ressources" + s + "Gare.png"));
         }
         catch (Exception ignored)
         {

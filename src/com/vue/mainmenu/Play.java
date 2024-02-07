@@ -1,15 +1,12 @@
 package com.vue.mainmenu;
 
-import com.gui.GameView;
+import com.vue.GameFrame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.beans.beancontext.BeanContextServiceAvailableEvent;
 import java.io.File;
-import java.util.Objects;
 
 public class Play extends JPanel
 {
@@ -18,9 +15,9 @@ public class Play extends JPanel
     private JLabel mode_tag;
     private JLabel character_tag;
 
-    private GameView frame;
+    private GameFrame frame;
 
-    public Play(GameView frame)
+    public Play(GameFrame frame)
     {
         this.frame = frame;
         makePlay();
