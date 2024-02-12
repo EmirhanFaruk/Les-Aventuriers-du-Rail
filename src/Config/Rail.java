@@ -15,7 +15,11 @@ public class Rail extends Case {
         return initialContent;
     }
 
-    public boolean isOccuper() {
+    public boolean getOccuper() {
         return occuper;
+    }
+    
+    public void setOccuper(boolean o) {
+        this.occuper = o;
     }
 }
