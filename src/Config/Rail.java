@@ -1,0 +1,21 @@
+package config;
+
+public class Rail extends Case {
+	public enum Content {BLEU, VIOLET, MARRON, NOIR, VERT, JAUNE, NOIRE, ROUGE}
+
+    private Content initialContent;
+    private boolean occuper;
+	
+    public Rail(int x, int y, Content c) {
+		super(x, y);
+		this.initialContent = c;
+	}
+    
+    public Content getInitialContent() {
+        return initialContent;
+    }
+
+    public boolean isOccuper() {
+        return occuper;
+    }
+}
