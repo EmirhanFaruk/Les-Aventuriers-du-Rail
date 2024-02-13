@@ -2,6 +2,7 @@ package com.vue.graphics;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,11 @@ public class CardGraphics {
      */
     public static BufferedImage getImage( ){
         return null ;
+    }
+
+    public static void paint (Graphics2D g ){
+        BufferedImage image = getImage() ;
+        g.drawImage( image , width , height , null) ;
     }
 
     /*
