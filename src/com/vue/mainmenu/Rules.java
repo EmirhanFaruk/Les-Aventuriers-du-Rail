@@ -49,7 +49,7 @@ public class Rules extends JPanel
     private JPanel textPanel;
     private CardLayout cardLayout;
 
-    private String
+    private final String
             materiel_mode = "MATERIEL",
             deroulement_mode = "DEROULEMENT",
             finjeu_mode = "FIN JEU";
@@ -119,6 +119,12 @@ public class Rules extends JPanel
                 "- Marqueurs de score : \n" +
                 "pour suivre les points des joueurs.";
 
+        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
+        textLabel.setBackground(Color.BLACK);
+        textLabel.setForeground(Color.GRAY);
+
+        res.add(textLabel);
+
         return res;
     }
 
@@ -139,6 +145,12 @@ public class Rules extends JPanel
                 "   - Construire les voies ferrées nécessaires pour réaliser leurs cartes Destination.\n" +
                 "6. Le tour passe au joueur suivant.";
 
+        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
+        textLabel.setBackground(Color.BLACK);
+        textLabel.setForeground(Color.GRAY);
+
+        res.add(textLabel);
+
         return res;
     }
 
@@ -156,10 +168,16 @@ public class Rules extends JPanel
                 "\n" +
                 "Le joueur avec le plus de points à la fin de la partie remporte le jeu.";
 
+        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
+        textLabel.setBackground(Color.BLACK);
+        textLabel.setForeground(Color.GRAY);
+
+        res.add(textLabel);
+
         return res;
     }
 
-    private void makeTextScreen()
+    private JPanel makeTextPanel()
     {
         JPanel res = new JPanel();
         res.setLayout(cardLayout);
@@ -167,13 +185,19 @@ public class Rules extends JPanel
         res.add(materiel_mode, makeMaterielPanel());
         res.add(deroulement_mode, makeDeroulementPanel());
         res.add(finjeu_mode, makeFinJeuPanel());
+
+        cardLayout.show(res, materiel_mode);
+
+        return res;
     }
 
     private void makeRules()
     {
         this.setLayout(new BorderLayout());
 
+        textPanel = makeTextPanel();
 
+        this.add(textPanel);
         this.add(makeButtonPanel(), BorderLayout.SOUTH);
 
     }
