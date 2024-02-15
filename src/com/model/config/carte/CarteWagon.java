@@ -1,6 +1,6 @@
-package com.modele.config.carte;
+package com.model.config.carte;
 import java.util.Random;
-import static com.modele.config.carte.CarteWagon.Couleur.*;
+import static com.model.config.carte.CarteWagon.Couleur.*;
 
 public class CarteWagon {
     public enum Couleur {LOC, BLEU, VIOLET, MARRON, BLANC, VERT, JAUNE, NOIRE, ROUGE}

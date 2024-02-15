@@ -1,4 +1,4 @@
-package com.modele.config.carte;
+package com.model.config.carte;
 
 public class CarteManager {
 

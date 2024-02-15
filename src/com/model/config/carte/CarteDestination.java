@@ -1,8 +1,8 @@
-package com.modele.config.carte;
+package com.model.config.carte;
 
 import java.util.Random;
 
-import static com.modele.config.carte.CarteDestination.Ville.*;
+import static com.model.config.carte.CarteDestination.Ville.*;
 
 public class CarteDestination {
     private Ville premiereVille;

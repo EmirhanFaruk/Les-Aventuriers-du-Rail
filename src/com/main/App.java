@@ -1,6 +1,6 @@
 package com.main;
 
-import com.vue.GameFrame;
+import com.view.GameFrame;
 
 public class App {
 
