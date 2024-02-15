@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 public class Rules extends JPanel
 {
     /**
-     * Materiel button.
+     * Materiel button action.
      */
-    public class MaterielButton implements ActionListener
+    public class MaterielButtonAction implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e)
@@ -20,9 +20,9 @@ public class Rules extends JPanel
     }
 
     /**
-     * Deroulement button.
+     * Deroulement button action.
      */
-    public class DeroulementButton implements ActionListener
+    public class DeroulementButtonAction implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e)
@@ -32,9 +32,9 @@ public class Rules extends JPanel
     }
 
     /**
-     * Fin Jeu button.
+     * Fin Jeu button action.
      */
-    public class FinJeuButton implements ActionListener
+    public class FinJeuButtonAction implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e)
@@ -43,8 +43,6 @@ public class Rules extends JPanel
         }
     }
 
-
-    private int width, height;
 
     private JPanel textPanel;
     private CardLayout cardLayout;
@@ -55,10 +53,8 @@ public class Rules extends JPanel
             finjeu_mode = "FIN JEU";
 
 
-    public Rules(int width, int height)
+    public Rules()
     {
-        this.width = width;
-        this.height = height;
         cardLayout = new CardLayout();
         makeRules();
     }
@@ -66,8 +62,6 @@ public class Rules extends JPanel
     @Override
     public void setSize(int width, int height)
     {
-        this.width = width;
-        this.height = height;
         makeRules();
     }
 
@@ -85,9 +79,9 @@ public class Rules extends JPanel
         JButton deroulement_button = new JButton("DEROULEMENT");
         JButton finjeu_button = new JButton("FIN JEU");
 
-        materiel_button.addActionListener(new MaterielButton());
-        deroulement_button.addActionListener(new DeroulementButton());
-        finjeu_button.addActionListener(new FinJeuButton());
+        materiel_button.addActionListener(new MaterielButtonAction());
+        deroulement_button.addActionListener(new DeroulementButtonAction());
+        finjeu_button.addActionListener(new FinJeuButtonAction());
 
 
         JButton[] bl = {materiel_button, deroulement_button, finjeu_button};
@@ -102,6 +96,11 @@ public class Rules extends JPanel
         return res;
     }
 
+
+    /**
+     * Makes the JPanel with materiel text in it.
+     * @return the said panel
+     */
     private JPanel makeMaterielPanel()
     {
         JPanel res = new JPanel();
@@ -128,6 +127,11 @@ public class Rules extends JPanel
         return res;
     }
 
+
+    /**
+     * Makes the JPanel with deroulement text in it.
+     * @return the said panel
+     */
     private JPanel makeDeroulementPanel()
     {
         JPanel res = new JPanel();
@@ -154,6 +158,11 @@ public class Rules extends JPanel
         return res;
     }
 
+
+    /**
+     * Makes the JPanel with fin jeu text in it.
+     * @return the said panel
+     */
     private JPanel makeFinJeuPanel()
     {
         JPanel res = new JPanel();
@@ -177,6 +186,11 @@ public class Rules extends JPanel
         return res;
     }
 
+
+    /**
+     * Makes a JPanel that gathers all of the text panels(materiel, deroulement, fin jeu)
+     * @return the said panel
+     */
     private JPanel makeTextPanel()
     {
         JPanel res = new JPanel();
