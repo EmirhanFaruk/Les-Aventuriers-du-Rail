@@ -1,4 +1,4 @@
-package config;
+package com.model.config;
 
 public class Rail extends Case {
 	public enum Content {BLEU, VIOLET, MARRON, NOIR, VERT, JAUNE, NOIRE, ROUGE}
