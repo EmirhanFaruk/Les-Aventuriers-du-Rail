@@ -1,4 +1,4 @@
-package config;
+package com.modele.config;
 
 public class Case {	
 	private final int x;

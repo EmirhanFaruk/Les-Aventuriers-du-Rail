@@ -1,6 +1,4 @@
-package config.carte;
-
-import java.util.ArrayList;
+package com.modele.config.carte;
 
 public class CarteManager {
 

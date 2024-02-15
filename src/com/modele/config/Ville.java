@@ -1,4 +1,4 @@
-package config;
+package com.modele.config;
 
 public class Ville extends Case{
 	private String nom;
