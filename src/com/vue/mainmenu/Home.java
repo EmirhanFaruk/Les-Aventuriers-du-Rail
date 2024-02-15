@@ -45,7 +45,7 @@ public class Home extends JPanel
         String s = findSlash(path);
         try
         {
-            home_image_file = ImageIO.read(new File(path + s + "ressources" + s + "Gare.png"));
+            home_image_file = ImageIO.read(new File(path + s + "ressources" + s + "Main_Menu" + s + "Menu_Image.png"));
         }
         catch (Exception ignored)
         {

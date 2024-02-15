@@ -35,7 +35,7 @@ public class GameFrame extends JFrame implements Runnable
     public GameFrame(int width, int height)
     {
         // Les attributs de JPanel
-        this.setTitle("Tower Defense");
+        this.setTitle("Tchu Tchuuu");
         this.setSize(width, height);
         this.setPreferredSize(new Dimension(width, height));
         this.setResizable(false);
