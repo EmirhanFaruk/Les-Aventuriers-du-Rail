@@ -1,5 +1,7 @@
-package com.vue.graphics;
+package com.view.graphics;
 
+
+import com.model.config.carte.CarteWagon;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -61,11 +63,11 @@ public class CardGraphics {
     }
 
     /**
-     * TODO : faire la fonction getImage quand on aura la classe Carte ( ou Couleur )  finit
      * Donne la bonne image
      * @return bufferedImage
      */
-    public static BufferedImage getImage( ){
+    public static BufferedImage getImage(CarteWagon carteWagon){
+
         return null ;
     }
 
