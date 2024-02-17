@@ -1,4 +1,4 @@
-package config;
+package com.model.config;
 
 /**
  * La classe Plateau représente le plateau de jeu.
