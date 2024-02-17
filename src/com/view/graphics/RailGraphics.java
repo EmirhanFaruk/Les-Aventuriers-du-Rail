@@ -30,7 +30,7 @@ public class RailGraphics {
 
     /**
      * Une fonction qui renvoie une image
-     * @param fileName
+     * @param fileName String
      * @return bufferedImage
      */
     private static BufferedImage loadImage(String fileName) {
@@ -45,7 +45,7 @@ public class RailGraphics {
 
     /**
      * Une fonction qui donne le bon slash
-     * @param p
+     * @param p String
      * @return String
      */
     private static String findSlash(String p) {
@@ -61,7 +61,8 @@ public class RailGraphics {
     }
 
     /**
-     * Donne la bonne image
+     * Renvoie la bonne image
+     * @param rail Rail
      * @return bufferedImage
      */
     public static BufferedImage getImage(Rail rail) {
@@ -100,6 +101,11 @@ public class RailGraphics {
         return null ;
     }
 
+    /**
+     * Affiche l'image
+     * @param g Graphics
+     * @param rail Rail
+     */
     public static void paint (Graphics2D g , Rail rail ){
         BufferedImage image = getImage(rail) ;
         g.drawImage( image , rail.getX() , rail.getY() , width , height , null ) ;
