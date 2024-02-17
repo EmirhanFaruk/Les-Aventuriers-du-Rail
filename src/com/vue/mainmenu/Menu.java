@@ -215,7 +215,7 @@ public class Menu extends JPanel
         return new Settings(this);
     }
 
-    private JPanel makeRules() { return new Rules(); }
+    private JPanel makeRules() { return new Rules(width, height); }
 
 
     public void setAllSize(int width, int height)

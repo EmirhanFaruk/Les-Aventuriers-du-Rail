@@ -52,9 +52,13 @@ public class Rules extends JPanel
             deroulement_mode = "DEROULEMENT",
             finjeu_mode = "FIN JEU";
 
+    int width, height;
 
-    public Rules()
+
+    public Rules(int width, int height)
     {
+        this.width = width;
+        this.height = height;
         cardLayout = new CardLayout();
         makeRules();
     }
@@ -104,6 +108,7 @@ public class Rules extends JPanel
     private JPanel makeMaterielPanel()
     {
         JPanel res = new JPanel();
+        res.setLayout(new BorderLayout());
         res.setBackground(Color.BLACK);
 
         String text = "**Matériel :**\n" +
@@ -152,8 +157,10 @@ public class Rules extends JPanel
         JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
         textLabel.setBackground(Color.BLACK);
         textLabel.setForeground(Color.GRAY);
+        textLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        textLabel.setVerticalAlignment(SwingConstants.CENTER);
 
-        res.add(textLabel);
+        res.add(textLabel, BorderLayout.CENTER);
 
         return res;
     }
@@ -168,22 +175,37 @@ public class Rules extends JPanel
         JPanel res = new JPanel();
         res.setBackground(Color.BLACK);
 
-        String text = "**Fin du jeu :**\n" +
-                "La partie prend fin lorsque :\n" +
+        String text = "<html><body>" +
+                "<h1>Fin du jeu :</h1>\n" +
+                "<>La partie prend fin lorsque :\n" +
                 "- Un joueur n'a plus que deux ou moins de wagons.\n" +
                 "- Un joueur a terminé au moins 6 billets de destination.\n" +
                 "- Plus aucun emplacement de voie ferrée ne peut être construit.\n" +
                 "Ensuite, les joueurs révèlent leurs cartes Destination et marquent des points en fonction de celles qu'ils ont réalisées et perdent des points pour celles qu'ils n'ont pas réussi à compléter.\n" +
                 "\n" +
-                "Le joueur avec le plus de points à la fin de la partie remporte le jeu.";
+                "Le joueur avec le plus de points à la fin de la partie remporte le jeu."
+                 + "</body></html>";
 
-        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
-        textLabel.setBackground(Color.BLACK);
-        textLabel.setForeground(Color.GRAY);
 
-        res.add(textLabel);
+
+
+        res.add(makeTextArea(text));
 
         return res;
+    }
+
+
+    private JLabel makeTextArea(String text)
+    {
+        JLabel textArea = new JLabel(text);
+        textArea.setBackground(Color.BLACK);
+        textArea.setForeground(Color.GRAY);
+
+
+        textArea.setPreferredSize(new Dimension(width / 2, height / 2));
+
+
+        return textArea;
     }
 
 
@@ -211,7 +233,7 @@ public class Rules extends JPanel
 
         textPanel = makeTextPanel();
 
-        this.add(textPanel);
+        this.add(textPanel, BorderLayout.CENTER);
         this.add(makeButtonPanel(), BorderLayout.SOUTH);
 
     }
