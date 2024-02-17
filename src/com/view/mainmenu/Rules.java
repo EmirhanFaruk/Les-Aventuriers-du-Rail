@@ -5,6 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
 public class Rules extends JPanel
 {
     /**
@@ -51,6 +58,8 @@ public class Rules extends JPanel
             materiel_mode = "MATERIEL",
             deroulement_mode = "DEROULEMENT",
             finjeu_mode = "FIN JEU";
+
+    private final String slash = findSlash();
 
     int width, height;
 
@@ -102,6 +111,60 @@ public class Rules extends JPanel
 
 
     /**
+     * Finds the slash type of the system
+     * @return slash in String type
+     */
+    private String findSlash()
+    {
+        String p = System.getProperty("user.dir");
+        for (int i = 0; i < p.length(); i++)
+        {
+            switch (p.charAt(i))
+            {
+                case '/':
+                    return "/";
+                case '\\':
+                    return "\\";
+            }
+        }
+        return "/";
+    }
+
+
+
+    /**
+     * Reads html file
+     * @param filename the html file name
+     * @return the content of it
+     */
+    private String loadHTMLContent(String filename)
+    {
+        BufferedReader reader;
+        String res = "";
+
+        try
+        {
+            reader = new BufferedReader(new FileReader(filename));
+            String line = reader.readLine();
+
+            while (line != null)
+            {
+                res += line;
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+
+    /**
      * Makes the JPanel with materiel text in it.
      * @return the said panel
      */
@@ -111,23 +174,9 @@ public class Rules extends JPanel
         res.setLayout(new BorderLayout());
         res.setBackground(Color.BLACK);
 
-        String text = "**Matériel :**\n" +
-                "- Plateau de jeu : \n" +
-                "Une carte géographique (par exemple, les États-Unis, l'Europe, etc.).\n" +
-                "- Cartes Destination : \n" +
-                "Indiquent les villes que les joueurs doivent relier pour gagner des points.\n" +
-                "- Cartes Wagons : \n" +
-                "Représentent différentes couleurs et sont utilisées pour construire des voies ferrées.\n" +
-                "- Wagons en plastique de différentes couleurs : \n" +
-                "Représentent les voies ferrées construites.\n" +
-                "- Marqueurs de score : \n" +
-                "pour suivre les points des joueurs.";
+        String htmlContent = loadHTMLContent("ressources" + slash + "Rules" + slash + "Materiel.html");
 
-        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
-        textLabel.setBackground(Color.BLACK);
-        textLabel.setForeground(Color.GRAY);
-
-        res.add(textLabel);
+        res.add(makeTextPlace(htmlContent));
 
         return res;
     }
@@ -142,25 +191,9 @@ public class Rules extends JPanel
         JPanel res = new JPanel();
         res.setBackground(Color.BLACK);
 
-        String text = "**Déroulement du jeu :**\n" +
-                "1. Chaque joueur reçoit un nombre de cartes Destination.\n" +
-                "2. Des cartes Wagons sont placées face visible sur le plateau.\n" +
-                "3. Chaque joueur reçoit des cartes Wagons en main.\n" +
-                "4. Les joueurs peuvent :\n" +
-                "   - Piocher des cartes Wagons de la réserve.\n" +
-                "   - Construire des voies ferrées en jouant des cartes Wagons de la même couleur.\n" +
-                "5. Les joueurs peuvent également :\n" +
-                "   - Piocher des nouvelles cartes Destination (garder au moins une).\n" +
-                "   - Construire les voies ferrées nécessaires pour réaliser leurs cartes Destination.\n" +
-                "6. Le tour passe au joueur suivant.";
+        String htmlContent = loadHTMLContent("ressources" + slash + "Rules" + slash + "Deroulement.html");
 
-        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
-        textLabel.setBackground(Color.BLACK);
-        textLabel.setForeground(Color.GRAY);
-        textLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        textLabel.setVerticalAlignment(SwingConstants.CENTER);
-
-        res.add(textLabel, BorderLayout.CENTER);
+        res.add(makeTextPlace(htmlContent));
 
         return res;
     }
@@ -175,42 +208,31 @@ public class Rules extends JPanel
         JPanel res = new JPanel();
         res.setBackground(Color.BLACK);
 
-        String text = "<html><body>" +
-                "<h1>Fin du jeu :</h1>\n" +
-                "<>La partie prend fin lorsque :\n" +
-                "- Un joueur n'a plus que deux ou moins de wagons.\n" +
-                "- Un joueur a terminé au moins 6 billets de destination.\n" +
-                "- Plus aucun emplacement de voie ferrée ne peut être construit.\n" +
-                "Ensuite, les joueurs révèlent leurs cartes Destination et marquent des points en fonction de celles qu'ils ont réalisées et perdent des points pour celles qu'ils n'ont pas réussi à compléter.\n" +
-                "\n" +
-                "Le joueur avec le plus de points à la fin de la partie remporte le jeu."
-                 + "</body></html>";
+        String htmlContent = loadHTMLContent("ressources" + slash + "Rules" + slash + "Finjeu.html");
 
-
-
-
-        res.add(makeTextArea(text));
+        res.add(makeTextPlace(htmlContent));
 
         return res;
     }
 
 
-    private JLabel makeTextArea(String text)
+    private JEditorPane makeTextPlace(String text)
     {
-        JLabel textArea = new JLabel(text);
-        textArea.setBackground(Color.BLACK);
-        textArea.setForeground(Color.GRAY);
+        JEditorPane editorPane = new JEditorPane("text/html", text);
+        editorPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        editorPane.setAlignmentY(Component.CENTER_ALIGNMENT);
+        editorPane.setBorder(null);
+        editorPane.setEditable(false);
 
+        editorPane.setPreferredSize(new Dimension((width / 8) * 7, (height / 8) * 7));
+        editorPane.setSize(new Dimension((width / 8) * 7, (height / 8) * 7));
 
-        textArea.setPreferredSize(new Dimension(width / 2, height / 2));
-
-
-        return textArea;
+        return editorPane;
     }
 
 
     /**
-     * Makes a JPanel that gathers all of the text panels(materiel, deroulement, fin jeu)
+     * Makes a JPanel that gathers all the text panels(materiel, deroulement, fin jeu)
      * @return the said panel
      */
     private JPanel makeTextPanel()
