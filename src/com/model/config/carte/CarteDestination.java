@@ -30,7 +30,7 @@ public class CarteDestination {
         return nombrePoints;
     }
 
-    private void getDestination(){
+    public CarteDestination getDestination(){
         //Fonction qui choisit au hasard les déstinations
 
         //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
@@ -45,9 +45,8 @@ public class CarteDestination {
         }
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        this.premiereVille = villes[ville1];
-        this.deuxiemeVille = villes[ville2];
-        this.nombrePoints = nombrePointsDestination(this.premiereVille,this.deuxiemeVille);
+        return new CarteDestination(premiereVille,deuxiemeVille,nombrePoints);
+
 
     }
 
@@ -58,6 +57,13 @@ public class CarteDestination {
         this.deuxiemeVille = ADOMINATION;
         this.nombrePoints = 5;
     }
+
+    public CarteDestination(Ville v1, Ville v2, int nombrePoints){
+        this.premiereVille = v1;
+        this.deuxiemeVille = v2;
+        this.nombrePoints = nombrePoints;
+    }
+
 
     /*
     public CarteDestination(){
