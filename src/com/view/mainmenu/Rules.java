@@ -1,4 +1,4 @@
-package com.vue.mainmenu;
+package com.view.mainmenu;
 
 import javax.swing.*;
 import java.awt.*;

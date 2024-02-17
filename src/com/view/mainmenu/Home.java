@@ -1,4 +1,4 @@
-package com.vue.mainmenu;
+package com.view.mainmenu;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

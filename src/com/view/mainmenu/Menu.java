@@ -1,6 +1,6 @@
-package com.vue.mainmenu;
+package com.view.mainmenu;
 
-import com.vue.GameFrame;
+import com.view.GameFrame;
 
 
 import javax.swing.*;

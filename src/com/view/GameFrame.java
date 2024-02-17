@@ -1,6 +1,6 @@
-package com.vue;
+package com.view;
 
-import com.vue.mainmenu.Menu;
+import com.view.mainmenu.Menu;
 
 import javax.swing.*;
 import java.awt.*;

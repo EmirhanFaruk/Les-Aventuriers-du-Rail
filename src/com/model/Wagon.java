@@ -1,4 +1,4 @@
-package com.modele;
+package com.model;
 
 public class Wagon{
     
