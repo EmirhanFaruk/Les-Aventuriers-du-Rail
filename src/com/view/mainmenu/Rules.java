@@ -171,7 +171,6 @@ public class Rules extends JPanel
     private JPanel makeMaterielPanel()
     {
         JPanel res = new JPanel();
-        res.setLayout(new BorderLayout());
         res.setBackground(Color.BLACK);
 
         String htmlContent = loadHTMLContent("ressources" + slash + "Rules" + slash + "Materiel.html");
@@ -216,18 +215,23 @@ public class Rules extends JPanel
     }
 
 
-    private JEditorPane makeTextPlace(String text)
+    private JScrollPane makeTextPlace(String text)
     {
         JEditorPane editorPane = new JEditorPane("text/html", text);
         editorPane.setAlignmentX(Component.CENTER_ALIGNMENT);
         editorPane.setAlignmentY(Component.CENTER_ALIGNMENT);
-        editorPane.setBorder(null);
         editorPane.setEditable(false);
 
         editorPane.setPreferredSize(new Dimension((width / 8) * 7, (height / 8) * 7));
-        editorPane.setSize(new Dimension((width / 8) * 7, (height / 8) * 7));
+        editorPane.setSize(new Dimension((width / 8) * 7, (height / 8) * 6));
 
-        return editorPane;
+        JScrollPane scrollPane = new JScrollPane(editorPane);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollBar sBar = scrollPane.getVerticalScrollBar();
+        sBar.setBackground(Color.GRAY);
+
+        return scrollPane;
     }
 
 
