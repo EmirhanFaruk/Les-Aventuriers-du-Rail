@@ -1,4 +1,6 @@
-package com.vue.graphics;
+package com.view.graphics;
+
+import com.model.config.Rail;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,6 +19,8 @@ public class RailGraphics {
     private static final BufferedImage RailViolet = loadImage( "RailViolet.png" ) ;
     private static final BufferedImage RailWhite = loadImage( "RailBlanc.png" ) ;
     private static final BufferedImage RailYellow = loadImage( "RailJaune.png" ) ;
+    private static final BufferedImage RailJoker = loadImage( "RailLRainbow.png") ;
+    private static final BufferedImage RailJokerEtoilee = loadImage("RailLEtoile.png" ) ;
 
     private static int width , height ;
 
@@ -57,17 +61,48 @@ public class RailGraphics {
     }
 
     /**
-     * TODO : faire la fonction getImage quand on aura la classe Carte ( ou Couleur )  finit
      * Donne la bonne image
      * @return bufferedImage
      */
-    public static BufferedImage getImage( ){
+    public static BufferedImage getImage(Rail rail) {
+        switch ( rail.getInitialContent()){
+            case BLEU -> {
+                return RailBlue ;
+            }
+            case NOIR -> {
+                return RailDark ;
+            }
+            case VERT -> {
+                return RailGreen ;
+            }
+            case JAUNE -> {
+                return RailYellow ;
+            }
+            case ROUGE -> {
+                return RailRed ;
+            }
+            case MARRON -> {
+                return RailBrown ;
+            }
+            case VIOLET -> {
+                return RailViolet ;
+            }
+            case BLANC -> {
+                return RailWhite ;
+            }
+            case JOKER -> {
+                return RailJoker ;
+            }
+            case JOKERETOILEE -> {
+                return RailJokerEtoilee ;
+            }
+        }
         return null ;
     }
 
-    public static void paint (Graphics2D g ){
-        BufferedImage image = getImage() ;
-        g.drawImage( image , width , height , null) ;
+    public static void paint (Graphics2D g , Rail rail ){
+        BufferedImage image = getImage(rail) ;
+        g.drawImage( image , rail.getX() , rail.getY() , width , height , null ) ;
     }
 
     /*

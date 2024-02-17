@@ -1,8 +1,7 @@
 package com.model.config;
 
 public class Rail extends Case {
-	public enum Content {BLEU, VIOLET, MARRON, NOIR, VERT, JAUNE, NOIRE, ROUGE}
-
+	public enum Content { BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE }
     private Content initialContent;
     private boolean occuper;
 	
