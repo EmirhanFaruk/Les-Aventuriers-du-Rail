@@ -1,5 +1,7 @@
-package com.vue.graphics;
+package com.view.graphics;
 
+
+import com.model.config.carte.CarteWagon;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -30,7 +32,7 @@ public class CardGraphics {
 
     /**
      * Une fonction qui renvoie une image
-     * @param fileName
+     * @param fileName String
      * @return bufferedImage
      */
     private static BufferedImage loadImage(String fileName) {
@@ -45,7 +47,7 @@ public class CardGraphics {
 
     /**
      * Une fonction qui donne le bon slash
-     * @param p
+     * @param p String
      * @return String
      */
     private static String findSlash(String p) {
@@ -61,16 +63,50 @@ public class CardGraphics {
     }
 
     /**
-     * TODO : faire la fonction getImage quand on aura la classe Carte ( ou Couleur )  finit
-     * Donne la bonne image
+     * Renvoie la bonne image
+     * @param carteWagon CarteWagon
      * @return bufferedImage
      */
-    public static BufferedImage getImage( ){
+    public static BufferedImage getImage(CarteWagon carteWagon){
+        switch ( carteWagon.getInitialCouleur()){
+            case BLANC -> {
+                return CardWhite ;
+            }
+            case VIOLET -> {
+                return CardViolet ;
+            }
+            case MARRON -> {
+                return CardBrown ;
+            }
+            case NOIRE -> {
+                return CardDark ;
+            }
+            case JAUNE -> {
+                return CardYellow ;
+            }
+            case VERT -> {
+                return CardGreen ;
+            }
+            case LOC -> {
+                return CardLocomotive ;
+            }
+            case BLEU -> {
+                return CardBlue ;
+            }
+            case ROUGE -> {
+                return CardRed ;
+            }
+        }
         return null ;
     }
 
-    public static void paint (Graphics2D g ){
-        BufferedImage image = getImage() ;
+    /**
+     * Affiche l'image
+     * @param g graphics2D
+     * @param carteWagon CarteWagon
+     */
+    public static void paint (Graphics2D g  , CarteWagon carteWagon){
+        BufferedImage image = getImage( carteWagon ) ;
         g.drawImage( image , width , height , null) ;
     }
 
