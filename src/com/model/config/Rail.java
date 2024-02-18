@@ -1,4 +1,4 @@
-package config;
+package com.model.config;
 
 /**
  * La classe Rail représente une case de type rail.
