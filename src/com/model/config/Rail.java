@@ -10,9 +10,7 @@ public class Rail extends Case {
     /**
      * L'énumération Content représente les différentes couleurs de rail possibles.
      */
-    public enum Content {
-        BLEU, VIOLET, MARRON, NOIR, VERT, JAUNE, NOIRE, ROUGE
-    }
+    public enum Content { BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE }
 
     /** La couleur initiale du rail. */
     private Content initialContent;
@@ -54,7 +52,7 @@ public class Rail extends Case {
     public void setOccuper(boolean o) {
         this.occuper = o;
     }
-    
+
     /**
      * Vérifie si la case est une gare.
      * @return false, car une case de rail ne peut pas être une gare, il faut qu'elle soit une ville pour être une gare.
