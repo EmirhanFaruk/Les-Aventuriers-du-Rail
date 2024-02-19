@@ -97,6 +97,7 @@ public class Play extends JPanel
     private JPanel makeAllPlayersPanel()
     {
         JPanel res = makeDefaultPanel();
+        res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         res.setLayout(new GridLayout(4, 1));
 
@@ -168,11 +169,9 @@ public class Play extends JPanel
         JPanel res = makeDefaultPanel();
         res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        res.setLayout(new GridLayout(1, 3));
+        res.setLayout(new GridLayout(1, 2));
 
         res.add(makePlayerNamePanel(i));
-
-        res.add(makeDefaultPanel());
 
         res.add(makeCPUPlayerSelectorPanel(i));
 
@@ -214,7 +213,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "src" + s + "resources" + s + "maps");
+        File directory = new File(path + s + "resources" + s + "maps");
         int map_count = 0;
         if(directory.list() != null)
         {
@@ -228,7 +227,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "src" + s + "resources" + s + "maps");
+        File directory = new File(path + s + "resources" + s + "maps");
         if(directory.list() != null)
         {
             String[] res = directory.list();
@@ -252,7 +251,7 @@ public class Play extends JPanel
 
     private JPanel makeLevelPanel()
     {
-        JPanel res = new JPanel();
+        JPanel res = makeDefaultPanel();
         int map_count = getMapCount();
         if(map_count > 0)
         {
@@ -276,7 +275,6 @@ public class Play extends JPanel
     private JPanel makeShowConfigPanel()
     {
         JPanel res = makeDefaultPanel();
-
 
         JPanel lnt_capsule = makeDefaultPanel(); // level name tag capsule
 
