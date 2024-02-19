@@ -11,14 +11,19 @@ import java.io.File;
 public class Play extends JPanel
 {
     private JLabel level_name_tag;
-    private JLabel[] player_name_list_tag;
+    private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
+
+    private final String
+            PLAYER = "PLAYER",
+            CPU = "CPU";
 
     private GameFrame frame;
 
     public Play(GameFrame frame)
     {
         this.frame = frame;
+
         makePlay();
     }
 
@@ -31,12 +36,26 @@ public class Play extends JPanel
     private void makePlay()
     {
         setLayout(new BorderLayout());
-
+        initializeTables();
         add(makeAllPlayersPanel());
         add(makeMapListPanel(), BorderLayout.EAST);
 
     }
 
+    private void initializeTables()
+    {
+        player_name_list_tag = new JTextArea[4];
+        for (int i = 0; i < 4; i++)
+        {
+            player_name_list_tag[i] = new JTextArea("Player " + (i + 1));
+        }
+
+        player_type_list_tag = new JLabel[4];
+        for (int i = 0; i < 4; i++)
+        {
+            player_type_list_tag[i] = new JLabel(PLAYER);
+        }
+    }
 
 
     private JPanel makeDefaultPanel()
@@ -47,12 +66,33 @@ public class Play extends JPanel
         return res;
     }
 
+    private JPanel makeCenteringPanel(JComponent comp)
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new GridLayout(3, 3));
+
+        for (int j = 0; j < 4; j++)
+        {
+            res.add(makeDefaultPanel());
+        }
+
+        res.add(comp);
+
+        for (int j = 0; j < 4; j++)
+        {
+            res.add(makeDefaultPanel());
+        }
+
+        return res;
+    }
+
 
     // START OF PLAYER PANEL FUNCTIONS
 
     /**
-     * Gathers 4 players in 1 panel
-     * @return the panel that contains 4 players
+     * Gathers 4 players in 1 panel.
+     * @return the panel that contains 4 players.
      */
     private JPanel makeAllPlayersPanel()
     {
@@ -62,19 +102,59 @@ public class Play extends JPanel
 
         for (int i = 0; i < 4; i++)
         {
-            res.add(makeSinglePlayerPanel(i + 1));
+            res.add(makeSinglePlayerPanel(i));
         }
 
         return res;
     }
 
 
-
+    /**
+     * Makes the name part of the player panel. Also adds it to the player_name_list_tag.
+     * @param i the player number.
+     * @return the TextArea capsulated in JPanel.
+     */
     private JPanel makePlayerNamePanel(int i)
     {
-        JPanel res = makeDefaultPanel();
+        JTextArea playerName = new JTextArea("Player " + (i + 1));
+        playerName.setBackground(Color.BLACK);
+        playerName.setForeground(Color.GRAY);
 
-        JTextArea playerName = new JTextArea("Player " + i);
+        player_name_list_tag[i] = playerName;
+
+        return makeCenteringPanel(playerName);
+    }
+
+
+    /**
+     * Makes a button that toggles CPU and Player.
+     * @param i player number
+     * @return the panel containing the said button.
+     */
+    private JPanel makeCPUPlayerSelectorPanel(int i)
+    {
+        player_type_list_tag[i] = new JLabel(PLAYER);
+
+        JButton button = new JButton(PLAYER);
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.GRAY);
+        button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        button.addActionListener(e ->
+        {
+            if (player_type_list_tag[i].getText().equals(PLAYER))
+            {
+                player_type_list_tag[i].setText(CPU);
+                button.setText(CPU);
+            }
+            else
+            {
+                player_type_list_tag[i].setText(PLAYER);
+                button.setText(PLAYER);
+            }
+        });
+
+        return makeCenteringPanel(button);
     }
 
 
@@ -86,10 +166,15 @@ public class Play extends JPanel
     private JPanel makeSinglePlayerPanel(int i)
     {
         JPanel res = makeDefaultPanel();
+        res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         res.setLayout(new GridLayout(1, 3));
 
-        res.add()
+        res.add(makePlayerNamePanel(i));
+
+        res.add(makeDefaultPanel());
+
+        res.add(makeCPUPlayerSelectorPanel(i));
 
 
         return res;
