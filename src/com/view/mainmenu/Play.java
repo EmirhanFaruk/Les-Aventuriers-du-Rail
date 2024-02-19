@@ -11,7 +11,8 @@ import java.io.File;
 public class Play extends JPanel
 {
     private JLabel level_name_tag;
-    private JLabel[] player_list_tag;
+    private JLabel[] player_name_list_tag;
+    private JLabel[] player_type_list_tag;
 
     private GameFrame frame;
 
@@ -31,10 +32,80 @@ public class Play extends JPanel
     {
         setLayout(new BorderLayout());
 
-        //add(makePlayerPanel());
+        add(makeAllPlayersPanel());
         add(makeMapListPanel(), BorderLayout.EAST);
 
     }
+
+
+
+    private JPanel makeDefaultPanel()
+    {
+        JPanel res = new JPanel();
+        res.setBackground(Color.BLACK);
+        res.setForeground(Color.GRAY);
+        return res;
+    }
+
+
+    // START OF PLAYER PANEL FUNCTIONS
+
+    /**
+     * Gathers 4 players in 1 panel
+     * @return the panel that contains 4 players
+     */
+    private JPanel makeAllPlayersPanel()
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new GridLayout(4, 1));
+
+        for (int i = 0; i < 4; i++)
+        {
+            res.add(makeSinglePlayerPanel(i + 1));
+        }
+
+        return res;
+    }
+
+
+
+    private JPanel makePlayerNamePanel(int i)
+    {
+        JPanel res = makeDefaultPanel();
+
+        JTextArea playerName = new JTextArea("Player " + i);
+    }
+
+
+    /**
+     * Makes a single player panel.
+     * @param i The number that differentiates the players
+     * @return the player panel
+     */
+    private JPanel makeSinglePlayerPanel(int i)
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new GridLayout(1, 3));
+
+        res.add()
+
+
+        return res;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
      * START OF LEVEL LIST FUNCTIONS
@@ -119,14 +190,10 @@ public class Play extends JPanel
 
     private JPanel makeShowConfigPanel()
     {
-        JPanel res = new JPanel();
-        res.setBackground(Color.BLACK);
-        res.setForeground(Color.GRAY);
+        JPanel res = makeDefaultPanel();
 
 
-        JPanel lnt_capsule = new JPanel(); // level name tag capsule
-        lnt_capsule.setBackground(Color.BLACK);
-        lnt_capsule.setForeground(Color.GRAY);
+        JPanel lnt_capsule = makeDefaultPanel(); // level name tag capsule
 
         level_name_tag = new JLabel("Map1");
         level_name_tag.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -144,9 +211,7 @@ public class Play extends JPanel
 
     private JPanel makeLevelNConfigPanel()
     {
-        JPanel res = new JPanel();
-        res.setBackground(Color.BLACK);
-        res.setForeground(Color.GRAY);
+        JPanel res = makeDefaultPanel();
 
         res.setLayout(new BorderLayout());
 
@@ -160,28 +225,26 @@ public class Play extends JPanel
 
     private JPanel makePlayButton()
     {
-        JPanel res = new JPanel();
-        res.setBackground(Color.BLACK);
-        res.setForeground(Color.GRAY);
+        JPanel res = makeDefaultPanel();
 
         JButton play_button = new JButton("GO!");
         play_button.setBackground(Color.BLACK);
         play_button.setForeground(Color.GRAY);
 
-        play_button.addActionListener(
-                new ActionListener()
-            {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                String[] player_list = new String[4];
-                for (int i = 0; i < 4; i++)
-                {
-                    player_list[i] = player_list_tag[i].getText();
-                }
-                frame.startGame(level_name_tag.getText(), player_list);
-            }
-        });
+        play_button.addActionListener(e ->
+                    {
+                        String[] player_name_list = new String[4];
+                        for (int i = 0; i < 4; i++)
+                        {
+                            player_name_list[i] = player_name_list_tag[i].getText();
+                        }
+                        String[] player_type_list = new String[4];
+                        for (int i = 0; i < 4; i++)
+                        {
+                            player_type_list[i] = player_type_list_tag[i].getText();
+                        }
+                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list);
+                    });
 
         res.add(play_button);
 

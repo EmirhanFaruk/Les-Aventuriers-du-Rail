@@ -60,7 +60,7 @@ public class GameFrame extends JFrame implements Runnable
     }
 
 
-    public void startGame(String map, String[] players)
+    public void startGame(String map, String[] player_names, String[] player_types)
     {
         setMinimumSize(getSize());
         pack();
