@@ -15,15 +15,65 @@ public class Plateau {
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
     
+    
+    public static Plateau creerPlateauDepuisFichier(String nomFichier) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
+
+        String line;
+
+        // Lire la première ligne pour déterminer la longueur du plateau
+        if ((line = reader.readLine()) != null) {
+        	longueurP = line.length();
+        	largeurP++;
+        }
+
+        // Lire les lignes suivantes pour déterminer la largeur du plateau
+        while ((line = reader.readLine()) != null) {
+        	largeurP++;
+        }
+
+        reader.close();
+
+        Plateau plateau = new Plateau(longueurP, largeurP);
+        reader = new BufferedReader(new FileReader(nomFichier));
+
+        int x = 0;
+        int y = 0;
+
+        // Lire à nouveau le fichier pour créer les cases du plateau
+        while ((line = reader.readLine()) != null) {
+            for (char c : line.toCharArray()) {
+                switch (c) {
+                    case '1':
+                        plateau.getPlateau()[x][y] = new Case(x, y);
+                        break;
+                    case '2':
+                        plateau.getPlateau()[x][y] = new Rail(x, y, Rail.Content.NOIR); // couleur par défaut
+                        break;
+                    case '3':
+                        plateau.getPlateau()[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Caractère invalide dans le fichier de carte: " + c);
+                }
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+
+        reader.close();
+        return plateau;
+    }
+    
+    
     /**
      * Constructeur de la classe Plateau.
      * @param x La longueur du plateau.
      * @param y La largeur du plateau.
      */
-    public Plateau(int x, int y) {
-        this.longueurP = x;
-        this.largeurP = y;
-        this.plateau = new Case[x][y];
+    public Plateau() {
+        this.plateau = creerPlateauDepuisFichier("/resources/Map.txt");
     }
     
     /**
