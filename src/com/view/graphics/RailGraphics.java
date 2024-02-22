@@ -4,6 +4,8 @@ import com.model.config.Rail;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,16 +13,16 @@ import java.io.IOException;
 public class RailGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-    private static final BufferedImage RailBlue = loadImage( "RailBleu.png" ) ;
-    private static final BufferedImage RailBrown = loadImage( "RailMarron.png" ) ;
-    private static final BufferedImage RailDark = loadImage( "RailNoir.png" ) ;
-    private static final BufferedImage RailGreen = loadImage( "RailVert.png" ) ;
-    private static final BufferedImage RailRed = loadImage( "RailRouge.png" ) ;
-    private static final BufferedImage RailViolet = loadImage( "RailViolet.png" ) ;
-    private static final BufferedImage RailWhite = loadImage( "RailBlanc.png" ) ;
-    private static final BufferedImage RailYellow = loadImage( "RailJaune.png" ) ;
-    private static final BufferedImage RailJoker = loadImage( "RailLRainbow.png") ;
-    private static final BufferedImage RailJokerEtoilee = loadImage("RailLEtoile.png" ) ;
+    private static final BufferedImage[] RailBlue = { loadImage( "RailBleu.png" )} ;
+    private static final BufferedImage[] RailBrown = { loadImage( "RailMarron.png" ) } ;
+    private static final BufferedImage[] RailDark = { loadImage( "RailNoir.png" ) } ;
+    private static final BufferedImage[] RailGreen = {loadImage( "RailVert.png" ) } ;
+    private static final BufferedImage[] RailRed = { loadImage( "RailRouge.png" ) };
+    private static final BufferedImage[] RailViolet = { loadImage( "RailViolet.png" ) } ;
+    private static final BufferedImage[] RailWhite = { loadImage( "RailBlanc.png" ) } ;
+    private static final BufferedImage[] RailYellow = { loadImage( "RailJaune.png" ) } ;
+    private static final BufferedImage[] RailJoker = { loadImage( "RailLRainbow.png") } ;
+    private static final BufferedImage[] RailJokerEtoilee = { loadImage("RailLEtoile.png" ) } ;
 
     private static int width , height ;
 
@@ -58,6 +60,11 @@ public class RailGraphics {
             }
         }
         return "/";
+    }
+
+    public static BufferedImage putRotation ( BufferedImage image ) {
+        AffineTransform transform = new AffineTransform() ;
+        AffineTransformOp transformOp = new AffineTransformOp(transform , AffineTransformOp.TYPE_BILINEAR) ;
     }
 
     /**

@@ -1,4 +1,4 @@
-package config;
+package com.model.config;
 
 /**
  * La classe Rail représente une case de type rail.
@@ -15,6 +15,8 @@ public class Rail extends Case {
     /** La couleur initiale du rail. */
     private Content initialContent;
 
+    private final int angle ;
+
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
 
@@ -24,9 +26,10 @@ public class Rail extends Case {
      * @param y La position verticale du rail sur le plateau de jeu.
      * @param c La couleur initiale du rail.
      */
-    public Rail(int x, int y, Content c) {
+    public Rail(int x, int y, Content c, int angle) {
         super(x, y);
         this.initialContent = c;
+        this.angle = angle;
     }
     
     /**
@@ -59,5 +62,9 @@ public class Rail extends Case {
      */
     public boolean estUneCaseGare() {
         return false;
+    }
+
+    public int getAngle() {
+        return angle;
     }
 }
