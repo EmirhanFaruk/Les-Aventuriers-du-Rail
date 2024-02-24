@@ -1,4 +1,7 @@
 package config;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * La classe Plateau représente le plateau de jeu.
@@ -21,36 +24,43 @@ public class Plateau {
 
         String line;
 
+        int longueur = 0;
+        int largeur = 0;
+
         // Lire la première ligne pour déterminer la longueur du plateau
         if ((line = reader.readLine()) != null) {
-        	longueurP = line.length();
-        	largeurP++;
+            longueur = line.length();
+            largeur++;
         }
 
         // Lire les lignes suivantes pour déterminer la largeur du plateau
         while ((line = reader.readLine()) != null) {
-        	largeurP++;
+            largeur++;
         }
 
         reader.close();
 
-        Plateau plateau = new Plateau(longueurP, largeurP);
+        Plateau plateau = new Plateau(longueur, largeur);
         reader = new BufferedReader(new FileReader(nomFichier));
 
         int x = 0;
         int y = 0;
 
         // Lire à nouveau le fichier pour créer les cases du plateau
+        /*LEGENDE : V = ville, C = case vide, R = rail + {Bleu = B, Jaune = J, Blanc = W,
+        Marron = M, Vert = G, Noir = N, Violet = P et Rouge = K} + {_ = 0°, \ = 45°, | = 90° et / = 135°}*/
         while ((line = reader.readLine()) != null) {
-            for (char c : line.toCharArray()) {
+            for (int i = 0; i < line.length(); i++) {
+                char c = line.charAt(i);
                 switch (c) {
-                    case '1':
+                    case 'C':
                         plateau.getPlateau()[x][y] = new Case(x, y);
                         break;
-                    case '2':
-                        plateau.getPlateau()[x][y] = new Rail(x, y, Rail.Content.NOIR); // couleur par défaut
+                    case 'R':
+                        plateau.getPlateau()[x][y] = new Rail(x, y, this.raiLCouleur(line.charAt(i + 1)), this.raiLAngle(line.charAt(i + 2)));
+                        i += 2; // Avancer de deux caractères supplémentaires
                         break;
-                    case '3':
+                    case 'V':
                         plateau.getPlateau()[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
                         break;
                     default:
@@ -64,6 +74,40 @@ public class Plateau {
 
         reader.close();
         return plateau;
+    }
+    
+    //METHODE COULEUR
+    Content raiLCouleur(char c) {
+    	if(c == 'B') {
+    		return BLEU;
+        }else if(c == 'J') {
+        	return JAUNE;
+        }else if(c == 'W') {
+        	return BLANC;
+        }else if(c == 'M') {
+        	return MARRON;
+        }else if(c == 'G') {
+        	return VERT;
+        }else if(c == 'N') {
+        	return NOIR;
+        }else if(c == 'P') {
+        	return VIOLET;
+        }else{
+        	return ROUGE;
+        }
+    }
+    
+    //METHODE ANGLE
+    int raiLAngle(char angle) {
+    	if(angle == '_') {
+        	return 0;
+        }else if(angle == '\'){
+        	return 45;
+		}else if(angle == '|') {
+			return 90
+		}else {
+			return 135;
+		}
     }
     
     
