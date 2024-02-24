@@ -10,7 +10,7 @@ public class Ville extends Case {
     /** Le nom de la ville. */
     private String nom;
 
-    /** 
+    /**
      * Un indicateur indiquant si la ville possède une gare.
      * Par défaut, la valeur est false.
      */
@@ -26,7 +26,7 @@ public class Ville extends Case {
         super(x, y);
         this.nom = nom;
     }
-    
+
     /**
      * Indicateur de présence d'une gare pour cette ville.
      * @return true si la ville possède une gare, sinon false.
@@ -34,7 +34,7 @@ public class Ville extends Case {
     public boolean getGare() {
         return this.gare;
     }
-    
+
     /**
      * Définit si la ville possède une gare ou non.
      * @param estUneGare true si la ville possède une gare, sinon false.

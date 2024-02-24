@@ -10,15 +10,17 @@ public class Rail extends Case {
     /**
      * L'énumération Content représente les différentes couleurs de rail possibles.
      */
-    public enum Content {
-        BLEU, VIOLET, MARRON, NOIR, VERT, JAUNE, NOIRE, ROUGE
-    }
+    public enum Content { BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE }
 
     /** La couleur initiale du rail. */
     private Content initialContent;
 
+    private final int angle ;
+
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
+    
+    private final int angle;
 
     /**
      * Constructeur de la classe Rail.
@@ -26,9 +28,10 @@ public class Rail extends Case {
      * @param y La position verticale du rail sur le plateau de jeu.
      * @param c La couleur initiale du rail.
      */
-    public Rail(int x, int y, Content c) {
+    public Rail(int x, int y, Content c, int angle) {
         super(x, y);
         this.initialContent = c;
+        this.angle = angle;
     }
     
     /**
@@ -54,12 +57,16 @@ public class Rail extends Case {
     public void setOccuper(boolean o) {
         this.occuper = o;
     }
-    
+
     /**
      * Vérifie si la case est une gare.
      * @return false, car une case de rail ne peut pas être une gare, il faut qu'elle soit une ville pour être une gare.
      */
     public boolean estUneCaseGare() {
         return false;
+    }
+
+    public int getAngle() {
+        return angle;
     }
 }
