@@ -19,6 +19,8 @@ public class Rail extends Case {
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
+    
+    private final int angle;
 
     /**
      * Constructeur de la classe Rail.
