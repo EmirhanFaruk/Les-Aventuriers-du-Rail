@@ -1,4 +1,4 @@
-package config;
+package com.model.config;
 
 /**
  * La classe Ville représente une case de type ville

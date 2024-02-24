@@ -35,7 +35,7 @@ public class RailGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath = path + s + "resources" + s + "images" + s + "Monster" + s + fileName;
+            String imagePath = path + s + "resources" + s + "Rail" + s + fileName;
             return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,6 +59,11 @@ public class RailGraphics {
         }
         return "/";
     }
+
+    /**
+     * TODO : faire une fonction qui puisse orienter les rails en fonction du chemin entre les villes
+     *  et mettre en lien avec getImage
+     */
 
     /**
      * Renvoie la bonne image
