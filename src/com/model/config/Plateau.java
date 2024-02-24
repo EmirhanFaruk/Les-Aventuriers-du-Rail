@@ -30,7 +30,6 @@ public class Plateau {
         // Lire la première ligne pour déterminer la longueur du plateau
         if ((line = reader.readLine()) != null) {
             longueur = line.length();
-            largeur++;
         }
 
         // Lire les lignes suivantes pour déterminer la largeur du plateau
@@ -39,7 +38,9 @@ public class Plateau {
         }
 
         reader.close();
-
+        
+        this.longueurP = longueur;
+        this.largeurP = largeur;
         Plateau plateau = new Plateau(longueur, largeur);
         reader = new BufferedReader(new FileReader(nomFichier));
 
@@ -57,7 +58,9 @@ public class Plateau {
                         plateau.getPlateau()[x][y] = new Case(x, y);
                         break;
                     case 'R':
-                        plateau.getPlateau()[x][y] = new Rail(x, y, this.raiLCouleur(line.charAt(i + 1)), this.raiLAngle(line.charAt(i + 2)));
+                    	char couleur = line.charAt(i+1); // Lire le caractère suivant pour obtenir la couleur
+                        char angle = line.charAt(i+2); // Lire le deuxième caractère suivant pour obtenir l'angle
+                        plateau.getPlateau()[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
                         i += 2; // Avancer de deux caractères supplémentaires
                         break;
                     case 'V':
