@@ -17,6 +17,8 @@ public class Rail extends Case {
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
+    
+    private final int angle;
 
     /**
      * Constructeur de la classe Rail.
@@ -24,9 +26,14 @@ public class Rail extends Case {
      * @param y La position verticale du rail sur le plateau de jeu.
      * @param c La couleur initiale du rail.
      */
-    public Rail(int x, int y, Content c) {
+    public Rail(int x, int y, Content c, int angle) {
         super(x, y);
         this.initialContent = c;
+        this.angle = angle;
+    }
+    
+    public int getAngle() {
+        return angle;
     }
     
     /**
