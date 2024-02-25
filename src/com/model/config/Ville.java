@@ -58,4 +58,9 @@ public class Ville extends Case {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    @Override
+    public boolean estUneCaseGare() {
+        return false;
+    }
 }

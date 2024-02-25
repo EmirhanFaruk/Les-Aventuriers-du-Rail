@@ -1,27 +1,35 @@
-package config;
+package com.model.config;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import static com.model.config.Rail.Content.* ;
 
 /**
  * La classe Plateau représente le plateau de jeu.
  * Elle contient des méthodes pour gérer les cases du plateau telles que les rails, les villes et les paysages.
  */
 public class Plateau {
-    
-    /** La longueur du plateau. */
-    private int longueurP;
-    
-    /** La largeur du plateau. */
-    private int largeurP;
-    
-    /** Le tableau représentant les cases du plateau. */
-    private Case[][] plateau;
-    
-    
-    public static Plateau creerPlateauDepuisFichier(String nomFichier) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
 
+    /**
+     * La longueur du plateau.
+     */
+    private static int longueurP;
+
+    /**
+     * La largeur du plateau.
+     */
+    private static int largeurP;
+
+    /**
+     * Le tableau représentant les cases du plateau.
+     */
+    private static Case[][] plateau;
+
+
+    public static Case[][] creerPlateauDepuisFichier(String nomFichier) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
+        Case[][] plat = new Case[largeurP][longueurP] ;
         String line;
 
         int longueur = 0;
@@ -38,10 +46,6 @@ public class Plateau {
         }
 
         reader.close();
-        
-        this.longueurP = longueur;
-        this.largeurP = largeur;
-        Plateau plateau = new Plateau(longueur, largeur);
         reader = new BufferedReader(new FileReader(nomFichier));
 
         int x = 0;
@@ -55,16 +59,21 @@ public class Plateau {
                 char c = line.charAt(i);
                 switch (c) {
                     case 'C':
-                        plateau.getPlateau()[x][y] = new Case(x, y);
+                        plat[x][y] = new Case(x, y) {
+                            @Override
+                            public boolean estUneCaseGare() {
+                                return false;
+                            }
+                        };
                         break;
                     case 'R':
-                    	char couleur = line.charAt(i+1); // Lire le caractère suivant pour obtenir la couleur
-                        char angle = line.charAt(i+2); // Lire le deuxième caractère suivant pour obtenir l'angle
-                        plateau.getPlateau()[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
+                        char couleur = line.charAt(i + 1); // Lire le caractère suivant pour obtenir la couleur
+                        char angle = line.charAt(i + 2); // Lire le deuxième caractère suivant pour obtenir l'angle
+                        plat[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
                         i += 2; // Avancer de deux caractères supplémentaires
                         break;
                     case 'V':
-                        plateau.getPlateau()[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
+                        plat[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
                         break;
                     default:
                         throw new IllegalArgumentException("Caractère invalide dans le fichier de carte: " + c);
@@ -76,11 +85,11 @@ public class Plateau {
         }
 
         reader.close();
-        return plateau;
+        return plat;
     }
-    
+
     //METHODE COULEUR
-    Content raiLCouleur(char c) {
+    static Rail.Content raiLCouleur(char c) {
     	if(c == 'B') {
     		return BLEU;
         }else if(c == 'J') {
@@ -101,26 +110,28 @@ public class Plateau {
     }
     
     //METHODE ANGLE
-    int raiLAngle(char angle) {
+    static int raiLAngle(char angle) {
     	if(angle == '_') {
-        	return 0;
-        }else if(angle == '\'){
-        	return 45;
+        	return 0 ;
+        }else if(angle == '\\'){
+        	return 45 ;
 		}else if(angle == '|') {
-			return 90
+			return 90 ;
 		}else {
-			return 135;
+			return 135 ;
 		}
     }
     
     
     /**
      * Constructeur de la classe Plateau.
-     * @param x La longueur du plateau.
-     * @param y La largeur du plateau.
+     * @param longueur La longueur du plateau.
+     * @param largeur La largeur du plateau.
      */
-    public Plateau() {
-        this.plateau = creerPlateauDepuisFichier("/resources/Map.txt");
+    public Plateau(int longueur , int largeur) throws IOException {
+        longueurP = longueur ;
+        largeurP = largeur ;
+        plateau = creerPlateauDepuisFichier(System.getProperty("user.dir")+"/resources/Map.txt");
     }
     
     /**
