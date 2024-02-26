@@ -53,8 +53,6 @@ public class Plateau {
         int y = 0;
 
         // Lire à nouveau le fichier pour créer les cases du plateau
-        /*LEGENDE : V = ville, C = case vide, R = rail + {Bleu = B, Jaune = J, Blanc = W,
-        Marron = M, Vert = G, Noir = N, Violet = P et Rouge = K} + {_ = 0°, \ = 45°, | = 90° et / = 135°}*/
         while ((line = reader.readLine()) != null) {
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);
@@ -90,40 +88,39 @@ public class Plateau {
     }
 
     //METHODE COULEUR
-    static Rail.Content raiLCouleur(char c) {
-    	if(c == 'B') {
-    		return BLEU;
-        }else if(c == 'J') {
-        	return JAUNE;
-        }else if(c == 'W') {
-        	return BLANC;
-        }else if(c == 'M') {
-        	return MARRON;
-        }else if(c == 'G') {
-        	return VERT;
-        }else if(c == 'N') {
-        	return NOIR;
-        }else if(c == 'P') {
-        	return VIOLET;
-        }else{
-        	return ROUGE;
+    static Content raiLCouleur(char c) {
+        if (c == 'B') {
+            return Content.BLEU;
+        } else if (c == 'J') {
+            return Content.JAUNE;
+        } else if (c == 'W') {
+            return Content.BLANC;
+        } else if (c == 'M') {
+            return Content.MARRON;
+        } else if (c == 'G') {
+            return Content.VERT;
+        } else if (c == 'N') {
+            return Content.NOIR;
+        } else if (c == 'P') {
+            return Content.VIOLET;
+        } else {
+            return Content.ROUGE;
         }
     }
-    
+
     //METHODE ANGLE
     static int raiLAngle(char angle) {
-    	if(angle == '_') {
-        	return 0 ;
-        }else if(angle == '\\'){
-        	return 45 ;
-		}else if(angle == '|') {
-			return 90 ;
-		}else {
-			return 135 ;
-		}
+        if (angle == '-') {
+            return 0;
+        } else if (angle == '\\') {
+            return 45;
+        } else if (angle == '|') {
+            return 90;
+        } else {
+            return 135;
+        }
     }
-    
-    
+
     /**
      * Constructeur de la classe Plateau.
      * @param longueur La longueur du plateau.
@@ -134,31 +131,31 @@ public class Plateau {
         largeurP = largeur ;
         plateau = creerPlateauDepuisFichier(System.getProperty("user.dir")+"/resources/Map.txt");
     }
-    
+
     /**
-     * Obtient la largeur du plateau. 
+     * Obtient la largeur du plateau.
      * @return La largeur du plateau.
      */
     public int getLargeur() {
-        return plateau.length;
+        return plateau[0].length;
     }
-    
+
     /**
      * Obtient la longueur du plateau.
      * @return La longueur du plateau.
      */
     public int getLongueur() {
-        return plateau[0].length;
+        return plateau.length;
     }
-    
+
     /**
      * Obtient le tableau représentant les cases du plateau.
      * @return Le tableau représentant les cases du plateau.
      */
-    public Case[][] getPlateau(){
+    public Case[][] getPlateau() {
         return plateau;
     }
-    
+
     /**
      * Vérifie si une position donnée est valide sur le plateau.
      * @param x La position horizontale.
@@ -166,9 +163,9 @@ public class Plateau {
      * @return true si la position est valide, sinon false.
      */
     public boolean positionValide(int x, int y) {
-        return !(y >= this.getLargeur() || x >= this.getLongueur() || x < 0  || y < 0);
+        return !(y >= this.getLargeur() || x >= this.getLongueur() || x < 0 || y < 0);
     }
-    
+
     /**
      * Vérifie si la case à la position spécifiée est un rail.
      * @param x La position horizontale.
@@ -178,7 +175,7 @@ public class Plateau {
     public boolean estUneCaseRail(int x, int y) {
         return plateau[x][y] instanceof Rail;
     }
-    
+
     /**
      * Vérifie si la case à la position spécifiée est une ville.
      * @param x La position horizontale.
@@ -188,7 +185,7 @@ public class Plateau {
     public boolean estUneCaseVille(int x, int y) {
         return plateau[x][y] instanceof Ville;
     }
-    
+
     /**
      * Vérifie si la case à la position spécifiée est une gare.
      * @param x La position horizontale.
@@ -201,7 +198,7 @@ public class Plateau {
         }
         return false;
     }
-    
+
     /**
      * Vérifie si la case à la position spécifiée est un paysage.
      * @param x La position horizontale.
@@ -209,6 +206,6 @@ public class Plateau {
      * @return true si la case est un paysage, sinon false.
      */
     public boolean estUneCasePaysage(int x, int y) {
-        return !this.estUneCaseVille(x, y) && !this.estUneCaseRail(x,y);
+        return !this.estUneCaseVille(x, y) && !this.estUneCaseRail(x, y);
     }
 }
