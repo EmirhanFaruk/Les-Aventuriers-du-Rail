@@ -1,4 +1,4 @@
-package com.model.config;
+package src.com.model.config;
 
 /**
  * La classe Rail représente une case de type rail.
@@ -10,7 +10,7 @@ public class Rail extends Case {
     /**
      * L'énumération Content représente les différentes couleurs de rail possibles.
      */
-    public enum Content { BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE }
+    public enum Content {BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE}
 
     /** La couleur initiale du rail. */
     private Content initialContent;
