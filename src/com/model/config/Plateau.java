@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import static com.model.config.Rail.Content.* ;
 
+
 /**
  * La classe Plateau représente le plateau de jeu.
  * Elle contient des méthodes pour gérer les cases du plateau telles que les rails, les villes et les paysages.
