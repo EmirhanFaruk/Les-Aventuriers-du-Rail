@@ -1,5 +1,5 @@
-package config;
-
+package src.com.model.config;
+import src.com.model.config.Rail.Content;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class Plateau {
                 char c = line.charAt(i);
                 switch (c) {
                     case 'C':
-                        plateau.plateau[x][y] = new Case(x, y);
+                        plateau.plateau[x][y] = new Paysage(x, y);
                         break;
                     case 'R':
                         char couleur = line.charAt(i + 1); // Lire le caractère suivant pour obtenir la couleur
@@ -70,7 +70,7 @@ public class Plateau {
     }
 
     //METHODE COULEUR
-    Content raiLCouleur(char c) {
+    static Content raiLCouleur(char c) {
         if (c == 'B') {
             return Content.BLEU;
         } else if (c == 'J') {
@@ -91,8 +91,8 @@ public class Plateau {
     }
 
     //METHODE ANGLE
-    int raiLAngle(char angle) {
-        if (angle == '_') {
+    static int raiLAngle(char angle) {
+        if (angle == '-') {
             return 0;
         } else if (angle == '\\') {
             return 45;

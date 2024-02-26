@@ -1,4 +1,4 @@
-package config;
+package src.com.model.config;
 
 /**
  * La classe Ville représente une case de type ville
@@ -58,4 +58,9 @@ public class Ville extends Case {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+	@Override
+	public boolean estUneCaseGare() {
+		return gare;
+	}
 }
