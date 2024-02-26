@@ -1,4 +1,4 @@
-package src.com.model.config;
+package com.model.config;
 
 /**
  * La classe Case représente une case générique.

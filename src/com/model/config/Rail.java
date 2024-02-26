@@ -15,6 +15,8 @@ public class Rail extends Case {
     /** La couleur initiale du rail. */
     private Content initialContent;
 
+    private final int angle ;
+
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
     
@@ -30,10 +32,6 @@ public class Rail extends Case {
         super(x, y);
         this.initialContent = c;
         this.angle = angle;
-    }
-    
-    public int getAngle() {
-        return angle;
     }
     
     /**
@@ -66,5 +64,9 @@ public class Rail extends Case {
      */
     public boolean estUneCaseGare() {
         return false;
+    }
+
+    public int getAngle() {
+        return angle;
     }
 }
