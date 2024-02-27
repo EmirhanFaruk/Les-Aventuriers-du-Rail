@@ -20,7 +20,7 @@ public class TrainGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath = path + s + "resources" + s + "Train" + s + findColor(fileName) + s + fileName;
+            String imagePath = path + s + "ressources" + s + "Train" + s + findColor(fileName) + s + fileName;
             return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             e.printStackTrace();
