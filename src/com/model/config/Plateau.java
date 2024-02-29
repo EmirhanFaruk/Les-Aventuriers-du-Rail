@@ -19,7 +19,6 @@ public class Plateau {
 
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
-    private ArrayList<Route> routes;
 
 
     /**
@@ -28,7 +27,7 @@ public class Plateau {
      * @return le plateau depuis la carte donnee
      * @throws FileNotFoundException
      */
-    private static Plateau makePlateau(String nomMap)
+    private static Plateau makePlateau(String nomMap, ArrayList<Route> routes)
     {
         Plateau res = new Plateau(24,24);
 
@@ -48,7 +47,7 @@ public class Plateau {
         produireVilles(villes, stville);
 
         // Produire routes
-        res.routes = produireRoutes(villes, stville);
+        routes = produireRoutes(villes, stville);
 
 
         return res;

@@ -1,4 +1,4 @@
-package com.main;
+package com.model;
 
 import com.model.config.Plateau;
 import com.model.config.carte.CarteManager;
