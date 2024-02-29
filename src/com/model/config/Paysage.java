@@ -1,4 +1,4 @@
-package src.com.model.config;
+package com.model.config;
 
 public class Paysage extends Case {
 

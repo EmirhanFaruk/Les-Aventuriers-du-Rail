@@ -1,4 +1,4 @@
-package src.com.model.config;
+package com.model.config;
 
 /**
  * La classe Rail représente une case de type rail.
@@ -19,7 +19,6 @@ public class Rail extends Case {
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
-
 
     /**
      * Constructeur de la classe Rail.

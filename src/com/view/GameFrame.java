@@ -35,7 +35,7 @@ public class GameFrame extends JFrame implements Runnable
     public GameFrame(int width, int height)
     {
         // Les attributs de JPanel
-        this.setTitle("Tower Defense");
+        this.setTitle("Tchu Tchuuu");
         this.setSize(width, height);
         this.setPreferredSize(new Dimension(width, height));
         this.setResizable(false);
@@ -60,7 +60,7 @@ public class GameFrame extends JFrame implements Runnable
     }
 
 
-    public void startGame(String map, String difficulty, String mode, String character)
+    public void startGame(String map, String[] player_names, String[] player_types)
     {
         setMinimumSize(getSize());
         pack();

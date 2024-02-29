@@ -46,6 +46,18 @@ public class Menu extends JPanel
         }
     }
 
+    /**
+     * Rules button action.
+     */
+    public class RulesButtonAction implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            cardLayout.show(main_panel, rules_mode);
+        }
+    }
+
     private int width, height;
 
 
@@ -58,6 +70,7 @@ public class Menu extends JPanel
     private final HomeButton hbl = new HomeButton();
     private final PlayButton pbl = new PlayButton();
     private final SettingsButton sbl = new SettingsButton();
+    private final RulesButtonAction rbl = new RulesButtonAction();
 
 
 
@@ -67,6 +80,7 @@ public class Menu extends JPanel
     private final String home_mode = "HOME";
     private final String play_mode = "PLAY";
     private final String settings_mode = "SETTINGS";
+    private final String rules_mode = "RULES";
 
 
     // Le JFrame
@@ -121,10 +135,13 @@ public class Menu extends JPanel
 
         JButton home = new JButton("HOME");
         home.addActionListener(hbl);
+        JButton rules = new JButton("RULES");
+        rules.addActionListener(rbl);
         JButton play = new JButton("PLAY");
         play.addActionListener(pbl);
         JButton settings = new JButton("SETTINGS");
         settings.addActionListener(sbl);
+
 
         JButton quit = new JButton("QUIT");
         quit.addActionListener(new ActionListener()
@@ -136,7 +153,7 @@ public class Menu extends JPanel
             }
         });
 
-        JButton[] bl = {home, play, settings, quit};
+        JButton[] bl = {home, rules, play, settings, quit};
         for (JButton button : bl)
         {
             button.setBorderPainted(false);
@@ -145,6 +162,7 @@ public class Menu extends JPanel
         }
 
         res.add(home);
+        res.add(rules);
         res.add(play);
         res.add(settings);
         res.add(quit);
@@ -166,6 +184,7 @@ public class Menu extends JPanel
         res.add(home_mode, makeHome());
         res.add(play_mode, makePlay());
         res.add(settings_mode, makeSettings());
+        res.add(rules_mode, makeRules());
 
         cardLayout.show(res, home_mode);
 
@@ -195,6 +214,9 @@ public class Menu extends JPanel
     {
         return new Settings(this);
     }
+
+    private JPanel makeRules() { return new Rules(width, height); }
+
 
     public void setAllSize(int width, int height)
     {

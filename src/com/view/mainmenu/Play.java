@@ -11,15 +11,19 @@ import java.io.File;
 public class Play extends JPanel
 {
     private JLabel level_name_tag;
-    private JLabel difficulty_tag;
-    private JLabel mode_tag;
-    private JLabel character_tag;
+    private JTextArea[] player_name_list_tag;
+    private JLabel[] player_type_list_tag;
+
+    private final String
+            PLAYER = "PLAYER",
+            CPU = "CPU";
 
     private GameFrame frame;
 
     public Play(GameFrame frame)
     {
         this.frame = frame;
+
         makePlay();
     }
 
@@ -32,11 +36,160 @@ public class Play extends JPanel
     private void makePlay()
     {
         setLayout(new BorderLayout());
-
-        add(makeLevelPanel());
-        add(makeConfigPanel(), BorderLayout.EAST);
+        initializeTables();
+        add(makeAllPlayersPanel());
+        add(makeMapListPanel(), BorderLayout.EAST);
 
     }
+
+    private void initializeTables()
+    {
+        player_name_list_tag = new JTextArea[4];
+        for (int i = 0; i < 4; i++)
+        {
+            player_name_list_tag[i] = new JTextArea("Player " + (i + 1));
+        }
+
+        player_type_list_tag = new JLabel[4];
+        for (int i = 0; i < 4; i++)
+        {
+            player_type_list_tag[i] = new JLabel(PLAYER);
+        }
+    }
+
+
+    private JPanel makeDefaultPanel()
+    {
+        JPanel res = new JPanel();
+        res.setBackground(Color.BLACK);
+        res.setForeground(Color.GRAY);
+        return res;
+    }
+
+    private JPanel makeCenteringPanel(JComponent comp)
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new GridLayout(3, 3));
+
+        for (int j = 0; j < 4; j++)
+        {
+            res.add(makeDefaultPanel());
+        }
+
+        res.add(comp);
+
+        for (int j = 0; j < 4; j++)
+        {
+            res.add(makeDefaultPanel());
+        }
+
+        return res;
+    }
+
+
+    // START OF PLAYER PANEL FUNCTIONS
+
+    /**
+     * Gathers 4 players in 1 panel.
+     * @return the panel that contains 4 players.
+     */
+    private JPanel makeAllPlayersPanel()
+    {
+        JPanel res = makeDefaultPanel();
+        res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        res.setLayout(new GridLayout(4, 1));
+
+        for (int i = 0; i < 4; i++)
+        {
+            res.add(makeSinglePlayerPanel(i));
+        }
+
+        return res;
+    }
+
+
+    /**
+     * Makes the name part of the player panel. Also adds it to the player_name_list_tag.
+     * @param i the player number.
+     * @return the TextArea capsulated in JPanel.
+     */
+    private JPanel makePlayerNamePanel(int i)
+    {
+        JTextArea playerName = new JTextArea("Player " + (i + 1));
+        playerName.setBackground(Color.BLACK);
+        playerName.setForeground(Color.GRAY);
+
+        player_name_list_tag[i] = playerName;
+
+        return makeCenteringPanel(playerName);
+    }
+
+
+    /**
+     * Makes a button that toggles CPU and Player.
+     * @param i player number
+     * @return the panel containing the said button.
+     */
+    private JPanel makeCPUPlayerSelectorPanel(int i)
+    {
+        player_type_list_tag[i] = new JLabel(PLAYER);
+
+        JButton button = new JButton(PLAYER);
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.GRAY);
+        button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        button.addActionListener(e ->
+        {
+            if (player_type_list_tag[i].getText().equals(PLAYER))
+            {
+                player_type_list_tag[i].setText(CPU);
+                button.setText(CPU);
+            }
+            else
+            {
+                player_type_list_tag[i].setText(PLAYER);
+                button.setText(PLAYER);
+            }
+        });
+
+        return makeCenteringPanel(button);
+    }
+
+
+    /**
+     * Makes a single player panel.
+     * @param i The number that differentiates the players
+     * @return the player panel
+     */
+    private JPanel makeSinglePlayerPanel(int i)
+    {
+        JPanel res = makeDefaultPanel();
+        res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+        res.setLayout(new GridLayout(1, 2));
+
+        res.add(makePlayerNamePanel(i));
+
+        res.add(makeCPUPlayerSelectorPanel(i));
+
+
+        return res;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
      * START OF LEVEL LIST FUNCTIONS
@@ -60,7 +213,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "src" + s + "resources" + s + "maps");
+        File directory = new File(path + s + "ressources" + s + "maps");
         int map_count = 0;
         if(directory.list() != null)
         {
@@ -74,7 +227,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "src" + s + "resources" + s + "maps");
+        File directory = new File(path + s + "ressources" + s + "maps");
         if(directory.list() != null)
         {
             String[] res = directory.list();
@@ -92,21 +245,13 @@ public class Play extends JPanel
         JButton res = new JButton(level_name);
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
-        res.addActionListener(
-                new ActionListener()
-            {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                level_name_tag.setText(level_name);
-            }
-        });
+        res.addActionListener( e -> { level_name_tag.setText(level_name); });
         return res;
     }
 
     private JPanel makeLevelPanel()
     {
-        JPanel res = new JPanel();
+        JPanel res = makeDefaultPanel();
         int map_count = getMapCount();
         if(map_count > 0)
         {
@@ -126,124 +271,12 @@ public class Play extends JPanel
 
 
 
-    /*
-     * START OF DIFFICULTY PANEL FUNCTIONS
-     */
 
-
-    private JPanel makeDifficultyOptions()
+    private JPanel makeShowConfigPanel()
     {
-        JPanel diffs = new JPanel();
-        diffs.setBackground(Color.BLACK);
-        diffs.setForeground(Color.GRAY);
-        diffs.setLayout(new GridLayout(3, 1));
+        JPanel res = makeDefaultPanel();
 
-        String[] diff_list = {"EASY", "NORMAL", "HARD"};
-        for(String diff : diff_list)
-        {
-            JButton button = new JButton(diff);
-            button.setBackground(Color.BLACK);
-            button.setForeground(Color.GRAY);
-            button.addActionListener(
-                    new ActionListener()
-                    {
-                        @Override
-                        public void actionPerformed(ActionEvent e)
-                        {
-                            difficulty_tag.setText(diff);
-                        }
-                    });
-            diffs.add(button);
-        }
-
-        return diffs;
-    }
-
-    private JPanel makeModeOptions()
-    {
-        JPanel opts = new JPanel();
-        opts.setBackground(Color.BLACK);
-        opts.setForeground(Color.GRAY);
-        opts.setLayout(new GridLayout(1, 2));
-
-        String[] mode_list = {"NORMAL", "MARATHON"};
-        for(String mode : mode_list)
-        {
-            JButton button = new JButton(mode);
-            button.setBackground(Color.BLACK);
-            button.setForeground(Color.GRAY);
-            button.addActionListener(
-                    new ActionListener()
-                    {
-                        @Override
-                        public void actionPerformed(ActionEvent e)
-                        {
-                            mode_tag.setText(mode);
-                        }
-                    });
-            opts.add(button);
-        }
-
-        return opts;
-    }
-
-
-    private JPanel makeCharacterOptions()
-    {
-        JPanel opts = new JPanel();
-        opts.setBackground(Color.BLACK);
-        opts.setForeground(Color.GRAY);
-        opts.setLayout(new GridLayout(2, 2));
-
-        String[] character_list = {"VILLAGEOIS", "ARCHER", "SOLDAT", "COMMANDANT"};
-        for(String ch : character_list)
-        {
-            JButton button = new JButton(ch);
-            button.setBackground(Color.BLACK);
-            button.setForeground(Color.GRAY);
-            button.addActionListener(
-                    new ActionListener()
-                    {
-                        @Override
-                        public void actionPerformed(ActionEvent e)
-                        {
-                            character_tag.setText(ch);
-                        }
-                    });
-            opts.add(button);
-        }
-
-        return opts;
-    }
-
-
-    private JPanel makeDifficultyPanel()
-    {
-        JPanel res = new JPanel();
-        res.setBackground(Color.BLACK);
-        res.setForeground(Color.GRAY);
-
-        // diffs, mode, character, texts
-        res.setLayout(new GridLayout(4, 1));
-
-        res.add(makeDifficultyOptions());
-
-        res.add(makeCharacterOptions());
-
-        res.add(makeModeOptions());
-
-
-
-        // Tried to use a function but it didnt work, so gotta do it like this
-
-        JPanel texts_capsule = new JPanel();
-        texts_capsule.setBackground(Color.BLACK);
-        texts_capsule.setForeground(Color.GRAY);
-        texts_capsule.setLayout(new GridLayout(4, 1));
-
-        JPanel lnt_capsule = new JPanel(); // level name tag capsule
-        lnt_capsule.setBackground(Color.BLACK);
-        lnt_capsule.setForeground(Color.GRAY);
+        JPanel lnt_capsule = makeDefaultPanel(); // level name tag capsule
 
         level_name_tag = new JLabel("Map1");
         level_name_tag.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -252,51 +285,21 @@ public class Play extends JPanel
         level_name_tag.setForeground(Color.GRAY);
 
         lnt_capsule.add(level_name_tag);
-        texts_capsule.add(lnt_capsule);
+
+        res.add(lnt_capsule);
+
+        return res;
+    }
 
 
-        JPanel dt_capsule = new JPanel(); // difficulty tag capsule
-        dt_capsule.setBackground(Color.BLACK);
-        dt_capsule.setForeground(Color.GRAY);
+    private JPanel makeLevelNConfigPanel()
+    {
+        JPanel res = makeDefaultPanel();
 
-        difficulty_tag = new JLabel("EASY");
-        difficulty_tag.setHorizontalTextPosition(SwingConstants.CENTER);
-        difficulty_tag.setVerticalTextPosition(SwingConstants.CENTER);
-        difficulty_tag.setBackground(Color.BLACK);
-        difficulty_tag.setForeground(Color.GRAY);
+        res.setLayout(new BorderLayout());
 
-        dt_capsule.add(difficulty_tag);
-        texts_capsule.add(dt_capsule);
-
-
-        JPanel mt_capsule = new JPanel(); // mode tag capsule
-        mt_capsule.setBackground(Color.BLACK);
-        mt_capsule.setForeground(Color.GRAY);
-
-        mode_tag = new JLabel("NORMAL");
-        mode_tag.setHorizontalTextPosition(SwingConstants.CENTER);
-        mode_tag.setVerticalTextPosition(SwingConstants.CENTER);
-        mode_tag.setBackground(Color.BLACK);
-        mode_tag.setForeground(Color.GRAY);
-
-        mt_capsule.add(mode_tag);
-        texts_capsule.add(mt_capsule);
-
-        JPanel ct_capsule = new JPanel(); // mode tag capsule
-        ct_capsule.setBackground(Color.BLACK);
-        ct_capsule.setForeground(Color.GRAY);
-
-        character_tag = new JLabel("VILLAGEOIS");
-        character_tag.setHorizontalTextPosition(SwingConstants.CENTER);
-        character_tag.setVerticalTextPosition(SwingConstants.CENTER);
-        character_tag.setBackground(Color.BLACK);
-        character_tag.setForeground(Color.GRAY);
-
-        ct_capsule.add(character_tag);
-        texts_capsule.add(ct_capsule);
-
-
-        res.add(texts_capsule);
+        res.add(makeLevelPanel(), BorderLayout.CENTER);
+        res.add(makeShowConfigPanel(), BorderLayout.SOUTH);
 
         return res;
     }
@@ -305,34 +308,37 @@ public class Play extends JPanel
 
     private JPanel makePlayButton()
     {
-        JPanel res = new JPanel();
-        res.setBackground(Color.BLACK);
-        res.setForeground(Color.GRAY);
+        JPanel res = makeDefaultPanel();
 
         JButton play_button = new JButton("GO!");
         play_button.setBackground(Color.BLACK);
         play_button.setForeground(Color.GRAY);
 
-        play_button.addActionListener(
-                new ActionListener()
-            {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                frame.startGame(level_name_tag.getText(), difficulty_tag.getText(), mode_tag.getText(), character_tag.getText());
-            }
-        });
+        play_button.addActionListener(e ->
+                    {
+                        String[] player_name_list = new String[4];
+                        for (int i = 0; i < 4; i++)
+                        {
+                            player_name_list[i] = player_name_list_tag[i].getText();
+                        }
+                        String[] player_type_list = new String[4];
+                        for (int i = 0; i < 4; i++)
+                        {
+                            player_type_list[i] = player_type_list_tag[i].getText();
+                        }
+                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list);
+                    });
 
         res.add(play_button);
 
         return res;
     }
 
-    private JPanel makeConfigPanel()
+    private JPanel makeMapListPanel()
     {
         JPanel res = new JPanel();
         res.setLayout(new BorderLayout());
-        res.add(makeDifficultyPanel(), BorderLayout.CENTER);
+        res.add(makeLevelNConfigPanel(), BorderLayout.CENTER);
 
         res.add(makePlayButton(), BorderLayout.SOUTH);
 
