@@ -1,4 +1,4 @@
-package controller;
+package com.model.controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import com.model.config.carte.CarteDestination;
