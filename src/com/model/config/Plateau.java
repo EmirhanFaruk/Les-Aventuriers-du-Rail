@@ -1,10 +1,12 @@
 package com.model.config;
 
+import com.model.Route;
 import com.model.config.Rail.Content;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * La classe Plateau représente le plateau de jeu.
@@ -14,12 +16,13 @@ public class Plateau {
 
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
+    private ArrayList<Route> routes;
 
 
     /**
      * Produire un plateau depuis un nom de map
      * @param nomMap nom de fichier
-     * @return
+     * @return le plateau depuis la carte donnee
      * @throws FileNotFoundException
      */
     private static Plateau makePlateau(String nomMap)
@@ -28,54 +31,29 @@ public class Plateau {
 
         fillTab(res.getPlateau());
 
-        BufferedReader reader;
-        try
-        {
-            reader = new BufferedReader(new FileReader(nomMap + ".csv"));
-        }
-        catch (java.io.FileNotFoundException e)
-        {
-            System.out.println("Could not read the file.");
-            return null;
-        }
+        // Opening the file
+        BufferedReader reader = openFile(nomMap);
+        if (reader == null) { return null; }
 
-        String line;
-        try
-        {
-            line = reader.readLine();
-        }
-        catch (java.io.IOException e)
-        {
-            System.out.println(nomMap + ".csv is empty.");
-            line = null;
-        }
-        char delimiter = ';';
+        // Reading from the file
         Ville[] villes = new Ville[15];
+        String[][] stville = new String[15][];
+        readFile(reader, stville);
 
 
-        while(line != null)
-        {
+        // Produire les villes
+        produireVilles(villes, stville);
 
-
-
-            try
-            {
-                line = reader.readLine();
-            }
-            catch (java.io.IOException e)
-            {
-                System.out.println("Ended reading " + nomMap + ".csv.");
-                line = null;
-            }
-        }
-
+        // Produire routes
+        ArrayList<Route> tempRoutes = produireRoutes(stville);
+        
 
         return res;
     }
 
 
     /**
-     * remplir le tableau avec des Paysages.
+     * Remplir les parties nulls du tableau avec des Paysages.
      * @param tab le tableau dit
      */
     private static void fillTab(Case[][] tab)
@@ -84,7 +62,10 @@ public class Plateau {
         {
             for (int j = 0; j < tab[i].length; j++)
             {
-                tab[i][j] = new Paysage(j, i);
+                if(tab[i][j] == null)
+                {
+                    tab[i][j] = new Paysage(j, i);
+                }
             }
         }
     }
@@ -92,14 +73,37 @@ public class Plateau {
     /**
      * Retourne un tableau avec chaque element d'une ligne d'un fichier csv
      * @param csvLine
-     * @return
+     * @return le tableau des villes
      */
     private static String[] delimit(String csvLine, char delimiter)
     {
+        String[] res = new String[numDelimiter(csvLine, delimiter)];
+        int resIndex = 0;
 
-        return null;
+        String temp = "";
+        for (int i = 0; i < csvLine.length(); i++)
+        {
+            if(csvLine.charAt(i) != ';')
+            {
+                temp = temp + csvLine.charAt(i);
+            }
+            else
+            {
+                res[resIndex] = temp;
+                resIndex++;
+                temp = "";
+            }
+        }
+
+        return res;
     }
 
+    /**
+     * Retourne le nombre de delimiteur dans le string.
+     * @param csvLine le string
+     * @param delimiter le delimiteur
+     * @return le nombre de delimiteur dans le string
+     */
     private static int numDelimiter(String csvLine, char delimiter)
     {
         int res = 0;
@@ -114,6 +118,105 @@ public class Plateau {
         return res;
     }
 
+
+    /**
+     * Ouvrir un fichier et retourne le reader
+     * @param nomMap nom de fichier
+     * @return
+     */
+    private static BufferedReader openFile(String nomMap)
+    {
+        BufferedReader reader;
+        String path = System.getProperty("user.dir");
+        String s = findSlash(path);
+        try
+        {
+            reader = new BufferedReader(new FileReader(path + s + "ressources" + s + "maps" + s + nomMap + ".csv"));
+        }
+        catch (java.io.FileNotFoundException e)
+        {
+            System.out.println("Could not read the file.");
+            return null;
+        }
+        return reader;
+    }
+
+    /**
+     * Retourne le type de slash de systeme d'exploitation
+     * @param p
+     * @return
+     */
+    private static String findSlash(String p)
+    {
+        for(int i = 0; i < p.length(); i++)
+        {
+            switch (p.charAt(i))
+            {
+                case '/' : return "/";
+                case '\\' : return "\\";
+            }
+        }
+        return "/";
+    }
+
+    /**
+     * Lire le fichier et mettre les donnees dans le tableau donne
+     * @param reader
+     * @param stville
+     */
+    private static void readFile(BufferedReader reader, String[][] stville)
+    {
+        // Checking the file
+        String line;
+        try
+        {
+            line = reader.readLine();
+        }
+        catch (java.io.IOException e)
+        {
+            System.out.println("The file is empty.");
+            line = null;
+        }
+        char delimiter = ';';
+
+        int index = 0;
+        // Reading from the file and converting it to string tables
+        while(line != null)
+        {
+            stville[index] = delimit(line, delimiter);
+
+            try
+            {
+                line = reader.readLine();
+            }
+            catch (java.io.IOException e)
+            {
+                System.out.println("Ended reading the file.");
+                line = null;
+            }
+            index++;
+        }
+    }
+
+    private static void produireVilles(Ville[] villes, String[][] stville)
+    {
+        for (int i = 0; i < villes.length; i++)
+        {
+            // nom, x, y, (num de ville, type de rail, nombre de rail) * k
+            int x = Integer.parseInt(stville[i][1]);
+            int y = Integer.parseInt(stville[i][2]);
+            String nom = stville[i][0];
+            villes[i] = new Ville(x, y, nom);
+        }
+    }
+
+    private static ArrayList<Route> produireRoutes(String[][] stville)
+    {
+        ArrayList<Route> res = new ArrayList<>();
+
+
+        return res;
+    }
 
 
 
