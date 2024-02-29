@@ -1,9 +1,12 @@
 package com.model.config;
 
+
 import com.model.config.Rail.Content;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import static com.model.config.Rail.Content.* ;
+
 
 /**
  * La classe Plateau représente le plateau de jeu.
@@ -11,12 +14,25 @@ import java.io.IOException;
  */
 public class Plateau {
 
-    /** Le tableau représentant les cases du plateau. */
-    private Case[][] plateau;
+    /**
+     * La longueur du plateau.
+     */
+    private static int longueurP;
 
-    public static Plateau creerPlateauDepuisFichier(String nomFichier) throws IOException {
+    /**
+     * La largeur du plateau.
+     */
+    private static int largeurP;
+
+    /**
+     * Le tableau représentant les cases du plateau.
+     */
+    private static Case[][] plateau;
+
+
+    public static Case[][] creerPlateauDepuisFichier(String nomFichier) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
-
+        Case[][] plat = new Case[largeurP][longueurP] ;
         String line;
 
         int longueur = 0;
@@ -33,8 +49,6 @@ public class Plateau {
         }
 
         reader.close();
-
-        Plateau plateau = new Plateau(longueur, largeur);
         reader = new BufferedReader(new FileReader(nomFichier));
 
         int x = 0;
@@ -46,16 +60,21 @@ public class Plateau {
                 char c = line.charAt(i);
                 switch (c) {
                     case 'C':
-                        plateau.plateau[x][y] = new Paysage(x, y);
+                        plat[x][y] = new Case(x, y) {
+                            @Override
+                            public boolean estUneCaseGare() {
+                                return false;
+                            }
+                        };
                         break;
                     case 'R':
                         char couleur = line.charAt(i + 1); // Lire le caractère suivant pour obtenir la couleur
                         char angle = line.charAt(i + 2); // Lire le deuxième caractère suivant pour obtenir l'angle
-                        plateau.plateau[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
+                        plat[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
                         i += 2; // Avancer de deux caractères supplémentaires
                         break;
                     case 'V':
-                        plateau.plateau[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
+                        plat[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
                         break;
                     default:
                         throw new IllegalArgumentException("Caractère invalide dans le fichier de carte: " + c);
@@ -67,7 +86,7 @@ public class Plateau {
         }
 
         reader.close();
-        return plateau;
+        return plat;
     }
 
     //METHODE COULEUR
@@ -109,8 +128,10 @@ public class Plateau {
      * @param longueur La longueur du plateau.
      * @param largeur La largeur du plateau.
      */
-    public Plateau(int longueur, int largeur) {
-        this.plateau = new Case[longueur][largeur];
+    public Plateau(int longueur , int largeur) throws IOException {
+        longueurP = longueur ;
+        largeurP = largeur ;
+        plateau = creerPlateauDepuisFichier(System.getProperty("user.dir")+"/resources/Map.txt");
     }
 
     /**
