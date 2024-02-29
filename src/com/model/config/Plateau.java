@@ -1,7 +1,10 @@
 package com.model.config;
 
 import com.model.Route;
+import com.model.config.carte.CarteWagon.Couleur;
 import com.model.config.Rail.Content;
+import com.model.config.carte.CarteDestination;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -45,8 +48,8 @@ public class Plateau {
         produireVilles(villes, stville);
 
         // Produire routes
-        ArrayList<Route> tempRoutes = produireRoutes(stville);
-        
+        res.routes = produireRoutes(villes, stville);
+
 
         return res;
     }
@@ -202,18 +205,37 @@ public class Plateau {
     {
         for (int i = 0; i < villes.length; i++)
         {
-            // nom, x, y, (num de ville, type de rail, nombre de rail) * k
-            int x = Integer.parseInt(stville[i][1]);
-            int y = Integer.parseInt(stville[i][2]);
-            String nom = stville[i][0];
+            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+            int x = Integer.parseInt(stville[i][2]);
+            int y = Integer.parseInt(stville[i][3]);
+            String nom = stville[i][1];
             villes[i] = new Ville(x, y, nom);
         }
     }
 
-    private static ArrayList<Route> produireRoutes(String[][] stville)
+    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
     {
         ArrayList<Route> res = new ArrayList<>();
 
+        for (String[] villet : stville)
+        {
+            if(villet.length > 4)
+            {
+                int i = 4;
+                while (i < villet.length)
+                {
+                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+                    int nvil1 = Integer.parseInt(villet[0]);
+                    int nvil2 = Integer.parseInt(villet[i]);
+                    int longueur = Integer.parseInt(villet[i + 2]);
+                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i + 1])];
+                    CarteDestination carte = new CarteDestination();
+                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
+                    res.add(new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte));
+                    i += 4;
+                }
+            }
+        }
 
         return res;
     }
