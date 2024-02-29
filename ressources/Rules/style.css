@@ -1,0 +1,28 @@
+body
+{
+    background-color: black;
+    color: gray;
+}
+
+h1
+{
+    text-align: center;
+    color: gray;
+}
+
+h2
+{
+    text-align: left;
+    color: gray;
+}
+
+p
+{
+    text-align: left;
+    color: gray;
+}
+
+ul
+{
+    color: gray;
+}

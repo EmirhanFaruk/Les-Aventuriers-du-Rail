@@ -37,7 +37,7 @@ public class CardGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath = path + s + "resources" + s + "Card" + s + fileName;
+            String imagePath = path + s + "ressources" + s + "Card" + s + fileName;
             return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             e.printStackTrace();
