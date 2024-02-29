@@ -50,7 +50,7 @@ public class Plateau {
         produireVilles(game.getVilles(), stville);
 
         // Produire routes
-        game.setRoutes(produireRoutes(game.getVilles(), stville));
+        game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
         return res;
     }
@@ -214,7 +214,7 @@ public class Plateau {
         }
     }
 
-    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
+    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville, Plateau plateau)
     {
         ArrayList<Route> res = new ArrayList<>();
 
@@ -228,11 +228,14 @@ public class Plateau {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i - 3]);
+                    Ville ville1 = villes[nvil1];
+                    Ville ville2 = villes[nvil2];
                     int longueur = Integer.parseInt(villet[i - 1]);
                     Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
-                    Route route = new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte);
+                    Route route = new Route(ville1, ville2, longueur, couleur, carte);
+                    putRails(ville1, ville2, longueur, plateau);
                     res.add(route);
                     i += 4;
                 }
@@ -243,9 +246,12 @@ public class Plateau {
     }
 
 
-    private static void putRails(Ville[] villes, Route route)
+    private static void putRails(Ville ville1, Ville ville2, int longueur, Plateau plateau)
     {
-
+        while(longueur > 0)
+        {
+            
+        }
     }
 
 
