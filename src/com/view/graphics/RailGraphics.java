@@ -1,5 +1,6 @@
 package com.view.graphics;
 
+import com.model.config.Case;
 import com.model.config.Rail;
 
 import javax.imageio.ImageIO;

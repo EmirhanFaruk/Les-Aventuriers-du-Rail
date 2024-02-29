@@ -8,6 +8,7 @@ import java.io.IOException;
 public class TrainGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+    private static int width , height ;
 
     /**
      * TODO : ajouter les variables
@@ -57,5 +58,14 @@ public class TrainGraphics {
      * TODO : faire une fonction qui  qui puisse orienter les wagons en fonction du chemin entre les villes
      *  et mettre en lien avec la fonction getImage()
      */
+
+    /*
+    getters et setters
+     */
+    public static void setWH(int w, int h)
+    {
+        width = w;
+        height = h;
+    }
 
 }

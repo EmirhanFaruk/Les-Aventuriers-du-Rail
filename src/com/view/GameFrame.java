@@ -1,6 +1,7 @@
 package com.view;
 
 import com.controller.Main;
+import com.model.Game;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
@@ -21,6 +22,9 @@ public class GameFrame extends JFrame
     // Pour changer le mode
     private JPanel main_panel;
     private final CardLayout cardLayout = new CardLayout();
+
+    private Game game ;
+    private GameScreen gameScreen ;
 
     private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME";
 
@@ -65,11 +69,17 @@ public class GameFrame extends JFrame
 
     public void startGame(String map, String[] player_names, String[] player_types)
     {
+        main.startGame(map, player_names, player_types);
+
+        gameScreen = new GameScreen( this ) ;
+
+        main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
         pack();
+        main_panel.validate();
         setMinimumSize(null);
+        gameScreen.make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
-        main.startGame(map, player_names, player_types);
     }
 
 

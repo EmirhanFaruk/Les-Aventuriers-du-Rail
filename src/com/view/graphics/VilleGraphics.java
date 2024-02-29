@@ -1,5 +1,6 @@
 package com.view.graphics;
 
+import com.model.config.Rail;
 import com.model.config.Ville;
 
 import javax.imageio.ImageIO;
@@ -18,7 +19,7 @@ public class VilleGraphics {
 
 
     public VilleGraphics(){
-
+        super();
     }
 
     /**
@@ -73,7 +74,7 @@ public class VilleGraphics {
      */
     public static void paint (Graphics2D g  , Ville ville ){
         BufferedImage image = getImage( ville ) ;
-        g.drawImage( image , width , height , null) ;
+        g.drawImage( image , ville.getX() , ville.getY(),  width , height , null) ;
     }
 
     /*
