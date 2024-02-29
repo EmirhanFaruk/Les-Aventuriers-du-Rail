@@ -14,6 +14,7 @@ public class GameScreen extends JPanel {
 
     public GameScreen ( GameFrame frame ){
         this.frame = frame ;
+        this.mapScreen = new MapScreen() ;
     }
 
     public void make( Plateau plateau ){

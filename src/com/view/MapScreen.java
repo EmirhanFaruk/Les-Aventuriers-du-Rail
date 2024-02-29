@@ -9,13 +9,14 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
-    ArrayList<MapGraphics> map ;
+    ArrayList<MapGraphics> map = new ArrayList<>() ;
+
+    public MapScreen(){
+
+    }
 
 
     public void makeMap ( Plateau plateau , int tile_width , int tile_height ){
-        VilleGraphics.setWH( tile_width , tile_height );
-        RailGraphics.setWH( tile_width , tile_height );
-        TrainGraphics.setWH( tile_width , tile_height );
         map( plateau );
     }
 

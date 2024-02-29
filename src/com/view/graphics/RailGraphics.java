@@ -88,8 +88,6 @@ public class RailGraphics {
         BufferedImage image = loadImage( s ) ;
         list[0] = image ;
         for ( int i =1 ; i < list.length ; i++){
-            assert image != null;
-            assert angle != null;
             list[i] = putRotation(image, angle[i]) ;
         }
         return list ;

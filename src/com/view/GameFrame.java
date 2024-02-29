@@ -23,7 +23,6 @@ public class GameFrame extends JFrame
     private JPanel main_panel;
     private final CardLayout cardLayout = new CardLayout();
 
-    private Game game ;
     private GameScreen gameScreen ;
 
     private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME";
@@ -76,7 +75,6 @@ public class GameFrame extends JFrame
         main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
         pack();
-        main_panel.validate();
         setMinimumSize(null);
         gameScreen.make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
