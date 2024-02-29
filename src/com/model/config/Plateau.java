@@ -232,10 +232,13 @@ public class Plateau {
                     Ville ville2 = villes[nvil2];
                     int longueur = Integer.parseInt(villet[i - 1]);
                     Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
+                    Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i - 2])];
+                    int angle = Integer.parseInt(villet[i]);
+
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
                     Route route = new Route(ville1, ville2, longueur, couleur, carte);
-                    putRails(ville1, ville2, longueur, plateau);
+                    putRails(ville1, ville2, longueur, fakeCouleur, angle, plateau);
                     res.add(route);
                     i += 4;
                 }
@@ -246,11 +249,32 @@ public class Plateau {
     }
 
 
-    private static void putRails(Ville ville1, Ville ville2, int longueur, Plateau plateau)
+    private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
+        int[] pos = new int[]{ville1.getY(), ville1.getX()};
         while(longueur > 0)
         {
-            
+            if (pos[0] > ville2.getY())
+            {
+                pos[0] = pos[0] - 1;
+            }
+            else if (pos[0] < ville2.getY())
+            {
+                pos[0] = pos[0] + 1;
+            }
+
+            if (pos[1] > ville2.getX())
+            {
+                pos[1] = pos[0] - 1;
+            }
+            else if (pos[1] < ville2.getX())
+            {
+                pos[1] = pos[1] + 1;
+            }
+
+            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angle);
+
+            longueur--;
         }
     }
 
