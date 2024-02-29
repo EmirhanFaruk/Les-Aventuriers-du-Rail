@@ -1,4 +1,4 @@
-package com.model.controlleur;
+package com.model.controller;
 
 
 import com.model.config.carte.CarteWagon;
