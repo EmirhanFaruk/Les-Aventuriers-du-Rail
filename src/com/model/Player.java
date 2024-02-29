@@ -45,9 +45,6 @@ public class Player {
 
     }
 
-    private void takeDestinationCard(GameManager gameManager, int takedCard){
-
-    }
 
 
 }

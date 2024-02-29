@@ -1,5 +1,6 @@
 package com.main;
 
+import com.model.Player;
 import com.model.Route;
 import com.model.config.Plateau;
 import com.model.config.Ville;
@@ -10,8 +11,8 @@ import java.util.List;
 
 public class Game implements Runnable {
     private Plateau plateau;
-    private List<Joueur> joueurs;
-    private Joueur joueurCourant;
+    private List<Player> joueurs;
+    private Player joueurCourant;
     private List<Ville> villes;
     private List<Route> routes;
     private CarteManager cm;
@@ -36,11 +37,11 @@ public class Game implements Runnable {
         return routes;
     }
 
-    public List<Joueur> getJoueurs() {
+    public List<Player> getJoueurs() {
         return joueurs;
     }
 
-    public Joueur getJoueurCourant() {
+    public Player getJoueurCourant() {
         return joueurCourant;
     }
 
