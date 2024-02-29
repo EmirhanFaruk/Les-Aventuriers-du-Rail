@@ -39,6 +39,7 @@ public class Game implements Runnable {
         return routes;
     }
 
+
     public List<Player> getJoueurs() {
         return joueurs;
     }

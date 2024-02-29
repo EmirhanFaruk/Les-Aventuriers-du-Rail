@@ -1,10 +1,15 @@
 package com.model.config;
+import com.model.Game;
+import com.model.Route;
+import com.model.config.carte.CarteWagon.Couleur;
 import com.model.config.Rail.Content;
+import com.model.config.carte.CarteDestination;
+
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static com.model.config.Rail.Content.* ;
-
+import java.util.ArrayList;
 
 /**
  * La classe Plateau représente le plateau de jeu.
@@ -15,121 +20,234 @@ public class Plateau {
     /**
      * La longueur du plateau.
      */
-    private static int longueurP;
+    /** Le tableau représentant les cases du plateau. */
+    private Case[][] plateau;
 
     /**
-     * La largeur du plateau.
+     * Produire un plateau depuis un nom de map
+     * @param nomMap nom de fichier
+     * @return le plateau depuis la carte donnee
+     * @throws FileNotFoundException
      */
-    private static int largeurP;
+    public static Plateau makePlateau(String nomMap, Game game)
+    {
+        Plateau res = new Plateau(24,24);
+
+        fillTab(res.getPlateau());
+
+        // Opening the file
+        BufferedReader reader = openFile(nomMap);
+        if (reader == null) { return null; }
+
+        // Reading from the file
+        game.setVilles(new Ville[15]);
+        String[][] stville = new String[15][];
+        readFile(reader, stville);
+
+        // Produire les villes
+        produireVilles(game.getVilles(), stville);
+
+        // Produire routes
+        game.setRoutes(produireRoutes(game.getVilles(), stville));
+
+        return res;
+    }
+
 
     /**
-     * Le tableau représentant les cases du plateau.
+     * Remplir les parties nulls du tableau avec des Paysages.
+     * @param tab le tableau dit
      */
-    private static Case[][] plateau;
-
-
-    public static Case[][] creerPlateauDepuisFichier(String nomFichier) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
-        Case[][] plat = new Case[largeurP][longueurP] ;
-        String line;
-
-        int longueur = 0;
-        int largeur = 0;
-
-        // Lire la première ligne pour déterminer la longueur du plateau
-        if ((line = reader.readLine()) != null) {
-            longueur = line.length();
-        }
-
-        // Lire les lignes suivantes pour déterminer la largeur du plateau
-        while ((line = reader.readLine()) != null) {
-            largeur++;
-        }
-
-        reader.close();
-        reader = new BufferedReader(new FileReader(nomFichier));
-
-        int x = 0;
-        int y = 0;
-
-        // Lire à nouveau le fichier pour créer les cases du plateau
-        while ((line = reader.readLine()) != null) {
-            for (int i = 0; i < line.length(); i++) {
-                char c = line.charAt(i);
-                switch (c) {
-                    case 'C':
-                        plat[x][y] = new Case(x, y) {
-                            @Override
-                            public boolean estUneCaseGare() {
-                                return false;
-                            }
-                        };
-                        break;
-                    case 'R':
-                        char couleur = line.charAt(i + 1); // Lire le caractère suivant pour obtenir la couleur
-                        char angle = line.charAt(i + 2); // Lire le deuxième caractère suivant pour obtenir l'angle
-                        plat[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
-                        i += 2; // Avancer de deux caractères supplémentaires
-                        break;
-                    case 'V':
-                        plat[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Caractère invalide dans le fichier de carte: " + c);
+    private static void fillTab(Case[][] tab)
+    {
+        for (int i = 0; i < tab.length; i++)
+        {
+            for (int j = 0; j < tab[i].length; j++)
+            {
+                if(tab[i][j] == null)
+                {
+                    tab[i][j] = new Paysage(j, i);
                 }
-                x++;
             }
-            x = 0;
-            y++;
-        }
-
-        reader.close();
-        return plat;
-    }
-
-    //METHODE COULEUR
-    static Content raiLCouleur(char c) {
-        if (c == 'B') {
-            return Content.BLEU;
-        } else if (c == 'J') {
-            return Content.JAUNE;
-        } else if (c == 'W') {
-            return Content.BLANC;
-        } else if (c == 'M') {
-            return Content.MARRON;
-        } else if (c == 'G') {
-            return Content.VERT;
-        } else if (c == 'N') {
-            return Content.NOIR;
-        } else if (c == 'P') {
-            return Content.VIOLET;
-        } else {
-            return Content.ROUGE;
         }
     }
 
-    //METHODE ANGLE
-    static int raiLAngle(char angle) {
-        if (angle == '-') {
-            return 0;
-        } else if (angle == '\\') {
-            return 45;
-        } else if (angle == '|') {
-            return 90;
-        } else {
-            return 135;
+    /**
+     * Retourne un tableau avec chaque element d'une ligne d'un fichier csv
+     * @param csvLine
+     * @return le tableau des villes
+     */
+    private static String[] delimit(String csvLine, char delimiter)
+    {
+        String[] res = new String[numDelimiter(csvLine, delimiter)];
+        int resIndex = 0;
+
+        String temp = "";
+        for (int i = 0; i < csvLine.length(); i++)
+        {
+            if(csvLine.charAt(i) != ';')
+            {
+                temp = temp + csvLine.charAt(i);
+            }
+            else
+            {
+                res[resIndex] = temp;
+                resIndex++;
+                temp = "";
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Retourne le nombre de delimiteur dans le string.
+     * @param csvLine le string
+     * @param delimiter le delimiteur
+     * @return le nombre de delimiteur dans le string
+     */
+    private static int numDelimiter(String csvLine, char delimiter)
+    {
+        int res = 0;
+        for (int i = 0; i < csvLine.length(); i++)
+        {
+            if (csvLine.charAt(i) == delimiter)
+            {
+                res++;
+            }
+        }
+
+        return res;
+    }
+
+
+    /**
+     * Ouvrir un fichier et retourne le reader
+     * @param nomMap nom de fichier
+     * @return
+     */
+    private static BufferedReader openFile(String nomMap)
+    {
+        BufferedReader reader;
+        String path = System.getProperty("user.dir");
+        String s = findSlash(path);
+        try
+        {
+            reader = new BufferedReader(new FileReader(path + s + "ressources" + s + "maps" + s + nomMap + ".csv"));
+        }
+        catch (java.io.FileNotFoundException e)
+        {
+            System.out.println("Could not read the file.");
+            return null;
+        }
+        return reader;
+    }
+
+    /**
+     * Retourne le type de slash de systeme d'exploitation
+     * @param p
+     * @return
+     */
+    private static String findSlash(String p)
+    {
+        for(int i = 0; i < p.length(); i++)
+        {
+            switch (p.charAt(i))
+            {
+                case '/' : return "/";
+                case '\\' : return "\\";
+            }
+        }
+        return "/";
+    }
+
+    /**
+     * Lire le fichier et mettre les donnees dans le tableau donne
+     * @param reader
+     * @param stville
+     */
+    private static void readFile(BufferedReader reader, String[][] stville)
+    {
+        // Checking the file
+        String line;
+        try
+        {
+            line = reader.readLine();
+        }
+        catch (java.io.IOException e)
+        {
+            System.out.println("The file is empty.");
+            line = null;
+        }
+        char delimiter = ';';
+
+        int index = 0;
+        // Reading from the file and converting it to string tables
+        while(line != null)
+        {
+            stville[index] = delimit(line, delimiter);
+
+            try
+            {
+                line = reader.readLine();
+            }
+            catch (java.io.IOException e)
+            {
+                System.out.println("Ended reading the file.");
+                line = null;
+            }
+            index++;
         }
     }
+
+    private static void produireVilles(Ville[] villes, String[][] stville)
+    {
+        for (int i = 0; i < villes.length; i++)
+        {
+            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+            int x = Integer.parseInt(stville[i][2]);
+            int y = Integer.parseInt(stville[i][3]);
+            String nom = stville[i][1];
+            villes[i] = new Ville(x, y, nom);
+        }
+    }
+
+    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
+    {
+        ArrayList<Route> res = new ArrayList<>();
+
+        for (String[] villet : stville)
+        {
+            if(villet.length > 4)
+            {
+                int i = 8;
+                while (i < villet.length)
+                {
+                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+                    int nvil1 = Integer.parseInt(villet[0]);
+                    int nvil2 = Integer.parseInt(villet[i - 3]);
+                    int longueur = Integer.parseInt(villet[i - 1]);
+                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
+                    CarteDestination carte = new CarteDestination();
+                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
+                    res.add(new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte));
+                    i += 4;
+                }
+            }
+        }
+
+        return res;
+    }
+
 
     /**
      * Constructeur de la classe Plateau.
      * @param longueur La longueur du plateau.
      * @param largeur La largeur du plateau.
      */
-    public Plateau(int longueur , int largeur) throws IOException {
-        longueurP = longueur ;
-        largeurP = largeur ;
-        plateau = creerPlateauDepuisFichier(System.getProperty("user.dir")+"/resources/Map.txt");
+    public Plateau(int longueur , int largeur)
+    {
+        plateau = new Case[longueur][largeur];
     }
 
     /**
