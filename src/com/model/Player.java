@@ -37,7 +37,7 @@ public class Player {
 
 
     private void takeRail(Rail rail){
-       //*
+       //**
         // TODO idea : use the class Rail to ask if we can or not to place train,
         //  verify if we have enough trainCard,
         //  if we can take the tain and verify the color of the train card

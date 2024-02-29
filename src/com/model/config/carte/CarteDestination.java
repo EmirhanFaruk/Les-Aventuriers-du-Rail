@@ -56,43 +56,6 @@ public class CarteDestination {
     */
 
 
-    public int nombrePointsDestination(Ville v1, Ville v2){
-        //Fonction qui dit le nombre de point pour la destination entre 2 villes
-
-        int nombreDePoint = 0; //variable qui détermine le nombre de point
-
-        //TODO : Add a fonction that add a int in nombrePoints
-
-        /*
-        switch (nombreDePoint){
-            //1 wagon = 1 point
-            case 1 -> {
-                return 1;
-            }
-            //2 wagon = 2 point
-            case 2 -> {
-                return 2;
-            }
-            //3 wagon = 4 point
-            case 3 -> {
-                return 4;
-            }
-            //4 wagon = 7 point
-            case 4 -> {
-                return 7;
-            }
-            //5 wagon = 10 point
-            case 5 -> {
-                return 10;
-            }
-            default -> {
-                return 0;
-            }
-
-            }
-        */
-        return 0;
-    }
 
 
 
