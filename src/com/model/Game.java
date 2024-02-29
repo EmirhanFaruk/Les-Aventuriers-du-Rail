@@ -21,16 +21,20 @@ public class Game
     public void makeGame(String nomMap)
     {
         this.cm = new CarteManager();
-        this.plateau = Plateau.makePlateau(nomMap, this.routes, this.villes);
+        this.plateau = Plateau.makePlateau(nomMap, this);
     }
 
     public Ville[] getVilles() {
         return villes;
     }
 
+    public void setVilles(Ville[] villes) { this.villes = villes; }
+
     public List<Route> getRoutes() {
         return routes;
     }
+
+    public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
 
     public List<Joueur> getJoueurs() {
         return joueurs;

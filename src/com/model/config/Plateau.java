@@ -1,5 +1,6 @@
 package com.model.config;
 
+import com.model.Game;
 import com.model.Route;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.model.config.Rail.Content;
@@ -27,7 +28,7 @@ public class Plateau {
      * @return le plateau depuis la carte donnee
      * @throws FileNotFoundException
      */
-    public static Plateau makePlateau(String nomMap, ArrayList<Route> routes, Ville[] villes)
+    public static Plateau makePlateau(String nomMap, Game game)
     {
         Plateau res = new Plateau(24,24);
 
@@ -38,16 +39,16 @@ public class Plateau {
         if (reader == null) { return null; }
 
         // Reading from the file
-        villes = new Ville[15];
+        game.setVilles(new Ville[15]);
         String[][] stville = new String[15][];
         readFile(reader, stville);
 
 
         // Produire les villes
-        produireVilles(villes, stville);
+        produireVilles(game.getVilles(), stville);
 
         // Produire routes
-        routes = produireRoutes(villes, stville);
+        game.setRoutes(produireRoutes(game.getVilles(), stville));
 
 
         return res;
@@ -239,97 +240,6 @@ public class Plateau {
         return res;
     }
 
-
-
-    public static Plateau creerPlateauDepuisFichier(String nomFichier) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
-
-        String line;
-
-        int longueur = 0;
-        int largeur = 0;
-
-        // Lire la première ligne pour déterminer la longueur du plateau
-        if ((line = reader.readLine()) != null) {
-            longueur = line.length();
-        }
-
-        // Lire les lignes suivantes pour déterminer la largeur du plateau
-        while ((line = reader.readLine()) != null) {
-            largeur++;
-        }
-
-        reader.close();
-
-        Plateau plateau = new Plateau(longueur, largeur);
-        reader = new BufferedReader(new FileReader(nomFichier));
-
-        int x = 0;
-        int y = 0;
-
-        // Lire à nouveau le fichier pour créer les cases du plateau
-        while ((line = reader.readLine()) != null) {
-            for (int i = 0; i < line.length(); i++) {
-                char c = line.charAt(i);
-                switch (c) {
-                    case 'C':
-                        plateau.plateau[x][y] = new Paysage(x, y);
-                        break;
-                    case 'R':
-                        char couleur = line.charAt(i + 1); // Lire le caractère suivant pour obtenir la couleur
-                        char angle = line.charAt(i + 2); // Lire le deuxième caractère suivant pour obtenir l'angle
-                        plateau.plateau[x][y] = new Rail(x, y, raiLCouleur(couleur), raiLAngle(angle));
-                        i += 2; // Avancer de deux caractères supplémentaires
-                        break;
-                    case 'V':
-                        plateau.plateau[x][y] = new Ville(x, y, "Ville"); // Nom par défaut
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Caractère invalide dans le fichier de carte: " + c);
-                }
-                x++;
-            }
-            x = 0;
-            y++;
-        }
-
-        reader.close();
-        return plateau;
-    }
-
-    //METHODE COULEUR
-    static Content raiLCouleur(char c) {
-        if (c == 'B') {
-            return Content.BLEU;
-        } else if (c == 'J') {
-            return Content.JAUNE;
-        } else if (c == 'W') {
-            return Content.BLANC;
-        } else if (c == 'M') {
-            return Content.MARRON;
-        } else if (c == 'G') {
-            return Content.VERT;
-        } else if (c == 'N') {
-            return Content.NOIR;
-        } else if (c == 'P') {
-            return Content.VIOLET;
-        } else {
-            return Content.ROUGE;
-        }
-    }
-
-    //METHODE ANGLE
-    static int raiLAngle(char angle) {
-        if (angle == '-') {
-            return 0;
-        } else if (angle == '\\') {
-            return 45;
-        } else if (angle == '|') {
-            return 90;
-        } else {
-            return 135;
-        }
-    }
 
     /**
      * Constructeur de la classe Plateau.
