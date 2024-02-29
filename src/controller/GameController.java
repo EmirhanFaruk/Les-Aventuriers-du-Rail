@@ -1,4 +1,7 @@
 package controller;
+import com.model.config.carte.CarteDestination;
+import com.model.config.carte.CarteWagon;
+
 import java.awt.*;
 import java.awt.event.*;
 

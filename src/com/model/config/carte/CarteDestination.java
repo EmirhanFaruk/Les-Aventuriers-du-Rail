@@ -30,24 +30,8 @@ public class CarteDestination {
         return nombrePoints;
     }
 
-    public CarteDestination getDestination(){
-        //Fonction qui choisit au hasard les déstinations
-
-        //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random ville1RANDOM = new Random(villes.length);
-        Random ville2RANDOM = new Random(villes.length);
-        int ville1 = ville1RANDOM.nextInt();
-        int ville2 = ville1RANDOM.nextInt();
-
-        //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
-        while(ville1 == ville2){
-            ville2 = ville1RANDOM.nextInt();
-        }
-
-        //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        return new CarteDestination(premiereVille,deuxiemeVille,nombrePoints);
-
-
+    public Ville[] getVilles() {
+        return villes;
     }
 
     //Pour les testes on va utiliser ce constructeur
