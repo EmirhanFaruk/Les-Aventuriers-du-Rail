@@ -1,16 +1,16 @@
 package com.view;
 
+import com.controller.Main;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 
-public class GameFrame extends JFrame implements Runnable
+public class GameFrame extends JFrame
 {
     public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
-    private boolean running = false;
 
     private boolean in_main_menu = true;
 
@@ -26,13 +26,14 @@ public class GameFrame extends JFrame implements Runnable
 
     private Menu menu;
 
-    private Thread game_thread;
+    private Main main;
+
 
 
     /**
      * Constructeur de GameView, assigner les attributs
      */
-    public GameFrame(int width, int height)
+    public GameFrame(int width, int height, Main main)
     {
         // Les attributs de JPanel
         this.setTitle("Tchu Tchuuu");
@@ -42,6 +43,8 @@ public class GameFrame extends JFrame implements Runnable
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
+
+        this.main = main;
         // On commence par menu
         // On ne peut pas produire game encore car on n'a pas encore choisit le map.
         menu = new Menu(width, height, this);
@@ -49,7 +52,7 @@ public class GameFrame extends JFrame implements Runnable
         main_panel = new JPanel();
         main_panel.setLayout(cardLayout);
         main_panel.add(main_menu_screen_s, menu);
-        cardLayout.show(main_panel, main_menu_screen_s);
+        cardLayout.show(main_panel, ingame_screen_s);
 
         this.add(main_panel);
 
@@ -66,39 +69,12 @@ public class GameFrame extends JFrame implements Runnable
         pack();
         setMinimumSize(null);
         cardLayout.show(main_panel, ingame_screen_s);
-        running = true;
-        startGame_thread();
+        main.startGame(map, player_names, player_types);
     }
 
-    private void startGame_thread()
-    {
-        game_thread = new Thread(this);
-        game_thread.start();
-    }
 
-    /**
-     * Une func qui fait rouler le mainLoop
-     */
-    @Override
-    public void run()
-    {
-        double start;
-        double required_fps = (double) 1000000000/60;
-        double end = required_fps;
-        while(running)
-        {
-            start = System.nanoTime();
-            if(end >= required_fps)
-            {
-                //game.update(end/1000000000);
-                end = System.nanoTime() - start;
-            }
-            else
-            {
-                end += System.nanoTime() - start;
-            }
-        }
-    }
+
+
 
 
     @Override
@@ -115,7 +91,7 @@ public class GameFrame extends JFrame implements Runnable
     {
         cardLayout.show(main_panel, main_menu_screen_s);
         menu.showMenu();
-        running = false;
+        main.setRunning(false);
     }
 
     public void quitGame()

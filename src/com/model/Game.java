@@ -3,28 +3,28 @@ package com.model;
 import com.model.config.Plateau;
 import com.model.config.carte.CarteManager;
 import com.model.config.Ville;
-import com.model.Route;
-import com.model.Joueur;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Game implements Runnable {
+public class Game
+{
     private Plateau plateau;
     private List<Joueur> joueurs;
     private Joueur joueurCourant;
-    private List<Ville> villes;
-    private List<Route> routes;
+    private Ville[] villes;
+    private ArrayList<Route> routes;
     private CarteManager cm;
 
-    public Game(Plateau plateau, List<Ville> villes,List<Route> routes) {
-        // création des cartes
-        //...
-        // création des villes et des routes
-        this.plateau = plateau;
-        this.villes = villes;
-        this.routes = routes;
+    public Game() {}
+
+    public void makeGame(String nomMap)
+    {
+        this.cm = new CarteManager();
+        this.plateau = Plateau.makePlateau(nomMap, this.routes, this.villes);
     }
 
-    public List<Ville> getVilles() {
+    public Ville[] getVilles() {
         return villes;
     }
 
@@ -40,11 +40,9 @@ public class Game implements Runnable {
         return joueurCourant;
     }
 
-    public void run() {
-
-        while (true) {
-            //game loop
-        }
+    public void update(double deltaTime)
+    {
+        //game loop
     }
 
 

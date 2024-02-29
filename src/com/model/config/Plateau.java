@@ -27,7 +27,7 @@ public class Plateau {
      * @return le plateau depuis la carte donnee
      * @throws FileNotFoundException
      */
-    private static Plateau makePlateau(String nomMap, ArrayList<Route> routes)
+    public static Plateau makePlateau(String nomMap, ArrayList<Route> routes, Ville[] villes)
     {
         Plateau res = new Plateau(24,24);
 
@@ -38,7 +38,7 @@ public class Plateau {
         if (reader == null) { return null; }
 
         // Reading from the file
-        Ville[] villes = new Ville[15];
+        villes = new Ville[15];
         String[][] stville = new String[15][];
         readFile(reader, stville);
 
@@ -220,14 +220,14 @@ public class Plateau {
         {
             if(villet.length > 4)
             {
-                int i = 4;
+                int i = 8;
                 while (i < villet.length)
                 {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
                     int nvil1 = Integer.parseInt(villet[0]);
-                    int nvil2 = Integer.parseInt(villet[i]);
-                    int longueur = Integer.parseInt(villet[i + 2]);
-                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i + 1])];
+                    int nvil2 = Integer.parseInt(villet[i - 3]);
+                    int longueur = Integer.parseInt(villet[i - 1]);
+                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
                     res.add(new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte));
