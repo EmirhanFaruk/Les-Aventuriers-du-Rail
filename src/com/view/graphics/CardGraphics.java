@@ -69,33 +69,32 @@ public class CardGraphics {
      */
     public static BufferedImage getImage(CarteWagon carteWagon){
         switch ( carteWagon.getInitialCouleur()){
-            case BLANC -> {
+            case BLANC:
                 return CardWhite ;
-            }
-            case VIOLET -> {
+            case VIOLET:
                 return CardViolet ;
-            }
-            case MARRON -> {
+
+            case MARRON:
                 return CardBrown ;
-            }
-            case NOIRE -> {
+
+            case NOIRE:
                 return CardDark ;
-            }
-            case JAUNE -> {
+
+            case JAUNE:
                 return CardYellow ;
-            }
-            case VERT -> {
+
+            case VERT:
                 return CardGreen ;
-            }
-            case LOC -> {
+
+            case LOC:
                 return CardLocomotive ;
-            }
-            case BLEU -> {
+
+            case BLEU:
                 return CardBlue ;
-            }
-            case ROUGE -> {
+
+            case ROUGE:
                 return CardRed ;
-            }
+
         }
         return null ;
     }

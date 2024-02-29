@@ -1,4 +1,8 @@
-package controller;
+package com.model.controlleur;
+
+
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteDestination;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -12,7 +16,7 @@ public class GameController {
             detailsCarte = "Destination: " + carteDestination.getPremiereVille() + " - " + carteDestination.getDeuxiemeVille();
         } else if (source instanceof CarteWagon) { // Si la source est une carte wagon
             CarteWagon carteWagon = (CarteWagon) source;
-            detailsCarte = "Couleur du wagon: " + carteWagon.getCouleur();
+            detailsCarte = "Couleur du wagon: " + carteWagon.getInitialCouleur();
         }
         return detailsCarte;
     }

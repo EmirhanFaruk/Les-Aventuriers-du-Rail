@@ -4,6 +4,7 @@ import com.model.config.Plateau;
 import com.model.config.carte.CarteManager;
 import com.model.config.Ville;
 import com.model.Route;
+import com.model.Joueur;
 import java.util.List;
 
 public class Game implements Runnable {

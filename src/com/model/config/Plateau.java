@@ -2,6 +2,7 @@ package com.model.config;
 
 import com.model.config.Rail.Content;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -13,6 +14,26 @@ public class Plateau {
 
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
+
+
+
+
+    public static Plateau makePlateau(String nomMap) throws FileNotFoundException
+    {
+        BufferedReader reader = new BufferedReader(new FileReader(nomMap));
+
+
+
+        Plateau res = new Plateau(24,24);
+
+
+        return res;
+    }
+
+
+
+
+
 
     public static Plateau creerPlateauDepuisFichier(String nomFichier) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(nomFichier));
