@@ -232,13 +232,20 @@ public class Plateau {
                     Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
-                    res.add(new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte));
+                    Route route = new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte);
+                    res.add(route);
                     i += 4;
                 }
             }
         }
 
         return res;
+    }
+
+
+    private static void putRails(Ville[] villes, Route route)
+    {
+
     }
 
 
