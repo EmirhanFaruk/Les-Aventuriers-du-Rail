@@ -1,5 +1,6 @@
 package com.model.config;
 
+
 import com.model.Game;
 import com.model.Route;
 import com.model.config.carte.CarteWagon.Couleur;
@@ -18,9 +19,11 @@ import java.util.ArrayList;
  */
 public class Plateau {
 
+    /**
+     * La longueur du plateau.
+     */
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
-
 
     /**
      * Produire un plateau depuis un nom de map
@@ -43,13 +46,11 @@ public class Plateau {
         String[][] stville = new String[15][];
         readFile(reader, stville);
 
-
         // Produire les villes
         produireVilles(game.getVilles(), stville);
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville));
-
 
         return res;
     }
@@ -246,8 +247,9 @@ public class Plateau {
      * @param longueur La longueur du plateau.
      * @param largeur La largeur du plateau.
      */
-    public Plateau(int longueur, int largeur) {
-        this.plateau = new Case[longueur][largeur];
+    public Plateau(int longueur , int largeur)
+    {
+        plateau = new Case[longueur][largeur];
     }
 
     /**

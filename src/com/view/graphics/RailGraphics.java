@@ -39,7 +39,7 @@ public class RailGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath = path + s + "resources" + s + "Rail" + s + fileName;
+            String imagePath = path + s + "ressources" + s + "Rail" + s + fileName;
             return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             e.printStackTrace();

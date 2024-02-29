@@ -3,14 +3,14 @@ package com.model.controller;
 
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteDestination;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
 
     public String obtenirDetailsCarte(MouseEvent e) {
-        Component source = (Component) e.getSource(); // Obtenir la source de l'événement
+        Object source = e.getSource(); // Obtenir la source de l'événement
         if (source instanceof CarteDestination) { // Si la source est une carte destination
             CarteDestination carteDestination = (CarteDestination) source;
             detailsCarte = "Destination: " + carteDestination.getPremiereVille() + " - " + carteDestination.getDeuxiemeVille();
