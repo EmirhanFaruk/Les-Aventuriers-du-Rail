@@ -213,7 +213,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "resources" + s + "maps");
+        File directory = new File(path + s + "ressources" + s + "maps");
         int map_count = 0;
         if(directory.list() != null)
         {
@@ -227,7 +227,7 @@ public class Play extends JPanel
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
 
-        File directory = new File(path + s + "resources" + s + "maps");
+        File directory = new File(path + s + "ressources" + s + "maps");
         if(directory.list() != null)
         {
             String[] res = directory.list();
