@@ -59,8 +59,8 @@ public class Ville extends Case {
         this.nom = nom;
     }
 
-    @Override
-    public boolean estUneCaseGare() {
-        return false;
-    }
+	@Override
+	public boolean estUneCaseGare() {
+		return gare;
+	}
 }

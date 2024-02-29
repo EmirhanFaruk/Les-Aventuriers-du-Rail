@@ -10,7 +10,7 @@ public class Rail extends Case {
     /**
      * L'énumération Content représente les différentes couleurs de rail possibles.
      */
-    public enum Content { BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE }
+    public enum Content {BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE}
 
     /** La couleur initiale du rail. */
     private Content initialContent;
@@ -19,8 +19,6 @@ public class Rail extends Case {
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
-    
-    private final int angle;
 
     /**
      * Constructeur de la classe Rail.
