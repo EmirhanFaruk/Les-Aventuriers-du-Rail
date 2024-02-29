@@ -1,8 +1,10 @@
-package com.model.controlleur;
+package com.model.controller;
+
+
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteDestination;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteWagon;
 
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte

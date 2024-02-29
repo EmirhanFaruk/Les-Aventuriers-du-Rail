@@ -1,6 +1,9 @@
-import config.Ville;
-import config.carte.CarteDestination;
-import config.carte.CarteWagon.Couleur;
+package com.model;
+
+
+import com.model.config.Ville;
+import com.model.config.carte.CarteDestination;
+import com.model.config.carte.CarteWagon.Couleur;
 
 public class Route {
 

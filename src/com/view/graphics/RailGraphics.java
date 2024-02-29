@@ -114,36 +114,36 @@ public class RailGraphics {
     public static BufferedImage getImage(Rail rail) {
         int index = indexOf( rail.getAngle() ) ;
         switch ( rail.getInitialContent()){
-            case BLEU -> {
+            case BLEU:
                 return RailBlue[index] ;
-            }
-            case NOIR -> {
+
+            case NOIR:
                 return RailDark[index] ;
-            }
-            case VERT -> {
+
+            case VERT:
                 return RailGreen[index] ;
-            }
-            case JAUNE -> {
+
+            case JAUNE:
                 return RailYellow[index] ;
-            }
-            case ROUGE -> {
+
+            case ROUGE:
                 return RailRed[index] ;
-            }
-            case MARRON -> {
+
+            case MARRON:
                 return RailBrown[index] ;
-            }
-            case VIOLET -> {
+
+            case VIOLET:
                 return RailViolet[index] ;
-            }
-            case BLANC -> {
+
+            case BLANC:
                 return RailWhite[index] ;
-            }
-            case JOKER -> {
+
+            case JOKER:
                 return RailJoker[index] ;
-            }
-            case JOKERETOILEE -> {
+
+            case JOKERETOILEE:
                 return RailJokerEtoilee[index] ;
-            }
+
         }
         return null ;
     }

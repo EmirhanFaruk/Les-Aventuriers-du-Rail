@@ -1,10 +1,11 @@
 package com.model.config.carte;
 
+import javax.swing.*;
 import java.util.Random;
 
 import static com.model.config.carte.CarteDestination.Ville.*;
 
-public class CarteDestination {
+public class CarteDestination extends JPanel {
     private Ville premiereVille;
     private Ville deuxiemeVille;
     private int nombrePoints;
