@@ -1,7 +1,7 @@
 package com.main;
 
 import com.model.Player;
-import com.model.Route;
+import com.model.config.Route;
 import com.model.config.Plateau;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
