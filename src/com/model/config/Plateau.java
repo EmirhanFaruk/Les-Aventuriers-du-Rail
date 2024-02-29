@@ -16,21 +16,103 @@ public class Plateau {
     private Case[][] plateau;
 
 
-
-
-    public static Plateau makePlateau(String nomMap) throws FileNotFoundException
+    /**
+     * Produire un plateau depuis un nom de map
+     * @param nomMap nom de fichier
+     * @return
+     * @throws FileNotFoundException
+     */
+    private static Plateau makePlateau(String nomMap)
     {
-        BufferedReader reader = new BufferedReader(new FileReader(nomMap));
-
-
-
         Plateau res = new Plateau(24,24);
+
+        fillTab(res.getPlateau());
+
+        BufferedReader reader;
+        try
+        {
+            reader = new BufferedReader(new FileReader(nomMap + ".csv"));
+        }
+        catch (java.io.FileNotFoundException e)
+        {
+            System.out.println("Could not read the file.");
+            return null;
+        }
+
+        String line;
+        try
+        {
+            line = reader.readLine();
+        }
+        catch (java.io.IOException e)
+        {
+            System.out.println(nomMap + ".csv is empty.");
+            line = null;
+        }
+        char delimiter = ';';
+        Ville[] villes = new Ville[15];
+
+
+        while(line != null)
+        {
+
+
+
+            try
+            {
+                line = reader.readLine();
+            }
+            catch (java.io.IOException e)
+            {
+                System.out.println("Ended reading " + nomMap + ".csv.");
+                line = null;
+            }
+        }
 
 
         return res;
     }
 
 
+    /**
+     * remplir le tableau avec des Paysages.
+     * @param tab le tableau dit
+     */
+    private static void fillTab(Case[][] tab)
+    {
+        for (int i = 0; i < tab.length; i++)
+        {
+            for (int j = 0; j < tab[i].length; j++)
+            {
+                tab[i][j] = new Paysage(j, i);
+            }
+        }
+    }
+
+    /**
+     * Retourne un tableau avec chaque element d'une ligne d'un fichier csv
+     * @param csvLine
+     * @return
+     */
+    private static String[] delimit(String csvLine, char delimiter)
+    {
+
+        return null;
+    }
+
+    private static int numDelimiter(String csvLine, char delimiter)
+    {
+        int res = 0;
+        for (int i = 0; i < csvLine.length(); i++)
+        {
+            if (csvLine.charAt(i) == delimiter)
+            {
+                res++;
+            }
+        }
+
+        return res;
+    }
 
 
 
