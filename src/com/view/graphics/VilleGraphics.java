@@ -19,7 +19,6 @@ public class VilleGraphics {
 
 
     public VilleGraphics(){
-        super();
     }
 
     /**
