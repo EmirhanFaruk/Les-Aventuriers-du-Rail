@@ -50,7 +50,7 @@ public class Plateau {
         produireVilles(game.getVilles(), stville);
 
         // Produire routes
-        game.setRoutes(produireRoutes(game.getVilles(), stville));
+        game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
         return res;
     }
@@ -214,7 +214,7 @@ public class Plateau {
         }
     }
 
-    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
+    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville, Plateau plateau)
     {
         ArrayList<Route> res = new ArrayList<>();
 
@@ -228,17 +228,54 @@ public class Plateau {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i - 3]);
+                    Ville ville1 = villes[nvil1];
+                    Ville ville2 = villes[nvil2];
                     int longueur = Integer.parseInt(villet[i - 1]);
                     Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
+                    Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i - 2])];
+                    int angle = Integer.parseInt(villet[i]);
+
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
-                    res.add(new Route(villes[nvil1], villes[nvil2], longueur, couleur, carte));
+                    Route route = new Route(ville1, ville2, longueur, couleur, carte);
+                    putRails(ville1, ville2, longueur, fakeCouleur, angle, plateau);
+                    res.add(route);
                     i += 4;
                 }
             }
         }
 
         return res;
+    }
+
+
+    private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
+    {
+        int[] pos = new int[]{ville1.getY(), ville1.getX()};
+        while(longueur > 0)
+        {
+            if (pos[0] > ville2.getY())
+            {
+                pos[0] = pos[0] - 1;
+            }
+            else if (pos[0] < ville2.getY())
+            {
+                pos[0] = pos[0] + 1;
+            }
+
+            if (pos[1] > ville2.getX())
+            {
+                pos[1] = pos[0] - 1;
+            }
+            else if (pos[1] < ville2.getX())
+            {
+                pos[1] = pos[1] + 1;
+            }
+
+            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angle);
+
+            longueur--;
+        }
     }
 
 
