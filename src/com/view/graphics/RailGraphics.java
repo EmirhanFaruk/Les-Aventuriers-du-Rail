@@ -100,10 +100,11 @@ public class RailGraphics {
 
     /**
      * UNe fonction qui me donne l'index de l'élément de ma liste angle
-     * @param a Integer
-     * @return int
+     * @param a Integer qui est un angle
+     * @return index
      */
     public static int indexOf ( int a ){
+        System.err.println( " L'angle est de " +a);
         for ( int i = 0 ; i < angle.length ; i++){
             if ( angle[i] == a ) return i ;
         }
