@@ -1,5 +1,6 @@
 package com.model.config;
 
+
 /**
  * La classe Rail représente une case de type rail.
  * Elle hérite de la classe Case et ajoute des fonctionnalités spécifiques
