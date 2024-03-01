@@ -253,6 +253,7 @@ public class Plateau {
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
         int[] pos = new int[]{ville1.getY(), ville1.getX()};
+        int[] angles = {0, 45, 90, 135};
         while(longueur > 0)
         {
             if (pos[0] > ville2.getY())
@@ -273,7 +274,8 @@ public class Plateau {
                 pos[1] = pos[1] + 1;
             }
 
-            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angle);
+
+            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
 
             longueur--;
         }
