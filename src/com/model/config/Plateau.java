@@ -50,12 +50,10 @@ public class Plateau {
         // Produire les villes
         produireVilles(game.getVilles(), stville, res);
 
-        printTab(stville);
-
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
-        printTab(stville);
+        printVillesProps(res.plateau);
 
         return res;
     }
@@ -74,7 +72,7 @@ public class Plateau {
             for (int j = 0; j < stville[i].length; j++)
             {
                 indent = 4;
-                if(comp % 4 == 0 && comp != 0)
+                if(comp % 4 == 0)
                 {
                     System.out.println();
                     cind(indent);
@@ -86,10 +84,28 @@ public class Plateau {
                 }
                 comp++;
             }
-            System.out.println(" }");
+            System.out.println();
+            cind(indent - 2);
+            System.out.println("}");
         }
         System.out.println(" }");
     }
+
+    private static void printTab1(String[] tab)
+    {
+        System.out.println("{ ");
+        for (int i = 0; i < tab.length; i++)
+        {
+            System.out.print(tab[i]);
+            if(i < tab.length - 1)
+            {
+                System.out.print(", ");
+            }
+        }
+        System.out.println(" }");
+    }
+
+
 
     private static void printVillesProps(Case[][] plateau)
     {
@@ -97,15 +113,28 @@ public class Plateau {
         System.out.println("{ ");
         for (int i = 0; i < plateau.length; i++)
         {
-            System.out.println("{ ");
+            indent = 2;
+            int comp = 0;
+            cind(indent);
+            System.out.print("{ ");
             for (int j = 0; j < plateau[i].length; j++)
             {
+                indent = 4;
+                if(comp % 4 == 0)
+                {
+                    System.out.println();
+                    cind(indent);
+                }
+                System.out.print(plateau[i][j]);
                 if(j < plateau[i].length - 1)
                 {
                     System.out.print(", ");
                 }
+                comp++;
             }
-            System.out.println(" }");
+            System.out.println();
+            cind(indent - 2);
+            System.out.println("}");
         }
         System.out.println(" }");
     }
@@ -293,12 +322,13 @@ public class Plateau {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i]);
-                    Ville ville1 = villes[nvil1];
-                    Ville ville2 = villes[nvil2];
+                    Ville ville1 = villes[nvil1 - 1];
+                    Ville ville2 = villes[nvil2 - 1];
                     int longueur = Integer.parseInt(villet[i + 2]);
                     Couleur couleur = Couleur.values()[Integer.parseInt(villet[i + 1])];
                     Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
                     int angle = Integer.parseInt(villet[i + 3]);
+
 
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
