@@ -159,7 +159,7 @@ public class RailGraphics {
      */
     public static void paint(Graphics2D g, Rail rail){
         BufferedImage image = getImage(rail) ;
-        g.drawImage( image , rail.getX() , rail.getY() , width , height , null ) ;
+        g.drawImage( image , rail.getX() * width , rail.getY() * height , width , height , null ) ;
     }
 
     /*

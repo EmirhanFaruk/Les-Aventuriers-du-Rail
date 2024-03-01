@@ -73,7 +73,7 @@ public class VilleGraphics {
      */
     public static void paint (Graphics2D g  , Ville ville ){
         BufferedImage image = getImage( ville ) ;
-        g.drawImage( image , ville.getX() , ville.getY(),  width , height , null) ;
+        g.drawImage( image , ville.getX() * width , ville.getY() * height ,  width , height , null) ;
     }
 
     /*
