@@ -11,8 +11,11 @@ import java.util.ArrayList;
 public class MapScreen extends JPanel {
     ArrayList<MapGraphics> map = new ArrayList<>() ;
 
-    public MapScreen(){
+    final int width , height ;
 
+    public MapScreen( int width , int height){
+        this.width = width ;
+        this.height = height ;
     }
 
 
@@ -24,7 +27,7 @@ public class MapScreen extends JPanel {
         Case[][] tab = plateau.getPlateau();
         for ( Case[] cases : tab ) {
             for ( Case c : cases ) {
-                map.add( new MapGraphics( c , c.getX() , c.getY() ) );
+                map.add( new MapGraphics( c , width , height ) );
             }
         }
     }

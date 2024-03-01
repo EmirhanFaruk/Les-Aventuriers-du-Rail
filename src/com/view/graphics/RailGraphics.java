@@ -24,9 +24,7 @@ public class RailGraphics {
     private static final BufferedImage[] RailYellow = createListImage( "RailJaune.png" ) ;
     private static final BufferedImage[] RailJoker = createListImage( "RailLRainbow.png") ;
     private static final BufferedImage[] RailJokerEtoilee =createListImage("RailLEtoile.png" ) ;
-
-    private static final int[] angle = {0 , 45 , 90 , 135 } ;
-
+    private static int[] angle = { 0 , 45 , 90 , 135 } ;
     private static int width , height ;
 
     public RailGraphics( ) {
@@ -83,14 +81,22 @@ public class RailGraphics {
      * @param s string
      * @return BufferedImage[]
      */
-    public static BufferedImage[] createListImage ( String s){
-        BufferedImage[] list = new BufferedImage[4] ;
-        BufferedImage image = loadImage( s ) ;
-        list[0] = image ;
-        for ( int i =1 ; i < list.length ; i++){
-            list[i] = putRotation(image, angle[i]) ;
+    public static BufferedImage[] createListImage(String s) {
+        if (angle == null) {
+            angle = new int[]{0, 45, 90, 135};
         }
-        return list ;
+        BufferedImage[] list = new BufferedImage[4];
+        BufferedImage image = loadImage(s);
+        if (image != null) {
+            list[0] = image;
+            for (int i = 1 ; i < list.length; i++) {
+                BufferedImage rotatedImage = putRotation(image, angle[i]);
+                if (rotatedImage != null) {
+                    list[i] = rotatedImage;
+                }
+            }
+        }
+        return list;
     }
 
     /**
@@ -152,7 +158,7 @@ public class RailGraphics {
      * @param g Graphics
      * @param rail Rail
      */
-    public static void paint (Graphics2D g , Rail rail ){
+    public static void paint(Graphics2D g, Rail rail){
         BufferedImage image = getImage(rail) ;
         g.drawImage( image , rail.getX() , rail.getY() , width , height , null ) ;
     }
