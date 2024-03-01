@@ -17,7 +17,7 @@ public class MapGraphics {
     public void draw(Graphics2D g) {
         if (aCase instanceof Ville ville) {
             VilleGraphics.setWH(width, height);
-            VilleGraphics.paint( g , ville );
+            //VilleGraphics.paint( g , ville );
             System.err.println("La ville est dessiner");
         } else if (aCase instanceof Rail rail) {
             RailGraphics.setWH(width, height);

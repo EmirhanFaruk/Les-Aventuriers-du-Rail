@@ -1,6 +1,5 @@
 package com.view.graphics;
 
-import com.model.config.Case;
 import com.model.config.Rail;
 
 import javax.imageio.ImageIO;
@@ -105,10 +104,10 @@ public class RailGraphics {
      * @return int
      */
     public static int indexOf ( int a ){
-        for ( int i =0 ; i < angle.length ; i++){
+        for ( int i = 0 ; i < angle.length ; i++){
             if ( angle[i] == a ) return i ;
         }
-        return -1 ;
+        return 0 ;
     }
 
     /**
