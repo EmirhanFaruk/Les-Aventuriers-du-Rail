@@ -104,7 +104,6 @@ public class RailGraphics {
      * @return index
      */
     public static int indexOf ( int a ){
-        System.err.println( " L'angle est de " +a);
         for ( int i = 0 ; i < angle.length ; i++){
             if ( angle[i] == a ) return i ;
         }

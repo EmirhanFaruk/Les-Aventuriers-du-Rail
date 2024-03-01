@@ -49,6 +49,7 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
+        MapGraphics.getCmp();
         g2.dispose();
     }
 }
