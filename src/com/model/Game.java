@@ -10,8 +10,8 @@ import java.util.List;
 public class Game
 {
     private Plateau plateau;
-    private List<Joueur> joueurs;
-    private Joueur joueurCourant;
+    private List<Player> joueurs;
+    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -36,11 +36,11 @@ public class Game
 
     public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
 
-    public List<Joueur> getJoueurs() {
+    public List<Player> getJoueurs() {
         return joueurs;
     }
 
-    public Joueur getJoueurCourant() {
+    public Player getJoueurCourant() {
         return joueurCourant;
     }
 

@@ -1,6 +1,7 @@
 package com.model;
 
 
+import com.model.config.Plateau;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon.Couleur;
@@ -11,7 +12,7 @@ public class Route {
     private Ville ville2;
     private int longueur;
     private Couleur couleur; //couleur de la route
-    private Joueur proprietaire; //joueur qui a construit la route
+    private Player proprietaire; //joueur qui a construit la route
     private CarteDestination carte;
 
     public Route(Ville ville1, Ville ville2, int longueur, Couleur couleur,CarteDestination carte) {
@@ -39,11 +40,11 @@ public class Route {
         return couleur;
     }
 
-    public Joueur getProprietaire() {
+    public Player getProprietaire() {
         return proprietaire;
     }
 
-    public void setProprietaire(Joueur proprietaire) {
+    public void setProprietaire(Player proprietaire) {
         this.proprietaire = proprietaire;
     }
 

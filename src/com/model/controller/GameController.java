@@ -1,8 +1,7 @@
 package com.model.controller;
-
-
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteDestination;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 

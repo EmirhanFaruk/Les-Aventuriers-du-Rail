@@ -1,6 +1,4 @@
 package com.model.config;
-
-
 import com.model.Game;
 import com.model.Route;
 import com.model.config.carte.CarteWagon.Couleur;
