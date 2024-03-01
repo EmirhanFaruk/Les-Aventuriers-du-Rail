@@ -61,14 +61,10 @@ public class MapGraphics {
 
 
     public void draw(Graphics2D g) {
-        if (aCase instanceof Ville ville) {
-            VilleGraphics.setWH(tileWidth, tileHeight);
-            VilleGraphics.paint( g , ville );
-            System.err.println("La ville est dessiner");
-        } else if (aCase instanceof Rail rail) {
-            RailGraphics.setWH(tileWidth, tileHeight);
-            RailGraphics.paint( g, rail );
-            System.err.println("La rail est dessiner");
+        if (aCase instanceof Ville ) {
+            VilleGraphics.paint( g , ( Ville ) aCase );
+        } else if (aCase instanceof Rail ) {
+            RailGraphics.paint( g, (Rail) aCase );
         }
     }
 
