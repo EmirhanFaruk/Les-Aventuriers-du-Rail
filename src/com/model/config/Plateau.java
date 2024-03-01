@@ -53,7 +53,7 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
-        printVillesProps(res.plateau);
+        printVillesProps(stville);
 
         return res;
     }
@@ -107,30 +107,46 @@ public class Plateau {
 
 
 
-    private static void printVillesProps(Case[][] plateau)
+    private static void printVillesProps(String[][] stville)
     {
         int indent = 0;
         System.out.println("{ ");
-        for (int i = 0; i < plateau.length; i++)
+        for (int i = 0; i < stville.length; i++)
         {
             indent = 2;
             int comp = 0;
             cind(indent);
             System.out.print("{ ");
-            for (int j = 0; j < plateau[i].length; j++)
+            System.out.println();
+            indent = 4;
+            cind(indent);
+            System.out.print("Num: " + stville[i][0]);
+            System.out.print(", nom: " + stville[i][1]);
+            System.out.print(", X: " + stville[i][2]);
+            System.out.print(", Y: " + stville[i][3]);
+            int j = 4;
+            while (j < stville[i].length)
             {
                 indent = 4;
-                if(comp % 4 == 0)
-                {
-                    System.out.println();
-                    cind(indent);
-                }
-                System.out.print(plateau[i][j]);
-                if(j < plateau[i].length - 1)
+                System.out.println();
+                cind(indent);
+
+
+
+                System.out.print("Num: " + stville[i][j]);
+                System.out.print(", Type de rail: " + stville[i][j + 1]);
+                System.out.print(", Nombre des rails: " + stville[i][j + 2]);
+                System.out.print(", Angle: " + stville[i][j + 3]);
+
+
+
+                if(j < stville[i].length - 1)
                 {
                     System.out.print(", ");
                 }
                 comp++;
+
+                j += 4;
             }
             System.out.println();
             cind(indent - 2);
