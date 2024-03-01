@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
     ArrayList<MapGraphics> map = new ArrayList<>() ;
-
+    final String mapName ;
     final int width , height ;
-
     final int tileWidth , tileHeight ;
 
-    public MapScreen( int width , int height , int tileWidth , int tileHeight ){
+    public MapScreen( String mapName , int width , int height , int tileWidth , int tileHeight ){
+        this.mapName = mapName+".png" ;
         this.width = width ;
         this.height = height ;
         this.tileWidth = tileWidth ;
@@ -23,7 +23,7 @@ public class MapScreen extends JPanel {
     }
 
 
-    public void makeMap ( Plateau plateau){
+    public void makeMap ( Plateau plateau ){
         map( plateau );
     }
 
@@ -39,7 +39,7 @@ public class MapScreen extends JPanel {
     protected void paintComponent (Graphics g ){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        g.drawImage( MapGraphics.getBackGround(), 0 ,0 , width , height , null ) ;
+        g.drawImage( MapGraphics.backgroundImage( mapName ), 0 ,0 , width , height , null ) ;
 
         // Everything to draw goes here using g2
         for (MapGraphics m : map)

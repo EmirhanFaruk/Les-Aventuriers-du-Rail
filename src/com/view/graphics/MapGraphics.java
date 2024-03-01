@@ -15,7 +15,6 @@ public class MapGraphics {
 
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-    private static final BufferedImage backGround = loadImage("Map1.png") ;
 
     public MapGraphics( Case c , int tileWidth , int tileHeight ){
         this.aCase = c ;
@@ -56,6 +55,9 @@ public class MapGraphics {
         return "/";
     }
 
+    public static BufferedImage backgroundImage ( String mapName ){
+        return loadImage(mapName ) ;
+    }
 
 
     public void draw(Graphics2D g) {
@@ -76,10 +78,6 @@ public class MapGraphics {
     */
     public Case getaCase() {
         return aCase;
-    }
-
-    public static BufferedImage getBackGround() {
-        return backGround;
     }
 
     public int getHeight() {
