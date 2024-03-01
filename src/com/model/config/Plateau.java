@@ -52,7 +52,6 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
-        printTabEls(res.getPlateau());
         return res;
     }
 
@@ -248,26 +247,6 @@ public class Plateau {
             }
         }
         return res;
-    }
-
-
-    private static void printTabEls(Case[][] tab)
-    {
-        System.out.println("{ ");
-        for (int i = 0; i < tab.length; i++)
-        {
-            System.out.print("{ ");
-            for (int j = 0; j < tab[i].length; j++)
-            {
-                System.out.print(tab[i][j].getClass());
-                if(j < tab[i].length - 1)
-                {
-                    System.out.print(", ");
-                }
-            }
-            System.out.println(" }");
-        }
-        System.out.println(" }");
     }
 
 
