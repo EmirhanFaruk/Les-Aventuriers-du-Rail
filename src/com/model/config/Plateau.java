@@ -29,7 +29,6 @@ public class Plateau {
      * Produire un plateau depuis un nom de map
      * @param nomMap nom de fichier
      * @return le plateau depuis la carte donnee
-     * @throws FileNotFoundException
      */
     public static Plateau makePlateau(String nomMap, Game game)
     {
@@ -46,13 +45,77 @@ public class Plateau {
         String[][] stville = new String[15][];
         readFile(reader, stville);
 
+        printTab(stville);
+
         // Produire les villes
         produireVilles(game.getVilles(), stville, res);
+
+        printTab(stville);
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
+        printTab(stville);
+
         return res;
+    }
+
+
+    private static void printTab(String[][] stville)
+    {
+        int indent = 0;
+        System.out.println("{ ");
+        for (int i = 0; i < stville.length; i++)
+        {
+            indent = 2;
+            int comp = 0;
+            cind(indent);
+            System.out.print("{ ");
+            for (int j = 0; j < stville[i].length; j++)
+            {
+                indent = 4;
+                if(comp % 4 == 0 && comp != 0)
+                {
+                    System.out.println();
+                    cind(indent);
+                }
+                System.out.print(stville[i][j]);
+                if(j < stville[i].length - 1)
+                {
+                    System.out.print(", ");
+                }
+                comp++;
+            }
+            System.out.println(" }");
+        }
+        System.out.println(" }");
+    }
+
+    private static void printVillesProps(Case[][] plateau)
+    {
+        int indent = 0;
+        System.out.println("{ ");
+        for (int i = 0; i < plateau.length; i++)
+        {
+            System.out.println("{ ");
+            for (int j = 0; j < plateau[i].length; j++)
+            {
+                if(j < plateau[i].length - 1)
+                {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println(" }");
+        }
+        System.out.println(" }");
+    }
+
+    private static void cind(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            System.out.print(" ");
+        }
     }
 
 
@@ -224,18 +287,18 @@ public class Plateau {
         {
             if(villet.length > 4)
             {
-                int i = 8;
-                while (i < villet.length)
+                int i = 4;
+                while (i + 4 < villet.length)
                 {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
                     int nvil1 = Integer.parseInt(villet[0]);
-                    int nvil2 = Integer.parseInt(villet[i - 3]);
+                    int nvil2 = Integer.parseInt(villet[i]);
                     Ville ville1 = villes[nvil1];
                     Ville ville2 = villes[nvil2];
-                    int longueur = Integer.parseInt(villet[i - 1]);
-                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i - 2])];
-                    Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i - 2])];
-                    int angle = Integer.parseInt(villet[i]);
+                    int longueur = Integer.parseInt(villet[i + 2]);
+                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i + 1])];
+                    Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
+                    int angle = Integer.parseInt(villet[i + 3]);
 
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
