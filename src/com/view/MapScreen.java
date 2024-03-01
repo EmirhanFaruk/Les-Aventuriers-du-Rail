@@ -13,9 +13,13 @@ public class MapScreen extends JPanel {
 
     final int width , height ;
 
-    public MapScreen( int width , int height){
+    final int tileWidth , tileHeight ;
+
+    public MapScreen( int width , int height , int tileWidth , int tileHeight ){
         this.width = width ;
         this.height = height ;
+        this.tileWidth = tileWidth ;
+        this.tileHeight = tileHeight ;
     }
 
 
@@ -27,7 +31,7 @@ public class MapScreen extends JPanel {
         Case[][] tab = plateau.getPlateau();
         for ( Case[] cases : tab ) {
             for ( Case c : cases ) {
-                map.add( new MapGraphics( c , width , height ) );
+                map.add( new MapGraphics( c , tileWidth , tileHeight ) );
             }
         }
     }
@@ -35,6 +39,7 @@ public class MapScreen extends JPanel {
     protected void paintComponent (Graphics g ){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        g.drawImage( MapGraphics.getBackGround(), 0 ,0 , width , height , null ) ;
 
         // Everything to draw goes here using g2
         for (MapGraphics m : map)

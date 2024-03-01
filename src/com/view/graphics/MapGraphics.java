@@ -10,16 +10,17 @@ import java.io.IOException;
 
 public class MapGraphics {
     private Case aCase ;
-    int width , height ;
+    final int tileWidth , tileHeight ;
+
 
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-    private final BufferedImage backGround = loadImage("") ;
+    private static final BufferedImage backGround = loadImage("Map1.png") ;
 
-    public MapGraphics( Case c , int width , int height ){
+    public MapGraphics( Case c , int tileWidth , int tileHeight ){
         this.aCase = c ;
-        this.width = width ;
-        this.height = height ;
+        this.tileWidth = tileWidth ;
+        this.tileHeight = tileHeight ;
     }
 
 
@@ -58,13 +59,12 @@ public class MapGraphics {
 
 
     public void draw(Graphics2D g) {
-        g.drawImage( backGround , 0 ,0 , getWidth() , getHeight() , null ) ;
         if (aCase instanceof Ville ville) {
-            VilleGraphics.setWH(width, height);
+            VilleGraphics.setWH(tileWidth, tileHeight);
             VilleGraphics.paint( g , ville );
             System.err.println("La ville est dessiner");
         } else if (aCase instanceof Rail rail) {
-            RailGraphics.setWH(width, height);
+            RailGraphics.setWH(tileWidth, tileHeight);
             RailGraphics.paint( g, rail );
             System.err.println("La rail est dessiner");
         }
@@ -78,11 +78,15 @@ public class MapGraphics {
         return aCase;
     }
 
+    public static BufferedImage getBackGround() {
+        return backGround;
+    }
+
     public int getHeight() {
-        return height;
+        return tileHeight;
     }
 
     public int getWidth() {
-        return width;
+        return tileWidth;
     }
 }

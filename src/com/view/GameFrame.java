@@ -46,7 +46,6 @@ public class GameFrame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-        this.scale = 32 ;
         this.main = main;
         // On commence par menu
         // On ne peut pas produire game encore car on n'a pas encore choisit le map.
@@ -114,7 +113,4 @@ public class GameFrame extends JFrame
         return device;
     }
 
-    public double getScale() {
-        return scale;
-    }
 }
