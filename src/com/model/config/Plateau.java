@@ -47,7 +47,7 @@ public class Plateau {
         readFile(reader, stville);
 
         // Produire les villes
-        produireVilles(game.getVilles(), stville);
+        produireVilles(game.getVilles(), stville, res);
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
@@ -202,7 +202,7 @@ public class Plateau {
         }
     }
 
-    private static void produireVilles(Ville[] villes, String[][] stville)
+    private static void produireVilles(Ville[] villes, String[][] stville, Plateau plateau)
     {
         for (int i = 0; i < villes.length; i++)
         {
@@ -210,7 +210,9 @@ public class Plateau {
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
-            villes[i] = new Ville(x, y, nom);
+            Ville ville = new Ville(x, y, nom);
+            villes[i] = ville;
+            plateau.getPlateau()[y][x] = ville;
         }
     }
 
@@ -244,7 +246,6 @@ public class Plateau {
                 }
             }
         }
-
         return res;
     }
 
