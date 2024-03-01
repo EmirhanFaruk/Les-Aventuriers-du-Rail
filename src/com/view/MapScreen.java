@@ -24,10 +24,10 @@ public class MapScreen extends JPanel {
 
 
     public void makeMap ( Plateau plateau ){
-
         map( plateau );
         RailGraphics.setWH(tileWidth, tileHeight);
         VilleGraphics.setWH(tileWidth, tileHeight);
+        plateau.cmp();
     }
 
     private void map( Plateau plateau ) {

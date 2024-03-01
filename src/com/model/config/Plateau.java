@@ -365,4 +365,20 @@ public class Plateau {
     public boolean estUneCasePaysage(int x, int y) {
         return !this.estUneCaseVille(x, y) && !this.estUneCaseRail(x, y);
     }
+
+    public void cmp (){
+        int cmpVille = 0 ;
+        int cmpRail = 0 ;
+        for ( Case[] cases : this.plateau ){
+            for ( Case c : cases ){
+                if ( c instanceof Ville ){
+                    cmpVille ++ ;
+                } else if ( c instanceof Rail ){
+                    cmpRail++ ;
+                }
+            }
+        }
+        System.out.println("Le nombre de ville  : "+ cmpVille );
+        System.out.println("Le nombre de rail : "+ cmpRail );
+    }
 }
