@@ -39,7 +39,7 @@ public class Main implements Runnable
         double end = required_fps;
         while(running)
         {
-            System.out.println("running");
+            //System.out.println("running");
             start = System.nanoTime();
             if(end >= required_fps)
             {

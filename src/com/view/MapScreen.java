@@ -16,7 +16,7 @@ public class MapScreen extends JPanel {
     }
 
 
-    public void makeMap ( Plateau plateau , int tile_width , int tile_height ){
+    public void makeMap ( Plateau plateau){
         map( plateau );
     }
 
@@ -36,7 +36,7 @@ public class MapScreen extends JPanel {
         // Everything to draw goes here using g2
         for (MapGraphics m : map)
         {
-            m.paint( g2 , m.getaCase() );
+            m.draw( g2 );
         }
         g2.dispose();
     }

@@ -14,16 +14,20 @@ public class MapGraphics {
         this.height = height ;
     }
 
-   public void paint ( Graphics2D g , Case c ){
-        if ( c instanceof Ville ){
-            VilleGraphics.paint( g , (Ville) c );
-        } else if ( c instanceof Rail ) {
-            RailGraphics.paint(g, (Rail) c);
+    public void draw(Graphics2D g) {
+        if (aCase instanceof Ville ville) {
+            VilleGraphics.paint( g , ville );
+            System.err.println("La ville est dessiner");
+        } else if (aCase instanceof Rail rail) {
+            RailGraphics.paint( g, rail );
+            System.err.println("La rail est dessiner");
+        } else {
+            System.out.println("C' est une case");
         }
-   }
+    }
 
 
-   /*
+    /*
    getteurs et setteurs
     */
     public Case getaCase() {

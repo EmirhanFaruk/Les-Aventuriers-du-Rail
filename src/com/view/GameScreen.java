@@ -2,8 +2,10 @@ package com.view;
 
 
 import com.model.config.Plateau;
+import com.view.graphics.* ;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class GameScreen extends JPanel {
 
@@ -15,15 +17,16 @@ public class GameScreen extends JPanel {
     public GameScreen ( GameFrame frame ){
         this.frame = frame ;
         this.mapScreen = new MapScreen() ;
-    }
-
-    public void make( Plateau plateau ){
         tile_height = getHeight() / 24 ;
         tile_width = getWidth() / 24 ;
 
-        tile_offset_width = (getWidth() - (tile_width * 24));
-        tile_offset_height = (getHeight() - (tile_height * 24));
+        setSize( tile_width , tile_height ) ;
+        setLayout(new BorderLayout());
+        add( mapScreen , BorderLayout.CENTER ) ;
 
-        mapScreen.makeMap( plateau , tile_width , tile_height );
+    }
+
+    public void make( Plateau plateau ){
+        mapScreen.makeMap( plateau );
     }
 }

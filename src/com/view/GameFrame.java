@@ -70,6 +70,7 @@ public class GameFrame extends JFrame
     {
         main.startGame(map, player_names, player_types);
 
+        gameScreen = null ;
         gameScreen = new GameScreen( this ) ;
 
         main_panel.add(ingame_screen_s , gameScreen ) ;
