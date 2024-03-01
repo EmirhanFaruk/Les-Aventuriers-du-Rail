@@ -82,6 +82,7 @@ public class Settings extends JPanel
                 int index = res_box.getSelectedIndex();
                 int[] res = resolutions[index];
                 main.setAllSize(res[0], res[1]);
+                main.getFrame().setLocationRelativeTo(null);
             }
         });
 

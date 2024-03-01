@@ -60,6 +60,7 @@ public class GameFrame extends JFrame
         this.add(main_panel);
 
         pack();
+        setLocationRelativeTo(null);
 
         this.setVisible(true);
 
