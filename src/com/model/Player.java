@@ -53,7 +53,7 @@ public class Player {
     private void retirerLesCartes(Couleur color, int longeur) {
     	int i = 0, count = longeur;
     	
-    	while(count == 0) {    		
+    	while(count != 0) {    		
     		if(this.trainList.get(i) == color) {
     			this.trainList.remove(i);
     			count--;
