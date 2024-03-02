@@ -1,7 +1,5 @@
 package com.model;
 import com.model.config.Plateau;
-import com.model.config.Rail;
-import com.model.config.Rail.Content;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
@@ -43,10 +41,10 @@ public class Player {
     
     private int carteDuJoueur(Couleur color){
     	int count = 0;
-    	
+
     	for(int i = 0; i < this.trainList.size(); i++) {
     		if(this.trainList.get(i) == color)count++;
-    		if(this.trainList.get(i).equals(JOKERETOILEE))count++;
+    		if(this.trainList.get(i) == Couleur.LOC)count++;
     	}
     	
     	return count;
