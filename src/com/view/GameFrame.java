@@ -1,6 +1,7 @@
 package com.view;
 
 import com.controller.Main;
+import com.model.Game;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
@@ -21,6 +22,8 @@ public class GameFrame extends JFrame
     // Pour changer le mode
     private JPanel main_panel;
     private final CardLayout cardLayout = new CardLayout();
+
+    private GameScreen gameScreen ;
 
     private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME";
 
@@ -43,7 +46,6 @@ public class GameFrame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-
         this.main = main;
         // On commence par menu
         // On ne peut pas produire game encore car on n'a pas encore choisit le map.
@@ -57,6 +59,7 @@ public class GameFrame extends JFrame
         this.add(main_panel);
 
         pack();
+        setLocationRelativeTo(null);
 
         this.setVisible(true);
 
@@ -65,11 +68,17 @@ public class GameFrame extends JFrame
 
     public void startGame(String map, String[] player_names, String[] player_types)
     {
+        main.startGame(map, player_names, player_types);
+
+        gameScreen = null ;
+        gameScreen = new GameScreen( this , map , getWidth() , getHeight()) ;
+
+        main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
         pack();
         setMinimumSize(null);
+        gameScreen.make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
-        main.startGame(map, player_names, player_types);
     }
 
 
@@ -103,4 +112,5 @@ public class GameFrame extends JFrame
     {
         return device;
     }
+
 }

@@ -24,6 +24,13 @@ public class Game
         this.plateau = Plateau.makePlateau(nomMap, this);
     }
 
+    /*
+    getteurs et setteurs
+     */
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     public Ville[] getVilles() {
         return villes;
     }
