@@ -32,7 +32,7 @@ public class Plateau {
     {
         Plateau res = new Plateau(24,24);
 
-        fillTab(res.getPlateau());
+
 
         // Opening the file
         BufferedReader reader = openFile(nomMap);
@@ -45,13 +45,58 @@ public class Plateau {
 
         // Produire les villes
         produireVilles(game.getVilles(), stville, res);
-        System.out.println(game.getVilles().length);
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
+        //printTab(res.plateau);
+        fillTab(res.getPlateau());
+
+
 
         return res;
     }
+
+    private static void printTab(Case[][] plateau)
+    {
+        int indent = 0;
+        System.out.println("{ ");
+        for (int i = 0; i < plateau.length; i++)
+        {
+            indent = 2;
+            int comp = 0;
+            cind(indent);
+            System.out.print("{ ");
+            for (int j = 0; j < plateau[i].length; j++)
+            {
+                indent = 4;
+                if(comp % 4 == 0)
+                {
+                    System.out.println();
+                    cind(indent);
+                }
+                System.out.print(plateau[j][i]);
+                if(j < plateau[i].length - 1)
+                {
+                    System.out.print(", ");
+                }
+                comp++;
+            }
+            System.out.println();
+            cind(indent - 2);
+            System.out.println("}");
+        }
+        System.out.println(" }");
+    }
+
+    private static void cind(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            System.out.print(" ");
+        }
+    }
+
+
 
     /**
      * Remplir les parties nulls du tableau avec des Paysages.
@@ -207,10 +252,10 @@ public class Plateau {
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
-            Ville ville = new Ville(x, y, nom);
-            villes[i] = ville;
-            plateau.getPlateau()[y][x] = ville;
-            System.out.println("X: " + x + ", Y: " + y + ", Nom: " + nom);
+            villes[i] = new Ville(x, y, nom);
+            plateau.getPlateau()[y][x] = new Ville(x, y, nom);
+            plateau.cmp();
+            //System.out.println("X: " + x + ", Y: " + y + ", Nom: " + nom);
         }
     }
 
