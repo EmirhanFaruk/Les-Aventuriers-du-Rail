@@ -318,8 +318,10 @@ public class Plateau {
                 pos[1] = pos[1] + 1;
             }
 
-
-            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
+            {
+                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+            }
 
             longueur--;
         }
