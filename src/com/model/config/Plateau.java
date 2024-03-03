@@ -45,6 +45,7 @@ public class Plateau {
 
         // Produire les villes
         produireVilles(game.getVilles(), stville, res);
+        System.out.println(game.getVilles().length);
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
@@ -209,6 +210,7 @@ public class Plateau {
             Ville ville = new Ville(x, y, nom);
             villes[i] = ville;
             plateau.getPlateau()[y][x] = ville;
+            System.out.println("X: " + x + ", Y: " + y + ", Nom: " + nom);
         }
     }
 
