@@ -53,32 +53,39 @@ public class Route {
 
         switch (longueur){
             //1 wagon = 1 point
-            case 1 -> {
+            case 1 :
                 nombrePoint = 1;
-            }
+                break;
+
             //2 wagon = 2 point
-            case 2 -> {
+            case 2 :
                 nombrePoint = 2;
-            }
+                break;
+
             //3 wagon = 4 point
-            case 3 -> {
+            case 3 :
                 nombrePoint = 4;
-            }
+                break;
+
+
             //4 wagon = 7 point
-            case 4 -> {
+            case 4 :
                 nombrePoint = 7;
-            }
+                break;
             //5 wagon = 10 point
-            case 5 -> {
+            case 5 :
                 nombrePoint = 10;
-            }
+                break;
+
             //5 wagon = 15 point
-            case 6 -> {
+            case 6 :
                 nombrePoint = 15;
-            }
-            default -> {
+                break;
+
+            default :
                 nombrePoint = 0;
-            }
+                break;
+
 
             }
 

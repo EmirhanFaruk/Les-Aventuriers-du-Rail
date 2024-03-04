@@ -236,7 +236,7 @@ public class Plateau {
 
                     CarteDestination carte = new CarteDestination();
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
-                    Route route = new Route(ville1, ville2, longueur, couleur, carte);
+                    Route route = new Route(ville1, ville2, longueur, couleur);
                     putRails(ville1, ville2, longueur, fakeCouleur, angle, plateau);
                     res.add(route);
                     i += 4;
