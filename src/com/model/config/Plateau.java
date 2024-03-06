@@ -77,8 +77,10 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
+
         return res;
     }
+
 
     /**
      * Remplir les parties nulls du tableau avec des Paysages.
@@ -90,10 +92,7 @@ public class Plateau {
         {
             for (int j = 0; j < tab[i].length; j++)
             {
-                if(tab[i][j] == null)
-                {
-                    tab[i][j] = new Paysage(j, i);
-                }
+                tab[i][j] = new Paysage(j, i);
             }
         }
     }
@@ -234,9 +233,8 @@ public class Plateau {
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
-            Ville ville = new Ville(x, y, nom);
-            villes[i] = ville;
-            plateau.getPlateau()[y][x] = ville;
+            villes[i] = new Ville(x, y, nom);
+            plateau.getPlateau()[y][x] = new Ville(x, y, nom);
         }
     }
 
@@ -299,8 +297,10 @@ public class Plateau {
                 pos[1] = pos[1] + 1;
             }
 
-
-            plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
+            {
+                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+            }
 
             longueur--;
         }
