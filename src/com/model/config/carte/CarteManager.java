@@ -1,5 +1,9 @@
 package com.model.config.carte;
 
+import com.model.config.Plateau;
+import com.model.config.Plateau.Ville;
+import com.model.config.Route;
+
 import java.util.Random;
 
 import static com.model.config.carte.CarteWagon.Couleur.*;
@@ -10,8 +14,7 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[5];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
-
-    private CarteDestination carteDestination = new CarteDestination();
+    private Plateau plateau = new Plateau();
 
 
     public CarteManager(){
@@ -102,8 +105,8 @@ public class CarteManager {
         //Fonction qui choisit au hasard les déstinations
 
         //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random ville1RANDOM = new Random(carteDestination.getVilles().length);
-        Random ville2RANDOM = new Random(carteDestination.getVilles().length);
+        Random ville1RANDOM = new Random(plateau.getVilles().length);
+        Random ville2RANDOM = new Random(plateau.getVilles().length);
         int ville1 = ville1RANDOM.nextInt();
         int ville2 = ville1RANDOM.nextInt();
 
@@ -111,11 +114,19 @@ public class CarteManager {
         while(ville1 == ville2){
             ville2 = ville1RANDOM.nextInt();
         }
+        Plateau.Ville v1 = plateau.getVilles()[ville1];
+        Plateau.Ville v2 = plateau.getVilles()[ville2];
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        return new CarteDestination(carteDestination.getPremiereVille(),carteDestination.getDeuxiemeVille(),carteDestination.getNombrePoints());
+        return  new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
 
 
+    }
+
+
+    public int nombrePointDistance(Plateau.Ville v1, Plateau.Ville v2){
+        //TODO
+        return 2;
     }
 
 
@@ -123,7 +134,7 @@ public class CarteManager {
         return getPioche();
     }
 
-
+    //TODO
 
 
 

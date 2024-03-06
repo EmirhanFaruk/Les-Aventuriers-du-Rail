@@ -39,6 +39,9 @@ public class Game implements Runnable {
         return routes;
     }
 
+    public void setVilles(List<Ville> villes) {
+        this.villes = villes;
+    }
 
     public List<Player> getJoueurs() {
         return joueurs;

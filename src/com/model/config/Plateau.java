@@ -11,6 +11,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.model.config.Plateau.Ville.*;
+
+
 /**
  * La classe Plateau représente le plateau de jeu.
  * Elle contient des méthodes pour gérer les cases du plateau telles que les rails, les villes et les paysages.
@@ -23,11 +26,36 @@ public class Plateau {
     /** Le tableau représentant les cases du plateau. */
     private Case[][] plateau;
 
+    private ArrayList<Route> routesPlateau;
+
+    private String nomMap;
+    public enum Ville
+    {MONAN,EMIRHANDOME,SALAME,AMAZIGHSPIDERMAN,
+        ALEXICOLE,YAPADEPANO,WOKUWOKU,CHEDELYON,
+        WOKANDA,FFQUATORZE,DUCKDUCK,CATLAND,
+        PARTPARTPART,BEINGCHILLING,ADOMINATION}
+
+    private Ville[] villes = new Ville[]{MONAN, EMIRHANDOME, SALAME, AMAZIGHSPIDERMAN,
+            ALEXICOLE, YAPADEPANO, WOKUWOKU, CHEDELYON,
+            WOKANDA, FFQUATORZE, DUCKDUCK, CATLAND,
+            PARTPARTPART, BEINGCHILLING, ADOMINATION};
+
+    public Ville[] getVilles() {
+        return villes;
+    }
+
+
+
     /**
      * Produire un plateau depuis un nom de map
-     * @param nomMap nom de fichier
+     * @param  nomMap de fichier
      * @return le plateau depuis la carte donnee
      */
+
+
+    public Plateau(){
+
+    }
     public static Plateau makePlateau(String nomMap, Game game)
     {
         Plateau res = new Plateau(24,24);
@@ -381,4 +409,20 @@ public class Plateau {
         System.out.println("Le nombre de ville  : "+ cmpVille );
         System.out.println("Le nombre de rail : "+ cmpRail );
     }
+
+
+
+    public void initRoute(){
+
+        routesPlateau.add(new Route(E))
+
+    }
+
+
+
+
 }
+
+
+
+
