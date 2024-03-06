@@ -2,13 +2,10 @@ package com.model.config;
 import com.model.Game;
 import com.model.Route;
 import com.model.config.carte.CarteWagon.Couleur;
-import com.model.config.Rail.Content;
 import com.model.config.carte.CarteDestination;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.model.config.Plateau.Ville.*;
@@ -51,11 +48,6 @@ public class Plateau {
      * @param  nomMap de fichier
      * @return le plateau depuis la carte donnee
      */
-
-
-    public Plateau(){
-
-    }
     public static Plateau makePlateau(String nomMap, Game game)
     {
         Plateau res = new Plateau(24,24);
@@ -414,7 +406,7 @@ public class Plateau {
 
     public void initRoute(){
 
-        routesPlateau.add(new Route(E))
+        routesPlateau.add(new Route());
 
     }
 

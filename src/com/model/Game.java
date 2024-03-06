@@ -51,9 +51,26 @@ public class Game
         return joueurCourant;
     }
 
+
     public void update(double deltaTime)
     {
         //game loop
+    }
+
+    private void initBoard(){
+        //Fonction qui initialise le jeu
+
+
+        //Initialisation des cartes wagon sur le board
+        for(int i = 0; i< cm.getTrainCards().length; i++){
+            cm.getTrainCards()[i] = cm.getPioche();
+        }
+
+        //Initialisation des cartes destination du premier tour du board que le joueur choisit
+        for(int y = 0; y < cm.getDestinationsCards().length;y++){
+            cm.getDestinationsCards()[y] = cm.getDestination();
+        }
+
     }
 
 
