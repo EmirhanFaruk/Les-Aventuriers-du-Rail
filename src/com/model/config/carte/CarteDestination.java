@@ -1,24 +1,16 @@
 package com.model.config.carte;
 
-import javax.swing.*;
-import java.util.Random;
+import com.model.config.Plateau;
+import com.model.config.Route;
+import com.model.config.Ville;
 
-import static com.model.config.carte.CarteDestination.Ville.*;
+import javax.swing.*;
 
 public class CarteDestination extends JPanel {
+
     private Ville premiereVille;
     private Ville deuxiemeVille;
     private int nombrePoints;
-    public enum Ville
-    {MONAN,EMIRHANDOME,SALAME,AMAZIGHSPIDERMAN,
-        ALEXICOLE,YAPADEPANO,WOKUWOKU,CHEDELYON,
-        WOKANDA,FFQUATORZE,DUCKDUCK,CATLAND,
-        PARTPARTPART,BEINGCHILLING,ADOMINATION}
-
-    private Ville[] villes = new Ville[]{MONAN, EMIRHANDOME, SALAME, AMAZIGHSPIDERMAN,
-            ALEXICOLE, YAPADEPANO, WOKUWOKU, CHEDELYON,
-            WOKANDA, FFQUATORZE, DUCKDUCK, CATLAND,
-            PARTPARTPART, BEINGCHILLING, ADOMINATION};
 
 
     public Ville getPremiereVille() {
@@ -31,30 +23,17 @@ public class CarteDestination extends JPanel {
         return nombrePoints;
     }
 
-    public Ville[] getVilles() {
-        return villes;
-    }
 
     //Pour les testes on va utiliser ce constructeur
 
-    public CarteDestination(){
-        this.premiereVille = WOKUWOKU;
-        this.deuxiemeVille = ADOMINATION;
-        this.nombrePoints = 5;
-    }
-
-    public CarteDestination(Ville v1, Ville v2, int nombrePoints){
-        this.premiereVille = v1;
-        this.deuxiemeVille = v2;
-        this.nombrePoints = nombrePoints;
+    public CarteDestination(Route route){
+        this.premiereVille = route.getVille1();
+        this.deuxiemeVille = route.getVille2();
+        this.nombrePoints = route.getNombrePoint();
     }
 
 
-    /*
-    public CarteDestination(){
-        getDestination();
-    }
-    */
+
 
 
 

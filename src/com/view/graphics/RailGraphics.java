@@ -121,7 +121,7 @@ public class RailGraphics {
             case BLEU:
                 return RailBlue[index] ;
 
-            case NOIR:
+            case NOIRE:
                 return RailDark[index] ;
 
             case VERT:
