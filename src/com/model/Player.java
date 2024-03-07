@@ -49,19 +49,19 @@ public class Player {
         this.trainList = trainList;
     }
     
-    private int carteDuJoueur(Couleur color){
+    private int carteDuJoueur(Rail.Content color){
     	int count = 0;
 
     	for(int i = 0; i < this.trainList.size(); i++) {
-    		if(this.trainList.get(i) == color)count++;
-    		if(this.trainList.get(i) == Couleur.LOC)count++;
+    		if(compatibleColor(color,this.trainList.get(i)))count++;
+
     	}
     	
     	return count;
     }
 
 	//TODO, Faire une fonction de Comparaison entre /!\ CONTENT /!\ et /!\COULEUR/!\
-    private void retirerLesCartes(Content color, int longeur) {
+    private void retirerLesCartes(Couleur color, int longeur) {
     	int i = 0, count = longeur;
     	
     	while(count != 0) {    		
@@ -75,13 +75,8 @@ public class Player {
     }
 
     public boolean mettreRoute(Route r){
-    	String a = "Rouge";
-		String b = "JSP";
-
-		System.out.println(a.equals(b));
-
 		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null){
-    		this.retirerLesCartes(r.getCouleur(), r.getLongueur());
+    		this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
     		r = new Route(r.getVille1(), r.getVille2(), r.getLongueur(), r.getCouleur());
 			r.setProprietaire(this);
     		return true;
@@ -100,20 +95,13 @@ public class Player {
 		return false;
     }
 
-	LOC, BLEU, VIOLET, MARRON, BLANC, VERT, JAUNE, NOIRE, ROUGE
-	BLEU,VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE
-	public CarteWagon.Couleur compatibleColor(Content content){
+	public boolean compatibleColor(Content content, Couleur couleur){
 
-		switch (content){
-
-			case BLEU :
-				return Couleur.BLEU;
-
-
-
+		if(couleur == Couleur.LOC){
+			return true;
 		}
 
-
+		return content.ordinal() == couleur.ordinal();
 
 	}
 

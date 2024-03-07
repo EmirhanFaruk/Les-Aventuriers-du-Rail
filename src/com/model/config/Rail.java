@@ -11,7 +11,7 @@ public class Rail extends Case {
     /**
      * L'énumération Content représente les différentes couleurs de rail possibles.
      */
-    public enum Content {BLEU, VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE}
+    public enum Content {BLEU, VIOLET , MARRON , NOIRE , VERT , JAUNE , BLANC , ROUGE , JOKER , JOKERETOILEE}
 
     /** La couleur initiale du rail. */
     private Content initialContent;

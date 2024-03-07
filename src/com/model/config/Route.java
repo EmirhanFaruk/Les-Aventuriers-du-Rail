@@ -3,6 +3,8 @@ package com.model.config;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 import com.model.Player;
+import com.model.config.carte.CarteWagon.Couleur;
+import com.model.config.Rail.Content;
 
 public class Route {
 
@@ -43,6 +45,19 @@ public class Route {
 
     public Rail.Content getCouleur() {
         return couleur;
+    }
+
+    public Couleur traducteurCouleur(){
+        //Pour Carte : BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, LOC
+        if(this.getCouleur() == Content.BLEU)return Couleur.BLEU;
+        if(this.getCouleur() == Content.VIOLET)return Couleur.VIOLET;
+        if(this.getCouleur() == Content.MARRON)return Couleur.MARRON;
+        if(this.getCouleur() == Content.NOIRE)return Couleur.NOIRE;
+        if(this.getCouleur() == Content.VERT)return Couleur.VERT;
+        if(this.getCouleur() == Content.JAUNE)return Couleur.JAUNE;
+        if(this.getCouleur() == Content.BLANC)return Couleur.BLANC;
+        if(this.getCouleur() == Content.ROUGE)return Couleur.ROUGE;
+        return Couleur.LOC;
     }
 
     public Player getProprietaire() {
