@@ -1,8 +1,9 @@
 package com.model.config.carte;
 
+import com.model.Game;
 import com.model.config.Plateau;
-import com.model.config.Plateau.Ville;
 import com.model.config.Route;
+import com.model.config.Ville;
 
 import java.util.Random;
 
@@ -14,14 +15,15 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[5];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
-    private Plateau plateau = new Plateau();
+    private Game game;
 
-
-    public CarteManager(){
+    public CarteManager(Plateau plateau){
         //Pour initialiser les wagons
         for(int i = 0; i< trainCards.length;i++){
             trainCards[i] = getPioche();
+
         }
+        this.game = game;
 
     }
 
@@ -55,12 +57,12 @@ public class CarteManager {
         return destinationsCards[position];
     }
 
-    public void rerollDestination(){
+    public void rerollDestination(Game game){
         //Fonction qui remets de nouvelles mission
 
         //On va remplacer chaque élément par une nouvelle destination
         for(int i = 0; i<destinationsCards.length;i++){
-            destinationsCards[i] = new CarteDestination();
+            destinationsCards[i] = getDestination(game);
 
         }
     }
@@ -101,12 +103,12 @@ public class CarteManager {
 
     }
 
-    public CarteDestination getDestination(){
+    public CarteDestination getDestination(Game game){
         //Fonction qui choisit au hasard les déstinations
 
         //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random ville1RANDOM = new Random(plateau.getVilles().length);
-        Random ville2RANDOM = new Random(plateau.getVilles().length);
+        Random ville1RANDOM = new Random(game.getVilles().length);
+        Random ville2RANDOM = new Random(game.getVilles().length);
         int ville1 = ville1RANDOM.nextInt();
         int ville2 = ville1RANDOM.nextInt();
 
@@ -114,8 +116,8 @@ public class CarteManager {
         while(ville1 == ville2){
             ville2 = ville1RANDOM.nextInt();
         }
-        Plateau.Ville v1 = plateau.getVilles()[ville1];
-        Plateau.Ville v2 = plateau.getVilles()[ville2];
+        Ville v1 = game.getVilles()[ville1];
+        Ville v2 = game.getVilles()[ville2];
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
         return  new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
@@ -124,7 +126,7 @@ public class CarteManager {
     }
 
 
-    public int nombrePointDistance(Plateau.Ville v1, Plateau.Ville v2){
+    public int nombrePointDistance(Ville v1, Ville v2){
         //TODO
         return 2;
     }

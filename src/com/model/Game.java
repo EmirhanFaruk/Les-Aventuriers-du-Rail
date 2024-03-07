@@ -1,6 +1,7 @@
 package com.model;
 
 import com.model.config.Plateau;
+import com.model.config.Route;
 import com.model.config.carte.CarteManager;
 import com.model.config.Ville;
 
@@ -20,7 +21,7 @@ public class Game
 
     public void makeGame(String nomMap)
     {
-        this.cm = new CarteManager();
+        this.cm = new CarteManager(plateau);
         this.plateau = Plateau.makePlateau(nomMap, this);
     }
 
@@ -68,10 +69,13 @@ public class Game
 
         //Initialisation des cartes destination du premier tour du board que le joueur choisit
         for(int y = 0; y < cm.getDestinationsCards().length;y++){
-            cm.getDestinationsCards()[y] = cm.getDestination();
+            cm.getDestinationsCards()[y] = cm.getDestination(this);
         }
 
     }
+
+
+
 
 
 }

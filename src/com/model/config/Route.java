@@ -6,14 +6,14 @@ import com.model.Player;
 
 public class Route {
 
-    private Plateau.Ville ville1;
-    private Plateau.Ville ville2;
+    private Ville ville1;
+    private Ville ville2;
     private int longueur; //la longueur des rails
-    private Rail couleur; //couleur de la route
+    private Rail.Content couleur; //couleur de la route
     private Player proprietaire; //joueur qui a construit la route
     private int nombrePoint; //nombre de point que raporte la route
 
-    public Route(Plateau.Ville ville1, Plateau.Ville ville2, int longueur,Rail couleur) {
+    public Route(Ville ville1, Ville ville2, int longueur,Rail.Content couleur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
         this.longueur = longueur;
@@ -23,24 +23,17 @@ public class Route {
     }
 
 
-    public Route(Ville ville1, Ville ville2, int longueur) {
-        //Pour les cartes
-
-        this.proprietaire = null;
-        nombrePointsDestination(); //initialise le nombre de point que donne cette route
-    }
-
-    public Route(Plateau.Ville ville, Plateau.Ville ville1, int longueur) {
+    public Route(Ville ville, Ville ville1, int longueur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
         this.longueur = longueur;
     }
 
-    public Plateau.Ville getVille1() {
+    public Ville getVille1() {
         return ville1;
     }
 
-    public Plateau.Ville getVille2() {
+    public Ville getVille2() {
         return ville2;
     }
 
@@ -48,7 +41,7 @@ public class Route {
         return longueur;
     }
 
-    public Rail getCouleur() {
+    public Rail.Content getCouleur() {
         return couleur;
     }
 

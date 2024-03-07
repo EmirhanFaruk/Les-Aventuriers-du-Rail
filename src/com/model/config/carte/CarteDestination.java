@@ -8,16 +8,15 @@ import javax.swing.*;
 
 public class CarteDestination extends JPanel {
 
-    private Plateau.Ville premiereVille;
-    private Plateau.Ville deuxiemeVille;
+    private Ville premiereVille;
+    private Ville deuxiemeVille;
     private int nombrePoints;
 
 
-
-    public Plateau.Ville getPremiereVille() {
+    public Ville getPremiereVille() {
         return premiereVille;
     }
-    public Plateau.Ville getDeuxiemeVille() {
+    public Ville getDeuxiemeVille() {
         return deuxiemeVille;
     }
     public int getNombrePoints() {

@@ -1,14 +1,11 @@
 package com.model.config;
 import com.model.Game;
-import com.model.Route;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.model.config.carte.CarteDestination;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-
-import static com.model.config.Plateau.Ville.*;
 
 
 /**
@@ -26,21 +23,6 @@ public class Plateau {
     private ArrayList<Route> routesPlateau;
 
     private String nomMap;
-    public enum Ville
-    {MONAN,EMIRHANDOME,SALAME,AMAZIGHSPIDERMAN,
-        ALEXICOLE,YAPADEPANO,WOKUWOKU,CHEDELYON,
-        WOKANDA,FFQUATORZE,DUCKDUCK,CATLAND,
-        PARTPARTPART,BEINGCHILLING,ADOMINATION}
-
-    private Ville[] villes = new Ville[]{MONAN, EMIRHANDOME, SALAME, AMAZIGHSPIDERMAN,
-            ALEXICOLE, YAPADEPANO, WOKUWOKU, CHEDELYON,
-            WOKANDA, FFQUATORZE, DUCKDUCK, CATLAND,
-            PARTPARTPART, BEINGCHILLING, ADOMINATION};
-
-    public Ville[] getVilles() {
-        return villes;
-    }
-
 
 
     /**
@@ -247,15 +229,15 @@ public class Plateau {
                     Ville ville1 = villes[nvil1 - 1];
                     Ville ville2 = villes[nvil2 - 1];
                     int longueur = Integer.parseInt(villet[i + 2]);
-                    Couleur couleur = Couleur.values()[Integer.parseInt(villet[i + 1])];
-                    Rail.Content fakeCouleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
+                    Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
                     int angle = Integer.parseInt(villet[i + 3]);
 
 
-                    CarteDestination carte = new CarteDestination();
-                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur, CarteDestination carte)
-                    Route route = new Route(ville1, ville2, longueur, couleur);
-                    putRails(ville1, ville2, longueur, fakeCouleur, angle, plateau);
+                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
+                    Route route = new Route(ville1, ville2, longueur,couleur);
+                    CarteDestination carte = new CarteDestination(route);
+
+                    putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
                     i += 4;
                 }
@@ -403,13 +385,13 @@ public class Plateau {
     }
 
 
-
+/*
     public void initRoute(){
 
         routesPlateau.add(new Route());
 
     }
-
+*/
 
 
 

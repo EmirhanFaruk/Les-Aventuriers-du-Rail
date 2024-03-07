@@ -1,5 +1,8 @@
 package com.model;
 import com.model.config.Plateau;
+import com.model.config.Rail;
+import com.model.config.Rail.Content;
+import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
@@ -12,7 +15,6 @@ public class Player {
     private int score;
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>();
-    private CarteWagon carteDestination = new CarteWagon();
 
 
     public ArrayList<CarteDestination> getDestinationsList() {
@@ -30,6 +32,14 @@ public class Player {
     public void setScore(int score) {
         this.score = score;
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
     public void setDestinationsList(ArrayList<CarteDestination> destinationsList) {
         this.destinationsList = destinationsList;
@@ -49,8 +59,9 @@ public class Player {
     	
     	return count;
     }
-    
-    private void retirerLesCartes(Couleur color, int longeur) {
+
+	//TODO, Faire une fonction de Comparaison entre /!\ CONTENT /!\ et /!\COULEUR/!\
+    private void retirerLesCartes(Content color, int longeur) {
     	int i = 0, count = longeur;
     	
     	while(count != 0) {    		
@@ -64,9 +75,15 @@ public class Player {
     }
 
     public boolean mettreRoute(Route r){
-    	if(r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null){
+    	String a = "Rouge";
+		String b = "JSP";
+
+		System.out.println(a.equals(b));
+
+		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null){
     		this.retirerLesCartes(r.getCouleur(), r.getLongueur());
-    		r = new Route(r.getVille1(), r.getVille2(), r.getLongueur(), r.getCouleur(), this);
+    		r = new Route(r.getVille1(), r.getVille2(), r.getLongueur(), r.getCouleur());
+			r.setProprietaire(this);
     		return true;
     	}
 		return false;
@@ -83,11 +100,25 @@ public class Player {
 		return false;
     }
 
-	public String getName() {
-		return name;
+	LOC, BLEU, VIOLET, MARRON, BLANC, VERT, JAUNE, NOIRE, ROUGE
+	BLEU,VIOLET , MARRON , NOIR , VERT , JAUNE , ROUGE , BLANC , JOKER , JOKERETOILEE
+	public CarteWagon.Couleur compatibleColor(Content content){
+
+		switch (content){
+
+			case BLEU :
+				return Couleur.BLEU;
+
+
+
+		}
+
+
+
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+
+
+
+
 }

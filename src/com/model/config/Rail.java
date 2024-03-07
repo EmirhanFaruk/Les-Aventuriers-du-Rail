@@ -21,6 +21,7 @@ public class Rail extends Case {
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
 
+
     /**
      * Constructeur de la classe Rail.
      * @param x La position horizontale du rail sur le plateau de jeu.
