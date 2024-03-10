@@ -51,6 +51,9 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
+        printVilles(stville);
+
+        res.printPlat();
 
         return res;
     }
@@ -203,7 +206,7 @@ public class Plateau {
     {
         for (int i = 0; i < villes.length; i++)
         {
-            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
@@ -223,7 +226,7 @@ public class Plateau {
                 int i = 4;
                 while (i + 4 < villet.length)
                 {
-                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i]);
                     Ville ville1 = villes[nvil1 - 1];
@@ -235,7 +238,6 @@ public class Plateau {
 
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
                     Route route = new Route(ville1, ville2, longueur,couleur);
-                    CarteDestination carte = new CarteDestination(route);
 
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
@@ -249,35 +251,42 @@ public class Plateau {
 
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
-        int[] pos = new int[]{ville1.getY(), ville1.getX()};
+        longueur++;
+        int[] pos = new int[]{ville1.getX(), ville1.getY()};
+        int[] destpos = new int[]{ville2.getX(), ville2.getY()};
         int[] angles = {90, 45, 0, 135};
-        while(longueur > 0)
+        do
         {
-            if (pos[0] > ville2.getY())
+            if (pos[0] > ville2.getX())
             {
                 pos[0] = pos[0] - 1;
             }
-            else if (pos[0] < ville2.getY())
+            else if (pos[0] < ville2.getX())
             {
                 pos[0] = pos[0] + 1;
             }
 
-            if (pos[1] > ville2.getX())
+            if (pos[1] > ville2.getY())
             {
                 pos[1] = pos[0] - 1;
             }
-            else if (pos[1] < ville2.getX())
+            else if (pos[1] < ville2.getY())
             {
                 pos[1] = pos[1] + 1;
             }
 
-            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
+            if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
             {
-                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+                // i, j en plateau et x, y en graphics
+                plateau.plateau[pos[1]][pos[0]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
             }
-
             longueur--;
-        }
+        } while(longueur > 0 && !(samePos(pos, destpos)));
+    }
+
+    private static boolean samePos(int[] t1, int[] t2)
+    {
+        return t1[0] == t2[0] && t1[1] == t2[1];
     }
 
 
@@ -385,16 +394,83 @@ public class Plateau {
     }
 
 
-/*
-    public void initRoute(){
-
-        routesPlateau.add(new Route());
-
+    private void printPlat()
+    {
+        for (int i = 0; i < plateau.length; i++)
+        {
+            System.out.println();
+            for (int j = 0; j < plateau[i].length; j++)
+            {
+                if (plateau[i][j] instanceof Ville)
+                {
+                    System.out.print(" V ");
+                }
+                else if (plateau[i][j] instanceof Rail)
+                {
+                    System.out.print(" R ");
+                }
+                else
+                {
+                    System.out.print(" _ ");
+                }
+            }
+        }
     }
-*/
 
 
 
+    private static void printVilles(String[][] stvilles)
+    {
+        String[] couleurtab = new String[]{"BLEU", "VIOLET", "MARRON", "NOIRE", "VERT", "JAUNE", "BLANC", "ROUGE", "JOKER", "JOKERETOILEE"};
+        for (int i = 0; i < stvilles.length; i++)
+        {
+            println("\n-----------------\n" + stvilles[i][1] + ":", 0);
+            println("Num: " + stvilles[i][0], 2);
+            println("Name: " + stvilles[i][1], 2);
+            println("X: " + stvilles[i][2], 2);
+            println("Y: " + stvilles[i][3], 2);
+            for (int j = 4; j < stvilles[i].length - 4; j = j + 4)
+            {
+                // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
+                print("Dest Num: " + stvilles[i][j], 4);
+                // {BLEU, VIOLET , MARRON , NOIRE , VERT , JAUNE , BLANC , ROUGE , JOKER , JOKERETOILEE}
+                print("Type de rail: " + couleurtab[Integer.parseInt(stvilles[i][j + 1])], 4);
+                print("Nb de rail: " + stvilles[i][j + 2], 4);
+                //print("Angle de rail: " + stvilles[i][j + 3], 4);
+                
+                switch (stvilles[i][j + 3])
+                {
+                    case "0": print("Angle de rail: 90", 4); break;
+                    case "1": print("Angle de rail: 45", 4); break;
+                    case "2": print("Angle de rail: 0", 4); break;
+                    case "3": print("Angle de rail: 135", 4); break;
+                }
+                System.out.println();
+            }
+
+        }
+    }
+
+
+    private static void indent(int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            System.out.print(" ");
+        }
+    }
+
+    private static void println(String s, int i)
+    {
+        indent(i);
+        System.out.println(s);
+    }
+
+    private static void print(String s, int i)
+    {
+        indent(i);
+        System.out.print(s);
+    }
 }
 
 
