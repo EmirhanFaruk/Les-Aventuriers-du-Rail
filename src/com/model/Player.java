@@ -13,8 +13,10 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
-    private ArrayList<CarteDestination> destinationsList = new ArrayList<>();
-    private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>();
+	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
+    private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
+    private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
+
 
 
     public ArrayList<CarteDestination> getDestinationsList() {
@@ -24,8 +26,12 @@ public class Player {
     public ArrayList<CarteWagon.Couleur> getTrainCard() {
         return trainList;
     }
-    
-    public int getScore() {
+
+	public ArrayList<Couleur> getTrainList() {
+		return trainList;
+	}
+
+	public int getScore() {
     	return this.score;
     }
 
@@ -41,7 +47,11 @@ public class Player {
 		this.name = name;
 	}
 
-    public void setDestinationsList(ArrayList<CarteDestination> destinationsList) {
+	public int getNiveau() {
+		return niveau;
+	}
+
+	public void setDestinationsList(ArrayList<CarteDestination> destinationsList) {
         this.destinationsList = destinationsList;
     }
 
@@ -60,7 +70,6 @@ public class Player {
     	return count;
     }
 
-	//TODO, Faire une fonction de Comparaison entre /!\ CONTENT /!\ et /!\COULEUR/!\
     private void retirerLesCartes(Couleur color, int longeur) {
     	int i = 0, count = longeur;
     	
@@ -104,6 +113,8 @@ public class Player {
 		return content.ordinal() == couleur.ordinal();
 
 	}
+
+
 
 
 
