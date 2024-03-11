@@ -51,6 +51,8 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
+        printTab(stville);
+
         printVilles(stville);
 
         res.printPlat();
@@ -211,7 +213,7 @@ public class Plateau {
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
             villes[i] = new Ville(x, y, nom);
-            plateau.getPlateau()[y][x] = new Ville(x, y, nom);
+            plateau.plateau[x][y] = new Ville(x, y, nom);
         }
     }
 
@@ -251,10 +253,10 @@ public class Plateau {
 
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
-        longueur++;
         int[] pos = new int[]{ville1.getX(), ville1.getY()};
         int[] destpos = new int[]{ville2.getX(), ville2.getY()};
         int[] angles = {90, 45, 0, 135};
+        System.out.println();
         do
         {
             if (pos[0] > ville2.getX())
@@ -275,10 +277,10 @@ public class Plateau {
                 pos[1] = pos[1] + 1;
             }
 
-            if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
+            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
             {
-                // i, j en plateau et x, y en graphics
-                plateau.plateau[pos[1]][pos[0]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+                System.out.println("Between " + ville1.getNom() + " and " + ville2.getNom() + ", putting rail at {" + pos[0] + ", " + pos[1] + "}");
+                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
             }
             longueur--;
         } while(longueur > 0 && !(samePos(pos, destpos)));
@@ -401,11 +403,11 @@ public class Plateau {
             System.out.println();
             for (int j = 0; j < plateau[i].length; j++)
             {
-                if (plateau[i][j] instanceof Ville)
+                if (plateau[j][i] instanceof Ville)
                 {
                     System.out.print(" V ");
                 }
-                else if (plateau[i][j] instanceof Rail)
+                else if (plateau[j][i] instanceof Rail)
                 {
                     System.out.print(" R ");
                 }
@@ -429,7 +431,7 @@ public class Plateau {
             println("Name: " + stvilles[i][1], 2);
             println("X: " + stvilles[i][2], 2);
             println("Y: " + stvilles[i][3], 2);
-            for (int j = 4; j < stvilles[i].length - 4; j = j + 4)
+            for (int j = 4; j < stvilles[i].length - 3; j = j + 4)
             {
                 // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
                 print("Dest Num: " + stvilles[i][j], 4);
@@ -470,6 +472,22 @@ public class Plateau {
     {
         indent(i);
         System.out.print(s);
+    }
+
+    private static void printTab(String[][] t)
+    {
+        for (int i = 0; i < t.length; i++)
+        {
+            System.out.println();
+            for (int j = 0; j < t[i].length; j++)
+            {
+                System.out.print(t[i][j]);
+                if (j < t[i].length - 1)
+                {
+                    System.out.print(", ");
+                }
+            }
+        }
     }
 }
 
