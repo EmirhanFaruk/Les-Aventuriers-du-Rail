@@ -239,7 +239,7 @@ public class Plateau {
 
 
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
-                    Route route = new Route(ville1, ville2, longueur,couleur);
+                    Route route = new Route(ville1, ville2, longueur, couleur);
 
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
@@ -270,17 +270,17 @@ public class Plateau {
 
             if (pos[1] > ville2.getY())
             {
-                pos[1] = pos[0] - 1;
+                pos[1] = pos[1] - 1;
             }
             else if (pos[1] < ville2.getY())
             {
                 pos[1] = pos[1] + 1;
             }
 
-            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
+            if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
             {
                 System.out.println("Between " + ville1.getNom() + " and " + ville2.getNom() + ", putting rail at {" + pos[0] + ", " + pos[1] + "}");
-                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
+                plateau.plateau[pos[1]][pos[0]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
             }
             longueur--;
         } while(longueur > 0 && !(samePos(pos, destpos)));
