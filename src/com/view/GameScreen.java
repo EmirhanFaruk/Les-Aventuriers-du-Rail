@@ -10,25 +10,29 @@ import java.awt.*;
 public class GameScreen extends JPanel {
 
     GameFrame frame ;
-    MapScreen mapScreen ;
-    private static int tile_width , tile_height ;
-    private int width , height ;
+    GameManagerScreen gameManagerScreen ;
 
+    /**
+     * Constructeur de la classe GameScreen
+     * @param frame fenetre
+     * @param map quelle map
+     * @param width width
+     * @param height height
+     */
     public GameScreen ( GameFrame frame , String map , int width , int height){
         this.frame = frame ;
         setSize(width , height );
-        this.height = height ;
-        this.width = width ;
-        tile_height = getHeight() / 24 ;
-        tile_width = getWidth() / 24 ;
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  ) ;
+        this.gameManagerScreen = new GameManagerScreen(frame , map , width , height ) ;
 
         setLayout(new BorderLayout());
-        add( mapScreen , BorderLayout.CENTER ) ;
-
+        add( gameManagerScreen , BorderLayout.CENTER ) ;
     }
 
+    /**
+     * Une fonction qui permet de faire la map à partir du plateau
+     * @param plateau Plateau
+     */
     public void make( Plateau plateau ){
-        mapScreen.makeMap( plateau );
+        this.gameManagerScreen.make(plateau);
     }
 }
