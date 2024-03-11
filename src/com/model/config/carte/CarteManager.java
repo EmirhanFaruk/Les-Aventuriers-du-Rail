@@ -20,7 +20,7 @@ public class CarteManager {
     public CarteManager(Plateau plateau){
         //Pour initialiser les wagons
         for(int i = 0; i< trainCards.length;i++){
-            trainCards[i] = getPioche();
+            trainCards[i] = drawCard();
 
         }
         this.game = game;
@@ -43,10 +43,18 @@ public class CarteManager {
         this.trainCards = trainCards;
     }
 
-    public CarteWagon.Couleur takeWagon(int position){
+    public boolean possibleTakeWagon(int action, int position){
+        if(trainCards[position] == LOC){
+            return action == 2;
+        }else{
+            return true;
+        }
+    }
+
+    public CarteWagon.Couleur takeWagon(int position, int action){
         //Fonction qui prends une carte
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
-        trainCards[position] = getPioche(); //On met une nouvelle carte qui remplace l'ancienne
+        trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
 
         return renvoie;
 
@@ -67,7 +75,7 @@ public class CarteManager {
         }
     }
 
-    public CarteWagon.Couleur getPioche(){
+    public CarteWagon.Couleur drawCard(){
         //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
 
         Random carte = new Random(110);
@@ -132,11 +140,7 @@ public class CarteManager {
     }
 
 
-    public CarteWagon.Couleur drawTrain(){
-        return getPioche();
-    }
 
-    //TODO
 
 
 

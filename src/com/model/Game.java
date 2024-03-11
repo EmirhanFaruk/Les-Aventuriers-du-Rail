@@ -11,11 +11,11 @@ import java.util.List;
 public class Game
 {
     private Plateau plateau;
-    private List<Player> joueurs;
-    private Player joueurCourant;
+    private ArrayList<Player> listPlayer;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
+    private Round round;
 
     public Game() {}
 
@@ -23,6 +23,7 @@ public class Game
     {
         this.cm = new CarteManager(plateau);
         this.plateau = Plateau.makePlateau(nomMap, this);
+        this.round = new Round();
     }
 
     /*
@@ -44,18 +45,12 @@ public class Game
 
     public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
 
-    public List<Player> getJoueurs() {
-        return joueurs;
+    public ArrayList<Player> getListPlayer() {
+        return listPlayer;
     }
 
-    public Player getJoueurCourant() {
-        return joueurCourant;
-    }
-
-
-    public void update(double deltaTime)
-    {
-        //game loop
+    public void setListPlayer(ArrayList<Player> listPlayer) {
+        this.listPlayer = listPlayer;
     }
 
     private void initBoard(){
@@ -64,7 +59,7 @@ public class Game
 
         //Initialisation des cartes wagon sur le board
         for(int i = 0; i< cm.getTrainCards().length; i++){
-            cm.getTrainCards()[i] = cm.getPioche();
+            cm.getTrainCards()[i] = cm.drawCard();
         }
 
         //Initialisation des cartes destination du premier tour du board que le joueur choisit
@@ -78,4 +73,17 @@ public class Game
 
 
 
+    public void updateGame(double deltaTime)
+    {
+        //game loop
+        if(round.roundFinished()){
+
+            round.round(this,cm);
+
+        }
+
+
+
+
+    }
 }

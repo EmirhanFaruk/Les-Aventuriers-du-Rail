@@ -6,7 +6,7 @@ import java.util.Random;
 import static com.model.config.carte.CarteWagon.Couleur.*;
 
 public class CarteWagon extends JPanel {
-    public enum Couleur {BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, LOC}
+    public enum Couleur {BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE,LOC}
 
     private Couleur initialCouleur ;
 
