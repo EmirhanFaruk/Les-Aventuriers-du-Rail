@@ -43,7 +43,7 @@ public class Main implements Runnable
             start = System.nanoTime();
             if(end >= required_fps)
             {
-                game.update(end/1000000000);
+                game.updateGame(end/1000000000);
                 end = System.nanoTime() - start;
             }
             else
