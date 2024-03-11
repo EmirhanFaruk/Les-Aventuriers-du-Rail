@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
@@ -11,6 +12,7 @@ public class Round {
     private int whoIsPlaying = 0; //Quel joueur est entrain de jouer
     private boolean endTurn = false; //Si le tour est finis ou non
     private int action = 2; //Le nombre d'action qu'il reste pour piocher une carte wagon
+    private boolean missionCardTaked = false;
 
     public boolean roundFinished(){
         //Savoir si le joueur/ia a fini de jouer ou non
@@ -24,6 +26,7 @@ public class Round {
         //On reset le round
         this.endTurn = false;
         this.action = 2;
+        this.missionCardTaked = false;
 
         //On change de joueur
         if(whoIsPlaying == game.getListPlayer().size() -1){
@@ -80,16 +83,28 @@ public class Round {
 
         /*        CARTES MISSIONS        */
 
+        int nombreDecartePris = random.nextInt(carteManager.getDestinationsCards().length -1);
+        int[] tabNombre = new int[nombreDecartePris];
+        for(int y = 0; y< nombreDecartePris; y++){
 
+            tabNombre[y] = random.nextInt(2);
 
+        }
+        CarteDestination[] carteDestination = carteManager.takeDestination(tabNombre,game);
+
+        for(int z = 0; z<carteDestination.length;z++){
+            game.getListPlayer().get(whoIsPlaying).getDestinationsList().add(carteDestination[z]);
+        }
 
 
         /*        POSER DES WAGONS       */
 
 
+
         /*        RESET POUR LE PROCHAIN JOUEUR       */
 
-
+        endTurn = true;
+        whosNext(game);
 
     }
 
@@ -110,20 +125,14 @@ public class Round {
 
             case(1):
                 weakBotPlay(game,carteManager);
-                whosNext(game);
-                endTurn = true;
                 break;
 
             case(2):
                 normalBotPlay(game,carteManager);
-                whosNext(game);
-                endTurn = true;
                 break;
 
             case(3):
                 strongBotPlay(game,carteManager);
-                whosNext(game);
-                endTurn = true;
                 break;
 
             default: break;
