@@ -213,7 +213,7 @@ public class Plateau {
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
             villes[i] = new Ville(x, y, nom);
-            plateau.plateau[x][y] = new Ville(x, y, nom);
+            plateau.plateau[y][x] = new Ville(x, y, nom);
         }
     }
 
@@ -403,11 +403,11 @@ public class Plateau {
             System.out.println();
             for (int j = 0; j < plateau[i].length; j++)
             {
-                if (plateau[j][i] instanceof Ville)
+                if (plateau[i][j] instanceof Ville)
                 {
                     System.out.print(" V ");
                 }
-                else if (plateau[j][i] instanceof Rail)
+                else if (plateau[i][j] instanceof Rail)
                 {
                     System.out.print(" R ");
                 }
