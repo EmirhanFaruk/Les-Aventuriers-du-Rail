@@ -157,9 +157,12 @@ public class RailGraphics {
      * @param g Graphics
      * @param rail Rail
      */
-    public static void paint(Graphics2D g, Rail rail){
-        BufferedImage image = getImage(rail) ;
-        g.drawImage( image , rail.getX() * width , rail.getY() * height , width , height , null ) ;
+    public static void paint(Graphics2D g, Rail rail) {
+        BufferedImage image = getImage(rail);
+        g.drawImage(image, rail.getX() * width, rail.getY() * height, width, height, null);
+        if (rail.getOccuper()) {
+            TrainGraphics.paint(g, rail);
+        }
     }
 
     /*
