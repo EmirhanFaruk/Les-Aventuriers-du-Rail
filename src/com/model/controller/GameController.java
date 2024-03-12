@@ -9,10 +9,25 @@ import java.awt.event.MouseEvent;
 
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
+    
+    public void mouseClicked(MouseEvent e, Plateau plateau, Player joueurCourant) {
+        // Obtention des coordonnées du clic de souris
+        int x = e.getX();
+        int y = e.getY();
 
-    public void handleMouseEvent(MouseEvent e, Plateau plateau, Player joueurCourant) {
-        // Gestion de l'événement, par exemple
-        tenterAcquisitionRoute(e, plateau, joueurCourant);
+        // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
+        Object clickedObject = plateau.getPlateau()[x][y];
+
+        if (clickedObject != null) {
+            // Traitement en fonction du type de l'objet cliqué
+            if (clickedObject instanceof Rail) {
+                tenterAcquisitionRoute((Rail) clickedObject, plateau, joueurCourant);
+            } else if (clickedObject instanceof CarteDestination) {
+                // Pour une CarteDestination est cliquée
+            } else if (clickedObject instanceof CarteWagon) {
+                // Pour une CarteWagon est cliquée
+            }
+        }
     }
 
 
@@ -38,21 +53,14 @@ public class GameController {
         return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
     }
      
-    public void tenterAcquisitionRoute(MouseEvent e, Plateau plateau, Player player) {
-        Object source = e.getSource();
-
-        if (source instanceof Rail) {
-            Rail rail = (Rail) source;
-
-            // Vérifie si le rail a déjà un propriétaire
-            if (rail.getSaRoute().getProprietaire() != null) {
-                System.out.println("Ce rail a déjà un propriétaire.");
-                return;
-            }
-
-            //TODO : Bouton de confirmation      
-            player.mettreRoute(rail.getSaRoute(), plateau);
+    public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player) {
+        // Vérifie si le rail a déjà un propriétaire
+        if (r.getSaRoute().getProprietaire() != null) {
+            System.out.println("Ce rail a déjà un propriétaire.");
+            return;
         }
+
+        //TODO : Bouton de confirmation      
+        player.mettreRoute(r.getSaRoute());
     }
-    
 }
