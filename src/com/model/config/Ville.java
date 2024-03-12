@@ -1,5 +1,7 @@
 package com.model.config;
 
+import com.model.Player;
+
 /**
  * La classe Ville représente une case de type ville
  * Elle hérite de la classe Case et ajoute des fonctionnalités spécifiques
@@ -14,7 +16,7 @@ public class Ville extends Case {
      * Un indicateur indiquant si la ville possède une gare.
      * Par défaut, la valeur est false.
      */
-    private boolean gare;
+    private Player isOccuped = null;
 
     /**
      * Constructeur de la classe Ville.
@@ -29,18 +31,19 @@ public class Ville extends Case {
 
     /**
      * Indicateur de présence d'une gare pour cette ville.
-     * @return true si la ville possède une gare, sinon false.
+     * @return affiche un joueur si elle est occupé par un joueur, sinon false;
      */
-    public boolean getGare() {
-        return this.gare;
+
+    public Player getIsOccuped() {
+        return isOccuped;
     }
 
     /**
      * Définit si la ville possède une gare ou non.
-     * @param estUneGare true si la ville possède une gare, sinon false.
+     * @param isOccuped on set a un joueur la gare si elle est prise.
      */
-    public void setGare(boolean estUneGare) {
-        this.gare = estUneGare;
+    public void setIsOccuped(Player isOccuped) {
+        this.isOccuped = isOccuped;
     }
 
     /**
@@ -61,6 +64,6 @@ public class Ville extends Case {
 
 	@Override
 	public boolean estUneCaseGare() {
-		return gare;
+		return true;
 	}
 }

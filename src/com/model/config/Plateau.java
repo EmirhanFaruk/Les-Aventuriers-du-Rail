@@ -385,15 +385,6 @@ public class Plateau {
     }
 
 
-/*
-    public void initRoute(){
-
-        routesPlateau.add(new Route());
-
-    }
-*/
-
-
 
 }
 

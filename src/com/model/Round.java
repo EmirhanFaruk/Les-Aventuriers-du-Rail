@@ -42,62 +42,99 @@ public class Round {
     private void weakBotPlay(Game game, CarteManager carteManager) {
         //L'ia pas tres maline
 
-        Random random = new Random(2);
+        Random random = new Random();
+        int whatToDo = random.nextInt(4);
 
-        /*        CARTES WAGONS        */
+        switch (whatToDo){
 
-        //Si l'ia a encore des actions
-        while (action < 0){
-            int nbr = random.nextInt(2);
-            //Savoir si elle pioche ou prends une carte du board
 
-            if(random.nextInt() == 0){
-                //On enleve 1 action et pioche une carte
-                game.getListPlayer().get(whoIsPlaying).getTrainList().add(carteManager.drawCard());
-                action --;
-            }
+            case(0):
+            /*        CARTES WAGONS        */
 
-            else{
-                //Sinon elle choisit aléatoirement dans la liste de carte wagon sur le board
-                int position = random.nextInt(carteManager.getTrainCards().length);
+            //Si l'ia a encore des actions
+            while (action < 0){
+                int nbr = random.nextInt(2);
+                //Savoir si elle pioche ou prends une carte du board
 
-                //On verifie si elle a assez d'action pour choisir la carte, car carte normale = 1 point et locomotive = 2 points, sinon elle recommence dans le while
-                if(carteManager.possibleTakeWagon(this.action, position)){
-                    CarteWagon.Couleur carte = carteManager.takeWagon(position,action);
+                if(random.nextInt() == 0){
+                    //On enleve 1 action et pioche une carte
+                    game.getListPlayer().get(whoIsPlaying).getTrainList().add(carteManager.drawCard());
+                    action --;
+                }
 
-                    //Si la carte pioché est une locomotive, on eneleve 2 points
-                    if(carte == CarteWagon.Couleur.LOC){
-                        action = action - 2;
-                    }else{
-                        //Sinon on enleve 1 point
-                        action --;
+                else{
+                    //Sinon elle choisit aléatoirement dans la liste de carte wagon sur le board
+                    int position = random.nextInt(carteManager.getTrainCards().length);
+
+                    //On verifie si elle a assez d'action pour choisir la carte, car carte normale = 1 point et locomotive = 2 points, sinon elle recommence dans le while
+                    if(carteManager.possibleTakeWagon(this.action, position)){
+                        CarteWagon.Couleur carte = carteManager.takeWagon(position,action);
+
+                        //Si la carte pioché est une locomotive, on eneleve 2 points
+                        if(carte == CarteWagon.Couleur.LOC){
+                            action = action - 2;
+                        }else{
+                            //Sinon on enleve 1 point
+                            action --;
+                        }
+                        //Puis on l'ajoute dans la liste de carte
+                        game.getListPlayer().get(whoIsPlaying).getTrainList().add(carte);
+
                     }
-                    //Puis on l'ajoute dans la liste de carte
-                    game.getListPlayer().get(whoIsPlaying).getTrainList().add(carte);
 
                 }
 
             }
 
+            break;
+
+
+            case(1):
+
+            /*        CARTES MISSIONS        */
+
+            int nombreDecartePris = random.nextInt(carteManager.getDestinationsCards().length -1);
+            int[] tabNombre = new int[nombreDecartePris];
+            for(int y = 0; y< nombreDecartePris; y++){
+
+                tabNombre[y] = random.nextInt(2);
+
+            }
+            CarteDestination[] carteDestination = carteManager.takeDestination(tabNombre,game);
+
+            for(int z = 0; z<carteDestination.length;z++){
+                game.getListPlayer().get(whoIsPlaying).getDestinationsList().add(carteDestination[z]);
+            }
+
+
+            break;
+
+
+
+            case(2):
+            /*        POSER DES WAGONS       */
+
+
+
+
+
+
+                break;
+
+
+            default :
+            /*        POSER UNE GARE       */
+
+
+
+                //TODO si il n'y a plus de gare alors on rappel la fontion.
+
+                break;
+
+
+
         }
 
-        /*        CARTES MISSIONS        */
-
-        int nombreDecartePris = random.nextInt(carteManager.getDestinationsCards().length -1);
-        int[] tabNombre = new int[nombreDecartePris];
-        for(int y = 0; y< nombreDecartePris; y++){
-
-            tabNombre[y] = random.nextInt(2);
-
-        }
-        CarteDestination[] carteDestination = carteManager.takeDestination(tabNombre,game);
-
-        for(int z = 0; z<carteDestination.length;z++){
-            game.getListPlayer().get(whoIsPlaying).getDestinationsList().add(carteDestination[z]);
-        }
-
-
-        /*        POSER DES WAGONS       */
 
 
 

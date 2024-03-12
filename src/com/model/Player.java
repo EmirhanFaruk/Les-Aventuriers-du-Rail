@@ -97,7 +97,7 @@ public class Player {
     public boolean changerGareEnVille(int x, int y, Plateau p){
     	if(p.positionValide(x, y)){
     		if(p.estUneCaseVille(x, y) && !p.estUneCaseGare(x, y)) {
-    			((Ville) p.getPlateau()[x][y]).setGare(true);
+    			((Ville) p.getPlateau()[x][y]).getIsOccuped();
     			return true;
     		}
     	}
