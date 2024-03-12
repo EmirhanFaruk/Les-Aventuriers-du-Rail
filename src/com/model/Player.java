@@ -140,6 +140,10 @@ public class Player {
 
 	}
 
+	/**
+	 * Une fonction qui verifie si le joueur a assez de gare
+	 * @return si nbrGare est superieur a 0
+	 */
 	public boolean assezDeGare(){
 		return this.nbrGare > 0 ;
 	}
