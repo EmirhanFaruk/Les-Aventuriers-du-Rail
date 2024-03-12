@@ -14,6 +14,14 @@ public class MapScreen extends JPanel {
     final int width , height ;
     final int tileWidth , tileHeight ;
 
+    /**
+     * Constructeur de MapScreen
+     * @param mapName nom de la map
+     * @param width width du panel
+     * @param height height du panel
+     * @param tileWidth width de l'image
+     * @param tileHeight height de l'image
+     */
     public MapScreen( String mapName , int width , int height , int tileWidth , int tileHeight ){
         this.mapName = mapName+".png" ;
         this.width = width ;
@@ -22,7 +30,10 @@ public class MapScreen extends JPanel {
         this.tileHeight = tileHeight ;
     }
 
-
+    /**
+     * Une fonciton qui crée la map
+     * @param plateau
+     */
     public void makeMap ( Plateau plateau ){
         map( plateau );
         RailGraphics.setWH(tileWidth, tileHeight);
@@ -30,6 +41,10 @@ public class MapScreen extends JPanel {
         plateau.cmp();
     }
 
+    /**
+     * Une fonction qui ajoute dans l'attribut map les Mapgraphics de chaque case
+     * @param plateau Plateau
+     */
     private void map( Plateau plateau ) {
         Case[][] tab = plateau.getPlateau();
         for ( Case[] cases : tab ) {
@@ -39,6 +54,10 @@ public class MapScreen extends JPanel {
         }
     }
 
+    /**
+     * Une fonction affcihe les element de case
+     * @param g the <code>Graphics</code> object to protect
+     */
     protected void paintComponent (Graphics g ){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;

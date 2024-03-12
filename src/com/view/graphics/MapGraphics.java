@@ -16,6 +16,12 @@ public class MapGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
 
+    /**
+     * Constructeur de la classe MapGraphics
+     * @param c une case
+     * @param tileWidth width de l'image
+     * @param tileHeight height de l'image
+     */
     public MapGraphics( Case c , int tileWidth , int tileHeight ){
         this.aCase = c ;
         this.tileWidth = tileWidth ;
@@ -55,11 +61,19 @@ public class MapGraphics {
         return "/";
     }
 
+    /**
+     * Unr focntion qui permet de savoir sur quoi on joue
+     * @param mapName
+     * @return
+     */
     public static BufferedImage backgroundImage ( String mapName ){
         return loadImage(mapName ) ;
     }
 
-
+    /**
+     * Une fonction qui affiche la bonne image
+     * @param g graphics
+     */
     public void draw(Graphics2D g) {
         if (aCase instanceof Ville ) {
             cmpVille++ ;
