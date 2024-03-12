@@ -70,7 +70,14 @@ public class Game
     }
 
 
-
+    public boolean endGame( ){
+        for (Player p : listPlayer){
+            if ( p.getNbrWagon() <=2 ){
+                return true ;
+            }
+        }
+        return false ;
+    }
 
 
     public void updateGame(double deltaTime)
