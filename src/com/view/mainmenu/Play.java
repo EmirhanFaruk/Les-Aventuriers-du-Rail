@@ -7,12 +7,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Play extends JPanel
 {
     private JLabel level_name_tag;
     private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
+    //private String[] player_colors ={"BLEU", "JAUNE", "ROUGE", "VERT"};
+    private List<String> player_colors =new ArrayList<>(Arrays.asList("BLEU", "JAUNE", "ROUGE", "VERT"));
 
     private final String
             PLAYER = "PLAYER",
@@ -55,6 +60,7 @@ public class Play extends JPanel
         {
             player_type_list_tag[i] = new JLabel(PLAYER);
         }
+        
     }
 
 
@@ -158,6 +164,25 @@ public class Play extends JPanel
         return makeCenteringPanel(button);
     }
 
+    /**
+     * Makes a liste for choosing player's coulour.
+     * @param i player number
+     * @return the panel containing the said button.
+     */
+    private JPanel makePlayerCoulourChoicePanel(int i)
+    {
+        JComboBox<String> colorComboBox = new JComboBox<>(player_colors.toArray(new String[0]));
+        colorComboBox.setBackground(Color.BLACK);
+        colorComboBox.setForeground(Color.GRAY);
+        colorComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String coulour_of_player_i = (String) colorComboBox.getSelectedItem();
+            }
+        });
+
+        return makeCenteringPanel(colorComboBox);
+    }
 
     /**
      * Makes a single player panel.
@@ -169,15 +194,20 @@ public class Play extends JPanel
         JPanel res = makeDefaultPanel();
         res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        res.setLayout(new GridLayout(1, 2));
+        res.setLayout(new GridLayout(1, 3));
 
         res.add(makePlayerNamePanel(i));
 
         res.add(makeCPUPlayerSelectorPanel(i));
 
+        res.add(makePlayerCoulourChoicePanel(i));
+
 
         return res;
     }
+
+
+
 
 
 
