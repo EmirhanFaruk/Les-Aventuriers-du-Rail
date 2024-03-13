@@ -56,7 +56,7 @@ public class Player {
 		}
 		return false;
     }
-    
+
     //ATTENTION ! Si c'est true, passer le prochain tour du joueur.
     public boolean changerGareEnVille(int x, int y, Plateau p){
     	if(p.positionValide(x, y)){
@@ -66,7 +66,7 @@ public class Player {
     		}
     	}
 		return false;
-    }
+	}
 
 	public boolean compatibleColor(Content content, Couleur couleur){
 
