@@ -20,6 +20,8 @@ public class Rail extends Case {
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private boolean occuper;
+    
+    private Route saRoute;
 
 
     /**
@@ -69,4 +71,12 @@ public class Rail extends Case {
     public int getAngle() {
         return angle;
     }
+
+	public Route getSaRoute() {
+		return saRoute;
+	}
+
+	public void setSaRoute(Route saRoute) {
+		this.saRoute = saRoute;
+	}
 }
