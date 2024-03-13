@@ -396,6 +396,7 @@ public class Plateau {
     }
 
 
+
     private void printPlat()
     {
         for (int i = 0; i < plateau.length; i++)
@@ -418,8 +419,6 @@ public class Plateau {
             }
         }
     }
-
-
 
     private static void printVilles(String[][] stvilles)
     {
