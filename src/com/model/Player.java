@@ -55,18 +55,18 @@ public class Player {
 			return true;
 		}
 		return false;
-	}
-
-	//ATTENTION ! Si c'est true, passer le prochain tour du joueur.
-	public boolean changerGareEnVille(int x, int y, Plateau p){
-		if(p.positionValide(x, y)){
-			if(p.estUneCaseVille(x, y) && !p.estUneCaseGare(x, y)) {
-				((Ville) p.getPlateau()[x][y]).setGare(true);
-				return true;
-			}
-		}
+    }
+    
+    //ATTENTION ! Si c'est true, passer le prochain tour du joueur.
+    public boolean changerGareEnVille(int x, int y, Plateau p){
+    	if(p.positionValide(x, y)){
+    		if(p.estUneCaseVille(x, y) && !p.estUneCaseGare(x, y)) {
+    			((Ville) p.getPlateau()[x][y]).getIsOccuped();
+    			return true;
+    		}
+    	}
 		return false;
-	}
+    }
 
 	public boolean compatibleColor(Content content, Couleur couleur){
 

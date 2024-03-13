@@ -11,6 +11,7 @@ public class CarteDestination extends JPanel {
     private Ville premiereVille;
     private Ville deuxiemeVille;
     private int nombrePoints;
+    private boolean complete; //savoir si le joueur a complété ou non la mission
 
 
     public Ville getPremiereVille() {
@@ -30,6 +31,7 @@ public class CarteDestination extends JPanel {
         this.premiereVille = route.getVille1();
         this.deuxiemeVille = route.getVille2();
         this.nombrePoints = route.getNombrePoint();
+        this.complete = false;
     }
 
 
