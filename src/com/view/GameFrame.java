@@ -113,4 +113,7 @@ public class GameFrame extends JFrame
         return device;
     }
 
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
 }

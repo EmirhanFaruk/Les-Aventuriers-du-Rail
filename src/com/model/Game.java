@@ -4,6 +4,8 @@ import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
 import com.model.config.Ville;
+import com.view.GameFrame;
+import com.view.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,11 @@ public class Game
     private CarteManager cm;
     private Round round;
 
-    public Game() {}
+    private GameFrame gameFrame ;
+
+    public Game(GameFrame gameFrame) {
+        this.gameFrame = gameFrame ;
+    }
 
     public void makeGame(String nomMap)
     {
@@ -88,6 +94,7 @@ public class Game
             round.round(this,cm);
 
         }
+        this.gameFrame.getGameScreen().update(deltaTime);
 
 
 

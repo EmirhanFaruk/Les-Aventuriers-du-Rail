@@ -31,6 +31,7 @@ public class GameScreen extends JPanel {
 
         setLayout(new BorderLayout());
         add( gameManagerScreen , BorderLayout.CENTER ) ;
+        this.endGameScreen = new EndGameScreen(this , width ,height ) ;
     }
 
     /**
@@ -46,10 +47,14 @@ public class GameScreen extends JPanel {
         if (playing){
             this.game.updateGame( deltaTime ) ;
             if ( this.game.endGame()){
+                add( endGameScreen , BorderLayout.CENTER ) ;
                 playing = false ;
-                add(endGameScreen , BorderLayout.CENTER) ;
             }
         }
         repaint();
+    }
+
+    public GameFrame getFrame() {
+        return frame;
     }
 }

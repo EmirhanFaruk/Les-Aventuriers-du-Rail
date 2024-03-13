@@ -6,13 +6,14 @@ import com.view.GameFrame;
 public class Main implements Runnable
 {
     public GameFrame gameFrame;
-    public Game game = new Game();
+    public Game game ;
     private Thread game_thread;
     private boolean running = false;
 
     public void lance()
     {
-        GameFrame gameFrame = new GameFrame(800, 500, this);
+        this.gameFrame = new GameFrame(800, 500, this);
+        this.game =new Game( gameFrame);
     }
 
     private void startGame_thread()
