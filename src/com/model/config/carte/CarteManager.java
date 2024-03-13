@@ -60,9 +60,14 @@ public class CarteManager {
 
     }
 
-    public CarteDestination takeDestination(int position){
+    public CarteDestination[] takeDestination(int[] position,Game game){
+        CarteDestination [] renvoie = new CarteDestination[position.length];
         //Fonction qui prends prends une carte destination
-        return destinationsCards[position];
+        for(int i = 0; i<position.length;i++){
+            renvoie[i] = destinationsCards[position[i]];
+        }
+        rerollDestination(game);
+        return renvoie;
     }
 
     public void rerollDestination(Game game){
@@ -115,14 +120,13 @@ public class CarteManager {
         //Fonction qui choisit au hasard les déstinations
 
         //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random ville1RANDOM = new Random(game.getVilles().length);
-        Random ville2RANDOM = new Random(game.getVilles().length);
-        int ville1 = ville1RANDOM.nextInt();
-        int ville2 = ville1RANDOM.nextInt();
+        Random villeRANDOM = new Random(game.getVilles().length);
+        int ville1 = villeRANDOM.nextInt();
+        int ville2 = villeRANDOM.nextInt();
 
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
         while(ville1 == ville2){
-            ville2 = ville1RANDOM.nextInt();
+            ville2 = villeRANDOM.nextInt();
         }
         Ville v1 = game.getVilles()[ville1];
         Ville v2 = game.getVilles()[ville2];

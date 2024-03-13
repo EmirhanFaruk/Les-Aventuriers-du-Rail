@@ -117,6 +117,7 @@ public class Player {
         this.trainList = trainList;
     }
 
+
 	public String getPlayerCouleur() {
 		return playerCouleur;
 	}
