@@ -233,8 +233,7 @@ public class Plateau {
 
 
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
-                    Route route = new Route(ville1, ville2, longueur, couleur, plateau);
-                    //CarteDestination carte = new CarteDestination(route);
+                    Route route = new Route(ville1, ville2, longueur, couleur);
 
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
@@ -328,7 +327,7 @@ public class Plateau {
      * @return true si la position est valide, sinon false.
      */
     public boolean positionValide(int x, int y) {
-        return !(y > this.getLargeur() || x > this.getLongueur() || x < 0 || y < 0);
+        return !(y >= this.getLargeur() || x >= this.getLongueur() || x < 0 || y < 0);
     }
 
     /**

@@ -71,7 +71,7 @@ public class GameFrame extends JFrame
         main.startGame(map, player_names, player_types);
 
         gameScreen = null ;
-        gameScreen = new GameScreen( this , map , getWidth() , getHeight(), main.game.getJoueurCourant()) ;
+        gameScreen = new GameScreen( this , map , getWidth() , getHeight()) ;
 
         main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
@@ -80,6 +80,11 @@ public class GameFrame extends JFrame
         gameScreen.make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
     }
+
+
+
+
+
 
     @Override
     public void setSize(int width, int height)
