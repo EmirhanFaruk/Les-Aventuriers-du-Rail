@@ -1,4 +1,5 @@
 package com.model;
+
 import com.model.config.Plateau;
 import com.model.config.Rail;
 import com.model.config.Rail.Content;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
+	private final String playerCouleur ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
@@ -58,8 +60,14 @@ public class Player {
     public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
         this.trainList = trainList;
     }
-    
-    private int carteDuJoueur(Rail.Content color){
+
+	public Player ( String playerCouleur ){
+		this.playerCouleur = playerCouleur ;
+		this.score = 0 ;
+	}
+
+
+	private int carteDuJoueur(Rail.Content color){
     	int count = 0;
 
     	for(int i = 0; i < this.trainList.size(); i++) {
@@ -112,6 +120,10 @@ public class Player {
 
 		return content.ordinal() == couleur.ordinal();
 
+	}
+
+	public String getPlayerCouleur() {
+		return playerCouleur;
 	}
 
 
