@@ -50,13 +50,7 @@ public class Plateau {
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
-
-        printTab(stville);
-
-        printVilles(stville);
-
-        res.printPlat();
-
+        
         return res;
     }
 
