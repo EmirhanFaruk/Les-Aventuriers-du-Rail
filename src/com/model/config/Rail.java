@@ -1,6 +1,8 @@
 package com.model.config;
 
 
+import com.model.Player;
+
 /**
  * La classe Rail représente une case de type rail.
  * Elle hérite de la classe Case et ajoute des fonctionnalités spécifiques
@@ -19,7 +21,9 @@ public class Rail extends Case {
     private final int angle ;
 
     /** Un indicateur indiquant si le rail est occupé ou non. */
-    private boolean occuper;
+    private Player occuperPar;
+
+    private boolean occuper ;
 
 
     /**
@@ -32,6 +36,8 @@ public class Rail extends Case {
         super(x, y);
         this.initialContent = c;
         this.angle = angle;
+        this.occuper = false ;
+        this.occuperPar = null ;
     }
     
     /**
@@ -68,5 +74,23 @@ public class Rail extends Case {
 
     public int getAngle() {
         return angle;
+    }
+
+    /**
+     * Renvoie quelle joueur a cette rail
+     * @return Player
+     */
+    public Player getOccuperPar() {
+        return occuperPar;
+    }
+
+    /**
+     * Definir le joueur a quui appartient cette rail
+     * @param occuperPar Player
+     */
+    public void setOccuperPar(Player occuperPar) {
+        if ( ! this.occuper ) {
+            this.occuperPar = occuperPar;
+        }
     }
 }
