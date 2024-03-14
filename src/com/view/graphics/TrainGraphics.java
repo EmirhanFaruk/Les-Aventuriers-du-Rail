@@ -29,6 +29,11 @@ public class TrainGraphics {
         }
     }
 
+    /**
+     * Cherche si dans le string possede une couleur
+     * @param s nom du fichier
+     * @return true si il y a une couleur sinon non
+     */
     private static String findColor ( String s ) {
         if ( s.contains("Jaune")) return "Jaune" ;
         else if ( s.contains("Bleu")) return "Bleu" ;
