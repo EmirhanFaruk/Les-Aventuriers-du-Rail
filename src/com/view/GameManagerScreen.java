@@ -1,5 +1,6 @@
 package com.view;
 
+import com.model.Game;
 import com.model.config.Plateau;
 
 import javax.swing.*;
@@ -7,29 +8,22 @@ import java.awt.*;
 
 public class GameManagerScreen extends JPanel {
     GameFrame frame ;
-    MapScreen mapScreen ;
-    private static int tile_width , tile_height ;
-    private int width , height ;
+    GameMapPanel gameMapPanel ;
+    private Game game ;
+    private EndGameScreen endGameScreen ;
 
-    /**
-     * Constructeur de la classe GameManagerScreen
-     * @param frame
-     * @param map
-     * @param width
-     * @param height
-     */
-    public GameManagerScreen ( GameFrame frame , String map , int width , int height){
+    private GameScreen gameScreen ;
+
+    public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height ){
         this.frame = frame ;
+        this.gameScreen = gameScreen ;
         setSize(width , height );
-        this.height = height ;
-        this.width = width ;
-        tile_height = getHeight() / 24 ;
-        tile_width = getWidth() / 24 ;
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  ) ;
+        this.gameMapPanel = new GameMapPanel(frame , map , width , height ) ;
+        this.game = this.frame.getMain().getGame();
+        this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
 
-        setLayout(new BorderLayout());
-        add( mapScreen , BorderLayout.CENTER ) ;
-
+        setLayout(new CardLayout());
+        add( gameMapPanel ) ;
     }
 
     /**
@@ -37,6 +31,22 @@ public class GameManagerScreen extends JPanel {
      * @param plateau Plateau
      */
     public void make( Plateau plateau ){
-        mapScreen.makeMap( plateau );
+        this.gameMapPanel.make(plateau);
+    }
+
+    /**
+     * Une fonction qui verfie si la partie est fini et affiche le panel de la fin de jeu
+     */
+    public void update(){
+        if ( this.game.endGame()){
+            gameMapPanel.add( endGameScreen , BorderLayout.EAST) ;
+            this.frame.getMain().setRunning( false );
+        }
+        repaint();
+    }
+
+    /* getteurs et setteurs */
+    public GameFrame getFrame() {
+        return frame;
     }
 }

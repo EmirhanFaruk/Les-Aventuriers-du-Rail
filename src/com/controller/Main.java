@@ -44,7 +44,7 @@ public class Main implements Runnable
             start = System.nanoTime();
             if(end >= required_fps)
             {
-                game.updateGame(end/1000000000);
+                game.updateGame( );
                 end = System.nanoTime() - start;
             }
             else
@@ -58,5 +58,9 @@ public class Main implements Runnable
     public void setRunning(boolean b)
     {
         running = b;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

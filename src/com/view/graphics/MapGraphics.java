@@ -76,18 +76,12 @@ public class MapGraphics {
      */
     public void draw(Graphics2D g) {
         if (aCase instanceof Ville ) {
-            cmpVille++ ;
             VilleGraphics.paint( g , ( Ville ) aCase );
         } else if (aCase instanceof Rail ) {
-            cmpRail ++;
             RailGraphics.paint( g, (Rail) aCase );
         }
     }
 
-    public static void getCmp (){
-        System.out.println("Le nombre de rail : " + cmpRail );
-        System.out.println("Le nombre de ville :" + cmpVille );
-    }
 
     /*
    getteurs et setteurs

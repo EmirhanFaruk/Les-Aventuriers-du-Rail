@@ -23,6 +23,8 @@ public class Game
 
     public Game(GameFrame gameFrame) {
         this.gameFrame = gameFrame ;
+        listPlayer = new ArrayList<>();
+        listPlayer.add(new Player("BLEU")) ;
     }
 
     public void makeGame(String nomMap)
@@ -90,7 +92,7 @@ public class Game
     }
 
 
-    public void updateGame(double deltaTime)
+    public void updateGame( )
     {
         //game loop
         if(round.roundFinished()){
@@ -98,7 +100,10 @@ public class Game
             round.round(this,cm);
 
         }
-        this.gameFrame.getGameScreen().update(deltaTime);
+        if (this.gameFrame.getGameScreen() != null)
+        {
+            this.gameFrame.getGameScreen().getGameManagerScreen().update();
+        }
 
 
 

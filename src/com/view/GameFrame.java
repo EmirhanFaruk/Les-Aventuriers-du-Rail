@@ -77,7 +77,7 @@ public class GameFrame extends JFrame
         setMinimumSize(getSize());
         pack();
         setMinimumSize(null);
-        gameScreen.make( main.game.getPlateau());
+        gameScreen.getGameManagerScreen().make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
     }
 
@@ -115,5 +115,9 @@ public class GameFrame extends JFrame
 
     public GameScreen getGameScreen() {
         return gameScreen;
+    }
+
+    public Main getMain() {
+        return main;
     }
 }
