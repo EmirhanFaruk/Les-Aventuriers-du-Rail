@@ -3,6 +3,8 @@ package com.view.mainmenu;
 import com.view.GameFrame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +18,6 @@ public class Play extends JPanel
     private JLabel level_name_tag;
     private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
-    //private String[] player_colors ={"BLEU", "JAUNE", "ROUGE", "VERT"};
-    private List<String> player_colors =new ArrayList<>(Arrays.asList("BLEU", "JAUNE", "ROUGE", "VERT"));
 
     private final String
             PLAYER = "PLAYER",
@@ -169,19 +169,66 @@ public class Play extends JPanel
      * @param i player number
      * @return the panel containing the said button.
      */
-    private JPanel makePlayerCoulourChoicePanel(int i)
+    private JComponent makePlayerCoulourChoicePanel(int i)
     {
-        JComboBox<String> colorComboBox = new JComboBox<>(player_colors.toArray(new String[0]));
-        colorComboBox.setBackground(Color.BLACK);
-        colorComboBox.setForeground(Color.GRAY);
-        colorComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String coulour_of_player_i = (String) colorComboBox.getSelectedItem();
-            }
-        });
+        JPanel colors = makeDefaultPanel();
+        colors.setLayout(new GridLayout(1,5));
+        JPanel redPanel = makeredPanel();
+        JPanel bluePanel = makebluePanel();
+        JPanel greenPanel = makegreenPanel();
+        JPanel yellowPanel = makeyellowPanel();        
+        colors.add(redPanel);
+        colors.add(bluePanel);
+        colors.add(greenPanel);
+        colors.add(yellowPanel);
+        colors.add(makeDefaultPanel());
+        return colors;
+    }
 
-        return makeCenteringPanel(colorComboBox);
+    private JPanel makeredPanel() {
+        JPanel redPanel = makeDefaultPanel();
+        JButton red = new JButton();
+        red.setBackground(Color.red);
+        red.setSelected(true);
+        redPanel.setLayout(new GridLayout(3,1));
+        redPanel.setBorder(new EmptyBorder(5,5,5,5));
+        redPanel.add(makeDefaultPanel());
+        redPanel.add(red);
+        
+        return redPanel;
+    }
+
+    private JPanel makebluePanel() {
+        JPanel bluePanel = makeDefaultPanel();
+        JButton blue = new JButton();
+        blue.setBackground(Color.blue);
+        bluePanel.setLayout(new GridLayout(3,1));
+        bluePanel.setBorder(new EmptyBorder(5,5,5,5));
+        bluePanel.add(makeDefaultPanel());
+        bluePanel.add(blue);
+        return bluePanel;
+    }
+
+    private JPanel makegreenPanel() {
+        JPanel greenPanel = makeDefaultPanel();
+        JButton green = new JButton();
+        green.setBackground(Color.GREEN);
+        greenPanel.setLayout(new GridLayout(3,1));
+        greenPanel.setBorder(new EmptyBorder(5,5,5,5));
+        greenPanel.add(makeDefaultPanel());
+        greenPanel.add(green);
+        return greenPanel;
+    }
+
+    private JPanel makeyellowPanel() {
+        JPanel yellowPanel = makeDefaultPanel();
+        JButton yellow = new JButton();
+        yellow.setBackground(Color.YELLOW);
+        yellowPanel.setLayout(new GridLayout(3,1));
+        yellowPanel.setBorder(new EmptyBorder(5,5,5,5));
+        yellowPanel.add(makeDefaultPanel());
+        yellowPanel.add(yellow);
+        return yellowPanel;
     }
 
     /**
