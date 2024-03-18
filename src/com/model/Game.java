@@ -24,6 +24,7 @@ public class Game
         this.cm = new CarteManager(plateau);
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.round = new Round();
+        initBoard();
     }
 
     /*
@@ -67,6 +68,15 @@ public class Game
             cm.getDestinationsCards()[y] = cm.getDestination(this);
         }
 
+        // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
+        for (int i = 0; i < listPlayer.size(); i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                listPlayer.get(i).piocher(cm);
+            }
+        }
+
     }
 
 
@@ -87,14 +97,9 @@ public class Game
     public void updateGame(double deltaTime)
     {
         //game loop
-        if(round.roundFinished()){
-
-            round.round(this,cm);
-
+        if(round.roundFinished())
+        {
+            round.round(this, cm, deltaTime);
         }
-
-
-
-
     }
 }

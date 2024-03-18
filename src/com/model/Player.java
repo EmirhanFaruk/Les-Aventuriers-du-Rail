@@ -5,6 +5,7 @@ import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
+import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 
@@ -83,6 +84,16 @@ public class Player {
 		return content.ordinal() == couleur.ordinal();
 
 	}
+
+	public void piocher(CarteManager cm)
+	{
+		trainList.add(cm.drawCard());
+	}
+
+
+
+
+
 	/**
 	 * Une fonction qui verifie si le joueur a assez de gare
 	 * @return si nbrGare est superieur a 0
