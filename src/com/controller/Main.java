@@ -2,6 +2,7 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
+import java.awt.*;
 
 public class Main implements Runnable
 {
@@ -21,10 +22,10 @@ public class Main implements Runnable
         game_thread.start();
     }
 
-    public void startGame(String map, String[] player_names, String[] player_types)
+    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
     {
         running = true;
-        game.makeGame(map);
+        game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
 
