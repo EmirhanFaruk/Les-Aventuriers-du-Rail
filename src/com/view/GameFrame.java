@@ -25,7 +25,7 @@ public class GameFrame extends JFrame
 
     private GameScreen gameScreen ;
 
-    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME";
+    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , endgame_screen_s = "ENDGALE";
 
     private Menu menu;
 
@@ -115,6 +115,14 @@ public class GameFrame extends JFrame
 
     public GameScreen getGameScreen() {
         return gameScreen;
+    }
+
+    public String getIngame_screen_s() {
+        return ingame_screen_s;
+    }
+
+    public String getEndgame_screen_s() {
+        return endgame_screen_s;
     }
 
     public Main getMain() {

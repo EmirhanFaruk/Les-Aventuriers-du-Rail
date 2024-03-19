@@ -77,6 +77,11 @@ public class Game
 
     }
 
+    public void  dinumueCarte(){
+        for ( Player p : listPlayer ){
+            p.setNbrWagon( p.getNbrWagon() - 1 );
+        }
+    }
 
     /**
      * Verifie s'il y a un joueur qui a moins de 3 wagons
@@ -100,13 +105,11 @@ public class Game
             round.round(this,cm);
 
         }
-        if (this.gameFrame.getGameScreen() != null)
-        {
+
+        if ( endGame() && this.gameFrame.getGameScreen() != null) {
+            System.err.println("la partie est terminée");
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
-
-
-
 
     }
 }

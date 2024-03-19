@@ -8,8 +8,10 @@ import java.awt.*;
 
 public class GameManagerScreen extends JPanel {
     GameFrame frame ;
-    GameMapPanel gameMapPanel ;
+    private GameMapPanel gameMapPanel ;
     private Game game ;
+
+    private final CardLayout cardLayout = new CardLayout() ;
     private EndGameScreen endGameScreen ;
 
     private GameScreen gameScreen ;
@@ -21,9 +23,10 @@ public class GameManagerScreen extends JPanel {
         this.gameMapPanel = new GameMapPanel(frame , map , width , height ) ;
         this.game = this.frame.getMain().getGame();
         this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
-
-        setLayout(new CardLayout());
-        add( gameMapPanel ) ;
+        setLayout( cardLayout );
+        add( frame.getIngame_screen_s() , gameMapPanel ) ;
+        add( frame.getEndgame_screen_s() , endGameScreen ) ;
+        cardLayout.show(this, frame.getIngame_screen_s());
     }
 
     /**
@@ -39,7 +42,7 @@ public class GameManagerScreen extends JPanel {
      */
     public void update(){
         if ( this.game.endGame()){
-            gameMapPanel.add( endGameScreen , BorderLayout.EAST) ;
+            cardLayout.show(this , frame.getEndgame_screen_s());
             this.frame.getMain().setRunning( false );
         }
         repaint();
@@ -48,5 +51,13 @@ public class GameManagerScreen extends JPanel {
     /* getteurs et setteurs */
     public GameFrame getFrame() {
         return frame;
+    }
+
+    public GameMapPanel getGameMapPanel() {
+        return gameMapPanel;
+    }
+
+    public EndGameScreen getEndGameScreen() {
+        return endGameScreen;
     }
 }

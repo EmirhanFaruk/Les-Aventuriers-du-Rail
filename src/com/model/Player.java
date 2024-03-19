@@ -24,7 +24,7 @@ public class Player {
 	public Player ( String playerCouleur ){
 		this.playerCouleur = playerCouleur ;
 		this.score = 0 ;
-		this.nbrWagon = 2 ;
+		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
 	}
 

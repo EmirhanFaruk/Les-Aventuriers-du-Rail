@@ -35,7 +35,7 @@ public class EndGameScreen extends JPanel {
         buttonRestart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /** TODO : ajouter la focntion relancer le jeu ici */
+                gameScreen.getFrame().getMain().restart();
             }
         });
 
