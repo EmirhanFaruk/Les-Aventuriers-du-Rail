@@ -1,5 +1,6 @@
 package com.view.graphics;
 
+import com.model.Player;
 import com.model.config.Ville;
 
 import javax.imageio.ImageIO;
@@ -13,7 +14,10 @@ public class VilleGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
     private static final BufferedImage villeImage= loadImage( "Ville.png" ) ;
-    private static final BufferedImage gareImage = loadImage( "Gare.png" ) ;
+    private static final BufferedImage gareBleu = loadImage( "GareBleu.png" ) ;
+    private static final BufferedImage gareJaune = loadImage( "GareJaune.png" ) ;
+    private static final BufferedImage gareRouge = loadImage( "GareRouge.png" ) ;
+    private static final BufferedImage gareVert = loadImage( "GareVert.png" ) ;
     private static int width , height ;
 
 
@@ -27,7 +31,12 @@ public class VilleGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath = path + s + "ressources" + s + "Batiment" + s + fileName;
+            String imagePath =null ;
+            if (findColor(fileName)) {
+                imagePath = path + s + "ressources" + s + "Batiment" + s + "Gare" +  s+ fileName;
+            } else {
+                imagePath = path + s + "ressources" + s + "Batiment" + s + fileName;
+            }
             return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,16 +62,31 @@ public class VilleGraphics {
     }
 
     /**
+     * Cherche si dans le string possede une couleur
+     * @param s nom du fichier
+     * @return true si il y a une couleur sinon non
+     */
+    private static boolean findColor ( String s ) {
+        return s.contains("Jaune") || ( s.contains("Bleu")) ||( s.contains("Noir"))||  ( s.contains("Rouge")) || (s.contains("Vert")) ;
+    }
+
+    /**
      * Renvoie la bonne image
      * @param ville Ville
      * @return bufferedImage
      */
-    public static BufferedImage getImage( Ville ville ){
-        if (ville.estUneCaseGare()){
-            return gareImage ;
+    public static BufferedImage getImage(Ville ville ){
+        if (ville.estUneCaseGare() && ville.getIsOccuped() != null ){
+            switch (ville.getIsOccuped().getPlayerCouleur()){
+                case "JAUNE" : return gareJaune ;
+                case "ROUGE" : return gareRouge ;
+                case "BLEU" : return gareBleu ;
+                case "VERT" : return gareVert ;
+            }
         } else {
             return villeImage ;
         }
+        return null ;
     }
 
     /**

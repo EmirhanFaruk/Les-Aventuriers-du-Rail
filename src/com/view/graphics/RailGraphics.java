@@ -23,7 +23,7 @@ public class RailGraphics {
     private static final BufferedImage[] RailYellow = createListImage( "RailJaune.png" ) ;
     private static final BufferedImage[] RailJoker = createListImage( "RailLRainbow.png") ;
     private static final BufferedImage[] RailJokerEtoilee =createListImage("RailLEtoile.png" ) ;
-    private static int[] angle = { 0 , 45 , 90 , 135 } ;
+    private static int[] angle = { 90 , 45 , 0 , 135 } ;
     private static int width , height ;
 
     public RailGraphics( ) {
@@ -157,9 +157,12 @@ public class RailGraphics {
      * @param g Graphics
      * @param rail Rail
      */
-    public static void paint(Graphics2D g, Rail rail){
-        BufferedImage image = getImage(rail) ;
-        g.drawImage( image , rail.getX() * width , rail.getY() * height , width , height , null ) ;
+    public static void paint(Graphics2D g, Rail rail) {
+        BufferedImage image = getImage(rail);
+        g.drawImage(image, rail.getX() * width, rail.getY() * height, width, height, null);
+        if (rail.getOccuper()) {
+            TrainGraphics.paint(g, rail);
+        }
     }
 
     /*

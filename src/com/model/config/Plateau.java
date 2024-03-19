@@ -51,7 +51,6 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
-
         return res;
     }
 
@@ -203,12 +202,12 @@ public class Plateau {
     {
         for (int i = 0; i < villes.length; i++)
         {
-            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+            // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]);
             String nom = stville[i][1];
             villes[i] = new Ville(x, y, nom);
-            plateau.getPlateau()[y][x] = new Ville(x, y, nom);
+            plateau.plateau[y][x] = new Ville(x, y, nom);
         }
     }
 
@@ -223,7 +222,7 @@ public class Plateau {
                 int i = 4;
                 while (i + 4 < villet.length)
                 {
-                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes[0, 45, 90, 135]) * k
+                    // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i]);
                     Ville ville1 = villes[nvil1 - 1];
@@ -234,8 +233,7 @@ public class Plateau {
 
 
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
-                    Route route = new Route(ville1, ville2, longueur,couleur);
-                    CarteDestination carte = new CarteDestination(route);
+                    Route route = new Route(ville1, ville2, longueur, couleur);
 
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
@@ -249,35 +247,42 @@ public class Plateau {
 
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
-        int[] pos = new int[]{ville1.getY(), ville1.getX()};
+        int[] pos = new int[]{ville1.getX(), ville1.getY()};
+        int[] destpos = new int[]{ville2.getX(), ville2.getY()};
         int[] angles = {90, 45, 0, 135};
-        while(longueur > 0)
+        System.out.println();
+        do
         {
-            if (pos[0] > ville2.getY())
+            if (pos[0] > ville2.getX())
             {
                 pos[0] = pos[0] - 1;
             }
-            else if (pos[0] < ville2.getY())
+            else if (pos[0] < ville2.getX())
             {
                 pos[0] = pos[0] + 1;
             }
 
-            if (pos[1] > ville2.getX())
+            if (pos[1] > ville2.getY())
             {
-                pos[1] = pos[0] - 1;
+                pos[1] = pos[1] - 1;
             }
-            else if (pos[1] < ville2.getX())
+            else if (pos[1] < ville2.getY())
             {
                 pos[1] = pos[1] + 1;
             }
 
-            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
+            if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
             {
-                plateau.plateau[pos[0]][pos[1]] = new Rail(pos[1], pos[0], couleur, angles[angle]);
+                System.out.println("Between " + ville1.getNom() + " and " + ville2.getNom() + ", putting rail at {" + pos[0] + ", " + pos[1] + "}");
+                plateau.plateau[pos[1]][pos[0]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
             }
-
             longueur--;
-        }
+        } while(longueur > 0 && !(samePos(pos, destpos)));
+    }
+
+    private static boolean samePos(int[] t1, int[] t2)
+    {
+        return t1[0] == t2[0] && t1[1] == t2[1];
     }
 
 
@@ -383,9 +388,7 @@ public class Plateau {
         System.out.println("Le nombre de ville  : "+ cmpVille );
         System.out.println("Le nombre de rail : "+ cmpRail );
     }
-
-
-
+    
 }
 
 
