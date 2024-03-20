@@ -20,6 +20,7 @@ public class Player {
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
+	public Couleur couleur;
 
 	public Player ( String playerCouleur,String name, int niveau){
 		this.playerCouleur = playerCouleur ;
@@ -67,9 +68,8 @@ public class Player {
     //ATTENTION ! Si c'est true, passer le prochain tour du joueur.
     public boolean changerGareEnVille(int x, int y, Plateau p){
     	if(p.positionValide(x, y)){
-    		if(p.estUneCaseVille(x, y) && !p.estUneCaseGare(x, y) && assezDeGare()) {
-				setNbrGare(this.nbrWagon -1 );
-    			((Ville) p.getPlateau()[x][y]).getIsOccuped();
+    		if(p.estUneCaseVille(x, y) && !p.estUneCaseGare(x, y)) {
+    			((Ville) p.getPlateau()[x][y]).setIsOccuped(this);
     			return true;
     		}
     	}
