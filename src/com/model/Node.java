@@ -5,7 +5,7 @@ import com.model.config.Ville;
 
 import java.util.ArrayList;
 
-public class PathFinding
+public class Node
 {
     /**
      * Returns an ArrayList of strings that makes the shortest path between 2 villes
@@ -18,9 +18,6 @@ public class PathFinding
 
         return res;
     }
-
-
-
 
 
     /**
