@@ -5,6 +5,7 @@ import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
+import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 
@@ -21,11 +22,20 @@ public class Player {
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 
-	public Player ( String playerCouleur ){
+	public Player ( String playerCouleur, CarteManager carteManager){
 		this.playerCouleur = playerCouleur ;
 		this.score = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
+		initCarteWagon(carteManager);
+	}
+
+
+	public void initCarteWagon(CarteManager carteManager){
+		for(int i = 0; i< 5; i++){
+			this.trainList.add(carteManager.drawCard());
+
+		}
 	}
 
 	private int carteDuJoueur(Rail.Content color){

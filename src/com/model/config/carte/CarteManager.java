@@ -83,8 +83,8 @@ public class CarteManager {
     public CarteWagon.Couleur drawCard(){
         //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
 
-        Random carte = new Random(110);
-        int pioche = carte.nextInt();
+        Random carte = new Random();
+        int pioche = carte.nextInt(110);
 
         //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
         if(pioche >= 0 && pioche <= 11){
@@ -119,20 +119,19 @@ public class CarteManager {
     public CarteDestination getDestination(Game game){
         //Fonction qui choisit au hasard les déstinations
 
-        //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
+        //On prend un Random qui donne un nombre qui représente la position dans le tableau des villes
         Random villeRANDOM = new Random(game.getVilles().length);
-        int ville1 = villeRANDOM.nextInt();
-        int ville2 = villeRANDOM.nextInt();
+        int ville = villeRANDOM.nextInt();
 
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
-        while(ville1 == ville2){
-            ville2 = villeRANDOM.nextInt();
+        while(ville == ville){
+            ville = villeRANDOM.nextInt();
         }
-        Ville v1 = game.getVilles()[ville1];
-        Ville v2 = game.getVilles()[ville2];
+        Ville v1 = game.getVilles()[ville];
+        Ville v2 = game.getVilles()[ville];
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        return  new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
+        return new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
 
 
     }
