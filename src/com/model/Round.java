@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.config.Route;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
@@ -12,7 +13,6 @@ public class Round {
     private int whoIsPlaying = 0; //Quel joueur est entrain de jouer
     private boolean endTurn = false; //Si le tour est finis ou non
     private int action = 2; //Le nombre d'action qu'il reste pour piocher une carte wagon
-    private boolean missionCardTaked = false;
 
     public boolean roundFinished(){
         //Savoir si le joueur/ia a fini de jouer ou non
@@ -26,7 +26,6 @@ public class Round {
         //On reset le round
         this.endTurn = false;
         this.action = 2;
-        this.missionCardTaked = false;
 
         //On change de joueur
         if(whoIsPlaying == game.getListPlayer().size() -1){
@@ -68,7 +67,7 @@ public class Round {
 
                         //On verifie si elle a assez d'action pour choisir la carte, car carte normale = 1 point et locomotive = 2 points, sinon elle recommence dans le while
                         if(carteManager.possibleTakeWagon(this.action, position)){
-                            CarteWagon.Couleur carte = carteManager.takeWagon(position,action);
+                            CarteWagon.Couleur carte = carteManager.takeWagon(position);
 
                             //Si la carte pioché est une locomotive, on eneleve 2 points
                             if(carte == CarteWagon.Couleur.LOC){
@@ -194,25 +193,8 @@ public class Round {
 
     private void strongBotPlay(Game game, CarteManager carteManager) {
 
-        /*       /!\  Principes fondamentaux de ce bot  /!\
+        /*
 
-                     ----- MISSION PRINCIPALE ------
-
-              · Il doit completer toute ses missions pour ne pas avoir de malus
-
-              · Il doit avoir le plus de gare possible a la fin pour ajouter des points au compteur
-
-
-                     ----- PROCEDE DE CHAQUE TOUR ------
-
-              1- On regarde si il a complété ou pas ses missions :
-
-                    -Si oui :
-
-                    2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total
-                        puis les prends
-
-                    -Sinon :
 
                     3- On regarde si il peut faire finir sa route avec les routes non prise :
 
@@ -258,45 +240,42 @@ public class Round {
 
 
 
+        //1- On regarde si il a complété ou pas ses missions :
+        boolean allMissionIsCompleted = true;
+        for(int i = 0; i< game.getListPlayer().get(whoIsPlaying).getDestinationsList().size();i++){
+
+            if(!game.getListPlayer().get(whoIsPlaying).getDestinationsList().get(i).getComplete()){
+                allMissionIsCompleted = false;
+            }
+
+        }
+
+        //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
+        if(allMissionIsCompleted){
+
+            CarteDestination addCard = compareCardPoint();
 
 
-        /*        CARTES MISSIONS        */
-
+        }
+        else{
             /*
-            Pour l'ia intelligente je pars du principe qu'il ne va prendre des cartes missions seulement si
-            il a complété toute les cartes missions qu'il possede sinon il ne fait jamais cette option
+               3- On regarde si il peut faire finir sa route avec les routes non prise :
 
+                    -Si non :
 
-            -Plus tard peut etre completer juste ceux court pour ensuite prendre d'autre mission
+                    4- On cherche l'endroit le plus optimale pour poser une gare :
 
+                        5- Si il y a plus de chemin possible :
+                         alors on regarde si les autres missions sont complété
+
+                                 Si oui :
+                                    Alors prendre une nouvelle carte mission on fait l'étape 2
+
+                                Sinon :
+                                    Completer les autres missions
              */
 
-        /*        CARTES WAGONS        */
-
-            /*
-            C'est plus optimal de choisir les cartes pioche visible que de prendre ceux invisible
-
-            Il prendra une carte locomotive si il n'y a pas de couleur qui lui permet de completer sa
-            au prochain tour ca lui permet de prendre une route ensuite, puis il
-
-
-
-             */
-
-
-        /*        POSER DES WAGONS       */
-
-            /*
-            L'ia posera seulement des wagons qui aident a compléter ses missions
-
-             */
-
-        /*        POSER UNE GARE       */
-
-            /*
-            Il posera une gare si le chemin est pris par un autre joueur
-            Comme ca ca lui permettra de faciliter de finir ses missions
-             */
+        }
 
 
         /*        RESET POUR LE PROCHAIN JOUEUR       */
@@ -307,6 +286,11 @@ public class Round {
 
     }
 
+    private CarteDestination compareCardPoint() {
+        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+
+        return new CarteDestination(new Route(null,null,0));
+    }
 
 
     public void round(Game game,CarteManager carteManager){
