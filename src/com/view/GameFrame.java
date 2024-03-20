@@ -70,9 +70,9 @@ public class GameFrame extends JFrame
     }
 
 
-    public void startGame(String map, String[] player_names, String[] player_types)
+    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_Colors)
     {
-        main.startGame(map, player_names, player_types);
+        main.startGame(map, player_names, player_types,player_Colors);
 
         gameScreen = null ;
         Player p = new Player("Silver");

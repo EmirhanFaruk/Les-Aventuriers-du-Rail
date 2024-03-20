@@ -2,6 +2,7 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
+import java.awt.*;
 
 public class Main implements Runnable
 {
@@ -30,13 +31,13 @@ public class Main implements Runnable
         startGame( this.map , this.player_names , this.player_types );
         System.err.println("Une nouvelle game");
     }
-    public void startGame(String map, String[] player_names, String[] player_types)
+    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
     {
         running = true;
         this.map = map ;
         this.player_names = player_names ;
         this.player_types = player_types ;
-        game.makeGame(map);
+        game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
 

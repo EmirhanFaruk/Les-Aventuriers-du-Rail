@@ -24,8 +24,10 @@ public class Player {
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 
-	public Player ( String playerCouleur ){
+	public Player ( String playerCouleur,String name, int niveau){
 		this.playerCouleur = playerCouleur ;
+		this.name = name;
+		this.niveau = niveau;
 		this.score = 0 ;
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
