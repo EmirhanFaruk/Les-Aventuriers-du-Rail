@@ -17,6 +17,8 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;
+
+	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
@@ -25,6 +27,7 @@ public class Player {
 	public Player ( String playerCouleur ){
 		this.playerCouleur = playerCouleur ;
 		this.score = 0 ;
+		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
 	}
@@ -83,6 +86,7 @@ public class Player {
 		return content.ordinal() == couleur.ordinal();
 
 	}
+
 	/**
 	 * Une fonction qui verifie si le joueur a assez de gare
 	 * @return si nbrGare est superieur a 0
@@ -141,8 +145,15 @@ public class Player {
         this.nbrGare = nbrGare;
     }
 
+	public int getMissionComplete() {
+		return missionComplete;
+	}
 
-    public ArrayList<CarteDestination> getDestinationsList() {
+	public void setMissionComplete(int missionComplete) {
+		this.missionComplete = missionComplete;
+	}
+
+	public ArrayList<CarteDestination> getDestinationsList() {
         return destinationsList;
     }
 
