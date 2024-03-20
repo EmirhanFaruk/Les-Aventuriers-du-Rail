@@ -3,7 +3,13 @@ package com.model;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteWagon.Couleur;
+import com.view.GameFrame;
+import com.view.GameScreen;
 import com.model.config.Ville;
+import com.view.GameFrame;
+import com.view.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,19 +19,31 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
+    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
     private Round round;
 
-    public Game() {}
+    private GameFrame gameFrame ;
+
+    public Game(GameFrame gameFrame) {
+        this.gameFrame = gameFrame ;
+        listPlayer = new ArrayList<>();
+        listPlayer.add(new Player("BLEU")) ;
+    }
 
     public void makeGame(String nomMap,String[] player_names, String[] player_types,Color[] player_colors)
     {
-        this.cm = new CarteManager(plateau);
+        this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
         listPlayer = initPlayers(player_names,player_types,player_colors);
         this.round = new Round();
+        this.listPlayer = new ArrayList<Player>();
+        this.listPlayer.add(new Player("Salim"));
+        this.listPlayer.add(new Player("Alexis"));
+        this.listPlayer.add(new Player("Emirhan"));
+        this.listPlayer.add(new Player("Mina"));
     }
 
     /*
@@ -95,6 +113,12 @@ public class Game
         return -1;
     }
 
+    public void  dinumueCarte(){
+        for ( Player p : listPlayer ){
+            p.setNbrWagon( p.getNbrWagon() - 1 );
+        }
+    }
+
 
     /**
      * Verifie s'il y a un joueur qui a moins de 3 wagons
@@ -110,17 +134,24 @@ public class Game
     }
 
 
-    public void updateGame(double deltaTime)
+    public void updateGame( )
     {
         //game loop
         if(round.roundFinished()){
 
             round.round(this,cm);
+            
+        }*/
+    }
 
         }
 
+        if ( endGame() && this.gameFrame.getGameScreen() != null) {
+            System.err.println("la partie est terminée");
+            this.gameFrame.getGameScreen().getGameManagerScreen().update();
+        }
 
-
-
-    }
+	public void setJoueurCourant(Player joueurCourant) {
+		this.joueurCourant = joueurCourant;
+	}
 }

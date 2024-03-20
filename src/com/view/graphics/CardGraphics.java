@@ -14,7 +14,7 @@ public class CardGraphics {
     private static final String s = findSlash(path);
     private static final BufferedImage CardObjectif = loadImage( "OjectifCard.png" ) ;
     private static final BufferedImage CardBack= loadImage( "CardWagonBack.png" ) ;
-    private static final BufferedImage CardLocomotive = loadImage( "CardWagonLocomotive.png" ) ;
+    private static final BufferedImage CardLocomotive = loadImage( "CardLocomotive.png" ) ;
     private static final BufferedImage CardBlue = loadImage( "CardWagonBlue.png" ) ;
     private static final BufferedImage CardBrown = loadImage( "CardWagonBrown.png" ) ;
     private static final BufferedImage CardDark = loadImage( "CardWagonDark.png" ) ;
@@ -70,30 +70,30 @@ public class CardGraphics {
     public static BufferedImage getImage(CarteWagon carteWagon){
         switch ( carteWagon.getInitialCouleur()){
             case BLANC:
-                return CardWhite ;
+                return CardWhite;
             case VIOLET:
-                return CardViolet ;
+                return CardViolet;
 
             case MARRON:
-                return CardBrown ;
+                return CardBrown;
 
             case NOIRE:
-                return CardDark ;
+                return CardDark;
 
             case JAUNE:
-                return CardYellow ;
+                return CardYellow;
 
             case VERT:
-                return CardGreen ;
+                return CardGreen;
 
             case LOC:
-                return CardLocomotive ;
+                return CardLocomotive;
 
             case BLEU:
-                return CardBlue ;
+                return CardBlue;
 
             case ROUGE:
-                return CardRed ;
+                return CardRed;
 
         }
         return null ;
