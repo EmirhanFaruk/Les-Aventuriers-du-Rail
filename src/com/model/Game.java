@@ -3,6 +3,10 @@ package com.model;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteWagon.Couleur;
+import com.view.GameFrame;
+import com.view.GameScreen;
 import com.model.config.Ville;
 
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
+    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -21,9 +26,14 @@ public class Game
 
     public void makeGame(String nomMap)
     {
-        this.cm = new CarteManager(plateau);
+        this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.round = new Round();
+        this.listPlayer = new ArrayList<Player>();
+        this.listPlayer.add(new Player("Salim"));
+        this.listPlayer.add(new Player("Alexis"));
+        this.listPlayer.add(new Player("Emirhan"));
+        this.listPlayer.add(new Player("Mina"));
     }
 
     /*
@@ -84,17 +94,32 @@ public class Game
     }
 
 
-    public void updateGame(double deltaTime)
-    {
-        //game loop
-        if(round.roundFinished()){
-
+    public void updateGame(double deltaTime, GameFrame gameFrame)
+    {	
+    	Player p = new Player("Silver");
+    	CarteWagon.Couleur c = Couleur.BLEU;
+    	CarteWagon.Couleur c1 = Couleur.MARRON;
+    	CarteWagon.Couleur c2 = Couleur.VERT;
+    	CarteWagon.Couleur c3 = Couleur.ROUGE;
+    	CarteWagon.Couleur c4 = Couleur.NOIRE;
+    	p.getTrainCard().add(c);
+    	p.getTrainCard().add(c1);
+    	p.getTrainCard().add(c2);
+    	p.getTrainCard().add(c3);
+    	p.getTrainCard().add(c4);
+    	//gameFrame.getGameScreen().setPlayerCourant(p);
+        /*if(round.roundFinished()){
+        	
             round.round(this,cm);
-
-        }
-
-
-
-
+            
+        }*/
     }
+
+	public Player getJoueurCourant() {
+		return joueurCourant;
+	}
+
+	public void setJoueurCourant(Player joueurCourant) {
+		this.joueurCourant = joueurCourant;
+	}
 }

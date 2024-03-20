@@ -52,14 +52,17 @@ public class Player {
     	}
     }
 
-	public boolean mettreRoute(Route r){
-		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null){
-			this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
-			r = new Route(r.getVille1(), r.getVille2(), r.getLongueur(), r.getCouleur());
-			r.setProprietaire(this);
-			return true;
-		}
-		return false;
+    public boolean mettreRoute(Route r) {
+    	if(r != null) {
+    		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null) {
+                this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
+                r.setProprietaire(this); // Met à jour le propriétaire de la route.
+                System.out.println("I AM THE CAPTAIN NOW (C'EST MA ROUTE)");
+                return true;
+            }
+    	}
+    	
+    	return false;
     }
 
     //ATTENTION ! Si c'est true, passer le prochain tour du joueur.

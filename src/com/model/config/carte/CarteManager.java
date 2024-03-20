@@ -4,6 +4,7 @@ import com.model.Game;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
+import com.model.config.carte.CarteWagon.Couleur;
 
 import java.util.Random;
 
@@ -15,16 +16,13 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[5];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
-    private Game game;
 
-    public CarteManager(Plateau plateau){
+    public CarteManager(){
         //Pour initialiser les wagons
         for(int i = 0; i< trainCards.length;i++){
             trainCards[i] = drawCard();
 
         }
-        this.game = game;
-
     }
 
     public CarteDestination[] getDestinationsCards() {
@@ -83,36 +81,36 @@ public class CarteManager {
     public CarteWagon.Couleur drawCard(){
         //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
 
-        Random carte = new Random(110);
-        int pioche = carte.nextInt();
+        Random carte = new Random();
+        int pioche = carte.nextInt(110);
 
         //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
         if(pioche >= 0 && pioche <= 11){
-            return BLEU;
+            return Couleur.BLEU;
         }
         if(pioche >= 12 && pioche <= 23){
-            return VIOLET;
+            return Couleur.VIOLET;
         }
         if(pioche >= 24 && pioche <= 35){
-            return MARRON;
+            return Couleur.MARRON;
         }
         if(pioche >= 36 && pioche <= 47){
-            return NOIRE;
+            return Couleur.NOIRE;
         }
         if(pioche >= 48 && pioche <= 59){
-            return VERT;
+            return Couleur.VERT;
         }
         if(pioche >= 60 && pioche <= 71){
-            return JAUNE;
+            return Couleur.JAUNE;
         }
         if(pioche >= 72 && pioche <= 83){
-            return BLANC;
+            return Couleur.BLANC;
         }
         if(pioche >= 84 && pioche <= 95){
-            return ROUGE;
+            return Couleur.ROUGE;
         }
 
-        return LOC;
+        return Couleur.LOC;
 
     }
 

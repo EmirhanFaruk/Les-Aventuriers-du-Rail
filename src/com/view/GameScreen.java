@@ -1,38 +1,43 @@
 package com.view;
 
-
+import com.model.Player;
 import com.model.config.Plateau;
-import com.view.graphics.* ;
+import com.view.graphics.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameScreen extends JPanel {
 
-    GameFrame frame ;
-    GameManagerScreen gameManagerScreen ;
+    private GameFrame frame;
+    private GameManagerScreen gameManagerScreen; 
 
     /**
-     * Constructeur de la classe GameScreen
-     * @param frame fenetre
-     * @param map quelle map
+     * Constructor for GameScreen class
+     * @param frame window
+     * @param map which map
      * @param width width
      * @param height height
+     * @param plateau 
      */
-    public GameScreen ( GameFrame frame , String map , int width , int height){
-        this.frame = frame ;
-        setSize(width , height );
-        this.gameManagerScreen = new GameManagerScreen(frame , map , width , height ) ;
+    public GameScreen(GameFrame frame, String map, int width, int height, Player joueur, Plateau plateau) {
+        this.frame = frame;
+        setSize(width, height);
+        this.gameManagerScreen = new GameManagerScreen(frame, map, width, height, joueur, plateau);      
 
         setLayout(new BorderLayout());
-        add( gameManagerScreen , BorderLayout.CENTER ) ;
+        add(gameManagerScreen);
     }
 
     /**
-     * Une fonction qui permet de faire la map à partir du plateau
+     * A method to make the map from the plateau
      * @param plateau Plateau
      */
-    public void make( Plateau plateau ){
+    public void make(Plateau plateau) {
         this.gameManagerScreen.make(plateau);
+    }
+    
+    public GameManagerScreen getGMScreen() {
+    	return this.gameManagerScreen;
     }
 }
