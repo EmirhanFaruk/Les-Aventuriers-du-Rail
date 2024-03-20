@@ -1,6 +1,7 @@
 package com.view;
 
 
+import com.model.Game;
 import com.model.config.Plateau;
 import com.view.graphics.* ;
 
@@ -19,20 +20,18 @@ public class GameScreen extends JPanel {
      * @param width width
      * @param height height
      */
-    public GameScreen ( GameFrame frame , String map , int width , int height){
+    public GameScreen ( GameFrame frame , String map , int width , int height ){
         this.frame = frame ;
         setSize(width , height );
-        this.gameManagerScreen = new GameManagerScreen(frame , map , width , height ) ;
-
+        this.gameManagerScreen = new GameManagerScreen(frame , this , map , width , height ) ;
         setLayout(new BorderLayout());
-        add( gameManagerScreen , BorderLayout.CENTER ) ;
+        add( gameManagerScreen ) ;
     }
 
-    /**
-     * Une fonction qui permet de faire la map à partir du plateau
-     * @param plateau Plateau
-     */
-    public void make( Plateau plateau ){
-        this.gameManagerScreen.make(plateau);
+    public GameManagerScreen getGameManagerScreen() {
+        return gameManagerScreen;
+    }
+    public GameFrame getFrame() {
+        return frame;
     }
 }
