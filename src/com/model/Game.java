@@ -40,7 +40,7 @@ public class Game
 
     public void setVilles(Ville[] villes) { this.villes = villes; }
 
-    public List<Route> getRoutes() {
+    public ArrayList<Route> getRoutes() {
         return routes;
     }
 

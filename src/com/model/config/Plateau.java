@@ -1,8 +1,6 @@
 package com.model.config;
 import com.model.Game;
-import com.model.Node;
-import com.model.config.carte.CarteWagon.Couleur;
-import com.model.config.carte.CarteDestination;
+import com.model.ai.Node;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -51,6 +49,8 @@ public class Plateau {
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
+
+        setRouteCousins(game.getRoutes());
 
         for (int i = 0; i < game.getVilles().length; i++)
         {
@@ -289,6 +289,30 @@ public class Plateau {
             }
             longueur--;
         } while(longueur > 0 && !(samePos(pos, destpos)));
+    }
+
+    private static void setRouteCousins(ArrayList<Route> routes)
+    {
+        for (int i = 0; i < routes.size(); i++)
+        {
+            Route route = routes.get(i);
+            for (int j = 0; j < routes.size(); j++)
+            {
+                Route temp = routes.get(j);
+                if (route != temp)
+                {
+                    if (route.getCousin() == null)
+                    {
+                        boolean possibility1 = route.getVille1() == temp.getVille1() && route.getVille2() == temp.getVille2();
+                        boolean possibility2 = route.getVille1() == temp.getVille2() && route.getVille2() == temp.getVille1();
+                        if (possibility1 || possibility2)
+                        {
+                            route.setCousin(temp);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private static boolean samePos(int[] t1, int[] t2)

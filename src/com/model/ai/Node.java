@@ -1,6 +1,6 @@
-package com.model;
+package com.model.ai;
 
-import com.model.config.Case;
+import com.model.Player;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
@@ -281,7 +281,7 @@ public class Node
      * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
      * @return
      */
-    private static ArrayList<Ville> findLongestPath()
+    private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player propriataire)
     {
         ArrayList<Ville> res = new ArrayList<>();
 
@@ -304,7 +304,7 @@ public class Node
                     {
                         if(route.getVille1() == villes.get(i + 1) || route.getVille2() == villes.get(i + 1))
                         {
-                            System.out.print(" using " + route.getLongueur() + " " + route.getCouleur() + " rail(s).");
+                            System.out.print(" to " + villes.get(i + 1).getNom() + " using " + route.getLongueur() + " " + route.getCouleur() + " rail(s).");
                             break;
                         }
                     }

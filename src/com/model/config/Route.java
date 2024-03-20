@@ -13,9 +13,11 @@ public class Route {
     private int longueur; //la longueur des rails
     private Rail.Content couleur; //couleur de la route
     private Player proprietaire; //joueur qui a construit la route
+    private Route cousin; // null si cette route n'est pas un de double route, l'autre route sinon
+
     private int nombrePoint; //nombre de point que raporte la route
 
-    public Route(Ville ville1, Ville ville2, int longueur,Rail.Content couleur) {
+    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
         this.longueur = longueur;
@@ -25,7 +27,7 @@ public class Route {
     }
 
 
-    public Route(Ville ville, Ville ville1, int longueur) {
+    public Route(Ville ville1, Ville ville2, int longueur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
         this.longueur = longueur;
@@ -116,5 +118,15 @@ public class Route {
 
     }
 
+    /**
+     * Getter for cousin
+     * @return cousin
+     */
+    public Route getCousin() { return cousin; }
 
+    /**
+     * Setter for cousin
+     * @param cousin
+     */
+    public void setCousin(Route cousin) { this.cousin = cousin; }
 }
