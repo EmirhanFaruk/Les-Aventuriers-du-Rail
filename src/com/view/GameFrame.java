@@ -75,24 +75,14 @@ public class GameFrame extends JFrame
         main.startGame(map, player_names, player_types,player_Colors);
 
         gameScreen = null ;
-        Player p = new Player("Silver");
-        CarteWagon.Couleur c = Couleur.BLEU;
-        CarteWagon.Couleur c1 = Couleur.BLEU;
-        CarteWagon.Couleur c2 = Couleur.BLEU;
-        CarteWagon.Couleur c3 = Couleur.BLEU;
-        CarteWagon.Couleur c4 = Couleur.BLEU;
-        CarteWagon.Couleur c5 = Couleur.BLEU;
-        p.getTrainCard().add(c);
-        p.getTrainCard().add(c1);
-        p.getTrainCard().add(c2);
-        p.getTrainCard().add(c3);
-        p.getTrainCard().add(c4);
-        p.getTrainCard().add(c5);
         
         //CarteManager cm = new CarteManager();
         //for(int i=0; i<5; i++)p.getTrainCard().add(cm.drawCard());
     	//System.out.println("Setting player with " + p.getTrainCard().size() + " cards."); // Log pour le débogage*/
-    	gameScreen = new GameScreen(this , map , getWidth() , getHeight(), p, main.game.getPlateau()) ;
+        /**
+         * TODO : a changer le main.game.getlistPlayer().get(0) par autre chose
+         */
+    	gameScreen = new GameScreen(this , map , getWidth() , getHeight() , main.game.getListPlayer().get(0) , main.game.getPlateau()) ;
 
         main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
@@ -132,10 +122,6 @@ public class GameFrame extends JFrame
     
     public GameScreen getGameScreen() {
     	return this.gameScreen;
-    }
-
-    public GameScreen getGameScreen() {
-        return gameScreen;
     }
 
     public String getIngame_screen_s() {
