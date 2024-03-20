@@ -4,19 +4,20 @@ import com.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class ScoreBoardScreen extends JPanel{
-    private Player[] players ;
+    private ArrayList<Player> players ;
 
     /**
      * Le constructeur de scoreboardScreen
      * @param players une liste de joueur
      */
-    public ScoreBoardScreen( Player[] players ){
+    public ScoreBoardScreen( ArrayList<Player> players ){
         this.players = players ;
-        setLayout(new GridLayout(players.length + 1, 4 )); // +1 pour l'en-tête
+        setLayout(new GridLayout(players.size() + 1, 4 )); // +1 pour l'en-tête
 
         createEnTete();
         listePlayerTrier();
@@ -51,7 +52,7 @@ public class ScoreBoardScreen extends JPanel{
      * Une fonction qui trie la liste des joueurs
      */
     public void listePlayerTrier(){
-        Arrays.sort(players, Comparator.comparingInt(Player::getScore).reversed());
+        players.sort(Comparator.comparingInt(Player::getScore).reversed());
     }
 
     /**

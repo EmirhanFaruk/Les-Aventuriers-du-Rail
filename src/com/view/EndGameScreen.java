@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class EndGameScreen extends JPanel {
     private GameScreen gameScreen ;
     private JPanel button_panel;
+    private JPanel scoreBoardPanel ;
     private int width , height ;
     public EndGameScreen ( GameScreen gameScreen ,  int width , int height ){
         this.gameScreen = gameScreen ;
@@ -15,7 +16,9 @@ public class EndGameScreen extends JPanel {
         this.height = height ;
         setSize(width , height );
         this.button_panel = makeButton() ;
-        add( this.button_panel , BorderLayout.CENTER);
+        this.scoreBoardPanel = new ScoreBoardScreen( gameScreen.getFrame().getMain().getGame().getListPlayer()) ;
+        add( this.scoreBoardPanel , BorderLayout.CENTER ) ;
+        add( this.button_panel , BorderLayout.SOUTH ) ;
     }
 
     private JPanel makeButton (){
