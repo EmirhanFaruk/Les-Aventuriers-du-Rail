@@ -28,7 +28,7 @@ public class Player {
 		this.playerCouleur = playerCouleur ;
 		this.score = 0 ;
 		this.missionComplete = 0 ;
-		this.nbrWagon = 2 ;
+		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
 	}
 
