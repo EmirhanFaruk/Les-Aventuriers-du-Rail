@@ -1,5 +1,6 @@
 package com.view;
 
+import com.model.Player;
 import com.model.config.Plateau;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class GameMapPanel extends JPanel {
         this.width = width ;
         tile_height = getHeight() / 24 ;
         tile_width = getWidth() / 24 ;
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  ) ;
+        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height , new Player(), new Plateau()) ;
 
         setLayout(new BorderLayout());
         add( mapScreen , BorderLayout.CENTER ) ;

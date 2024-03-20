@@ -29,8 +29,6 @@ public class Game
 
     public Game(GameFrame gameFrame) {
         this.gameFrame = gameFrame ;
-        listPlayer = new ArrayList<>();
-        listPlayer.add(new Player("BLEU")) ;
     }
 
     public void makeGame(String nomMap,String[] player_names, String[] player_types,Color[] player_colors)

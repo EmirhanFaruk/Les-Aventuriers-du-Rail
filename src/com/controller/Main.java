@@ -13,6 +13,8 @@ public class Main implements Runnable
     private String map ;
     private String[] player_names  ;
     private String[] player_types ;
+    private Color[] player_colors;
+
     private boolean running = false;
 
     public void lance()
@@ -28,7 +30,7 @@ public class Main implements Runnable
     }
 
     public void restart (){
-        startGame( this.map , this.player_names , this.player_types );
+        startGame( this.map , this.player_names , this.player_types , player_colors);
         System.err.println("Une nouvelle game");
     }
     public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
@@ -37,6 +39,7 @@ public class Main implements Runnable
         this.map = map ;
         this.player_names = player_names ;
         this.player_types = player_types ;
+        this.player_colors = player_colors;
         game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
