@@ -3,6 +3,10 @@ package com.model;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteWagon.Couleur;
+import com.view.GameFrame;
+import com.view.GameScreen;
 import com.model.config.Ville;
 import com.view.GameFrame;
 import com.view.GameScreen;
@@ -14,6 +18,7 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
+    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -29,9 +34,14 @@ public class Game
 
     public void makeGame(String nomMap)
     {
-        this.cm = new CarteManager(plateau);
+        this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.round = new Round();
+        this.listPlayer = new ArrayList<Player>();
+        this.listPlayer.add(new Player("Salim"));
+        this.listPlayer.add(new Player("Alexis"));
+        this.listPlayer.add(new Player("Emirhan"));
+        this.listPlayer.add(new Player("Mina"));
     }
 
     /*
@@ -103,6 +113,9 @@ public class Game
         if(round.roundFinished()){
 
             round.round(this,cm);
+            
+        }*/
+    }
 
         }
 
@@ -111,5 +124,7 @@ public class Game
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
 
-    }
+	public void setJoueurCourant(Player joueurCourant) {
+		this.joueurCourant = joueurCourant;
+	}
 }

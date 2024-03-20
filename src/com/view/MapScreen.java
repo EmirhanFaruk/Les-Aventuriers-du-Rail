@@ -1,11 +1,15 @@
 package com.view;
 
+import com.model.Player;
 import com.model.config.Case;
 import com.model.config.Plateau;
+import com.model.controller.GameController;
 import com.view.graphics.* ;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
@@ -13,6 +17,7 @@ public class MapScreen extends JPanel {
     final String mapName ;
     final int width , height ;
     final int tileWidth , tileHeight ;
+    GameController gameController = new GameController();
 
     /**
      * Constructeur de MapScreen
@@ -22,12 +27,19 @@ public class MapScreen extends JPanel {
      * @param tileWidth width de l'image
      * @param tileHeight height de l'image
      */
-    public MapScreen( String mapName , int width , int height , int tileWidth , int tileHeight ){
+    public MapScreen( String mapName , int width , int height , int tileWidth , int tileHeight, Player joueur, Plateau plateau){
         this.mapName = mapName+".png" ;
         this.width = width ;
         this.height = height ;
         this.tileWidth = tileWidth ;
         this.tileHeight = tileHeight ;
+        
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	gameController.mouseClicked(e, tileWidth, tileHeight, plateau, joueur);
+            }
+        });
     }
 
     /**

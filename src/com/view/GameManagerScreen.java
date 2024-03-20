@@ -1,6 +1,6 @@
 package com.view;
 
-import com.model.Game;
+import com.model.Player;
 import com.model.config.Plateau;
 
 import javax.swing.*;
@@ -60,4 +60,8 @@ public class GameManagerScreen extends JPanel {
     public EndGameScreen getEndGameScreen() {
         return endGameScreen;
     }
+    
+    public void setPlayerCourant(Player playerCourant) {
+		this.playerHandPanel.setPlayer(playerCourant);
+	}
 }

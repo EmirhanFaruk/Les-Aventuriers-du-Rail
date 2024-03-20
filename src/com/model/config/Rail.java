@@ -1,6 +1,5 @@
 package com.model.config;
 
-
 import com.model.Player;
 
 /**
@@ -19,11 +18,14 @@ public class Rail extends Case {
     private Content initialContent;
 
     private final int angle ;
-
+    
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private Player occuperPar;
 
-    private boolean occuper ;
+    /** Un indicateur indiquant si le rail est occupé ou non. */
+    private boolean occuper;
+    
+    private Route saRoute;
 
 
     /**
@@ -36,11 +38,17 @@ public class Rail extends Case {
         super(x, y);
         this.initialContent = c;
         this.angle = angle;
-        this.occuper = false ;
-        this.occuperPar = null ;
+        this.saRoute = null;
     }
     
-    /**
+    public Rail(int i, int j, Content couleur, int k, Route r) {
+		super(i, j);
+		this.initialContent = couleur;
+		this.angle = k;
+		this.saRoute = r;
+	}
+
+	/**
      * Obtient la couleur initiale du rail.
      * @return La couleur initiale du rail.
      */
@@ -76,7 +84,15 @@ public class Rail extends Case {
         return angle;
     }
 
-    /**
+	public Route getSaRoute() {
+		return saRoute;
+	}
+
+	public void setSaRoute(Route r) {
+		this.saRoute = r;
+	}
+	
+	/**
      * Renvoie quelle joueur a cette rail
      * @return Player
      */

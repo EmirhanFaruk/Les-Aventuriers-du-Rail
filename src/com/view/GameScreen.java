@@ -1,24 +1,24 @@
 package com.view;
 
-
-import com.model.Game;
+import com.model.Player;
 import com.model.config.Plateau;
-import com.view.graphics.* ;
+import com.view.graphics.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameScreen extends JPanel {
 
-    GameFrame frame ;
-    GameManagerScreen gameManagerScreen ;
+    private GameFrame frame;
+    private GameManagerScreen gameManagerScreen; 
 
     /**
-     * Constructeur de la classe GameScreen
-     * @param frame fenetre
-     * @param map quelle map
+     * Constructor for GameScreen class
+     * @param frame window
+     * @param map which map
      * @param width width
      * @param height height
+     * @param plateau 
      */
     public GameScreen ( GameFrame frame , String map , int width , int height ){
         this.frame = frame ;
@@ -33,5 +33,9 @@ public class GameScreen extends JPanel {
     }
     public GameFrame getFrame() {
         return frame;
+    }
+    
+    public GameManagerScreen getGMScreen() {
+    	return this.gameManagerScreen;
     }
 }
