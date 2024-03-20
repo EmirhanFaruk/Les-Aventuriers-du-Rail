@@ -17,7 +17,7 @@ public class Player {
 
 	private final String playerCouleur ;
 	private int nbrWagon ;
-	private int nbrGare ;
+	private int nbrGare ; //Le nombre de gare que le joueur peut poser
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
