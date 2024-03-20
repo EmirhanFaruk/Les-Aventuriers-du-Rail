@@ -4,6 +4,8 @@ import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
 import com.model.config.Ville;
+import com.view.GameFrame;
+import com.view.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,13 @@ public class Game
     private CarteManager cm;
     private Round round;
 
-    public Game() {}
+    private GameFrame gameFrame ;
+
+    public Game(GameFrame gameFrame) {
+        this.gameFrame = gameFrame ;
+        listPlayer = new ArrayList<>();
+        listPlayer.add(new Player("BLEU")) ;
+    }
 
     public void makeGame(String nomMap)
     {
@@ -69,6 +77,11 @@ public class Game
 
     }
 
+    public void  dinumueCarte(){
+        for ( Player p : listPlayer ){
+            p.setNbrWagon( p.getNbrWagon() - 1 );
+        }
+    }
 
     /**
      * Verifie s'il y a un joueur qui a moins de 3 wagons
@@ -84,7 +97,7 @@ public class Game
     }
 
 
-    public void updateGame(double deltaTime)
+    public void updateGame( )
     {
         //game loop
         if(round.roundFinished()){
@@ -93,8 +106,10 @@ public class Game
 
         }
 
-
-
+        if ( endGame() && this.gameFrame.getGameScreen() != null) {
+            System.err.println("la partie est terminée");
+            this.gameFrame.getGameScreen().getGameManagerScreen().update();
+        }
 
     }
 }

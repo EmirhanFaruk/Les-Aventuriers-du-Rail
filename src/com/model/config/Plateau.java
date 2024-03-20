@@ -250,7 +250,6 @@ public class Plateau {
         int[] pos = new int[]{ville1.getX(), ville1.getY()};
         int[] destpos = new int[]{ville2.getX(), ville2.getY()};
         int[] angles = {90, 45, 0, 135};
-        System.out.println();
         do
         {
             if (pos[0] > ville2.getX())
@@ -273,7 +272,6 @@ public class Plateau {
 
             if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
             {
-                System.out.println("Between " + ville1.getNom() + " and " + ville2.getNom() + ", putting rail at {" + pos[0] + ", " + pos[1] + "}");
                 plateau.plateau[pos[1]][pos[0]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
             }
             longueur--;
@@ -373,22 +371,6 @@ public class Plateau {
         return !this.estUneCaseVille(x, y) && !this.estUneCaseRail(x, y);
     }
 
-    public void cmp (){
-        int cmpVille = 0 ;
-        int cmpRail = 0 ;
-        for ( Case[] cases : this.plateau ){
-            for ( Case c : cases ){
-                if ( c instanceof Ville ){
-                    cmpVille ++ ;
-                } else if ( c instanceof Rail ){
-                    cmpRail++ ;
-                }
-            }
-        }
-        System.out.println("Le nombre de ville  : "+ cmpVille );
-        System.out.println("Le nombre de rail : "+ cmpRail );
-    }
-    
 }
 
 

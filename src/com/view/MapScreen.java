@@ -36,9 +36,9 @@ public class MapScreen extends JPanel {
      */
     public void makeMap ( Plateau plateau ){
         map( plateau );
-        RailGraphics.setWH(tileWidth, tileHeight);
-        VilleGraphics.setWH(tileWidth, tileHeight);
-        plateau.cmp();
+        RailGraphics.setWH(tileWidth , tileHeight ) ;
+        VilleGraphics.setWH(tileWidth , tileHeight ) ;
+        TrainGraphics.setWH(tileWidth , tileHeight ) ;
     }
 
     /**
@@ -68,7 +68,6 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
-        MapGraphics.getCmp();
         g2.dispose();
     }
 }
