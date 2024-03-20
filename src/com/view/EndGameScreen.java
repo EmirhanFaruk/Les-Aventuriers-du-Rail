@@ -51,5 +51,4 @@ public class EndGameScreen extends JPanel {
         resultat.add(buttonExit) ;
         return resultat ;
     }
-
 }
