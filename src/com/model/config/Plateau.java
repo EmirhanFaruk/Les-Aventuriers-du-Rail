@@ -51,6 +51,8 @@ public class Plateau {
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
 
+
+
         return res;
     }
 
@@ -234,6 +236,9 @@ public class Plateau {
 
                     //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
                     Route route = new Route(ville1, ville2, longueur, couleur);
+
+                    ville1.getRoutes().add(route);
+                    ville2.getRoutes().add(route);
 
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
