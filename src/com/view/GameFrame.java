@@ -2,6 +2,10 @@ package com.view;
 
 import com.controller.Main;
 import com.model.Game;
+import com.model.Player;
+import com.model.config.carte.CarteManager;
+import com.model.config.carte.CarteWagon;
+import com.model.config.carte.CarteWagon.Couleur;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
@@ -25,7 +29,7 @@ public class GameFrame extends JFrame
 
     private GameScreen gameScreen ;
 
-    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME";
+    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , endgame_screen_s = "ENDGALE";
 
     private Menu menu;
 
@@ -66,26 +70,26 @@ public class GameFrame extends JFrame
     }
 
 
-    public void startGame(String map, String[] player_names, String[] player_types)
+    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_Colors)
     {
-        main.startGame(map, player_names, player_types);
+        main.startGame(map, player_names, player_types,player_Colors);
 
         gameScreen = null ;
-        gameScreen = new GameScreen( this , map , getWidth() , getHeight()) ;
+        
+        //CarteManager cm = new CarteManager();
+        //for(int i=0; i<5; i++)p.getTrainCard().add(cm.drawCard());
+    	//System.out.println("Setting player with " + p.getTrainCard().size() + " cards."); // Log pour le débogage*/
+    	gameScreen = new GameScreen(this , map , getWidth() , getHeight()) ;
 
         main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
         pack();
         setMinimumSize(null);
-        gameScreen.make( main.game.getPlateau());
+        gameScreen.getGameManagerScreen().make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
     }
 
-
-
-
-
-
+    
     @Override
     public void setSize(int width, int height)
     {
@@ -113,4 +117,19 @@ public class GameFrame extends JFrame
         return device;
     }
 
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
+    public String getIngame_screen_s() {
+        return ingame_screen_s;
+    }
+
+    public String getEndgame_screen_s() {
+        return endgame_screen_s;
+    }
+
+    public Main getMain() {
+        return main;
+    }
 }
