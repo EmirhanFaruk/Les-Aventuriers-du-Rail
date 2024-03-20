@@ -29,21 +29,15 @@ public class Game
 
     public Game(GameFrame gameFrame) {
         this.gameFrame = gameFrame ;
-        listPlayer = new ArrayList<>();
-        listPlayer.add(new Player("BLEU")) ;
     }
 
-    public void makeGame(String nomMap,String[] player_names, String[] player_types,Color[] player_colors)
+    public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors )
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        listPlayer = initPlayers(player_names,player_types,player_colors);
+        this.listPlayer = initPlayers(player_names,player_types,player_colors);
+        distrubueCarte();
         this.round = new Round();
-        this.listPlayer = new ArrayList<Player>();
-        this.listPlayer.add(new Player("Salim"));
-        this.listPlayer.add(new Player("Alexis"));
-        this.listPlayer.add(new Player("Emirhan"));
-        this.listPlayer.add(new Player("Mina"));
     }
 
     /*
@@ -133,23 +127,28 @@ public class Game
         return false ;
     }
 
-
-    public void updateGame( )
-    {
-        //game loop
-        if(round.roundFinished()){
-
-            round.round(this,cm);
-            
-        }*/
+    public void distrubueCarte (){
+        for (Player p : listPlayer ){
+            for ( int i = 0 ; i < 3 ; i++){
+                p.getTrainCard().add(this.cm.drawCard()) ;
+            }
+        }
     }
+
+    public void updateGame( ) {
+        //game loop
+        if (round.roundFinished()) {
+
+            round.round(this, cm);
 
         }
 
-        if ( endGame() && this.gameFrame.getGameScreen() != null) {
+        if (endGame() && this.gameFrame.getGameScreen() != null) {
             System.err.println("la partie est terminée");
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
+    }
+
 
 	public void setJoueurCourant(Player joueurCourant) {
 		this.joueurCourant = joueurCourant;
