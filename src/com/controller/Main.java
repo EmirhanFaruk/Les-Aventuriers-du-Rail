@@ -62,7 +62,7 @@ public class Main implements Runnable
             {
                 end += System.nanoTime() - start;
             }
-            game.dinumueCarte();
+            //game.dinumueCarte();
         }
     }
 
