@@ -84,11 +84,6 @@ public class MapGraphics {
         }
     }
 
-    public static void getCmp (){
-        System.out.println("Le nombre de rail : " + cmpRail );
-        System.out.println("Le nombre de ville :" + cmpVille );
-    }
-
     /*
    getteurs et setteurs
     */

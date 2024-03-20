@@ -36,7 +36,7 @@ public class Node
     }
 
     /**
-     * Calculates distance of 2 points.
+     * Calculates distance of 2 villes.
      * @param v1 Ville 1
      * @param v2 Ville 2
      * @return double
@@ -50,7 +50,7 @@ public class Node
 
     /**
      * Calculates total cost.
-     * @param end the target coordinate
+     * @param end the target ville
      */
     private void calculateTotal(Ville end)
     {
@@ -61,7 +61,7 @@ public class Node
 
     /**
      * Calculates the cost to go.
-     * @param end the target coordinate
+     * @param end the target ville
      */
     private void toGo(Ville end)
     {
@@ -71,7 +71,7 @@ public class Node
 
 
     /**
-     * Determines whether the coordinates of 2 nodes are the same.
+     * Determines whether the villes of 2 nodes are the same.
      * @param a node 1
      * @param b node 2
      * @return result
@@ -128,7 +128,7 @@ public class Node
     }
 
     /**
-     * Adds the given node to the list but if a node with same coordinates exist, it swaps itself with it.
+     * Adds the given node to the list but if a node with same ville exist, it swaps itself with it.
      * @param list the said list
      * @param to_add the said node
      */
@@ -149,7 +149,7 @@ public class Node
     }
 
     /**
-     * Determines if a node in the list and the given node has same coordinates.
+     * Determines if a node in the list and the given node has same villes.
      * @param list the said list
      * @param element the said node
      * @return node if exists, null otherwise.
@@ -240,7 +240,6 @@ public class Node
                     }
                     if(!exists(openList, neighbor))
                     {
-                        //System.out.println("Second if");
                         if(checker != null && neighbor.f < checker.f)
                         {
                             checker.f = neighbor.f;
@@ -261,9 +260,18 @@ public class Node
      * Returns an ArrayList of strings that makes the shortest path between 2 villes
      * @return the villes to get to in order to get the shortest path
      */
-    public static ArrayList<String> findClosestPath(ArrayList<Route> routes, Ville ville1, Ville ville2)
+    public static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2)
     {
-        ArrayList<String> res = new ArrayList<>();
+        ArrayList<Ville> res = new ArrayList<>();
+
+        Node resNode = aStar(ville1, ville2);
+
+        while(resNode != null)
+        {
+            res.add(0, resNode.ville);
+            resNode = resNode.parent;
+        }
+
 
         return res;
     }
@@ -273,24 +281,37 @@ public class Node
      * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
      * @return
      */
-    private static ArrayList<String> findLongestPath()
+    private static ArrayList<Ville> findLongestPath()
     {
-        ArrayList<String> res = new ArrayList<>();
+        ArrayList<Ville> res = new ArrayList<>();
 
         return res;
     }
 
 
-    /**
-     * Checks if 2 routes has the same destinations and departs
-     * @param r1 Route 1
-     * @param r2 Route 2
-     * @return true if they are same
-     */
-    private static boolean sameRoute(Route r1, Route r2)
+    public static void printWay(ArrayList<Ville> villes)
     {
-        boolean res = r1.getVille1().getNom().equals(r2.getVille1().getNom()) && r1.getVille2().getNom().equals(r2.getVille2().getNom());
-        res = res || (r1.getVille1().getNom().equals(r2.getVille2().getNom()) && r1.getVille2().getNom().equals(r2.getVille1().getNom()));
-        return res;
+        if(!villes.isEmpty())
+        {
+            System.out.println("\n\n===========================================================\n\n");
+            System.out.println("The shortest way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
+            for (int i = 0; i < villes.size(); i++)
+            {
+                System.out.print(villes.get(i).getNom());
+                if(i + 1 != villes.size())
+                {
+                    for (Route route : villes.get(i).getRoutes())
+                    {
+                        if(route.getVille1() == villes.get(i + 1) || route.getVille2() == villes.get(i + 1))
+                        {
+                            System.out.print(" using " + route.getLongueur() + " " + route.getCouleur() + " rail(s).");
+                            break;
+                        }
+                    }
+                }
+                System.out.println();
+            }
+        }
     }
+
 }
