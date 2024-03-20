@@ -3,10 +3,15 @@ package com.view.mainmenu;
 import com.view.GameFrame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Play extends JPanel
 {
@@ -55,6 +60,7 @@ public class Play extends JPanel
         {
             player_type_list_tag[i] = new JLabel(PLAYER);
         }
+        
     }
 
 
@@ -158,6 +164,72 @@ public class Play extends JPanel
         return makeCenteringPanel(button);
     }
 
+    /**
+     * Makes a liste for choosing player's coulour.
+     * @param i player number
+     * @return the panel containing the said button.
+     */
+    private JComponent makePlayerCoulourChoicePanel(int i)
+    {
+        JPanel colors = makeDefaultPanel();
+        colors.setLayout(new GridLayout(1,5));
+        JPanel redPanel = makeredPanel();
+        JPanel bluePanel = makebluePanel();
+        JPanel greenPanel = makegreenPanel();
+        JPanel yellowPanel = makeyellowPanel();        
+        colors.add(redPanel);
+        colors.add(bluePanel);
+        colors.add(greenPanel);
+        colors.add(yellowPanel);
+        colors.add(makeDefaultPanel());
+        return colors;
+    }
+
+    private JPanel makeredPanel() {
+        JPanel redPanel = makeDefaultPanel();
+        JButton red = new JButton();
+        red.setBackground(Color.red);
+        red.setSelected(true);
+        redPanel.setLayout(new GridLayout(3,1));
+        redPanel.setBorder(new EmptyBorder(5,5,5,5));
+        redPanel.add(makeDefaultPanel());
+        redPanel.add(red);
+        
+        return redPanel;
+    }
+
+    private JPanel makebluePanel() {
+        JPanel bluePanel = makeDefaultPanel();
+        JButton blue = new JButton();
+        blue.setBackground(Color.blue);
+        bluePanel.setLayout(new GridLayout(3,1));
+        bluePanel.setBorder(new EmptyBorder(5,5,5,5));
+        bluePanel.add(makeDefaultPanel());
+        bluePanel.add(blue);
+        return bluePanel;
+    }
+
+    private JPanel makegreenPanel() {
+        JPanel greenPanel = makeDefaultPanel();
+        JButton green = new JButton();
+        green.setBackground(Color.GREEN);
+        greenPanel.setLayout(new GridLayout(3,1));
+        greenPanel.setBorder(new EmptyBorder(5,5,5,5));
+        greenPanel.add(makeDefaultPanel());
+        greenPanel.add(green);
+        return greenPanel;
+    }
+
+    private JPanel makeyellowPanel() {
+        JPanel yellowPanel = makeDefaultPanel();
+        JButton yellow = new JButton();
+        yellow.setBackground(Color.YELLOW);
+        yellowPanel.setLayout(new GridLayout(3,1));
+        yellowPanel.setBorder(new EmptyBorder(5,5,5,5));
+        yellowPanel.add(makeDefaultPanel());
+        yellowPanel.add(yellow);
+        return yellowPanel;
+    }
 
     /**
      * Makes a single player panel.
@@ -169,15 +241,20 @@ public class Play extends JPanel
         JPanel res = makeDefaultPanel();
         res.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        res.setLayout(new GridLayout(1, 2));
+        res.setLayout(new GridLayout(1, 3));
 
         res.add(makePlayerNamePanel(i));
 
         res.add(makeCPUPlayerSelectorPanel(i));
 
+        res.add(makePlayerCoulourChoicePanel(i));
+
 
         return res;
     }
+
+
+
 
 
 
