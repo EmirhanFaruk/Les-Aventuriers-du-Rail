@@ -241,14 +241,13 @@ public class Plateau {
                     Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
                     int angle = Integer.parseInt(villet[i + 3]);
 
+                    putRails(ville1, ville2, longueur, couleur, angle, plateau);
 
-                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
                     Route route = new Route(ville1, ville2, longueur, couleur, plateau);
 
                     ville1.getRoutes().add(route);
                     ville2.getRoutes().add(route);
 
-                    putRails(ville1, ville2, longueur, couleur, angle, plateau);
                     res.add(route);
                     i += 4;
                 }
@@ -285,9 +284,9 @@ public class Plateau {
 
             if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville)) {
                 if (plateau.plateau[pos[0]][pos[1]] instanceof Rail) {
-                    // La case est déjà un Rail, mettez à jour si nécessaire.
+                    // La case est déjà un Rail, mettre à jour si nécessaire.
                     Rail existingRail = (Rail) plateau.plateau[pos[0]][pos[1]];
-                    existingRail.setSaRoute(existingRail.getSaRoute()); // Assurez-vous que routeCourante est la route actuellement traitée.
+                    existingRail.setSaRoute(existingRail.getSaRoute());
                     System.out.println("Mise à jour du rail à {" + pos[0] + ", " + pos[1] + "}");
                 } else {
                     // La case n'est pas un Rail, créez un nouveau Rail.

@@ -118,13 +118,13 @@ public class CarteManager {
         //Fonction qui choisit au hasard les déstinations
 
         //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random villeRANDOM = new Random(game.getVilles().length);
-        int ville1 = villeRANDOM.nextInt();
-        int ville2 = villeRANDOM.nextInt();
+        Random villeRANDOM = new Random();
+        int ville1 = villeRANDOM.nextInt(game.getVilles().length);
+        int ville2 = villeRANDOM.nextInt(game.getVilles().length);
 
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
         while(ville1 == ville2){
-            ville2 = villeRANDOM.nextInt();
+            ville2 = villeRANDOM.nextInt(game.getVilles().length);
         }
         Ville v1 = game.getVilles()[ville1];
         Ville v2 = game.getVilles()[ville2];

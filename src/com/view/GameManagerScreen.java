@@ -3,6 +3,8 @@ package com.view;
 import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
+import com.model.Game ;
+import com.view.PlayerHandPanel ;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,11 +19,11 @@ public class GameManagerScreen extends JPanel {
 
     private GameScreen gameScreen ;
 
-    public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height ){
+    public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height , Player player , Plateau plateau ){
         this.frame = frame ;
         this.gameScreen = gameScreen ;
         setSize(width , height );
-        this.gameMapPanel = new GameMapPanel(frame , map , width , height ) ;
+        this.gameMapPanel = new GameMapPanel(frame , map , width , height  , player , plateau ) ;
         this.game = this.frame.getMain().getGame();
         this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
         setLayout( cardLayout );
@@ -61,6 +63,7 @@ public class GameManagerScreen extends JPanel {
     public EndGameScreen getEndGameScreen() {
         return endGameScreen;
     }
+
 
     /*
     public void setPlayerCourant(Player playerCourant) {

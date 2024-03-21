@@ -3,6 +3,7 @@ package com.view;
 import com.model.Player;
 import com.model.config.Plateau;
 import com.view.graphics.*;
+import com.view.mainmenu.Play;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,7 @@ import java.awt.*;
 public class GameScreen extends JPanel {
 
     private GameFrame frame;
-    private GameManagerScreen gameManagerScreen; 
+    private GameManagerScreen gameManagerScreen;
 
     /**
      * Constructor for GameScreen class
@@ -19,10 +20,10 @@ public class GameScreen extends JPanel {
      * @param width width
      * @param height height
      */
-    public GameScreen ( GameFrame frame , String map , int width , int height ){
+    public GameScreen (GameFrame frame , String map , int width , int height , Player player, Plateau plateau ){
         this.frame = frame ;
         setSize(width , height );
-        this.gameManagerScreen = new GameManagerScreen(frame , this , map , width , height ) ;
+        this.gameManagerScreen = new GameManagerScreen(frame , this , map , width , height , player , plateau ) ;
         setLayout(new BorderLayout());
         add( gameManagerScreen ) ;
     }

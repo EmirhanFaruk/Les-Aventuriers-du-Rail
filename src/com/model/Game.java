@@ -31,11 +31,12 @@ public class Game
         this.gameFrame = gameFrame ;
     }
 
-    public void makeGame(String nomMap,String[] player_names, String[] player_types,Color[] player_colors)
+    public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors )
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        listPlayer = initPlayers(player_names,player_types,player_colors);
+        this.listPlayer = initPlayers(player_names,player_types,player_colors);
+        distrubueCarte();
         this.round = new Round();
         initBoard();
         this.listPlayer = initPlayers(player_names, player_types, player_colors);
@@ -138,10 +139,20 @@ public class Game
     }
 
 
-    public void updateGame(double deltaTime) {
+    public void distrubueCarte (){
+        for (Player p : listPlayer ){
+            for ( int i = 0 ; i < 3 ; i++){
+                p.getTrainCard().add(this.cm.drawCard()) ;
+            }
+        }
+    }
+
+    public void updateGame( double deltaTime ) {
         //game loop
         if (round.roundFinished()) {
+
             round.round(this, cm, deltaTime);
+
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
@@ -149,6 +160,7 @@ public class Game
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
     }
+
 
 	public void setJoueurCourant(Player joueurCourant) {
 		this.joueurCourant = joueurCourant;
