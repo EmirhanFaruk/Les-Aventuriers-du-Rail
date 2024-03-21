@@ -9,6 +9,5 @@ public class App
     {
         Main main = new Main();
         main.lance();
-
     }
 }

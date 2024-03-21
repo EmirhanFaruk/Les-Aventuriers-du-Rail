@@ -4,6 +4,8 @@ import com.view.GameFrame;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,6 +20,8 @@ public class Play extends JPanel
     private JLabel level_name_tag;
     private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
+    private Color[] player_colors = {Color.red,Color.red,Color.red,Color.red};
+    private JButton[] selected_color = new JButton[4];
 
     private final String
             PLAYER = "PLAYER",
@@ -173,10 +177,10 @@ public class Play extends JPanel
     {
         JPanel colors = makeDefaultPanel();
         colors.setLayout(new GridLayout(1,5));
-        JPanel redPanel = makeredPanel();
-        JPanel bluePanel = makebluePanel();
-        JPanel greenPanel = makegreenPanel();
-        JPanel yellowPanel = makeyellowPanel();        
+        JPanel redPanel = makeredPanel(i);
+        JPanel bluePanel = makebluePanel(i);
+        JPanel greenPanel = makegreenPanel(i);
+        JPanel yellowPanel = makeyellowPanel(i);        
         colors.add(redPanel);
         colors.add(bluePanel);
         colors.add(greenPanel);
@@ -185,11 +189,22 @@ public class Play extends JPanel
         return colors;
     }
 
-    private JPanel makeredPanel() {
+    private JPanel makeredPanel(int i) {
         JPanel redPanel = makeDefaultPanel();
         JButton red = new JButton();
         red.setBackground(Color.red);
-        red.setSelected(true);
+        red.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(selected_color[i] != red){
+            if(selected_color[i] != null)
+            selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
+            red.setBorder(new LineBorder(Color.WHITE, 5));
+            selected_color[i] = red;
+            player_colors[i] = Color.red;
+            }
+            }
+        });
         redPanel.setLayout(new GridLayout(3,1));
         redPanel.setBorder(new EmptyBorder(5,5,5,5));
         redPanel.add(makeDefaultPanel());
@@ -198,10 +213,22 @@ public class Play extends JPanel
         return redPanel;
     }
 
-    private JPanel makebluePanel() {
+    private JPanel makebluePanel(int i) {
         JPanel bluePanel = makeDefaultPanel();
         JButton blue = new JButton();
         blue.setBackground(Color.blue);
+        blue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(selected_color[i] != blue){
+            if(selected_color[i] != null)
+            selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
+            blue.setBorder(new LineBorder(Color.WHITE, 5));
+            selected_color[i] = blue;
+            player_colors[i] = Color.blue;
+            }
+            }
+        });
         bluePanel.setLayout(new GridLayout(3,1));
         bluePanel.setBorder(new EmptyBorder(5,5,5,5));
         bluePanel.add(makeDefaultPanel());
@@ -209,10 +236,22 @@ public class Play extends JPanel
         return bluePanel;
     }
 
-    private JPanel makegreenPanel() {
+    private JPanel makegreenPanel(int i) {
         JPanel greenPanel = makeDefaultPanel();
         JButton green = new JButton();
         green.setBackground(Color.GREEN);
+        green.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(selected_color[i] != green) {
+            if(selected_color[i] != null)
+            selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
+            green.setBorder(new LineBorder(Color.WHITE, 5));
+            selected_color[i] = green;
+            player_colors[i] = Color.green;
+        }
+            }
+        });
         greenPanel.setLayout(new GridLayout(3,1));
         greenPanel.setBorder(new EmptyBorder(5,5,5,5));
         greenPanel.add(makeDefaultPanel());
@@ -220,10 +259,22 @@ public class Play extends JPanel
         return greenPanel;
     }
 
-    private JPanel makeyellowPanel() {
+    private JPanel makeyellowPanel(int i) {
         JPanel yellowPanel = makeDefaultPanel();
         JButton yellow = new JButton();
         yellow.setBackground(Color.YELLOW);
+        yellow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(selected_color[i] != yellow){
+            if(selected_color[i] != null)
+            selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
+            yellow.setBorder(new LineBorder(Color.WHITE, 5));
+            selected_color[i] = yellow;
+            player_colors[i] = Color.yellow;
+            }
+            }
+        });
         yellowPanel.setLayout(new GridLayout(3,1));
         yellowPanel.setBorder(new EmptyBorder(5,5,5,5));
         yellowPanel.add(makeDefaultPanel());
@@ -403,12 +454,27 @@ public class Play extends JPanel
                         {
                             player_type_list[i] = player_type_list_tag[i].getText();
                         }
-                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list);
+                        if(!differentcolors()){
+                            JOptionPane.showMessageDialog(this,"Veuillez choisir des couleurs différentes !","Warning",JOptionPane.WARNING_MESSAGE);
+                        }else{
+                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list,player_colors);
+                    }
                     });
 
         res.add(play_button);
 
         return res;
+    }
+
+    private boolean differentcolors() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                if (player_colors[i].equals(player_colors[j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private JPanel makeMapListPanel()

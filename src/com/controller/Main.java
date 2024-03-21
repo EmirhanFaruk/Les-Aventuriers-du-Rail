@@ -2,17 +2,25 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
+import java.awt.*;
 
 public class Main implements Runnable
 {
     public GameFrame gameFrame;
-    public Game game = new Game();
+    public Game game ;
     private Thread game_thread;
+
+    private String map ;
+    private String[] player_names  ;
+    private String[] player_types ;
+
+    private Color[] player_colors ;
     private boolean running = false;
 
     public void lance()
     {
-        GameFrame gameFrame = new GameFrame(800, 500, this);
+        this.gameFrame = new GameFrame(800, 500, this);
+        this.game =new Game( gameFrame);
     }
 
     private void startGame_thread()
@@ -21,10 +29,18 @@ public class Main implements Runnable
         game_thread.start();
     }
 
-    public void startGame(String map, String[] player_names, String[] player_types)
+    public void restart (){
+        startGame( this.map , this.player_names , this.player_types , this.player_colors );
+        System.err.println("Une nouvelle game");
+    }
+    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
     {
         running = true;
-        game.makeGame(map);
+        this.map = map ;
+        this.player_names = player_names ;
+        this.player_types = player_types ;
+        this.player_colors = player_colors ;
+        game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
 
@@ -43,13 +59,14 @@ public class Main implements Runnable
             start = System.nanoTime();
             if(end >= required_fps)
             {
-                game.updateGame(end/1000000000);
+                game.updateGame( );
                 end = System.nanoTime() - start;
             }
             else
             {
                 end += System.nanoTime() - start;
             }
+            //game.dinumueCarte();
         }
     }
 
@@ -58,4 +75,10 @@ public class Main implements Runnable
     {
         running = b;
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+
 }

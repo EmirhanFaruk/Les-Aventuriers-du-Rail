@@ -65,7 +65,7 @@ public class Plateau {
         {
             for (int j = 0; j < tab[i].length; j++)
             {
-                tab[i][j] = new Paysage(j, i);
+                tab[j][i] = new Paysage(j, i);
             }
         }
     }
@@ -204,10 +204,10 @@ public class Plateau {
         {
             // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
             int x = Integer.parseInt(stville[i][2]);
-            int y = Integer.parseInt(stville[i][3]);
+            int y = Integer.parseInt(stville[i][3]); //CHECK
             String nom = stville[i][1];
             villes[i] = new Ville(x, y, nom);
-            plateau.plateau[y][x] = new Ville(x, y, nom);
+            plateau.plateau[x][y] = new Ville(x, y, nom);
         }
     }
 
@@ -231,11 +231,9 @@ public class Plateau {
                     Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
                     int angle = Integer.parseInt(villet[i + 3]);
 
-
-                    //Route(Ville ville1, Ville ville2, int longueur, Couleur couleur)
-                    Route route = new Route(ville1, ville2, longueur, couleur);
-
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
+
+                    Route route = new Route(ville1, ville2, longueur, couleur, plateau);
                     res.add(route);
                     i += 4;
                 }
@@ -250,7 +248,6 @@ public class Plateau {
         int[] pos = new int[]{ville1.getX(), ville1.getY()};
         int[] destpos = new int[]{ville2.getX(), ville2.getY()};
         int[] angles = {90, 45, 0, 135};
-        System.out.println();
         do
         {
             if (pos[0] > ville2.getX())
@@ -271,10 +268,17 @@ public class Plateau {
                 pos[1] = pos[1] + 1;
             }
 
-            if (!(plateau.plateau[pos[1]][pos[0]] instanceof Ville))
-            {
-                System.out.println("Between " + ville1.getNom() + " and " + ville2.getNom() + ", putting rail at {" + pos[0] + ", " + pos[1] + "}");
-                plateau.plateau[pos[1]][pos[0]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
+            if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville)) {
+                if (plateau.plateau[pos[0]][pos[1]] instanceof Rail) {
+                    // La case est déjà un Rail, mettre à jour si nécessaire.
+                    Rail existingRail = (Rail) plateau.plateau[pos[0]][pos[1]];
+                    existingRail.setSaRoute(existingRail.getSaRoute());
+                    System.out.println("Mise à jour du rail à {" + pos[0] + ", " + pos[1] + "}");
+                } else {
+                    // La case n'est pas un Rail, créez un nouveau Rail.
+                    plateau.plateau[pos[0]][pos[1]] = new Rail(pos[0], pos[1], couleur, angles[angle]);
+                    System.out.println("Création d'un nouveau rail à {" + pos[0] + ", " + pos[1] + "}");
+                }
             }
             longueur--;
         } while(longueur > 0 && !(samePos(pos, destpos)));
@@ -327,7 +331,7 @@ public class Plateau {
      * @return true si la position est valide, sinon false.
      */
     public boolean positionValide(int x, int y) {
-        return !(y >= this.getLargeur() || x >= this.getLongueur() || x < 0 || y < 0);
+        return !(y > this.getLargeur() || x > this.getLongueur() || x < 0 || y < 0);
     }
 
     /**
@@ -373,22 +377,6 @@ public class Plateau {
         return !this.estUneCaseVille(x, y) && !this.estUneCaseRail(x, y);
     }
 
-    public void cmp (){
-        int cmpVille = 0 ;
-        int cmpRail = 0 ;
-        for ( Case[] cases : this.plateau ){
-            for ( Case c : cases ){
-                if ( c instanceof Ville ){
-                    cmpVille ++ ;
-                } else if ( c instanceof Rail ){
-                    cmpRail++ ;
-                }
-            }
-        }
-        System.out.println("Le nombre de ville  : "+ cmpVille );
-        System.out.println("Le nombre de rail : "+ cmpRail );
-    }
-    
 }
 
 
