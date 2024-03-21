@@ -5,6 +5,7 @@ import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Round {
@@ -253,7 +254,10 @@ public class Round {
         //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
         if(allMissionIsCompleted){
 
-            CarteDestination addCard = compareCardPoint();
+            CarteDestination[] addCard = compareCardPoint(6,carteManager,game);
+            for(int j = 0; j< addCard.length; j++){
+                game.getListPlayer().get(whoIsPlaying).getDestinationsList().add(addCard[j]);
+            }
 
 
         }
@@ -286,10 +290,29 @@ public class Round {
 
     }
 
-    private CarteDestination compareCardPoint() {
+    private CarteDestination[] compareCardPoint(int max, CarteManager carteManager,Game game) {
         //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
 
-        return new CarteDestination(new Route(null,null,0));
+        //On regarde lequel des cartes mission a la plus petite route, puis on ajoute la 2eme mission avec la plus petite route si ca ne dépasse pas max
+        ArrayList<CarteDestination> tab = new ArrayList<>();
+        int[] tmp = new int[2];
+        //Premiere bouble qui va prendre la carte la plus petite
+        for(int i = 1; i< carteManager.getDestinationsCards().length;i++){
+            if(carteManager.getDestinationsCards()[i].getNombrePoints() < carteManager.getDestinationsCards()[i - 1].getNombrePoints()){
+                tmp[0] =  i;
+            }
+        }
+        //Deuxieme boucle qui ajoute
+        for(int y = 0; y< carteManager.getDestinationsCards().length;y++){
+            if((carteManager.getDestinationsCards()[y].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && y != tmp[0] )){
+
+                tmp[1] = y;
+            }
+        }
+
+         return carteManager.takeDestination(tmp,game);
+
+
     }
 
 
