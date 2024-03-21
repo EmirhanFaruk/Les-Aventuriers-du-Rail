@@ -27,6 +27,7 @@ public class Play extends JPanel
             PLAYER = "PLAYER",
             CPU = "CPU";
 
+
     private GameFrame frame;
 
     public Play(GameFrame frame)
