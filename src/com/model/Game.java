@@ -35,7 +35,7 @@ public class Game
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        this.listPlayer = initPlayers(player_names,player_types,player_colors);
+        this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
         distrubueCarte();
         this.round = new Round();
     }
@@ -83,12 +83,12 @@ public class Game
 
     }
 
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types,Color[] player_colors){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types,Color[] player_colors,  CarteManager carteManager){
         ArrayList<Player> playerlist = new ArrayList<>();
-        Player p1 = new Player(colorToString(player_colors[0]),player_names[0],StringToNiveau(player_types[0]));
-        Player p2 = new Player(colorToString(player_colors[1]),player_names[1],StringToNiveau(player_types[1]));
-        Player p3 = new Player(colorToString(player_colors[2]),player_names[2],StringToNiveau(player_types[2]));
-        Player p4 = new Player(colorToString(player_colors[3]),player_names[3],StringToNiveau(player_types[3]));
+        Player p1 = new Player(colorToString(player_colors[0]),player_names[0],StringToNiveau(player_types[0]), carteManager);
+        Player p2 = new Player(colorToString(player_colors[1]),player_names[1],StringToNiveau(player_types[1]), carteManager);
+        Player p3 = new Player(colorToString(player_colors[2]),player_names[2],StringToNiveau(player_types[2]), carteManager);
+        Player p4 = new Player(colorToString(player_colors[3]),player_names[3],StringToNiveau(player_types[3]), carteManager);
         playerlist.add(p1);playerlist.add(p2);playerlist.add(p3);playerlist.add(p4);
         return playerlist;
     }
