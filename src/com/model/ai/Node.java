@@ -84,8 +84,9 @@ public class Node
 
     /**
      * Gets possible neighbor nodes.
+     * @param player if a route is already owned by player, its cost is 0
      */
-    private void getNeighbors()
+    private void getNeighbors(Player player)
     {
         neighbors = new ArrayList<>();
 
@@ -98,6 +99,15 @@ public class Node
                 {
                     Node node = new Node(routeVille, this);
                     node.g = this.g + route.getLongueur();
+                    // If owned by player, cost stays the same
+                    if (player != null)
+                    {
+                        if (routeVille.getIsOccuped() == player)
+                        {
+                            node.g = this.g;
+                        }
+                    }
+
                     if(!Node.same(this, node))
                     {
                         neighbors.add(node);
@@ -189,9 +199,10 @@ public class Node
      * Puts almost every other functions together to make the A* algorithm.
      * @param s the start ville
      * @param e the target ville
+     * @param player the player for the routes
      * @return the node containing a path from end to start with its one way chained parents
      */
-    private static Node aStar(Ville s, Ville e)
+    private static Node aStar(Ville s, Ville e, Player player)
     {
         Node start = new Node(s, null);
         Node end = new Node(e, null);
@@ -212,7 +223,7 @@ public class Node
                 return current;
             }
 
-            current.getNeighbors();
+            current.getNeighbors(player);
             current.calculateTotal(e);
             addListDistinctive(closedList, current);
 
@@ -230,7 +241,7 @@ public class Node
 
                 if(!flag)
                 {
-                    neighbor.getNeighbors();
+                    neighbor.getNeighbors(player);
                     // if in open and new path shorter
                     Node checker = Node.sameIn(openList, neighbor);
                     if((checker != null && neighbor.f < checker.f))
@@ -258,13 +269,44 @@ public class Node
 
     /**
      * Returns an ArrayList of strings that makes the shortest path between 2 villes
+     * @param ville1 1st ville
+     * @param ville2 2nd ville
      * @return the villes to get to in order to get the shortest path
      */
-    public static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2)
+    private static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2)
     {
         ArrayList<Ville> res = new ArrayList<>();
 
-        Node resNode = aStar(ville1, ville2);
+        Node resNode = aStar(ville1, ville2, null);
+
+        while(resNode != null)
+        {
+            res.add(0, resNode.ville);
+            resNode = resNode.parent;
+        }
+
+
+        return res;
+    }
+
+    /**
+     * Returns an ArrayList of strings that makes the shortest path between 2 villes,
+     * by also including the player owned routes.
+     * @param ville1 1st ville
+     * @param ville2 2nd ville
+     * @param player the player to find the owned routes. Put null if player isn't needed
+     * @return the villes to get to in order to get the shortest path
+     */
+    public static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2, Player player)
+    {
+        if (player == null)
+        {
+            return findClosestPath(ville1, ville2);
+        }
+
+        ArrayList<Ville> res = new ArrayList<>();
+
+        Node resNode = aStar(ville1, ville2, player);
 
         while(resNode != null)
         {

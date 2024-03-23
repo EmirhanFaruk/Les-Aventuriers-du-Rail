@@ -37,9 +37,8 @@ public class Game
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         distrubueCarte();
-        this.round = new Round();
         initBoard();
-        this.listPlayer = initPlayers(player_names, player_types, player_colors);
+        this.round = new Round();
     }
 
     /*

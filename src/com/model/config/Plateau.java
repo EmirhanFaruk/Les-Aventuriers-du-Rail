@@ -56,7 +56,7 @@ public class Plateau {
         {
             for (int j = 0; j < game.getVilles().length; j++)
             {
-                Node.printWay(Node.findClosestPath(game.getVilles()[i], game.getVilles()[j]));
+                Node.printWay(Node.findClosestPath(game.getVilles()[i], game.getVilles()[j], null));
             }
         }
 
