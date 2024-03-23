@@ -27,7 +27,8 @@ public class GameMapPanel extends JPanel {
         this.width = width ;
         tile_height = (int) (getHeight() * 0.8 / 24);
         tile_width = (int) (getWidth() * 0.8 / 24);
-        this.mapScreen = new MapScreen( map , (int) (width * 0.85), (int) (height * 0.8) , tile_width , tile_height  , player , plateau ) ;
+        this.playerHandPanel = new PlayerHandPanel( player , width , height ) ;
+        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau, this.playerHandPanel) ;
         this.playerHandPanel = new PlayerHandPanel( player , width , (int) (height * 0.2) ) ;
         setLayout(new BorderLayout());
         add( mapScreen , BorderLayout.CENTER ) ;
