@@ -65,14 +65,6 @@ public class Rail extends Case {
     }
     
     /**
-     * Définit l'état d'occupation du rail.
-     * @param o true si le rail est occupé, sinon false.
-     */
-    public void setOccuper(boolean o) {
-        this.occuper = o;
-    }
-
-    /**
      * Vérifie si la case est une gare.
      * @return false, car une case de rail ne peut pas être une gare, il faut qu'elle soit une ville pour être une gare.
      */
@@ -107,6 +99,7 @@ public class Rail extends Case {
     public void setOccuperPar(Player occuperPar) {
         if ( ! this.occuper ) {
             this.occuperPar = occuperPar;
+            this.occuper = true;
         }
     }
 }

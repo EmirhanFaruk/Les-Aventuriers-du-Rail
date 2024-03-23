@@ -75,11 +75,17 @@ public class MapGraphics {
      * @param g graphics
      */
     public void draw(Graphics2D g) {
-        if (aCase instanceof Ville ) {
-            VilleGraphics.paint( g , ( Ville ) aCase );
-        } else if (aCase instanceof Rail ) {
-            RailGraphics.paint( g, (Rail) aCase );
-        }
+    	if(aCase != null) {
+    		if (aCase instanceof Ville ) {
+    			VilleGraphics.paint( g , ( Ville ) aCase );
+    		} else if (aCase instanceof Rail ) {
+    			if(((Rail) aCase).getOccuper() == true) {
+    				TrainGraphics.paint(g, (Rail) aCase);
+    			}else {
+    				RailGraphics.paint( g, (Rail) aCase );
+    			}
+    		}
+    	}
     }
 
 

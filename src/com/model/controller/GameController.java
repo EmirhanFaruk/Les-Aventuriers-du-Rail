@@ -6,6 +6,7 @@ import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
@@ -70,6 +71,13 @@ public class GameController {
         }
 
         //TODO : Bouton de confirmation      
-        player.mettreRoute(r.getSaRoute());
+        if(player.mettreRoute(r.getSaRoute())) {
+        	int tailleRoute = r.getSaRoute().getRailsRoute().size();
+        	ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute(); 
+        	
+        	for(int i=0; i<tailleRoute; i++) {
+        		listeRail.get(i).setOccuperPar(player);
+        	}
+        }
     }
 }

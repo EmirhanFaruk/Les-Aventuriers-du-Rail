@@ -28,8 +28,10 @@ public class MapScreen extends JPanel {
      * @param height height du panel
      * @param tileWidth width de l'image
      * @param tileHeight height de l'image
+     * @param playerHandPanel 
      */
-    public MapScreen( String mapName , int width , int height , int tileWidth , int tileHeight, Player joueur, Plateau plateau){
+    public MapScreen(String mapName , int width , int height , int tileWidth , int tileHeight,
+    		Player joueur, Plateau plateau, PlayerHandPanel playerHandPanel){
         this.mapName = mapName+".png" ;
         this.width = width ;
         this.height = height ;
@@ -41,6 +43,7 @@ public class MapScreen extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
             	gameController.mouseClicked(e, tileWidth, tileHeight, plateau, joueur);
+            	repaintAll(playerHandPanel);
             }
         });
     }
@@ -67,6 +70,11 @@ public class MapScreen extends JPanel {
                 map.add( new MapGraphics(  plateau , c , tileWidth , tileHeight ) );
             }
         }
+    }
+    
+    public void repaintAll(PlayerHandPanel php) {
+    	php.repaint();
+    	this.repaint();
     }
 
     /**
