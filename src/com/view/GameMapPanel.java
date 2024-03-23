@@ -25,20 +25,19 @@ public class GameMapPanel extends JPanel {
         setSize(width , height );
         this.height = height ;
         this.width = width ;
-        tile_height = getHeight() / 24 ;
-        tile_width = getWidth() / 24 ;
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau ) ;
-        this.playerHandPanel = new PlayerHandPanel( player ) ;
+        tile_height = (int) (getHeight() * 0.8 / 24);
+        tile_width = (int) (getWidth() * 0.8 / 24);
+        this.mapScreen = new MapScreen( map , (int) (width * 0.85), (int) (height * 0.8) , tile_width , tile_height  , player , plateau ) ;
+        this.playerHandPanel = new PlayerHandPanel( player , width , (int) (height * 0.2) ) ;
         setLayout(new BorderLayout());
         add( mapScreen , BorderLayout.CENTER ) ;
 
-        //Split le layout en deux parties : La map au milieu et la main du joueur en bas
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mapScreen, playerHandPanel);
-        splitPane.setResizeWeight(0.8); // Donne plus d'espace à la map
+        add( playerHandPanel , BorderLayout.SOUTH ) ;
 
-        // Ajout du splitPane au JFrame
-        add(splitPane, BorderLayout.CENTER);
-
+        JPanel destination = new JPanel() ;
+        destination.setBackground(Color.BLUE);
+        destination.setPreferredSize(new Dimension((int) (width * 0.15), height));
+        add(destination , BorderLayout.EAST ) ;
 
     }
 
