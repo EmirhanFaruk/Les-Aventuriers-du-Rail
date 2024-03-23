@@ -15,6 +15,9 @@ public class MapGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
 
+    private final int[] listx = { -1 , 0 , 1 , 0 } ;
+    private final int[] listy = { 0 , 1 , 0 , -1 } ;
+
     /**
      * Constructeur de la classe MapGraphics
      * @param c une case
@@ -78,8 +81,9 @@ public class MapGraphics {
     	if(aCase != null) {
     		if (aCase instanceof Ville ) {
     			VilleGraphics.paint( g , ( Ville ) aCase );
+                putsNameVille( g , ( Ville) aCase );
     		} else if (aCase instanceof Rail ) {
-    			if(((Rail) aCase).getOccuper() == true) {
+    			if(((Rail) aCase).getOccuper()) {
     				TrainGraphics.paint(g, (Rail) aCase);
     			}else {
     				RailGraphics.paint( g, (Rail) aCase );
@@ -88,6 +92,20 @@ public class MapGraphics {
     	}
     }
 
+    public void putsNameVille( Graphics2D g , Ville ville){
+        int x = ville.getX() ;
+        int y = ville.getY() ;
+        for ( int i = 0  ; i < listx.length ; i++ ){
+            if ( x - listx[i] > -1  && y - listy[i] > -1 ){
+                x = x  - listx[i] ;
+                y = y  - listy[i] ;
+                if ( ! (this.plateau.getPlateau() [ x ][ y ] instanceof Rail ) ){
+                    g.drawString( ville.getNom() , x * tileWidth , y * tileHeight );
+                    break;
+                }
+            }
+        }
+    }
 
     /*
    getteurs et setteurs
