@@ -2,18 +2,14 @@ package com.view;
 
 import com.model.Player;
 import com.model.config.Plateau;
-import com.model.controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class GameMapPanel extends JPanel {
     GameFrame frame ;
     private MapScreen mapScreen ;
     private PlayerHandPanel playerHandPanel ;
-    GameController gameController = new GameController();
     private static int tile_width , tile_height ;
     private int width , height ;
 
@@ -29,19 +25,21 @@ public class GameMapPanel extends JPanel {
         setSize(width , height );
         this.height = height ;
         this.width = width ;
-        tile_height = getHeight() / 24 ;
-        tile_width = getWidth() / 24 ;
-        this.playerHandPanel = new PlayerHandPanel( player ) ;
+        tile_height = (int) (getHeight() * 0.8 / 24);
+        tile_width = (int) (getWidth() * 0.8 / 24);
+        this.playerHandPanel = new PlayerHandPanel( player , width , height ) ;
         this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau, this.playerHandPanel) ;
+        this.playerHandPanel = new PlayerHandPanel( player , width , (int) (height * 0.2) ) ;
         setLayout(new BorderLayout());
         add( mapScreen , BorderLayout.CENTER ) ;
 
-        //Split le layout en deux parties : La map au milieu et la main du joueur en bas
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mapScreen, playerHandPanel);
-        splitPane.setResizeWeight(0.8); // Donne plus d'espace à la map
+        add( playerHandPanel , BorderLayout.SOUTH ) ;
 
-        // Ajout du splitPane au JFrame
-        add(splitPane, BorderLayout.CENTER);
+        JPanel destination = new JPanel() ;
+        destination.setBackground(Color.BLUE);
+        destination.setPreferredSize(new Dimension((int) (width * 0.15), height));
+        add(destination , BorderLayout.EAST ) ;
+
     }
 
     /**

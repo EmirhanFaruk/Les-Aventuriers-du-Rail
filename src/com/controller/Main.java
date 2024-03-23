@@ -32,7 +32,7 @@ public class Main implements Runnable
     }
 
     public void restart (){
-        startGame( this.map , this.player_names , this.player_types , this.player_colors );
+        gameFrame.startGame( this.map , this.player_names , this.player_types , this.player_colors );
         System.err.println("Une nouvelle game");
     }
     public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
