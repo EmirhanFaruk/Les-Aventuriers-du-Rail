@@ -47,7 +47,7 @@ public class GameManagerScreen extends JPanel {
             cardLayout.show(this , frame.getEndgame_screen_s());
             this.frame.getMain().setRunning( false );
         }
-        repaint();
+        this.gameMapPanel.repaint();
     }
 
     /* getteurs et setteurs */

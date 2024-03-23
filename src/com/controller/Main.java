@@ -2,6 +2,8 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
+import com.view.GameManagerScreen;
+
 import java.awt.*;
 
 public class Main implements Runnable
@@ -60,6 +62,8 @@ public class Main implements Runnable
             if(end >= required_fps)
             {
                 game.updateGame( );
+                //GameManagerScreen updateGraphics = this.gameFrame.getGameScreen().getGameManagerScreen();
+                //if(updateGraphics != null)updateGraphics.update();
                 end = System.nanoTime() - start;
             }
             else

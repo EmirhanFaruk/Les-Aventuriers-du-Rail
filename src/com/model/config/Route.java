@@ -60,6 +60,7 @@ public class Route {
         if(this.getCouleur() == Content.JAUNE)return Couleur.JAUNE;
         if(this.getCouleur() == Content.BLANC)return Couleur.BLANC;
         if(this.getCouleur() == Content.ROUGE)return Couleur.ROUGE;
+        if(this.getCouleur() == Content.JOKERETOILEE)return Couleur.JOKERETOILEE;
         return Couleur.LOC;
     }
 
