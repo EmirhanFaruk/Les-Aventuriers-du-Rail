@@ -141,7 +141,7 @@ public class Game
 
     public void distrubueCarte (){
         for (Player p : listPlayer ){
-            for ( int i = 0 ; i < 3 ; i++){
+            for ( int i = 0 ; i < 500 ; i++){
                 p.getTrainCard().add(this.cm.drawCard()) ;
             }
         }

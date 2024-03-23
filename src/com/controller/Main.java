@@ -2,6 +2,8 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
+import com.view.GameManagerScreen;
+
 import java.awt.*;
 
 public class Main implements Runnable
@@ -31,8 +33,7 @@ public class Main implements Runnable
     }
 
     public void restart (){
-        startGame( this.map , this.player_names , this.player_types , this.player_colors );
-
+        gameFrame.startGame( this.map , this.player_names , this.player_types , this.player_colors );
         System.err.println("Une nouvelle game");
     }
     public void startGame(String map, String[] player_names, String[] player_types,Color[] player_colors)
@@ -61,6 +62,8 @@ public class Main implements Runnable
             if(end >= required_fps)
             {
                 game.updateGame(end/1000000000);
+                //GameManagerScreen updateGraphics = this.gameFrame.getGameScreen().getGameManagerScreen();
+                //if(updateGraphics != null)updateGraphics.update();
                 end = System.nanoTime() - start;
             }
             else
