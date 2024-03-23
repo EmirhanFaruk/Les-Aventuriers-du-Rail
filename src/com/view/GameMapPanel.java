@@ -2,14 +2,18 @@ package com.view;
 
 import com.model.Player;
 import com.model.config.Plateau;
+import com.model.controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GameMapPanel extends JPanel {
     GameFrame frame ;
     private MapScreen mapScreen ;
     private PlayerHandPanel playerHandPanel ;
+    GameController gameController = new GameController();
     private static int tile_width , tile_height ;
     private int width , height ;
 
@@ -27,8 +31,8 @@ public class GameMapPanel extends JPanel {
         this.width = width ;
         tile_height = getHeight() / 24 ;
         tile_width = getWidth() / 24 ;
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau ) ;
         this.playerHandPanel = new PlayerHandPanel( player ) ;
+        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau, this.playerHandPanel) ;
         setLayout(new BorderLayout());
         add( mapScreen , BorderLayout.CENTER ) ;
 
@@ -38,8 +42,6 @@ public class GameMapPanel extends JPanel {
 
         // Ajout du splitPane au JFrame
         add(splitPane, BorderLayout.CENTER);
-
-
     }
 
     /**
