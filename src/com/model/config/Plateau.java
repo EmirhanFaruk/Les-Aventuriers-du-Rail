@@ -13,15 +13,8 @@ import java.util.ArrayList;
  */
 public class Plateau {
 
-    /**
-     * La longueur du plateau.
-     */
     /** Le tableau représentant les cases du plateau. */
-    private Case[][] plateau;
-
-    private ArrayList<Route> routesPlateau;
-
-    private String nomMap;
+    private final Case[][] plateau;
 
 
     /**
@@ -82,7 +75,7 @@ public class Plateau {
 
     /**
      * Retourne un tableau avec chaque element d'une ligne d'un fichier csv
-     * @param csvLine
+     * @param csvLine the line readen from the file
      * @return le tableau des villes
      */
     private static String[] delimit(String csvLine, char delimiter)
@@ -132,7 +125,7 @@ public class Plateau {
     /**
      * Ouvrir un fichier et retourne le reader
      * @param nomMap nom de fichier
-     * @return
+     * @return the reader of the file
      */
     private static BufferedReader openFile(String nomMap)
     {
@@ -153,8 +146,8 @@ public class Plateau {
 
     /**
      * Retourne le type de slash de systeme d'exploitation
-     * @param p
-     * @return
+     * @param p any path that contains a / or \
+     * @return the type of slash in String
      */
     private static String findSlash(String p)
     {
@@ -171,8 +164,8 @@ public class Plateau {
 
     /**
      * Lire le fichier et mettre les donnees dans le tableau donne
-     * @param reader
-     * @param stville
+     * @param reader reader of the file
+     * @param stville the list of list that the data will be written on
      */
     private static void readFile(BufferedReader reader, String[][] stville)
     {
@@ -208,6 +201,12 @@ public class Plateau {
         }
     }
 
+    /**
+     * Produire des villes depuis stville data et sauvegarde les dans plateau et villes
+     * @param villes la liste a sauvegarder
+     * @param stville la liste de la liste a lire
+     * @param plateau le plateau a sauvegarder
+     */
     private static void produireVilles(Ville[] villes, String[][] stville, Plateau plateau)
     {
         for (int i = 0; i < villes.length; i++)
@@ -221,33 +220,50 @@ public class Plateau {
         }
     }
 
+    /**
+     * Produire des routes et retourne les dans une ArrayList
+     * @param villes la liste des villes a utiliser
+     * @param stville la liste de la liste a lire
+     * @param plateau le plateau a sauvegarder les rails
+     * @return la liste des routes produits depuis stville
+     */
     private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville, Plateau plateau)
     {
         ArrayList<Route> res = new ArrayList<>();
 
         for (String[] villet : stville)
         {
+            // Faire le taff si la longueur est plus que 4,
+            // car jusqu'a 4 il y a que l'info de ville et pas ses connections
             if(villet.length > 4)
             {
                 int i = 4;
+                // Avec des boucles de 4, on lit chaque connection entre les villes
                 while (i + 4 < villet.length)
                 {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
+                    // Sauvegarder les nums des villes
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i]);
+                    // Avoir les villes pour sauvegarder dans la route
                     Ville ville1 = villes[nvil1 - 1];
                     Ville ville2 = villes[nvil2 - 1];
+                    // Garder les infos necessaires pour la route
                     int longueur = Integer.parseInt(villet[i + 2]);
                     Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
                     int angle = Integer.parseInt(villet[i + 3]);
 
+                    // Mettre des rails pour la route
                     putRails(ville1, ville2, longueur, couleur, angle, plateau);
 
+                    // Faire la route
                     Route route = new Route(ville1, ville2, longueur, couleur, plateau);
 
+                    // Ajouter la route aux villes concernés
                     ville1.getRoutes().add(route);
                     ville2.getRoutes().add(route);
 
+                    // Ajouter la resultat dans la liste a retourner
                     res.add(route);
                     i += 4;
                 }
@@ -257,6 +273,15 @@ public class Plateau {
     }
 
 
+    /**
+     * Produire et mettre des rails dans le plateau avec les infos données.
+     * @param ville1 ville 1
+     * @param ville2 ville 2
+     * @param longueur nombre des rails a mettre
+     * @param couleur couleur des rails
+     * @param angle angle des rails
+     * @param plateau le plateau a sauvegarder dans
+     */
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
         int[] pos = new int[]{ville1.getX(), ville1.getY()};
@@ -298,6 +323,20 @@ public class Plateau {
         } while(longueur > 0 && !(samePos(pos, destpos)));
     }
 
+
+    private static void putRailsPos(int[] v1pos, int[] v2pos, int longueur, Rail.Content couleur, int angle, Plateau plateau)
+    {
+        
+    }
+
+
+
+
+
+    /**
+     * Faire connaitre les doubles(cousins) routes
+     * @param routes la liste des routes a se faire connaitre
+     */
     private static void setRouteCousins(ArrayList<Route> routes)
     {
         for (int i = 0; i < routes.size(); i++)
@@ -320,6 +359,17 @@ public class Plateau {
                 }
             }
         }
+    }
+
+    private static void putDoubleRails()
+    {
+
+    }
+
+
+    private static void deleteSingleDoubleRails()
+    {
+
     }
 
     private static boolean samePos(int[] t1, int[] t2)
