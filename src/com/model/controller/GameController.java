@@ -1,9 +1,12 @@
 package com.model.controller;
+import com.model.config.Ville;
 import com.model.config.carte.CarteWagon;
 import com.model.Player;
 import com.model.config.Plateau;
 import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
+import com.view.graphics.VilleGraphics;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,8 +21,10 @@ public class GameController {
 
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
         Object clickedObject = plateau.getPlateau()[x][y];
-        Rail r = null;
+        Rail r = null ;
+        Ville v = null ;
         if(clickedObject instanceof Rail)r = (Rail) clickedObject;
+        if ( clickedObject instanceof Ville ) v = ( Ville ) clickedObject ;
         System.out.println("x = " + x + " y = " + y);
         if(r!=null) {
         	System.out.println(clickedObject + " " + r.getInitialContent() + " " + r.getSaRoute());
@@ -32,6 +37,8 @@ public class GameController {
             // Traitement en fonction du type de l'objet cliqué
             if (clickedObject instanceof Rail) {
                 tenterAcquisitionRoute((Rail) clickedObject, plateau, joueurCourant);
+            } else if ( clickedObject instanceof Ville ){
+                tenterDePoserUneGare( ( Ville ) clickedObject, joueurCourant  );
             } else if (clickedObject instanceof CarteDestination) {
                 // Pour une CarteDestination est cliquée
             } else if (clickedObject instanceof CarteWagon) {
@@ -79,5 +86,14 @@ public class GameController {
         		listeRail.get(i).setOccuperPar(player);
         	}
         }
+    }
+
+    public void tenterDePoserUneGare(Ville ville , Player player ){
+        /**
+         * TODO : ajouter un mouseListener sur les carte wagon pour savoir quelle couleur de carte il veut échanger contre une gare
+         */
+        CarteWagon.Couleur couleur = CarteWagon.Couleur.BLEU ;
+        player.transformerEnGare( ville , couleur ) ;
+
     }
 }

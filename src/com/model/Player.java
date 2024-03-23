@@ -17,7 +17,6 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;
-
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
@@ -31,7 +30,7 @@ public class Player {
 		this.score = 0 ;
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
-		this.nbrGare = 2 ;
+		this.nbrGare = 3 ;
 	}
 
 	private int carteDuJoueur(Rail.Content color){
@@ -65,6 +64,68 @@ public class Player {
     	return false;
     }
 
+	/**
+	 * Une fonction qui renvoie true si le joueur peut changer la ville en gare
+	 * @param ville Ville
+	 * @param couleurCarteChoisit une couleur de carte
+	 */
+	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
+		if ( assezDeGare() ){
+			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
+			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
+					retirerUnPionGare(couleurCarteChoisit , nbrCarteRetirer );
+					ville.setIsOccuped( this );
+					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+			} else {
+				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+			}
+		}
+
+	}
+
+	/**
+	 * Une fonction qui donne le bon nombre de cartes à échanger contre des gares
+	 * @return le nombre de cartes à échanger
+	 */
+	public int nombreDeCartePourPoserUneGare(){
+		if ( nbrGare == 3 )  return 1 ;
+		if ( nbrGare == 2 ) return 2 ;
+		if ( nbrGare == 1 ) return 3 ;
+		return 0 ;
+	}
+
+	/**
+	 * Une fonction qui compte le nombre de cartes de la couleur que le joueur a choisi pour changer les cartes en gare
+	 * @param couleurCarteChoisit couleur choisit
+	 * @return le nombre de cartes de la couleur
+	 */
+	public int peutChangerAvecCetteCarte ( Couleur couleurCarteChoisit ){
+		int count = 0;
+		for ( Couleur c : trainList ) {
+			if ( couleurCarteChoisit == c ) count++ ;
+		}
+		return count;
+	}
+
+	/**
+	 * Une fonction qui enlève une gare et les carte necessaire pour faire l'échange
+	 * @param couleur Couleur de la carte
+	 * @param carteAEnlever le nombre de cartes à retirer
+	 */
+	private void retirerUnPionGare( Couleur couleur , int carteAEnlever) {
+		setNbrGare( getNbrGare() -1 );
+		int restant = carteAEnlever ;
+		for ( int i = 0 ; i < trainList.size() ; i++ ){
+			if ( trainList.get(i) == couleur  ){
+				trainList.remove(i) ;
+				restant -- ;
+			}
+			if ( restant > 0 ){
+				break;
+			}
+		}
+	}
+
     //ATTENTION ! Si c'est true, passer le prochain tour du joueur.
     public boolean changerGareEnVille(int x, int y, Plateau p){
     	if(p.positionValide(x, y)){
@@ -90,6 +151,11 @@ public class Player {
 		}*/
 
 		return content.ordinal() == couleur.ordinal();
+	}
+
+
+	public int scoreFinal(){
+		return this.score + nbrGare*4 ;
 	}
 
 	/**

@@ -15,19 +15,19 @@ public class GameManagerScreen extends JPanel {
 
     private final CardLayout cardLayout = new CardLayout() ;
     private EndGameScreen endGameScreen ;
-
+    private int width , height ;
     private GameScreen gameScreen ;
 
     public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height , Player player , Plateau plateau ){
         this.frame = frame ;
         this.gameScreen = gameScreen ;
         setSize(width , height );
+        this.width = width ;
+        this.height = height ;
         this.gameMapPanel = new GameMapPanel(frame , map , width , height  , player , plateau ) ;
         this.game = this.frame.getMain().getGame();
-        this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
         setLayout( cardLayout );
         add( frame.getIngame_screen_s() , gameMapPanel ) ;
-        add( frame.getEndgame_screen_s() , endGameScreen ) ;
         cardLayout.show(this, frame.getIngame_screen_s());
     }
 
@@ -44,6 +44,8 @@ public class GameManagerScreen extends JPanel {
      */
     public void update(){
         if ( this.game.endGame()){
+            this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
+            add( frame.getEndgame_screen_s() , endGameScreen ) ;
             cardLayout.show(this , frame.getEndgame_screen_s());
             this.frame.getMain().setRunning( false );
         }
