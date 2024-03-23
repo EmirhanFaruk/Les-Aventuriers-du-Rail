@@ -11,8 +11,7 @@ import java.io.IOException;
 public class MapGraphics {
     private Case aCase ;
     final int tileWidth , tileHeight ;
-
-    static int cmpVille , cmpRail = 0 ;
+    private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
 
@@ -22,7 +21,8 @@ public class MapGraphics {
      * @param tileWidth width de l'image
      * @param tileHeight height de l'image
      */
-    public MapGraphics( Case c , int tileWidth , int tileHeight ){
+    public MapGraphics(  Plateau plateau, Case c , int tileWidth , int tileHeight ){
+        this.plateau = plateau ;
         this.aCase = c ;
         this.tileWidth = tileWidth ;
         this.tileHeight = tileHeight ;

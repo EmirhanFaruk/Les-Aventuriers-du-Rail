@@ -17,6 +17,8 @@ public class MapScreen extends JPanel {
     final String mapName ;
     final int width , height ;
     final int tileWidth , tileHeight ;
+
+    private Plateau plateau ;
     GameController gameController = new GameController();
 
     /**
@@ -33,6 +35,7 @@ public class MapScreen extends JPanel {
         this.height = height ;
         this.tileWidth = tileWidth ;
         this.tileHeight = tileHeight ;
+        this.plateau  = plateau ;
         
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -61,7 +64,7 @@ public class MapScreen extends JPanel {
         Case[][] tab = plateau.getPlateau();
         for ( Case[] cases : tab ) {
             for ( Case c : cases ) {
-                map.add( new MapGraphics( c , tileWidth , tileHeight ) );
+                map.add( new MapGraphics(  plateau , c , tileWidth , tileHeight ) );
             }
         }
     }
