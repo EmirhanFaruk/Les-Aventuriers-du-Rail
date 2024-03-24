@@ -19,6 +19,7 @@ public class GameScreen extends JPanel {
      * @param map which map
      * @param width width
      * @param height height
+     * @param plateau plateau
      */
     public GameScreen (GameFrame frame , String map , int width , int height , Player player, Plateau plateau ){
         this.frame = frame ;
