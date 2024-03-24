@@ -16,7 +16,8 @@ public class Main implements Runnable
     private String[] player_names  ;
     private String[] player_types ;
 
-    private Color[] player_colors ;
+    private Color[] player_colors;
+
     private boolean running = false;
 
     public void lance()
@@ -57,11 +58,10 @@ public class Main implements Runnable
         double end = required_fps;
         while(running)
         {
-            //System.out.println("running");
             start = System.nanoTime();
             if(end >= required_fps)
             {
-                game.updateGame( );
+                game.updateGame(end/1000000000);
                 //GameManagerScreen updateGraphics = this.gameFrame.getGameScreen().getGameManagerScreen();
                 //if(updateGraphics != null)updateGraphics.update();
                 end = System.nanoTime() - start;
