@@ -118,7 +118,7 @@ public class WeakBot implements BotAction{
     public void play(Game game, CarteManager carteManager, Round round) {
         //Fonction principale du bot faible
 
-        System.out.println(round.getWhoIsPlaying());
+        System.out.println("faiefhaeipfhapifafbaifanfbaf");
 
         Random random = new Random();
         int whatToDo = random.nextInt(4);

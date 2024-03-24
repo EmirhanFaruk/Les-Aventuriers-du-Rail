@@ -83,7 +83,7 @@ public class Round {
 
     public void round(Game game,CarteManager carteManager, double deltaTime)
     {
-        if (betweenRoundTimer > 0)
+        if (betweenRoundTimer <= 0)
         {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
 
