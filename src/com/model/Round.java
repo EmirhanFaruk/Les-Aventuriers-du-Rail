@@ -69,22 +69,7 @@ public class Round {
 
 
 
-    private void normalBotPlay(Game game, CarteManager carteManager) {
 
-        /*        CARTES MISSIONS        */
-
-        /*        CARTES WAGONS        */
-
-        /*        POSER DES WAGONS       */
-
-        /*        POSER UNE GARE       */
-
-
-        /*        RESET POUR LE PROCHAIN JOUEUR       */
-        endTurn = true;
-        whosNext(game);
-
-    }
 
 
 
@@ -99,7 +84,7 @@ public class Round {
                 break;
 
             case(2):
-                normalBotPlay(game,carteManager);
+                normalBotPlay.play(game,carteManager,this);
                 break;
 
             case(3):
