@@ -118,7 +118,7 @@ public class WeakBot implements BotAction{
     public void play(Game game, CarteManager carteManager, Round round) {
         //Fonction principale du bot faible
 
-        System.out.println("EJFDOAEBNAJEFOAPEIFBAEOFJEAFAEIFHBAEFAFBEA");
+        System.out.println(round.getWhoIsPlaying());
 
         Random random = new Random();
         int whatToDo = random.nextInt(4);
@@ -128,7 +128,6 @@ public class WeakBot implements BotAction{
 
             case(0):
                 /*        CARTES WAGONS        */
-                System.out.println("Probleme 1");
 
                 drawCardWagon(round,carteManager,game);
 
@@ -139,7 +138,6 @@ public class WeakBot implements BotAction{
 
             case(1):
                 /*        CARTES MISSIONS        */
-                System.out.println("Probleme 2");
 
                 CarteDestination[] carteDestination = takeMissionsCard(0,carteManager,game);
 
@@ -157,7 +155,6 @@ public class WeakBot implements BotAction{
 
             case(2):
                 /*        POSER DES WAGONS       */
-                System.out.println("Probleme 3");
 
                 //On regarde si les rails ont bien était posés
                 if(takeRail(game,round)){
@@ -175,7 +172,6 @@ public class WeakBot implements BotAction{
 
             default :
                 /*        POSER UNE GARE       */
-                System.out.println("Probleme 4");
 
                 int wichStation = random.nextInt(game.getVilles().length);
 

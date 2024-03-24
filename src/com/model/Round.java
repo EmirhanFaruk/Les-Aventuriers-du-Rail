@@ -58,7 +58,7 @@ public class Round {
 
         //On change de joueur
         if(whoIsPlaying == game.getListPlayer().size() -1){
-            whoIsPlaying = 1;
+            whoIsPlaying = 0;
         }
         else{
             whoIsPlaying ++;
