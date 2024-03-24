@@ -1,8 +1,6 @@
 package com.model.config;
 import com.model.Game;
-import com.model.ai.Node;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -42,12 +40,12 @@ public class Plateau {
         produireVilles(game.getVilles(), stville, res);
 
         // Produire routes
-        game.setRoutes(produireRoutes(game.getVilles(), stville, res));
+        game.setRoutes(produireRoutes(game.getVilles(), stville));
 
-        System.out.println("Route number: " + game.getRoutes().size());
-
+        // Set leur doubles/cousins
         setRouteCousins(game.getRoutes());
 
+        // Mettre toutes les rails(oui je sais il est ecrit double rail rails)
         putDRRails(game.getRoutes(), res);
 
 
@@ -221,10 +219,9 @@ public class Plateau {
      * Produire des routes et retourne les dans une ArrayList
      * @param villes la liste des villes a utiliser
      * @param stville la liste de la liste a lire
-     * @param plateau le plateau a sauvegarder les rails
      * @return la liste des routes produits depuis stville
      */
-    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville, Plateau plateau)
+    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
     {
         ArrayList<Route> res = new ArrayList<>();
 
@@ -248,7 +245,6 @@ public class Plateau {
                     // Garder les infos necessaires pour la route
                     int longueur = Integer.parseInt(villet[i + 2]);
                     Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
-                    int angle = Integer.parseInt(villet[i + 3]);
 
 
                     // Faire la route
@@ -307,15 +303,10 @@ public class Plateau {
             // Fix de Salim
             if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville))
             {
-                if (plateau.plateau[pos[0]][pos[1]] instanceof Rail)
-                {
-                    System.out.println("Existance d'un rail à {" + pos[0] + ", " + pos[1] + "}");
-                }
                 Rail rail = new Rail(pos[0], pos[1], couleur, angles[angle]);
                 rail.setSaRoute(route);
                 route.getRailsRoute().add(rail);
                 plateau.plateau[pos[0]][pos[1]] = rail;
-                System.out.println("Création d'un nouveau rail à {" + pos[0] + ", " + pos[1] + "}");
             }
 
             if (pos[0] > destpos[0])
@@ -440,8 +431,6 @@ public class Plateau {
 
             if (routes.get(i).getCousin() != null && !exists(routes.get(i), doubles))
             {
-                System.out.println("\n\n" + routes.get(i) + "\n=============\n");
-
                 putDoubleRails(v1, v2, routes.get(i), routes.get(i).getCousin(), plateau);
                 doubles.add(routes.get(i));
                 doubles.add(routes.get(i).getCousin());
@@ -465,7 +454,6 @@ public class Plateau {
      */
     private static void putDoubleRails(Ville ville1, Ville ville2, Route route1, Route route2, Plateau plateau)
     {
-        // TODO: OPTIMIZE THIS AND FIX THE OVERLAPPING RAIL PROBLEM
         int x1 = ville1.getX(),
             x2 = ville2.getX(),
             y1 = ville1.getY(),
@@ -519,10 +507,6 @@ public class Plateau {
         // angles = {90, 45, 0, 135}
         if (angle == 0)
         {
-            printCouple(positions1[0]);
-            printCouple(positions1[2]);
-            printCouple(positions1[5]);
-            printCouple(positions1[7]);
             // 90 degrees, upwards and downwards
             if (ville1.getY() > ville2.getY())
             {
@@ -557,10 +541,6 @@ public class Plateau {
         }
         else if (angle == 2)
         {
-            printCouple(positions1[0]);
-            printCouple(positions1[5]);
-            printCouple(positions1[2]);
-            printCouple(positions1[7]);
             // 0 degrees, left or right
             if (ville1.getX() > ville2.getX())
             {
@@ -593,25 +573,7 @@ public class Plateau {
             }
         }
 
-        // Finally done with this abomination, will hopefully come back to optimize later ^^
-    }
-
-
-    /**
-     * Checks if the values of these two couples are the same
-     * @param t1 couple 1
-     * @param t2 couple 2
-     * @return the result in boolean
-     */
-    private static boolean samePos(int[] t1, int[] t2)
-    {
-        return t1[0] == t2[0] && t1[1] == t2[1];
-    }
-
-
-    private static void printCouple(int[] c)
-    {
-        System.out.println("{ " + c[0] + ", " + c[1] + " }");
+        // Finally done with this abomination, will hopefully come back to optimize later ^^ (probably never)
     }
 
 
