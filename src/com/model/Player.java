@@ -103,6 +103,13 @@ public class Player {
 		return content.ordinal() == couleur.ordinal();
 	}
 
+
+	public void piocher(CarteManager cm)
+	{
+		trainList.add(cm.drawCard());
+	}
+
+
 	/**
 	 * Une fonction qui verifie si le joueur a assez de gare
 	 * @return si nbrGare est superieur a 0

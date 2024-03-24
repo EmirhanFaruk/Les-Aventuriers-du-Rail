@@ -43,6 +43,12 @@ public class Round {
         this.endTurn = endTurn;
     }
 
+
+
+    private double betweenRoundTimer = 0; // Comme ça on peut voir pour 1 seconde ce qui ce passe quand les bots jouent
+    private final double betweenRoundTimerMax = 1; // Valeur max de timer
+
+
     public boolean roundFinished(){
         //Savoir si le joueur/ia a fini de jouer ou non
         return this.endTurn;
@@ -74,26 +80,41 @@ public class Round {
 
 
 
-    public void round(Game game,CarteManager carteManager){
-    //La fonction qui indique qui joue, le round de qui
 
-        switch(game.getListPlayer().get(whoIsPlaying).getNiveau()){
+    public void round(Game game,CarteManager carteManager, double deltaTime)
+    {
+        if (betweenRoundTimer > 0)
+        {
+            switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
 
-            case(1):
-                weakBotPlay.play(game,carteManager,this);
-                break;
+                case(1):
+                    weakBotPlay.play(game,carteManager,this);
+                    break;
 
-            case(2):
-                normalBotPlay.play(game,carteManager,this);
-                break;
+                case(2):
+                    normalBotPlay.play(game,carteManager,this);
+                    break;
 
-            case(3):
-                strongBotPlay.play(game,carteManager,this);
-                break;
+                case(3):
+                    strongBotPlay.play(game,carteManager,this);
+                    break;
 
-            default: break;
+                default:
+                    break;
+            }
+
+            // Soit le joueur, soit les bots doivent rendre action 0 pour que leur tour finissent
+
+            if (action == 0)
+            {
+                whosNext(game);
+                betweenRoundTimer = betweenRoundTimerMax;
+            }
         }
-
+        else
+        {
+            betweenRoundTimer -= deltaTime;
+        }
 
 
     }

@@ -13,25 +13,28 @@ public class Route {
     private int longueur; //la longueur des rails
     private Rail.Content couleur; //couleur de la route
     private Player proprietaire; //joueur qui a construit la route
+    private Route cousin; // null si cette route n'est pas un de double route, l'autre route sinon
+
     private int nombrePoint; //nombre de point que raporte la route
     private ArrayList<Rail> railsRoute; //rails qui forme la route
 
-    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, Plateau p) {
-        this.ville1 = ville1;
-        this.ville2 = ville2;
-        this.longueur = longueur;
-        this.couleur = couleur;
-        this.proprietaire = null;
-        RouteFinder rf =  new  RouteFinder(p, ville1, ville2, couleur, this);
-        this.railsRoute = rf.trouverChemin();
-        nombrePointsDestination(); //initialise le nombre de point que donne cette route
-    }
 
     public Route(Ville v1, Ville v2, int nombrePointDistance) {
 		this.ville1 = v1;
 		this.ville2 = v2;
 		this.nombrePoint = nombrePointDistance;
 	}
+
+    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur)
+    {
+        this.ville1 = ville1;
+        this.ville2 = ville2;
+        this.longueur = longueur;
+        this.couleur = couleur;
+        this.proprietaire = null;
+        this.railsRoute = new ArrayList<>();
+        nombrePointsDestination(); //initialise le nombre de point que donne cette route
+    }
 
 
 	public Ville getVille1() {
@@ -117,6 +120,18 @@ public class Route {
 
     }
 
+    /**
+     * Getter for cousin
+     * @return cousin
+     */
+    public Route getCousin() { return cousin; }
+
+
+    /**
+     * Setter for cousin
+     * @param cousin
+     */
+    public void setCousin(Route cousin) { this.cousin = cousin; }
 
 	public ArrayList<Rail> getRailsRoute() {
 		return railsRoute;
@@ -127,57 +142,25 @@ public class Route {
 		this.railsRoute = railsRoute;
 	}
 
-	class RouteFinder {
-	    private Plateau plateau;
-	    private Ville villeDepart;
-	    private Ville villeArrivee;
-	    private Rail.Content couleurRoute;
-	    private Route saRoute;
-
-	    public RouteFinder(Plateau plateau, Ville villeDepart, Ville villeArrivee, Rail.Content couleurRoute, Route r) {
-	        this.plateau = plateau;
-	        this.villeDepart = villeDepart;
-	        this.villeArrivee = villeArrivee;
-	        this.couleurRoute = couleurRoute;
-	        this.saRoute = r;
-	    }
-
-	    public ArrayList<Rail> trouverChemin() {
-	        ArrayList<Rail> chemin = new ArrayList<>();
-
-	        // Commence par le rail le plus proche de villeDepart et se déplace vers villeArrivee
-	        int startX = this.villeDepart.getX();
-	        int startY = this.villeDepart.getY();
-	        int endX = this.villeArrivee.getX();
-	        int endY = this.villeArrivee.getY();
-
-	        int deltaX = Integer.compare(endX, startX); // Donne -1, 0 ou 1
-	        int deltaY = Integer.compare(endY, startY); // Donne -1, 0 ou 1
-
-	        int x = startX;
-	        int y = startY;
-
-	        while (x != endX || y != endY) {
-	            if (this.plateau.positionValide(x, y) && this.plateau.getPlateau()[x][y] instanceof Rail) {
-	                Rail rail = (Rail) this.plateau.getPlateau()[x][y];
-	                if (rail.getInitialContent() == this.couleurRoute) {
-	                    chemin.add(rail);
-	                    System.out.println(this.saRoute); 
-	                    ((Rail) this.plateau.getPlateau()[x][y]).setSaRoute(this.saRoute); // Associe chaque rail trouvé à la route
-	                }
-	            }
-
-	            x += deltaX;
-	            y += deltaY;
-	        }
-	        
-	        //Debug : Etat de la liste
-	        for(int i = 0; i < chemin.size(); i++) {
-	        	Rail r = chemin.get(i);
-	        	System.out.println(r + " " + r.getInitialContent());
-	        }
-
-	        return chemin;
-	    }
-	}
+    public String toString()
+    {
+        String res = "Route: \nVille1: " + ville1.getNom() + "\nVille2: " + ville2.getNom() + "\nLongueur: " + longueur + "\nCouleur: " + getCouleur();
+        if (proprietaire != null)
+        {
+            res += "\nProp: " + proprietaire.getName();
+        }
+        else
+        {
+            res += "\nProp: null";
+        }
+        if (cousin != null)
+        {
+            res += "\nCousin: " + cousin.getCouleur();
+        }
+        else
+        {
+            res += "\nCousin: null";
+        }
+        return res;
+    }
 }

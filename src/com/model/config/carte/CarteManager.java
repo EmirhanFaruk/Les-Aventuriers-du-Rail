@@ -123,7 +123,6 @@ public class CarteManager {
     public CarteDestination getDestination(Game game){
         //Fonction qui choisit au hasard les déstinations
 
-
         //On prend un Random qui donne un nombre qui représente la position dans le tableau des villes
         Random villeRANDOM = new Random();
 
@@ -135,6 +134,7 @@ public class CarteManager {
 
         while (v1 == v2){
             v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+
         }
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
