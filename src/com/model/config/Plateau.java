@@ -477,7 +477,7 @@ public class Plateau {
             y1 = ville1.getY(),
             y2 = ville2.getY();
 
-        int longueur = route1.getLongueur() + 1; // Car on va pas utiliser la distance direct entre deux villes
+        int longueur = route1.getLongueur() + 2; // Car on va pas utiliser la distance direct entre deux villes
         Rail.Content couleur1 = route1.getCouleur();
         Rail.Content couleur2 = route2.getCouleur();
         int angle = getAngle(route1.getVille1(), route1.getVille2());
@@ -487,29 +487,27 @@ public class Plateau {
         // 3  V  4
         // 5  6  7
 
-        // I know this is not the best way to do it
-        int[][] positions1 =
+        int[][] diffs =
                 {
-                        {x1 - 1, y1 - 1},
-                        {x1, y1 - 1},
-                        {x1 + 1, y1 - 1},
-                        {x1 - 1, y1},
-                        {x1 + 1, y1},
-                        {x1 - 1, y1 + 1},
-                        {x1, y1 + 1},
-                        {x1 + 1, y1 + 1}
+                        {-1, -1},
+                        {0, -1},
+                        {1, -1},
+                        {-1, 0},
+                        {1, 0},
+                        {-1, 1},
+                        {0, 1},
+                        {1, 1}
                 };
-        int[][] positions2 =
-                {
-                        {x2 - 1, y2 - 1},
-                        {x2, y2 - 1},
-                        {x2 + 1, y2 - 1},
-                        {x2 - 1, y2},
-                        {x2 + 1, y2},
-                        {x2 - 1, y2 + 1},
-                        {x2, y2 + 1},
-                        {x2 + 1, y2 + 1}
-                };
+
+        int[][] positions1 = new int[8][2];
+        int[][] positions2 = new int[8][2];
+
+        for (int i = 0; i < 8; i++)
+        {
+            positions1[i] = new int[]{x1 + diffs[i][0], y1 + diffs[i][1]};
+            positions1[i] = new int[]{x2 + diffs[i][0], y2 + diffs[i][1]};
+        }
+
 
         // angles = {90, 45, 0, 135}
         if (angle == 0)
