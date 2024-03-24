@@ -125,18 +125,6 @@ public class Game
         return "Error";
     }
 
-    private int StringToNiveau(String s){
-        if (s.equals("PLAYER")) return 0;
-        if (s.equals("CPU")) return 1; // pour l'instant en attendant une implémentation complète.
-        return -1;
-    }
-
-    public void  dinumueCarte(){
-        for ( Player p : listPlayer ){
-            p.setNbrWagon( p.getNbrWagon() - 1 );
-        }
-    }
-
 
     /**
      * Verifie s'il y a un joueur qui a moins de 3 wagons
@@ -161,7 +149,7 @@ public class Game
 
     public void updateGame( ) {
         //game loop
-        if (round.roundFinished()) {
+        if (!round.roundFinished()) {
 
             round.round(this, cm);
 

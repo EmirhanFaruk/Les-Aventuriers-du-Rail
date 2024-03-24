@@ -61,18 +61,24 @@ public class CarteManager {
     public CarteDestination[] takeDestination(int[] position,Game game){
         CarteDestination [] renvoie = new CarteDestination[position.length];
         //Fonction qui prends prends une carte destination
+
         for(int i = 0; i<position.length;i++){
+
+
             renvoie[i] = destinationsCards[position[i]];
         }
         rerollDestination(game);
+
         return renvoie;
     }
 
     public void rerollDestination(Game game){
+
         //Fonction qui remets de nouvelles mission
 
         //On va remplacer chaque élément par une nouvelle destination
         for(int i = 0; i<destinationsCards.length;i++){
+
             destinationsCards[i] = getDestination(game);
 
         }
@@ -117,16 +123,19 @@ public class CarteManager {
     public CarteDestination getDestination(Game game){
         //Fonction qui choisit au hasard les déstinations
 
+
         //On prend un Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random villeRANDOM = new Random(game.getVilles().length);
-        int ville = villeRANDOM.nextInt();
+        Random villeRANDOM = new Random();
 
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
-        while(ville == ville){
-            ville = villeRANDOM.nextInt();
+
+
+        Ville v1 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+        Ville v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+
+        while (v1 == v2){
+            v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
         }
-        Ville v1 = game.getVilles()[ville];
-        Ville v2 = game.getVilles()[ville];
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
         return new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));

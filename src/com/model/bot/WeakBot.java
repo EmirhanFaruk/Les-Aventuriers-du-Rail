@@ -87,6 +87,7 @@ public class WeakBot implements BotAction{
 
     @Override
     public CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game){
+
         Random random = new Random();
 
         //On choisit un nombre aleatoire et le joueur prends au hasard soit 1/2/3 cartes qu'on met dans un tableau
@@ -117,14 +118,17 @@ public class WeakBot implements BotAction{
     public void play(Game game, CarteManager carteManager, Round round) {
         //Fonction principale du bot faible
 
+        System.out.println("EJFDOAEBNAJEFOAPEIFBAEOFJEAFAEIFHBAEFAFBEA");
+
         Random random = new Random();
-        int whatToDo = random.nextInt(3);
+        int whatToDo = random.nextInt(4);
 
         switch (whatToDo){
 
 
             case(0):
                 /*        CARTES WAGONS        */
+                System.out.println("Probleme 1");
 
                 drawCardWagon(round,carteManager,game);
 
@@ -135,11 +139,13 @@ public class WeakBot implements BotAction{
 
             case(1):
                 /*        CARTES MISSIONS        */
+                System.out.println("Probleme 2");
 
-                CarteDestination[] carteDestination = takeMissionsCard(100,carteManager,game);
+                CarteDestination[] carteDestination = takeMissionsCard(0,carteManager,game);
 
                 //Pour ensuite les ajouter dans la liste des missions du bot
                 for(int z = 0; z<carteDestination.length;z++){
+
                     game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
                 }
 
@@ -151,6 +157,7 @@ public class WeakBot implements BotAction{
 
             case(2):
                 /*        POSER DES WAGONS       */
+                System.out.println("Probleme 3");
 
                 //On regarde si les rails ont bien était posés
                 if(takeRail(game,round)){
@@ -168,6 +175,7 @@ public class WeakBot implements BotAction{
 
             default :
                 /*        POSER UNE GARE       */
+                System.out.println("Probleme 4");
 
                 int wichStation = random.nextInt(game.getVilles().length);
 
