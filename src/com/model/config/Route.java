@@ -153,6 +153,28 @@ public class Route {
 		this.railsRoute = railsRoute;
 	}
 
+    public String toString()
+    {
+        String res = "Route: \nVille1: " + ville1.getNom() + "\nVille2: " + ville2.getNom() + "\nLongueur: " + longueur + "\nCouleur: " + getCouleur();
+        if (proprietaire != null)
+        {
+            res += "\nProp: " + proprietaire.getName();
+        }
+        else
+        {
+            res += "\nProp: null";
+        }
+        if (cousin != null)
+        {
+            res += "\nCousin: " + cousin.getCouleur();
+        }
+        else
+        {
+            res += "\nCousin: null";
+        }
+        return res;
+    }
+
 	class RouteFinder {
 	    private Plateau plateau;
 	    private Ville villeDepart;

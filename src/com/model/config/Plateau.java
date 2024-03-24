@@ -2,6 +2,7 @@ package com.model.config;
 import com.model.Game;
 import com.model.ai.Node;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class Plateau {
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville, res));
+
+        System.out.println("Route number: " + game.getRoutes().size());
 
         setRouteCousins(game.getRoutes());
 
@@ -233,7 +236,7 @@ public class Plateau {
             {
                 int i = 4;
                 // Avec des boucles de 4, on lit chaque connection entre les villes
-                while (i + 4 < villet.length)
+                while (i + 4 < villet.length && !villet[i].isEmpty())
                 {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
                     // Sauvegarder les nums des villes
@@ -344,7 +347,7 @@ public class Plateau {
             for (int j = 0; j < routes.size(); j++)
             {
                 Route temp = routes.get(j);
-                if (route != temp)
+                if (i != j)
                 {
                     if (route.getCousin() == null)
                     {
@@ -352,7 +355,9 @@ public class Plateau {
                         boolean possibility2 = route.getVille1() == temp.getVille2() && route.getVille2() == temp.getVille1();
                         if (possibility1 || possibility2)
                         {
+                            System.out.println("\n==========================\nSame:\n" + route + "\n-------------\n" + temp);
                             route.setCousin(temp);
+                            temp.setCousin(route);
                         }
                     }
                 }
@@ -362,7 +367,9 @@ public class Plateau {
 
 
     /**
-     * Avoir angle d'une route
+     * Avoir angle d'une route depuis ses villes
+     * @param ville1 ville 1
+     * @param ville2 ville 2
      * @return angle depuis la liste
      */
     private static int getAngle(Ville ville1, Ville ville2)
@@ -393,16 +400,39 @@ public class Plateau {
         return 0;
     }
 
-    private static boolean exists(int n, ArrayList<Integer> arr)
+    /**
+     * Verifier si un route existe dans une array(pas avec leur proprietes, directement)
+     * @param route la route a comparer
+     * @param arr la liste des routes
+     * @return le resultat
+     */
+    private static boolean exists(Route route, ArrayList<Route> arr)
     {
-        for (int i : arr)
+        for (Route i : arr)
         {
-            if (n == i)
+            if (route == i)
             {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Verifier si les proprietes de deux routes sont les memes
+     * @param r1 route 1
+     * @param r2 route 2
+     * @return le resultat
+     */
+    private static boolean same(Route r1, Route r2)
+    {
+        boolean res = r1.getVille1() == r2.getVille1();
+        res = res && r1.getVille2() == r2.getVille2();
+        res = res && r1.getCouleur() == r2.getCouleur();
+        res = res && r1.getLongueur() == r2.getLongueur();
+        //res = res && r1.getCousin() == r2.getCousin();
+
+        return res;
     }
 
 
@@ -413,19 +443,20 @@ public class Plateau {
      */
     private static void putDRRails(ArrayList<Route> routes, Plateau plateau)
     {
-        ArrayList<Integer> doubles = new ArrayList<>();
+        ArrayList<Route> doubles = new ArrayList<>();
         for (int i = 0; i < routes.size(); i++)
         {
-            if (routes.get(i).getCousin() != null && !exists(i, doubles))
+            if (routes.get(i).getCousin() != null && !exists(routes.get(i), doubles))
             {
+                System.out.println("\n\n" + routes.get(i) + "\n=============\n");
                 Ville v1 = routes.get(i).getVille1();
                 Ville v2 = routes.get(i).getVille2();
                 int longueur = routes.get(i).getLongueur();
 
                 deleteRails(v1, v2, longueur, plateau);
                 putDoubleRails(v1, v2, routes.get(i), routes.get(i).getCousin(), plateau);
-                doubles.add(i);
-                doubles.add(routes.indexOf(routes.get(i).getCousin()));
+                doubles.add(routes.get(i));
+                doubles.add(routes.get(i).getCousin());
             }
         }
     }
