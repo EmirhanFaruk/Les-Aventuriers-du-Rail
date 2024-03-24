@@ -1,5 +1,6 @@
 package com.view.mainmenu;
 
+import com.model.bot.WeakBot;
 import com.view.GameFrame;
 
 import javax.swing.*;
@@ -25,7 +26,10 @@ public class Play extends JPanel
 
     private final String
             PLAYER = "PLAYER",
-            CPU = "CPU";
+            WEAKBOT = "WEAK",
+            NORMALBOT = "NORMAL",
+            STRONGBOT = "STRONG",
+            NONE = "NONE";
 
 
     private GameFrame frame;
@@ -152,20 +156,32 @@ public class Play extends JPanel
         button.setForeground(Color.GRAY);
         button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        button.addActionListener(e ->
-        {
-            if (player_type_list_tag[i].getText().equals(PLAYER))
-            {
-                player_type_list_tag[i].setText(CPU);
-                button.setText(CPU);
-            }
-            else
-            {
-                player_type_list_tag[i].setText(PLAYER);
-                button.setText(PLAYER);
+        button.addActionListener(e -> {
+            switch (player_type_list_tag[i].getText()) {
+                case PLAYER:
+                    player_type_list_tag[i].setText(WEAKBOT);
+                    button.setText(WEAKBOT);
+                    break;
+                case WEAKBOT:
+                    player_type_list_tag[i].setText(NORMALBOT);
+                    button.setText(NORMALBOT);
+                    break;
+                case NORMALBOT:
+                    player_type_list_tag[i].setText(STRONGBOT);
+                    button.setText(STRONGBOT);
+                    break;
+                case STRONGBOT:
+                    player_type_list_tag[i].setText(NONE);
+                    button.setText(NONE);
+                    break;
+                case NONE:
+                    player_type_list_tag[i].setText(PLAYER);
+                    button.setText(PLAYER);
+                    break;
+                default:
+                    break;
             }
         });
-
         return makeCenteringPanel(button);
     }
 
@@ -487,6 +503,10 @@ public class Play extends JPanel
         res.add(makePlayButton(), BorderLayout.SOUTH);
 
         return res;
+    }
+
+    private void setPlayer(){
+
     }
 
 }
