@@ -44,6 +44,7 @@ public class Route {
         this.longueur = longueur;
         this.couleur = couleur;
         this.proprietaire = null;
+        this.railsRoute = new ArrayList<>();
         nombrePointsDestination(); //initialise le nombre de point que donne cette route
     }
 
