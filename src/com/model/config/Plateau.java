@@ -45,6 +45,8 @@ public class Plateau {
 
         setRouteCousins(game.getRoutes());
 
+        putDRRails(game.getRoutes(), res);
+
         for (int i = 0; i < game.getVilles().length; i++)
         {
             for (int j = 0; j < game.getVilles().length; j++)
@@ -274,7 +276,8 @@ public class Plateau {
 
 
     /**
-     * Produire et mettre des rails dans le plateau avec les infos données.
+     * Produire et mettre des rails dans le plateau avec les infos données
+     * en appelant putRailsPos avec les positions des villes.
      * @param ville1 ville 1
      * @param ville2 ville 2
      * @param longueur nombre des rails a mettre
@@ -284,29 +287,46 @@ public class Plateau {
      */
     private static void putRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
     {
-        int[] pos = new int[]{ville1.getX(), ville1.getY()};
-        int[] destpos = new int[]{ville2.getX(), ville2.getY()};
+        int[] v1pos = {ville1.getX(), ville1.getY()};
+        int[] v2pos = {ville2.getX(), ville2.getY()};
+        putRailsPos(v1pos, v2pos, longueur, couleur, angle, plateau);
+    }
+
+    /**
+     * Produire et mettre des rails dans le plateau avec les infos données
+     * @param v1pos position de ville 1
+     * @param v2pos position de ville 2
+     * @param longueur nombre des rails a mettre
+     * @param couleur couleur des rails
+     * @param angle angle des rails
+     * @param plateau le plateau a sauvegarder dans
+     */
+    private static void putRailsPos(int[] v1pos, int[] v2pos, int longueur, Rail.Content couleur, int angle, Plateau plateau)
+    {
+        int[] pos = new int[]{v1pos[0], v1pos[1]};
+        int[] destpos = new int[]{v2pos[0], v2pos[0]};
         int[] angles = {90, 45, 0, 135};
         do
         {
-            if (pos[0] > ville2.getX())
+            if (pos[0] > v2pos[0])
             {
                 pos[0] = pos[0] - 1;
             }
-            else if (pos[0] < ville2.getX())
+            else if (pos[0] < v2pos[0])
             {
                 pos[0] = pos[0] + 1;
             }
 
-            if (pos[1] > ville2.getY())
+            if (pos[1] > v2pos[1])
             {
                 pos[1] = pos[1] - 1;
             }
-            else if (pos[1] < ville2.getY())
+            else if (pos[1] < v2pos[1])
             {
                 pos[1] = pos[1] + 1;
             }
 
+            // Fix de Salim
             if (!(plateau.plateau[pos[0]][pos[1]] instanceof Ville)) {
                 if (plateau.plateau[pos[0]][pos[1]] instanceof Rail) {
                     // La case est déjà un Rail, mettre à jour si nécessaire.
@@ -322,15 +342,6 @@ public class Plateau {
             longueur--;
         } while(longueur > 0 && !(samePos(pos, destpos)));
     }
-
-
-    private static void putRailsPos(int[] v1pos, int[] v2pos, int longueur, Rail.Content couleur, int angle, Plateau plateau)
-    {
-        
-    }
-
-
-
 
 
     /**
@@ -361,17 +372,246 @@ public class Plateau {
         }
     }
 
-    private static void putDoubleRails()
-    {
 
+    /**
+     * Avoir angle d'une route
+     * @return angle depuis la liste
+     */
+    private static int getAngle(Ville ville1, Ville ville2)
+    {
+        // angles = {90, 45, 0, 135}
+        int x1 = ville1.getX(),
+                x2 = ville2.getX(),
+                y1 = ville1.getY(),
+                y2 = ville2.getY();
+
+        if (x1 == x2 && y1 != y2)
+        {
+            return 0;
+        }
+        if (x1 != x2 && y1 == y2)
+        {
+            return 2;
+        }
+        if ((x1 > x2 && y1 < y2) || (x1 < x2 && y1 > y2))
+        {
+            return 1;
+        }
+        if ((x1 < x2 && y1 < y2) || (x1 > x2 && y1 > y2))
+        {
+            return 3;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Produire un hard copy d'une ArrayList des routes
+     * @param routes ArrayList des routes
+     * @return hard copy des routes
+     */
+    private static ArrayList<Route> copyRoutes(ArrayList<Route> routes)
+    {
+        ArrayList<Route> res = new ArrayList<>();
+
+        for (Route route : routes)
+        {
+            Route aAjouter = new Route(route.getVille1(), route.getVille2(), route.getLongueur(), route.getCouleur());
+            res.add(aAjouter);
+        }
+        setRouteCousins(res);
+
+        return res;
+    }
+
+    /**
+     * Mettre les doubles routes dans plateau
+     * @param routes la liste des routes
+     * @param plateau le plateau a mettre sur
+     */
+    private static void putDRRails(ArrayList<Route> routes, Plateau plateau)
+    {
+        ArrayList<Route> routesCopy = copyRoutes(routes);
+        while (!routesCopy.isEmpty())
+        {
+            Route current = routesCopy.get(0);
+            if (current.getCousin() != null)
+            {
+                Ville v1 = current.getVille1();
+                Ville v2 = current.getVille2();
+                int longueur = current.getLongueur();
+                Rail.Content couleur = current.getCouleur();
+                int angle = getAngle(v1, v2);
+
+                deleteRails(v1, v2, longueur, plateau);
+                putDoubleRails(v1, v2, longueur, couleur, angle, plateau);
+                routesCopy.remove(current.getCousin());
+            }
+            routesCopy.remove(0);
+        }
+    }
+
+    /**
+     * Mettre des doubles rails entre deux villes
+     * @param ville1 ville 1
+     * @param ville2 ville 2
+     * @param longueur nombre des rails a mettre
+     * @param couleur couleur des rails
+     * @param angle angle des rails
+     * @param plateau le plateau a sauvegarder dans
+     */
+    private static void putDoubleRails(Ville ville1, Ville ville2, int longueur, Rail.Content couleur, int angle, Plateau plateau)
+    {
+        longueur++; // Car on va pas utiliser la distance direct entre deux villes
+        int x1 = ville1.getX(),
+            x2 = ville2.getX(),
+            y1 = ville1.getY(),
+            y2 = ville2.getY();
+
+        // There will be lots of ifs and elses
+        // 0  1  2
+        // 3  V  4
+        // 5  6  7
+
+        // I know this is not the best way to do it
+        int[][] positions1 =
+                {
+                        {x1 - 1, y1 - 1},
+                        {x1, y1 - 1},
+                        {x1 + 1, y1 - 1},
+                        {x1 - 1, y1},
+                        {x1 + 1, y1},
+                        {x1 - 1, y1 + 1},
+                        {x1, y1 + 1},
+                        {x1 + 1, y1 + 1}
+                };
+        int[][] positions2 =
+                {
+                        {x2 - 1, y2 - 1},
+                        {x2, y2 - 1},
+                        {x2 + 1, y2 - 1},
+                        {x2 - 1, y2},
+                        {x2 + 1, y2},
+                        {x2 - 1, y2 + 1},
+                        {x2, y2 + 1},
+                        {x2 + 1, y2 + 1}
+                };
+
+        // angles = {90, 45, 0, 135}
+        if (angle == 0)
+        {
+            // 90 degrees, upwards and downwards
+            if (ville1.getY() > ville2.getY())
+            {
+                // if ville1 below ville2, then put the rails starting from 0 and 2, ending at 5 and 7
+                putRailsPos(positions1[0], positions2[5], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[2], positions2[7], longueur, couleur, angle, plateau);
+            }
+            else
+            {
+                // if not then the numbers are switched
+                putRailsPos(positions1[5], positions2[0], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[7], positions2[2], longueur, couleur, angle, plateau);
+            }
+        } // I hate myself for not using switch
+        else if (angle == 1)
+        {
+            // 45 degrees, diagonal up right or down left
+            // thankfully, only need to check one of x or y this time
+            if (ville1.getY() > ville2.getY())
+            {
+                // if ville1 below left ville2, then put the rails starting from 1 and 4, ending at 3 and 6
+                putRailsPos(positions1[1], positions2[3], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[4], positions2[6], longueur, couleur, angle, plateau);
+            }
+            else
+            {
+                // if not then the numbers are switched
+                putRailsPos(positions1[3], positions2[1], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[6], positions2[4], longueur, couleur, angle, plateau);
+            }
+        }
+        else if (angle == 2)
+        {
+            // 0 degrees, left or right
+            if (ville1.getX() > ville2.getX())
+            {
+                // if ville1 is at the right of ville2, then put the rails starting from 0 and 5, ending at 2 and 7
+                putRailsPos(positions1[0], positions2[2], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[5], positions2[7], longueur, couleur, angle, plateau);
+            }
+            else
+            {
+                // if not then the numbers are switched
+                putRailsPos(positions1[2], positions2[0], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[7], positions2[5], longueur, couleur, angle, plateau);
+            }
+        }
+        else if (angle == 3)
+        {
+            // 135 degrees, diagonal up left or down right
+            // thankfully, only need to check one of x or y again
+            if (ville1.getY() > ville2.getY())
+            {
+                // if ville1 below left ville2, then put the rails starting from 3 and 1, ending at 6 and 4
+                putRailsPos(positions1[3], positions2[6], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[1], positions2[4], longueur, couleur, angle, plateau);
+            }
+            else
+            {
+                // if not then the numbers are switched
+                putRailsPos(positions1[6], positions2[3], longueur, couleur, angle, plateau);
+                putRailsPos(positions1[4], positions2[1], longueur, couleur, angle, plateau);
+            }
+        }
+
+        // Finally done with this abomination, will hopefully come back to optimize later ^^
     }
 
 
-    private static void deleteSingleDoubleRails()
+    /**
+     * Remplacer les cases entre deux villes par des paysages
+     * @param ville1 ville 1
+     * @param ville2 ville 2
+     * @param longueur longueur entre eux
+     * @param plateau le plateau a mettre les paysages
+     */
+    private static void deleteRails(Ville ville1, Ville ville2, int longueur, Plateau plateau)
     {
+        int[] pos = new int[]{ville1.getX(), ville1.getY()};
+        int[] destpos = new int[]{ville2.getX(), ville2.getY()};
+        do
+        {
+            if (pos[0] > ville2.getX())
+            {
+                pos[0] = pos[0] - 1;
+            }
+            else if (pos[0] < ville2.getX())
+            {
+                pos[0] = pos[0] + 1;
+            }
 
+            if (pos[1] > ville2.getY())
+            {
+                pos[1] = pos[1] - 1;
+            }
+            else if (pos[1] < ville2.getY())
+            {
+                pos[1] = pos[1] + 1;
+            }
+
+            plateau.plateau[pos[0]][pos[1]] = new Paysage(pos[0], pos[1]);
+
+            longueur--;
+        } while(longueur > 0 && !(samePos(pos, destpos)));
     }
 
+    /**
+     * Checks if the values of these two couples are the same
+     * @param t1 couple 1
+     * @param t2 couple 2
+     * @return the result in boolean
+     */
     private static boolean samePos(int[] t1, int[] t2)
     {
         return t1[0] == t2[0] && t1[1] == t2[1];

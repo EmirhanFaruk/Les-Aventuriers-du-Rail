@@ -37,6 +37,16 @@ public class Route {
 		this.nombrePoint = nombrePointDistance;
 	}
 
+    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur)
+    {
+        this.ville1 = ville1;
+        this.ville2 = ville2;
+        this.longueur = longueur;
+        this.couleur = couleur;
+        this.proprietaire = null;
+        nombrePointsDestination(); //initialise le nombre de point que donne cette route
+    }
+
 
 	public Ville getVille1() {
         return ville1;
