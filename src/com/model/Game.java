@@ -83,13 +83,37 @@ public class Game
 
     }
 
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types,Color[] player_colors,  CarteManager carteManager){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors,  CarteManager carteManager){
         ArrayList<Player> playerlist = new ArrayList<>();
-        Player p1 = new Player(colorToString(player_colors[0]),player_names[0],StringToNiveau(player_types[0]), carteManager);
-        Player p2 = new Player(colorToString(player_colors[1]),player_names[1],StringToNiveau(player_types[1]), carteManager);
-        Player p3 = new Player(colorToString(player_colors[2]),player_names[2],StringToNiveau(player_types[2]), carteManager);
-        Player p4 = new Player(colorToString(player_colors[3]),player_names[3],StringToNiveau(player_types[3]), carteManager);
-        playerlist.add(p1);playerlist.add(p2);playerlist.add(p3);playerlist.add(p4);
+
+        for(int i = 0; i< player_types.length;i++){
+
+            switch (player_types[i]){
+
+                case "PLAYER" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,carteManager));
+                    break;
+
+                case "WEAK" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,carteManager));
+                    break;
+
+                case "NORMAL" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,carteManager));
+                    break;
+
+                case "STRONG" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,carteManager));
+                    break;
+
+                default: break;
+
+            }
+
+
+
+        }
+
         return playerlist;
     }
 

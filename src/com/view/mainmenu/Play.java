@@ -21,7 +21,7 @@ public class Play extends JPanel
     private JLabel level_name_tag;
     private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
-    private Color[] player_colors = {Color.red,Color.red,Color.red,Color.red};
+    private Color[] player_colors = {Color.red,Color.blue,Color.green,Color.yellow};
     private JButton[] selected_color = new JButton[4];
 
     private final String
@@ -69,6 +69,7 @@ public class Play extends JPanel
         {
             player_type_list_tag[i] = new JLabel(PLAYER);
         }
+
         
     }
 
@@ -471,10 +472,11 @@ public class Play extends JPanel
                         {
                             player_type_list[i] = player_type_list_tag[i].getText();
                         }
+
                         if(!differentcolors()){
                             JOptionPane.showMessageDialog(this,"Veuillez choisir des couleurs différentes !","Warning",JOptionPane.WARNING_MESSAGE);
                         }else{
-                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list,player_colors);
+                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
                     }
                     });
 
@@ -503,10 +505,6 @@ public class Play extends JPanel
         res.add(makePlayButton(), BorderLayout.SOUTH);
 
         return res;
-    }
-
-    private void setPlayer(){
-
     }
 
 }

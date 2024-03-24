@@ -4,6 +4,7 @@ import com.model.Game;
 import com.view.GameFrame;
 import com.view.GameManagerScreen;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Main implements Runnable
@@ -15,7 +16,7 @@ public class Main implements Runnable
     private String map ;
     private String[] player_names  ;
     private String[] player_types ;
-
+    private JLabel[] player_name_list_tag;
     private Color[] player_colors ;
     private boolean running = false;
 
