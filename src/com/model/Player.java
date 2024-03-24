@@ -49,23 +49,17 @@ public class Player {
 		int count = 0;
 
 		for(int i = 0; i < this.trainList.size(); i++) {
-			if(compatibleColor(color,this.trainList.get(i)))count++;
-
+			if(compatibleColor(color, this.trainList.get(i)))count++;
 		}
 
 		return count;
 	}
 
-    private void retirerLesCartes(Couleur color, int longeur) {
-    	int i = 0, count = longeur;
-    	setNbrWagon( this.nbrWagon - count );
-    	while(count != 0) {
-    		if(this.trainList.get(i) == color) {
-    			this.trainList.remove(i);
-    			count--;
-    		}else {
-    			i++;
-    		}
+    private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    	setNbrWagon(this.nbrWagon - carteAEnlever);
+    	
+    	for(int i=0; i<this.trainList.size(); i++) {
+    		this.trainList.remove(i);
     	}
     }
 
@@ -94,13 +88,19 @@ public class Player {
 	}
 
 	public boolean compatibleColor(Content content, Couleur couleur){
-
 		if(couleur == Couleur.LOC){
 			return true;
 		}
+		
+		/*if(couleur == Couleur.LOC){
+			return true;
+		}else if(content.ordinal() == couleur.ordinal()) {
+			return true;
+		}else if(content == Content.JOKER) {
+			return true;
+		}*/
 
 		return content.ordinal() == couleur.ordinal();
-
 	}
 
 	/**
