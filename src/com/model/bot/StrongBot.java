@@ -61,26 +61,51 @@ public class StrongBot implements BotAction {
 
     @Override
     public void endRound(Round round,Game game) {
+        //Fonction qui finit le tour du bot
         round.setEndTurn(true);
         round.whosNext(game);
     }
 
-    @Override
-    public void play(Game game, CarteManager carteManager, Round round) {
 
-
-        //1- On regarde si il a complété ou pas ses missions :
-        boolean allMissionIsCompleted = true;
+    private boolean allMissionIsCompleted(Game game, Round round){
         for (int i = 0; i < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); i++) {
 
             if (!game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
-                allMissionIsCompleted = false;
+                return false;
             }
 
         }
+        return true;
+    }
 
-        //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
-        if (allMissionIsCompleted) {
+
+    private boolean canCompletePath(Game game,Round round){
+        //TODO contenu du for
+        //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
+        for (int l = 0; l < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); l++) {
+
+            if(game.getRoutes().get(l).getProprietaire() == null) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+
+
+
+
+    @Override
+    public void play(Game game, CarteManager carteManager, Round round) {
+
+        //Fonction principale du bot fort
+
+
+        //1- On regarde si il a complété toute ses missions ou pas :
+        if (allMissionIsCompleted(game,round)) {
+            //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
 
             CarteDestination[] addCard = takeMissionsCard(6, carteManager, game);
             for (int j = 0; j < addCard.length; j++) {
@@ -90,10 +115,9 @@ public class StrongBot implements BotAction {
 
         } else {
 
-            //3- On regarde si il peut faire finir sa route avec les routes non prise
-            for (int l = 0; l < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); l++) {
+            //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
 
-                if (!true) {
+                if (! canCompletePath(game,round)) {
 
                             /*
                    -Si non:
@@ -167,15 +191,10 @@ public class StrongBot implements BotAction {
 
         }
 
-        /*        RESET POUR LE PROCHAIN JOUEUR       */
-
-        round.setEndTurn(true);
-        round.whosNext(game);
-
     }
 
 
 
-}
+
 
 

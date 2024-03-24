@@ -31,6 +31,7 @@ public class NormalBot implements BotAction{
 
     @Override
     public void endRound(Round round,Game game) {
+        //Fonction qui finit le tour du bot
         round.setEndTurn(true);
         round.whosNext(game);
     }

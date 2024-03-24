@@ -73,6 +73,7 @@ public class WeakBot implements BotAction{
 
     @Override
     public boolean takeGare(Game game, int wichStation, Round round) {
+        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares
         if(game.getVilles()[wichStation].getIsOccuped() == null && game.getListPlayer().get(round.getWhoIsPlaying()).getNbrGare() < 0){
 
             game.getVilles()[wichStation].setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
@@ -107,13 +108,14 @@ public class WeakBot implements BotAction{
 
     @Override
     public void endRound(Round round,Game game) {
+        //Fonction qui finit le tour du bot
         round.setEndTurn(true);
         round.whosNext(game);
     }
 
     @Override
     public void play(Game game, CarteManager carteManager, Round round) {
-        //L'ia pas tres maline
+        //Fonction principale du bot faible
 
         Random random = new Random();
         int whatToDo = random.nextInt(3);
@@ -169,11 +171,10 @@ public class WeakBot implements BotAction{
 
                 int wichStation = random.nextInt(game.getVilles().length);
 
-                //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares
-              if(takeGare(game,wichStation,round)){
+                if(takeGare(game,wichStation,round)){
                   endRound(round,game);
 
-              }
+                }
                 else{
                     play(game,carteManager,round);
                 }
