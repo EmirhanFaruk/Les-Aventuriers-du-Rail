@@ -17,7 +17,7 @@ public class Player {
 
 	private final String playerCouleur ;
 	private int nbrWagon ;
-	private int nbrGare ;
+	private int nbrGare ;//Le nombre de gare que le joueur peut poser
 
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
@@ -25,7 +25,8 @@ public class Player {
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 
-	public Player ( String playerCouleur , String name , int niveau ){
+
+	public Player ( String playerCouleur , String name , int niveau, CarteManager carteManager ){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
@@ -33,6 +34,15 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
+		initCarteWagon(carteManager);
+	}
+
+
+	public void initCarteWagon(CarteManager carteManager){
+		for(int i = 0; i< 5; i++){
+			this.trainList.add(carteManager.drawCard());
+
+		}
 	}
 
 	private int carteDuJoueur(Rail.Content color){

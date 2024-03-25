@@ -35,7 +35,7 @@ public class Game
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        this.listPlayer = initPlayers(player_names,player_types,player_colors);
+        this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
         distrubueCarte();
         initBoard();
         this.round = new Round();
@@ -93,13 +93,37 @@ public class Game
 
     }
 
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types,Color[] player_colors){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors,  CarteManager carteManager){
         ArrayList<Player> playerlist = new ArrayList<>();
-        Player p1 = new Player(colorToString(player_colors[0]),player_names[0],StringToNiveau(player_types[0]));
-        Player p2 = new Player(colorToString(player_colors[1]),player_names[1],StringToNiveau(player_types[1]));
-        Player p3 = new Player(colorToString(player_colors[2]),player_names[2],StringToNiveau(player_types[2]));
-        Player p4 = new Player(colorToString(player_colors[3]),player_names[3],StringToNiveau(player_types[3]));
-        playerlist.add(p1);playerlist.add(p2);playerlist.add(p3);playerlist.add(p4);
+
+        for(int i = 0; i< player_types.length;i++){
+
+            switch (player_types[i]){
+
+                case "PLAYER" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,carteManager));
+                    break;
+
+                case "WEAK" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,carteManager));
+                    break;
+
+                case "NORMAL" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,carteManager));
+                    break;
+
+                case "STRONG" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,carteManager));
+                    break;
+
+                default: break;
+
+            }
+
+
+
+        }
+
         return playerlist;
     }
 
@@ -109,18 +133,6 @@ public class Game
         if(c.equals(Color.green)) return "VERT";
         if(c.equals(Color.yellow)) return "JAUNE";
         return "Error";
-    }
-
-    private int StringToNiveau(String s){
-        if (s.equals("PLAYER")) return 0;
-        if (s.equals("CPU")) return 1; // pour l'instant en attendant une implémentation complète.
-        return -1;
-    }
-
-    public void  dinumueCarte(){
-        for ( Player p : listPlayer ){
-            p.setNbrWagon( p.getNbrWagon() - 1 );
-        }
     }
 
 
@@ -148,7 +160,7 @@ public class Game
 
     public void updateGame( double deltaTime ) {
         //game loop
-        if (round.roundFinished()) {
+        if (!round.roundFinished()) {
 
             round.round(this, cm, deltaTime);
 
