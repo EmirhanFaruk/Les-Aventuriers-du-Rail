@@ -85,14 +85,20 @@ public class Node
     /**
      * Gets possible neighbor nodes.
      * @param player if a route is already owned by player, its cost is 0
+     * @param owned true if checking for only owned routes
      */
-    private void getNeighbors(Player player)
+    private void getNeighbors(Player player, boolean owned)
     {
         neighbors = new ArrayList<>();
 
         for (Route route : ville.getRoutes())
         {
-            if(route.getProprietaire() == player || route.getProprietaire() == null)
+            boolean available = route.getProprietaire() == player;
+            if (!owned)
+            {
+                available = available || route.getProprietaire() == null;
+            }
+            if(available)
             {
                 Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
                 for (Ville routeVille : villes)
@@ -123,19 +129,31 @@ public class Node
     /**
      * Finds lowest cost node of the list.
      * @param list the said list
+     * @param lowest true to find the lowest cost, false to find the highest
      * @return the lowest cost node
      */
-    private static Node findLowestCost(ArrayList<Node> list)
+    private static Node findLowestCost(ArrayList<Node> list, boolean lowest)
     {
         // Self-explanatory name
         // We are sure that the list is not empty
         Node res = list.get(0);
         for (Node n : list)
         {
-            if(res.g > n.g)
+            if (lowest)
             {
-                res = n;
+                if(res.g > n.g)
+                {
+                    res = n;
+                }
             }
+            else
+            {
+                if(res.g < n.g)
+                {
+                    res = n;
+                }
+            }
+
         }
         return res;
     }
@@ -203,9 +221,10 @@ public class Node
      * @param s the start ville
      * @param e the target ville
      * @param player the player for the routes
+     * @param shortest true to find the shortest path, false to find the longest owned
      * @return the node containing a path from end to start with its one way chained parents
      */
-    private static Node aStar(Ville s, Ville e, Player player)
+    private static Node aStar(Ville s, Ville e, Player player, boolean shortest)
     {
         Node start = new Node(s, null);
         Node end = new Node(e, null);
@@ -220,7 +239,8 @@ public class Node
         while(!openList.isEmpty())
         {
             // Get lowest cost node and use that node to proceed
-            Node current = Node.findLowestCost(openList);
+            Node current = Node.findLowestCost(openList, shortest);
+
             // Remove it from the open list because now it's closed
             openList.remove(current);
             // End algo if arrived to the end
@@ -230,7 +250,7 @@ public class Node
             }
 
             // Get neightbors, update total cost and add to the closed list
-            current.getNeighbors(player);
+            current.getNeighbors(player, !shortest);
             current.calculateTotal(e);
             addListDistinctive(closedList, current);
 
@@ -254,7 +274,7 @@ public class Node
                 // If not in closedList, we can check if we can add it
                 if(!flag)
                 {
-                    neighbor.getNeighbors(player);
+                    neighbor.getNeighbors(player, !shortest);
                     // If already in open and new path shorter,
                     // update the one in the list and do not add it again
                     Node checker = Node.sameIn(openList, neighbor);
@@ -273,6 +293,8 @@ public class Node
             }
         }
 
+        // If the open list has no more elements,
+        // it means it's impossible to reach the target node
         return null;
     }
 
@@ -287,7 +309,7 @@ public class Node
     {
         ArrayList<Ville> res = new ArrayList<>();
 
-        Node resNode = aStar(ville1, ville2, null);
+        Node resNode = aStar(ville1, ville2, null, true);
 
         while(resNode != null)
         {
@@ -316,7 +338,7 @@ public class Node
 
         ArrayList<Ville> res = new ArrayList<>();
 
-        Node resNode = aStar(ville1, ville2, player);
+        Node resNode = aStar(ville1, ville2, player, true);
 
         while(resNode != null)
         {
@@ -333,9 +355,17 @@ public class Node
      * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
      * @return the villes to get to in order to get the longest owned path
      */
-    private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player propriataire)
+    private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player player)
     {
         ArrayList<Ville> res = new ArrayList<>();
+
+        Node resNode = aStar(ville1, ville2, player, false);
+
+        while(resNode != null)
+        {
+            res.add(0, resNode.ville);
+            resNode = resNode.parent;
+        }
 
         return res;
     }

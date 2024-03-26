@@ -47,7 +47,7 @@ public class Plateau {
 
         // Mettre toutes les rails(oui je sais il est ecrit double rail rails)
         putDRRails(game.getRoutes(), res);
-        
+
 
         return res;
     }
