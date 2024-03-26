@@ -1,5 +1,6 @@
 package com.model.config;
 import com.model.Game;
+import com.model.ai.Node;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -32,12 +33,11 @@ public class Plateau {
         if (reader == null) { return null; }
 
         // Reading from the file
-        game.setVilles(new Ville[15]);
         String[][] stville = new String[15][];
         readFile(reader, stville);
 
         // Produire les villes
-        produireVilles(game.getVilles(), stville, res);
+        game.setVilles(produireVilles(stville, res));
 
         // Produire routes
         game.setRoutes(produireRoutes(game.getVilles(), stville));
@@ -47,7 +47,7 @@ public class Plateau {
 
         // Mettre toutes les rails(oui je sais il est ecrit double rail rails)
         putDRRails(game.getRoutes(), res);
-
+        
 
         return res;
     }
@@ -198,21 +198,23 @@ public class Plateau {
 
     /**
      * Produire des villes depuis stville data et sauvegarde les dans plateau et villes
-     * @param villes la liste a sauvegarder
      * @param stville la liste de la liste a lire
      * @param plateau le plateau a sauvegarder
      */
-    private static void produireVilles(Ville[] villes, String[][] stville, Plateau plateau)
+    private static ArrayList<Ville> produireVilles(String[][] stville, Plateau plateau)
     {
-        for (int i = 0; i < villes.length; i++)
+        ArrayList<Ville> res = new ArrayList<>();
+        for (int i = 0; i < stville.length; i++)
         {
             // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]); //CHECK
             String nom = stville[i][1];
-            villes[i] = new Ville(x, y, nom);
-            plateau.plateau[x][y] = new Ville(x, y, nom);
+            Ville ville = new Ville(x, y, nom);
+            res.add(ville);
+            plateau.plateau[x][y] = ville;
         }
+        return res;
     }
 
     /**
@@ -221,7 +223,7 @@ public class Plateau {
      * @param stville la liste de la liste a lire
      * @return la liste des routes produits depuis stville
      */
-    private static ArrayList<Route> produireRoutes(Ville[] villes, String[][] stville)
+    private static ArrayList<Route> produireRoutes(ArrayList<Ville> villes, String[][] stville)
     {
         ArrayList<Route> res = new ArrayList<>();
 
@@ -240,8 +242,8 @@ public class Plateau {
                     int nvil1 = Integer.parseInt(villet[0]);
                     int nvil2 = Integer.parseInt(villet[i]);
                     // Avoir les villes pour sauvegarder dans la route
-                    Ville ville1 = villes[nvil1 - 1];
-                    Ville ville2 = villes[nvil2 - 1];
+                    Ville ville1 = villes.get(nvil1 - 1);
+                    Ville ville2 = villes.get(nvil2 - 1);
                     // Garder les infos necessaires pour la route
                     int longueur = Integer.parseInt(villet[i + 2]);
                     Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
@@ -354,6 +356,13 @@ public class Plateau {
                         {
                             route.setCousin(temp);
                             temp.setCousin(route);
+                            // On ajoute longueur si la route est diagonale et double
+                            int angle = getAngle(route.getVille1(), route.getVille2());
+                            if (angle == 1 || angle == 3)
+                            {
+                                route.setLongueur(route.getLongueur() + 1);
+                                temp.setLongueur(temp.getLongueur() + 1);
+                            }
                         }
                     }
                 }

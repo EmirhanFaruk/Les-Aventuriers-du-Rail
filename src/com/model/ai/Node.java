@@ -92,25 +92,28 @@ public class Node
 
         for (Route route : ville.getRoutes())
         {
-            Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
-            for (Ville routeVille : villes)
+            if(route.getProprietaire() == player || route.getProprietaire() == null)
             {
-                if(routeVille != ville)
+                Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
+                for (Ville routeVille : villes)
                 {
-                    Node node = new Node(routeVille, this);
-                    node.g = this.g + route.getLongueur();
-                    // If owned by player, cost stays the same
-                    if (player != null)
+                    if (routeVille != ville)
                     {
-                        if (routeVille.getIsOccuped() == player)
+                        Node node = new Node(routeVille, this);
+                        node.g = this.g + route.getLongueur();
+                        // If owned by player, cost stays the same
+                        if (player != null)
                         {
-                            node.g = this.g;
+                            if (routeVille.getIsOccuped() == player)
+                            {
+                                node.g = this.g;
+                            }
                         }
-                    }
 
-                    if(!Node.same(this, node))
-                    {
-                        neighbors.add(node);
+                        if (!Node.same(this, node))
+                        {
+                            neighbors.add(node);
+                        }
                     }
                 }
             }
@@ -216,20 +219,29 @@ public class Node
 
         while(!openList.isEmpty())
         {
+            // Get lowest cost node and use that node to proceed
             Node current = Node.findLowestCost(openList);
+            // Remove it from the open list because now it's closed
             openList.remove(current);
+            // End algo if arrived to the end
             if(Node.same(current, end))
             {
                 return current;
             }
 
+            // Get neightbors, update total cost and add to the closed list
             current.getNeighbors(player);
             current.calculateTotal(e);
             addListDistinctive(closedList, current);
 
+            // For each neighbor, we will try to add the possible ones to the open list
+            // so we can proceed with these
             for(Node neighbor : current.neighbors)
             {
+                // Calculate total cost
                 neighbor.calculateTotal(e);
+
+                // See if this neighbor is in closedList
                 boolean flag = false;
                 for(Node c : closedList)
                 {
@@ -239,24 +251,22 @@ public class Node
                     }
                 }
 
+                // If not in closedList, we can check if we can add it
                 if(!flag)
                 {
                     neighbor.getNeighbors(player);
-                    // if in open and new path shorter
+                    // If already in open and new path shorter,
+                    // update the one in the list and do not add it again
                     Node checker = Node.sameIn(openList, neighbor);
                     if((checker != null && neighbor.f < checker.f))
                     {
                         checker.f = neighbor.f;
                         checker.parent = current;
                     }
+                    // If it doesn't exist in the list,
+                    // Add it to the list
                     if(!exists(openList, neighbor))
                     {
-                        if(checker != null && neighbor.f < checker.f)
-                        {
-                            checker.f = neighbor.f;
-                            checker.parent = current;
-                        }
-                        neighbor.calculateTotal(e);
                         openList.add(neighbor);
                     }
                 }
@@ -321,7 +331,7 @@ public class Node
 
     /**
      * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
-     * @return
+     * @return the villes to get to in order to get the longest owned path
      */
     private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player propriataire)
     {

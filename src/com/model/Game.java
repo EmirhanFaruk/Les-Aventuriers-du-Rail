@@ -20,7 +20,7 @@ public class Game
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
     private Player joueurCourant;
-    private Ville[] villes;
+    private ArrayList<Ville> villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
     private Round round;
@@ -48,11 +48,11 @@ public class Game
         return plateau;
     }
 
-    public Ville[] getVilles() {
+    public ArrayList<Ville> getVilles() {
         return villes;
     }
 
-    public void setVilles(Ville[] villes) { this.villes = villes; }
+    public void setVilles(ArrayList<Ville> villes) { this.villes = villes; }
 
     public ArrayList<Route> getRoutes() {
         return routes;

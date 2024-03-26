@@ -57,7 +57,7 @@ public class WeakBot implements BotAction{
         boolean toSetDownWagon = false;
 
         //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().length;i++){
+        for(int i = 0; i< game.getVilles().size(); i++){
 
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 
@@ -74,9 +74,9 @@ public class WeakBot implements BotAction{
     @Override
     public boolean takeGare(Game game, int wichStation, Round round) {
         //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares
-        if(game.getVilles()[wichStation].getIsOccuped() == null && game.getListPlayer().get(round.getWhoIsPlaying()).getNbrGare() < 0){
+        if(game.getVilles().get(wichStation).getIsOccuped() == null && game.getListPlayer().get(round.getWhoIsPlaying()).getNbrGare() < 0){
 
-            game.getVilles()[wichStation].setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
+            game.getVilles().get(wichStation).setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
 
             return true;
         }
@@ -173,7 +173,7 @@ public class WeakBot implements BotAction{
             default :
                 /*        POSER UNE GARE       */
 
-                int wichStation = random.nextInt(game.getVilles().length);
+                int wichStation = random.nextInt(game.getVilles().size());
 
                 if(takeGare(game,wichStation,round)){
                   endRound(round,game);

@@ -129,11 +129,11 @@ public class CarteManager {
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
 
 
-        Ville v1 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
-        Ville v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+        Ville v1 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
+        Ville v2 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
 
         while (v1 == v2){
-            v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+            v2 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
 
         }
 
