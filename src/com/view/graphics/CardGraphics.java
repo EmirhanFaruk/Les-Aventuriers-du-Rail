@@ -12,8 +12,10 @@ import java.io.IOException;
 public class CardGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+    private static final BufferedImage CardInvisible = loadImage("CardCache.png");
     private static final BufferedImage CardObjectif = loadImage( "OjectifCard.png" ) ;
     private static final BufferedImage CardBack= loadImage( "CardWagonBack.png" ) ;
+    private static final BufferedImage CardCache = loadImage( "CardCache.png" ) ;
     private static final BufferedImage CardLocomotive = loadImage( "CardLocomotive.png" ) ;
     private static final BufferedImage CardBlue = loadImage( "CardWagonBlue.png" ) ;
     private static final BufferedImage CardBrown = loadImage( "CardWagonBrown.png" ) ;
@@ -94,9 +96,34 @@ public class CardGraphics {
 
             case ROUGE:
                 return CardRed;
-
         }
         return null ;
+    }
+    
+    public static BufferedImage getImageFromColor(CarteWagon.Couleur couleur){
+        // Utilisez ici la logique existante mais avec CarteWagon.Couleur
+        switch (couleur) {
+            case BLANC:
+                return CardWhite;
+            case VIOLET:
+                return CardViolet;
+            case MARRON:
+                return CardBrown;
+            case NOIRE:
+                return CardDark;
+            case JAUNE:
+                return CardYellow;
+            case VERT:
+                return CardGreen;
+            case LOC:
+                return CardLocomotive;
+            case BLEU:
+                return CardBlue;
+            case ROUGE:
+                return CardRed;
+            default:
+                return null; // Ajoutez une gestion d'erreur ou une valeur par défaut si nécessaire
+        }
     }
 
     /**
@@ -107,6 +134,10 @@ public class CardGraphics {
     public static void paint (Graphics2D g  , CarteWagon carteWagon){
         BufferedImage image = getImage( carteWagon ) ;
         g.drawImage( image , width , height , null) ;
+    }
+    
+    public static BufferedImage getCardCache() {
+    	return CardInvisible;
     }
 
     /*

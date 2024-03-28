@@ -21,7 +21,7 @@ public class PlayerHandPanel extends JPanel {
 
         drawPlayerHand = new DrawPlayerHand( player , height ) ;
 
-        scrollPane = new JScrollPane(drawPlayerHand);
+        scrollPane = new JScrollPane(this.drawPlayerHand);
         scrollPane.setPreferredSize(new Dimension( width , height ));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -32,23 +32,29 @@ public class PlayerHandPanel extends JPanel {
 
     public void setPlayer(Player player) {
         this.player = player;
-        if (drawPlayerHand != null) {
-            drawPlayerHand.setPlayer(player);
+        if (this.drawPlayerHand != null) {
+            this.drawPlayerHand.setPlayer(player);
             scrollPane.revalidate();
         }
 
+    }
+    
+    public DrawPlayerHand getDrawPlayerHand() {
+    	return this.drawPlayerHand;
     }
 
     class DrawPlayerHand extends JPanel {
         Player player ;
         int height ;
         int width ;
+        
         DrawPlayerHand ( Player player  , int height ){
             this.player = player ;
             this.height = height ;
             this.width = 0;
             setBackground(Color.orange);
         }
+        
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;

@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.Node;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
@@ -36,7 +37,6 @@ public class Game
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
-        distrubueCarte();
         initBoard();
         this.round = new Round();
     }
@@ -85,7 +85,7 @@ public class Game
         // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
         for (int i = 0; i < listPlayer.size(); i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 5; j++)
             {
                 listPlayer.get(i).piocher(cm);
             }
@@ -148,22 +148,13 @@ public class Game
         }
         return false ;
     }
-
-
-    public void distrubueCarte (){
-        for (Player p : listPlayer ){
-            for ( int i = 0 ; i < 500 ; i++){
-                p.getTrainCard().add(this.cm.drawCard()) ;
-            }
-        }
-    }
+    
 
     public void updateGame( double deltaTime ) {
         //game loop
         if (!round.roundFinished()) {
 
             round.round(this, cm, deltaTime);
-
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
@@ -172,8 +163,4 @@ public class Game
         }
     }
 
-
-	public void setJoueurCourant(Player joueurCourant) {
-		this.joueurCourant = joueurCourant;
-	}
 }

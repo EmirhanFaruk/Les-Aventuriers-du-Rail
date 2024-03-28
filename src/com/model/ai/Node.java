@@ -1,6 +1,7 @@
 package com.model.ai;
 
 import com.model.Player;
+import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteManager;
@@ -396,7 +397,7 @@ public class Node
         }
     }
     
-    public static void printWays(ArrayList<Ville> villes)
+    public static void printWays(ArrayList<Ville> villes, Player player)
     {
         for (int i = 0; i < villes.size(); i++)
         {
@@ -406,7 +407,7 @@ public class Node
                 {
                     Ville v1 = villes.get(i);
                     Ville v2 = villes.get(j);
-                    ArrayList<Ville> way = Node.findLongestPath(v1, v2, new Player("ROUGE", "Bruh", 0, new CarteManager()));
+                    ArrayList<Ville> way = Node.findLongestPath(v1, v2, player);
                     Node.printWay(way);
                 }
             }
