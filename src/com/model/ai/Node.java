@@ -1,7 +1,6 @@
 package com.model.ai;
 
 import com.model.Player;
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 
@@ -14,7 +13,7 @@ public class Node
 {
     private Node parent;
 
-    private Ville ville;
+    private final Ville ville;
 
     private ArrayList<Node> neighbors;
 
@@ -85,7 +84,7 @@ public class Node
     /**
      * Gets possible neighbor nodes.
      * @param player if a route is already owned by player, its cost is 0
-     * @param owned true if checking for only owned routes
+     * @param owned true if checking for only owned routes, false if also routes with no owners
      */
     private void getNeighbors(Player player, boolean owned)
     {
