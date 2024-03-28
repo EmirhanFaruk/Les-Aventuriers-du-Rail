@@ -475,7 +475,12 @@ public class Play extends JPanel
 
                         if(!differentcolors()){
                             JOptionPane.showMessageDialog(this,"Veuillez choisir des couleurs différentes !","Warning",JOptionPane.WARNING_MESSAGE);
-                        }else{
+                        }
+                        else if(verifSupTwoPlayer(player_type_list)){
+                            JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Manque de Joueur",JOptionPane.WARNING_MESSAGE);
+
+                        }
+                        else{
                         frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
                     }
                     });
@@ -505,6 +510,17 @@ public class Play extends JPanel
         res.add(makePlayButton(), BorderLayout.SOUTH);
 
         return res;
+    }
+
+
+    private boolean verifSupTwoPlayer(String[] listeJoueur){
+        int compteur = 0;
+        for(int i = 0; i< listeJoueur.length;i++){
+            if(listeJoueur[i] == "NONE"){
+                compteur ++;
+            }
+        }
+        return compteur > 2;
     }
 
 }
