@@ -3,6 +3,7 @@ package com.model.ai;
 import com.model.Player;
 import com.model.config.Route;
 import com.model.config.Ville;
+import com.model.config.carte.CarteManager;
 
 import java.util.ArrayList;
 
@@ -375,7 +376,7 @@ public class Node
         if(!villes.isEmpty())
         {
             System.out.println("\n\n===========================================================\n\n");
-            System.out.println("The shortest way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
+            System.out.println("The way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
             for (int i = 0; i < villes.size(); i++)
             {
                 System.out.print(villes.get(i).getNom());
@@ -391,6 +392,23 @@ public class Node
                     }
                 }
                 System.out.println();
+            }
+        }
+    }
+    
+    public static void printWays(ArrayList<Ville> villes)
+    {
+        for (int i = 0; i < villes.size(); i++)
+        {
+            for (int j = 0; j < villes.size(); j++)
+            {
+                if (i != j)
+                {
+                    Ville v1 = villes.get(i);
+                    Ville v2 = villes.get(j);
+                    ArrayList<Ville> way = Node.findLongestPath(v1, v2, new Player("ROUGE", "Bruh", 0, new CarteManager()));
+                    Node.printWay(way);
+                }
             }
         }
     }

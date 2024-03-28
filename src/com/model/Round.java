@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.Node;
 import com.model.bot.BotAction;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
@@ -102,6 +103,7 @@ public class Round {
             {
                 whosNext(game);
                 betweenRoundTimer = betweenRoundTimerMax;
+                //Node.printWays(game.getVilles());
             }
         }
         else

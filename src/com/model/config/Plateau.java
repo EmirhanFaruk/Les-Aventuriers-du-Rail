@@ -50,16 +50,6 @@ public class Plateau {
         // Mettre toutes les rails(oui je sais il est ecrit double rail rails)
         putDRRails(game.getRoutes(), res);
 
-        for (int i = 0; i < game.getVilles().size(); i++)
-        {
-            for (int j = 0; j < game.getVilles().size(); j++)
-            {
-                Ville v1 = game.getVilles().get(i);
-                Ville v2 = game.getVilles().get(j);
-                ArrayList<Ville> way = Node.findLongestPath(v1, v2, new Player("ROUGE", "Bruh", 0, new CarteManager()));
-                Node.printWay(way);
-            }
-        }
 
         return res;
     }
@@ -607,6 +597,9 @@ public class Plateau {
     {
         plateau = new Case[longueur][largeur];
     }
+
+
+
 
     /**
      * Obtient la largeur du plateau.
