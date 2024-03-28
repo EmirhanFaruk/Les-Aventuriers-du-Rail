@@ -77,9 +77,9 @@ public class MapGraphics {
     public void draw(Graphics2D g) {
     	if(aCase != null) {
     		if (aCase instanceof Ville ) {
-    			VilleGraphics.paint( g , ( Ville ) aCase );
+                VilleGraphics.paint(g, (Ville) aCase) ;
     		} else if (aCase instanceof Rail ) {
-    			if(((Rail) aCase).getOccuper() == true) {
+    			if(((Rail) aCase).getOccuper()) {
     				TrainGraphics.paint(g, (Rail) aCase);
     			}else {
     				RailGraphics.paint( g, (Rail) aCase );

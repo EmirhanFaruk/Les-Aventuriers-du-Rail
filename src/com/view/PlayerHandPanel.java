@@ -1,11 +1,16 @@
 package com.view;
 
 import com.model.Player;
+import com.model.config.Plateau;
 import com.model.config.carte.CarteWagon;
+import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
+import com.view.graphics.MapGraphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -13,13 +18,18 @@ public class PlayerHandPanel extends JPanel {
     private Player player;
     private DrawPlayerHand drawPlayerHand ;
     private JScrollPane scrollPane;
+    private int imageWidth , imageHeight ;
+    private Plateau plateau ;
+    private MapScreen mapScreen ;
 
-    public PlayerHandPanel( Player currentPlayer , int width , int height ) {
+    public PlayerHandPanel(Player currentPlayer , GameController gameController, Plateau plateau , int width , int height , MapScreen mapScreen ) {
         setPlayer(currentPlayer);
         setBackground(Color.orange);
         setPreferredSize(new Dimension( width, height ));
 
-        drawPlayerHand = new DrawPlayerHand( player , height ) ;
+        drawPlayerHand = new DrawPlayerHand( player , height  , gameController) ;
+        this.plateau = plateau ;
+        this.mapScreen = mapScreen ;
 
         scrollPane = new JScrollPane(drawPlayerHand);
         scrollPane.setPreferredSize(new Dimension( width , height ));
@@ -36,19 +46,49 @@ public class PlayerHandPanel extends JPanel {
             drawPlayerHand.setPlayer(player);
             scrollPane.revalidate();
         }
-
     }
 
-    class DrawPlayerHand extends JPanel {
+    public DrawPlayerHand getDrawPlayerHand() {
+        return drawPlayerHand;
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
+    public MapScreen getMapScreen() {
+        return mapScreen;
+    }
+
+    public void setMapScreen(MapScreen mapScreen) {
+        this.mapScreen = mapScreen;
+    }
+
+
+    public class DrawPlayerHand extends JPanel {
         Player player ;
         int height ;
         int width ;
-        DrawPlayerHand ( Player player  , int height ){
-            this.player = player ;
-            this.height = height ;
+        int hFixe ;
+        private ArrayList< CarteWagon > listCardWagon ;
+        GameController gameController ;
+        DrawPlayerHand ( Player player  , int height , GameController gameController) {
+            this.player = player;
+            this.height = height;
             this.width = 0;
+            this.hFixe = 30 ;
+            this.gameController = gameController ;
+            this.listCardWagon = new ArrayList<>() ;
             setBackground(Color.orange);
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this , mapScreen );
+                    repaint();
+                }
+            });
         }
+
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
@@ -57,6 +97,7 @@ public class PlayerHandPanel extends JPanel {
                 setPreferredSize(new Dimension(width, height));
                 scrollPane.revalidate();
             }
+            repaint();
         }
 
         private void drawPlayerHand(Graphics2D g) {
@@ -64,16 +105,36 @@ public class PlayerHandPanel extends JPanel {
 
             while (i < this.player.getTrainCard().size()) {
                 CarteWagon.Couleur couleur = this.player.getTrainCard().get(i);
-                CarteWagon carteWagon = new CarteWagon(couleur);
+                CarteWagon carteWagon = new CarteWagon( couleur , x , hFixe );
+                listCardWagon.add( carteWagon ) ;
                 BufferedImage image = CardGraphics.getImage(carteWagon);
 
                 if (image != null) {
-                    g.drawImage(image, x, 30, null);
+                    g.drawImage(image, x , hFixe , null);
                     x += image.getWidth() + 10;
                     width = x;
+                    imageWidth = image.getWidth() ;
+                    imageHeight = image.getHeight() ;
                 }
                 i++;
             }
+        }
+
+        /**
+         * Une fonction qui renvoie la couleur de la carte clicker par le joueur
+         * @param x width
+         * @param y height
+         * @return la carte clicker
+         */
+        public CarteWagon CardClicked (int x , int y ){
+            for ( CarteWagon c : listCardWagon ){
+                int widthEndCard = c.getWidthInPanel() + imageWidth ;
+                int heightEndCard = c.getHeightInPanel() + imageHeight ;
+                if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard ){
+                    return c ;
+                }
+            }
+           return null ;
         }
 
         public void setPlayer(Player player) {

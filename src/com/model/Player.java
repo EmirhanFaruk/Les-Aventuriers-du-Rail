@@ -7,7 +7,9 @@ import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
+import com.view.graphics.VilleGraphics;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Player {

@@ -5,6 +5,8 @@ import com.model.Player;
 import com.model.config.Plateau;
 import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
+import com.view.MapScreen;
+import com.view.PlayerHandPanel;
 import com.view.graphics.VilleGraphics;
 
 import java.awt.event.KeyEvent;
@@ -13,6 +15,9 @@ import java.util.ArrayList;
 
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
+    private CarteWagon carteWagon ;
+    private CarteDestination carteDestination ;
+    private int Mx , My  ;
     
     public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Plateau plateau, Player joueurCourant) {
         // Obtention des coordonnées du clic de souris
@@ -22,27 +27,23 @@ public class GameController {
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
         Object clickedObject = plateau.getPlateau()[x][y];
         Rail r = null ;
-        Ville v = null ;
         if(clickedObject instanceof Rail)r = (Rail) clickedObject;
-        if ( clickedObject instanceof Ville ) v = ( Ville ) clickedObject ;
         System.out.println("x = " + x + " y = " + y);
         if(r!=null) {
         	System.out.println(clickedObject + " " + r.getInitialContent() + " " + r.getSaRoute());
         }else {
         	System.out.println(clickedObject);
         }
-        
 
         if (clickedObject != null) {
             // Traitement en fonction du type de l'objet cliqué
             if (clickedObject instanceof Rail) {
                 tenterAcquisitionRoute((Rail) clickedObject, plateau, joueurCourant);
             } else if ( clickedObject instanceof Ville ){
-                tenterDePoserUneGare( ( Ville ) clickedObject, joueurCourant  );
+                Mx = x ;
+                My = y ;
             } else if (clickedObject instanceof CarteDestination) {
                 // Pour une CarteDestination est cliquée
-            } else if (clickedObject instanceof CarteWagon) {
-                // Pour une CarteWagon est cliquée
             }
         }
     }
@@ -88,12 +89,26 @@ public class GameController {
         }
     }
 
+    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel , MapScreen mapScreen ){
+        CarteWagon source = playerHandPanel.getDrawPlayerHand().CardClicked( e.getX() , e.getY() );
+        if ( source != null ) {
+            // Si la source est une carte wagon
+            this.carteWagon = source;
+            try {
+                Ville ville = (Ville) playerHandPanel.getPlateau().getPlateau()[Mx][My];
+                tenterDePoserUneGare( ville , player );
+                mapScreen.repaintAll(playerHandPanel);
+            } catch ( Exception exception ){
+                System.err.println( "D'abord selectionner une ville" ) ;
+            }
+
+        }
+    }
+
     public void tenterDePoserUneGare(Ville ville , Player player ){
-        /**
-         * TODO : ajouter un mouseListener sur les carte wagon pour savoir quelle couleur de carte il veut échanger contre une gare
-         */
-        CarteWagon.Couleur couleur = CarteWagon.Couleur.BLEU ;
-        player.transformerEnGare( ville , couleur ) ;
+        player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
 
     }
+
+
 }
