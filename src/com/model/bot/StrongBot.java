@@ -1,8 +1,10 @@
 package com.model.bot;
 
 import com.model.Game;
+import com.model.Player;
 import com.model.Round;
 import com.model.ai.Node;
+import com.model.config.Rail;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
@@ -13,11 +15,63 @@ import java.util.ArrayList;
 public class StrongBot implements BotAction {
     @Override
     public void drawCardWagon(Round round,CarteManager carteManager, Game game) {
+        //-Si il manque une carte:
+        if (true) {
+
+            // 8- On prends la couleur manquante sur le tas de carte visible et on tire aléatoirement dans la pioche invisible
+            if (true) {
+
+
+
+                //9- Si on peut pas, on prends une carte locomotive sur le tas de carte visible
+            } else if(){
+
+
+
+                //10- Sinon on pioche 2 cartes dans la pioche invisible
+            } else{
+
+                joueur.piocher();
+
+
+            }
+
+
+        } else {
+
+            //Sinon on pioche 2 cartes aléatoire
+
+
+        }
 
     }
 
-    public Route takeRail(ArrayList<Ville> villes){
+    public Route takeRailAux(ArrayList<Ville> villes, Round round, Game game){
         //Fonction qui retourne la premiere route que le joueur peut completer dans la liste
+        for(int i = 1; i< villes.size() ;i++){
+
+            //Variable qui represente les villes
+            Ville ville1 = villes.get(i);
+            Ville ville2 = villes.get(i-1);
+
+            //On parcours la liste de route de la ville1 pour trouver celle qui relie a la ville2
+            for(int y = 0; i< ville1.getRoutes().size();y++){
+
+                //Variable qui represente la route obtenu dans la liste de route de ville1
+                Route route = ville1.getRoutes().get(y);
+
+                //On verifie que c'est bien la route demandé
+                if(route.links(ville1,ville2)){
+
+                   return route;
+
+                }
+
+            }
+
+        }
+        return null;
+
     }
     @Override
     public boolean takeRail(Game game, Round round) {
@@ -26,7 +80,7 @@ public class StrongBot implements BotAction {
         for(int i =0; i<destination.size();i++){
             ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-            Route toAdd = takeRail(ville);
+            Route toAdd = takeRailAux(ville,round,game);
 
             //On regarde si la route est null ou pas, si non alors on prends la route
             if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
@@ -124,6 +178,8 @@ public class StrongBot implements BotAction {
     public void play(Game game, CarteManager carteManager, Round round) {
         //Fonction principale du bot fort
 
+        //Variable du joueur
+        Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
 
         //1- On regarde si il a complété toute ses missions ou pas :
         if (allMissionIsCompleted(game,round)) {
@@ -134,10 +190,8 @@ public class StrongBot implements BotAction {
                 game.getListPlayer().get(round.getAction()).getDestinationsList().add(addCard[j]);
             }
 
-
-        } else {
-
             //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
+        } else {
 
                 //Si non:
                 if (! canCompletePath(game,round)) {
@@ -162,40 +216,15 @@ public class StrongBot implements BotAction {
                     //6- On pose les wagons
                     if (takeRail(game,round)) {
 
+                        round.endRound(game);
 
+
+                        //Sinon :  7- On pioche :
                     } else {
 
-                        // -Sinon :  7- On pioche :
-                        if (true) {
-                            //-Si il manque une carte:
+                        drawCardWagon(round,carteManager,game);
 
-                            if (true) {
-
-                                if (true) {
-                                    // 8- On prends la couleur manquante sur le tas de carte visible et on tire aléatoirement dans la pioche invisible
-
-
-                                } else {
-
-                                    //9- Si on peut pas, on prends une carte locomotive sur le tas de carte visible
-                                }
-
-                            } else {
-                                //10- Sinon on pioche 2 cartes dans la pioche invisible
-
-                            }
-
-
-                        } else {
-
-                            if (true) {
-                                //  11- On choisit toute les couleurs qu'on a besoin de prendre sur le tas de carte visible (en fonction de la route qu'on veut compléter en priorité)
-
-                            } else {
-                                //Sinon on pioche 2 cartes aléatoire
-
-
-                            }
+                        round.endRound(game);
 
                         }
 
