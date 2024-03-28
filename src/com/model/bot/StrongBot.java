@@ -59,12 +59,7 @@ public class StrongBot implements BotAction {
 
     }
 
-    @Override
-    public void endRound(Round round,Game game) {
-        //Fonction qui finit le tour du bot
-        round.setEndTurn(true);
-        round.whosNext(game);
-    }
+
 
 
     private boolean allMissionIsCompleted(Game game, Round round){
@@ -80,7 +75,7 @@ public class StrongBot implements BotAction {
 
 
     private boolean canCompletePath(Game game,Round round){
-        //TODO contenu du for
+        //TODO contenu du if
         //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
         for (int l = 0; l < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); l++) {
 
@@ -145,7 +140,6 @@ public class StrongBot implements BotAction {
                     } else {
 
                         // -Sinon :  7- On pioche :
-
                         if (true) {
                             //-Si il manque une carte:
 

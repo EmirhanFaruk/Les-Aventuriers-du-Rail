@@ -35,10 +35,6 @@ public class Round {
         this.action = action;
     }
 
-    public void setWhoIsPlaying(int whoIsPlaying) {
-        this.whoIsPlaying = whoIsPlaying;
-    }
-
     public void setEndTurn(boolean endTurn) {
         this.endTurn = endTurn;
     }
@@ -54,7 +50,11 @@ public class Round {
         return this.endTurn;
     }
 
-
+    public void endRound(Game game) {
+        //Fonction qui finit le tour du bot
+        setEndTurn(true);
+        whosNext(game);
+    }
     public void whosNext(Game game){
         //Passer au prochain joueur
 
@@ -71,13 +71,6 @@ public class Round {
         }
 
     }
-
-
-
-
-
-
-
 
 
 

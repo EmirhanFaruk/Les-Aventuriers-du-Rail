@@ -29,12 +29,6 @@ public class NormalBot implements BotAction{
     return new CarteDestination[5];
     }
 
-    @Override
-    public void endRound(Round round,Game game) {
-        //Fonction qui finit le tour du bot
-        round.setEndTurn(true);
-        round.whosNext(game);
-    }
 
     @Override
     public void play(Game game, CarteManager carteManager, Round round) {
