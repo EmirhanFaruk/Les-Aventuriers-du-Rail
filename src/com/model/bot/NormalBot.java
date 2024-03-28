@@ -25,7 +25,7 @@ public class NormalBot implements BotAction{
         boolean toSetDownWagon = false;
 
         //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().length;i++){
+        for(int i = 0; i< game.getVilles().size();i++){
 
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 

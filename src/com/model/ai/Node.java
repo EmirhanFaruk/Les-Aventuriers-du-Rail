@@ -354,7 +354,7 @@ public class Node
      * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
      * @return the villes to get to in order to get the longest owned path
      */
-    private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player player)
+    public static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player player)
     {
         ArrayList<Ville> res = new ArrayList<>();
 
