@@ -26,7 +26,7 @@ public class Player {
 	public Couleur couleur;
 
 
-	public Player ( String playerCouleur , String name , int niveau, CarteManager carteManager ){
+	public Player ( String playerCouleur , String name , int niveau){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;

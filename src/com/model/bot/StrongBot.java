@@ -2,6 +2,9 @@ package com.model.bot;
 
 import com.model.Game;
 import com.model.Round;
+import com.model.ai.Node;
+import com.model.config.Route;
+import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 
@@ -13,10 +16,28 @@ public class StrongBot implements BotAction {
 
     }
 
+    public Route takeRail(ArrayList<Ville> villes){
+        //Fonction qui retourne la premiere route que le joueur peut completer dans la liste
+    }
     @Override
     public boolean takeRail(Game game, Round round) {
+        //Fonction qui permet de poser prendre des routes, et renvie false si le bot n'a pas assez de carte
+        ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
+        for(int i =0; i<destination.size();i++){
+            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-        return true;
+            Route toAdd = takeRail(ville);
+
+            //On regarde si la route est null ou pas, si non alors on prends la route
+            if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
+                return true ;
+
+            }
+
+
+        }
+
+        return false;
     }
 
     @Override
@@ -75,14 +96,21 @@ public class StrongBot implements BotAction {
 
 
     private boolean canCompletePath(Game game,Round round){
-        //TODO contenu du if
-        //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
-        for (int l = 0; l < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); l++) {
+        //Variable qui donne la liste de destination
+        ArrayList<CarteDestination> destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
 
-            if(game.getRoutes().get(l).getProprietaire() == null) {
+        //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
+        for (int l = 0; l <destination.size(); l++) {
+
+            //Variable qui donne un chemins possible grace a une liste de ville
+            ArrayList<Ville> chemin = Node.findClosestPath(destination.get(l).getPremiereVille(),destination.get(l).getDeuxiemeVille());
+
+            //Si il y a une mission ou on peut remplir alors on la fait
+            if(game.getRoutes().get(l).getProprietaire() == null && !chemin.isEmpty()) {
                 return true;
             }
         }
+        //Si il n'y a pas de mission qui peut etre remplis
         return false;
 
     }
@@ -94,14 +122,13 @@ public class StrongBot implements BotAction {
 
     @Override
     public void play(Game game, CarteManager carteManager, Round round) {
-
         //Fonction principale du bot fort
 
 
         //1- On regarde si il a complété toute ses missions ou pas :
         if (allMissionIsCompleted(game,round)) {
-            //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
 
+            //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
             CarteDestination[] addCard = takeMissionsCard(6, carteManager, game);
             for (int j = 0; j < addCard.length; j++) {
                 game.getListPlayer().get(round.getAction()).getDestinationsList().add(addCard[j]);
@@ -112,10 +139,10 @@ public class StrongBot implements BotAction {
 
             //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
 
+                //Si non:
                 if (! canCompletePath(game,round)) {
 
                             /*
-                   -Si non:
 
                     4- On cherche l'endroit le plus optimale pour poser une gare :
 
@@ -128,13 +155,12 @@ public class StrongBot implements BotAction {
                                 Sinon :
                                     Completer les autres missions
              */
-                } else {
-                /*
-                        -Si on peut poser les wagons :
 
-                            6- On pose les wagons
-                 */
-                    if (true) {
+                    //Si oui
+                } else {
+
+                    //6- On pose les wagons
+                    if (takeRail(game,round)) {
 
 
                     } else {
