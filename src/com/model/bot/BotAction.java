@@ -10,6 +10,7 @@ public interface BotAction {
 
     //Piocher une/des cartes wagons visible
     abstract void drawCardWagon(Round round,CarteManager carteManager, Game game);
+
     //Prendre des rails
     abstract boolean takeRail(Game game,Round round);
 
@@ -18,9 +19,6 @@ public interface BotAction {
 
     //Prendre une/des cartes missions
     abstract CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game);
-
-    //Round fini
-    abstract void endRound(Round round,Game game);
 
     //La fonction principale du bot
     abstract void play(Game game, CarteManager carteManager, Round round);

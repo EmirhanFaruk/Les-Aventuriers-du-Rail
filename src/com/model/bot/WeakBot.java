@@ -107,18 +107,10 @@ public class WeakBot implements BotAction{
 
     }
 
-    @Override
-    public void endRound(Round round,Game game) {
-        //Fonction qui finit le tour du bot
-        round.setEndTurn(true);
-        round.whosNext(game);
-    }
 
     @Override
     public void play(Game game, CarteManager carteManager, Round round) {
         //Fonction principale du bot faible
-
-        System.out.println("faiefhaeipfhapifafbaifanfbaf");
 
         Random random = new Random();
         int whatToDo = random.nextInt(4);
@@ -131,7 +123,7 @@ public class WeakBot implements BotAction{
 
                 drawCardWagon(round,carteManager,game);
 
-                endRound(round,game);
+                round.endRound(game);
 
                 break;
 
@@ -147,7 +139,7 @@ public class WeakBot implements BotAction{
                     game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
                 }
 
-                endRound(round,game);
+                round.endRound(game);
 
                 break;
 
@@ -159,7 +151,7 @@ public class WeakBot implements BotAction{
                 //On regarde si les rails ont bien était posés
                 if(takeRail(game,round)){
 
-                    endRound(round,game);
+                    round.endRound(game);
 
                 }
                 else{
@@ -176,7 +168,7 @@ public class WeakBot implements BotAction{
                 int wichStation = random.nextInt(game.getVilles().length);
 
                 if(takeGare(game,wichStation,round)){
-                  endRound(round,game);
+                  round.endRound(game);
 
                 }
                 else{
