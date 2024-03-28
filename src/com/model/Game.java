@@ -19,7 +19,6 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
-    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -36,7 +35,6 @@ public class Game
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
-        distrubueCarte();
         initBoard();
         this.round = new Round();
     }
@@ -85,7 +83,7 @@ public class Game
         // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
         for (int i = 0; i < listPlayer.size(); i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 5; j++)
             {
                 listPlayer.get(i).piocher(cm);
             }
@@ -148,15 +146,7 @@ public class Game
         }
         return false ;
     }
-
-
-    public void distrubueCarte (){
-        for (Player p : listPlayer ){
-            for ( int i = 0 ; i < 500 ; i++){
-                p.getTrainCard().add(this.cm.drawCard()) ;
-            }
-        }
-    }
+    
 
     public void updateGame( double deltaTime ) {
         //game loop
@@ -172,8 +162,4 @@ public class Game
         }
     }
 
-
-	public void setJoueurCourant(Player joueurCourant) {
-		this.joueurCourant = joueurCourant;
-	}
 }

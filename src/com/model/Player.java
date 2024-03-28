@@ -34,41 +34,44 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
-		initCarteWagon(carteManager);
 	}
-
-
-	public void initCarteWagon(CarteManager carteManager){
-		for(int i = 0; i< 5; i++){
-			this.trainList.add(carteManager.drawCard());
-
-		}
-	}
-
-	private int carteDuJoueur(Rail.Content color){
+	
+	
+	private int carteDuJoueur(Route r){
 		int count = 0;
 
 		for(int i = 0; i < this.trainList.size(); i++) {
-			if(compatibleColor(color, this.trainList.get(i)))count++;
+			if(compatibleColor(r, this.trainList.get(i)))count++;
 		}
 
 		return count;
 	}
+	
+	public void piocheCarteInvisible() {
+		CarteManager cm = new CarteManager();
+		this.trainList.add(cm.drawCard());
+	}
+	
+	public void piocheCarteVisible(CarteWagon.Couleur carte) {
+		this.trainList.add(carte);
+	}
 
     private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    	int i = 0; 
     	setNbrWagon(this.nbrWagon - carteAEnlever);
-    	
-    	for(int i=0; i<this.trainList.size(); i++) {
-    		this.trainList.remove(i);
+		while(i < this.trainList.size() && 0 < carteAEnlever) {
+			this.trainList.remove(i);
+			carteAEnlever--;
+			i++;
     	}
     }
 
     public boolean mettreRoute(Route r) {
     	if(r != null) {
-    		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null) {
+    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null) {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
-                System.out.println("I AM THE CAPTAIN NOW (C'EST MA ROUTE)");
+                //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
                 return true;
             }
     	}
@@ -87,20 +90,17 @@ public class Player {
 		return false;
 	}
 
-	public boolean compatibleColor(Content content, Couleur couleur){
+	public boolean compatibleColor(Route r, Couleur couleur){
+		Rail.Content color = r.getCouleur();
+		Rail.Content color2 = r.getRailsRoute().get(0).getInitialContent();
+		
 		if(couleur == Couleur.LOC){
 			return true;
+		}else if(color2 == Rail.Content.JOKERETOILEE || color2 == Rail.Content.JOKER) {
+			return true;
 		}
-		
-		/*if(couleur == Couleur.LOC){
-			return true;
-		}else if(content.ordinal() == couleur.ordinal()) {
-			return true;
-		}else if(content == Content.JOKER) {
-			return true;
-		}*/
 
-		return content.ordinal() == couleur.ordinal();
+		return color.ordinal() == couleur.ordinal();
 	}
 
 
