@@ -108,7 +108,7 @@ public class PlayerHandPanel extends JPanel {
 
         private void drawPlayerHand(Graphics2D g) {
             int x = 30, i = 0;
-
+            listCardWagon = new ArrayList<>();
             while (i < this.player.getTrainCard().size()) {
                 CarteWagon.Couleur couleur = this.player.getTrainCard().get(i);
                 CarteWagon carteWagon = new CarteWagon( couleur , x , hFixe );
@@ -137,6 +137,7 @@ public class PlayerHandPanel extends JPanel {
                 int widthEndCard = c.getWidthInPanel() + imageWidth ;
                 int heightEndCard = c.getHeightInPanel() + imageHeight ;
                 if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard ){
+                    //DEBUG : System.err.println("La carte est de la couleur " + c.getInitialCouleur() );
                     return c ;
                 }
             }
