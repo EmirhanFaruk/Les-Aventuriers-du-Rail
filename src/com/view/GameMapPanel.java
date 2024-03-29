@@ -34,7 +34,7 @@ public class GameMapPanel extends JPanel {
         this.playerHandPanel = new PlayerHandPanel( player , gameController , plateau ,  width , (int) (height * 0.2) , null  ) ;
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , plateau, this.playerHandPanel , gameController ) ;
         this.playerHandPanel.setMapScreen(this.mapScreen);
-        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel);
+        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel , gameController );
         setLayout(new BorderLayout());
 
         add( mapScreen , BorderLayout.CENTER ) ;

@@ -61,11 +61,26 @@ public class Player {
     private void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
+		// Premiere boucle qui enlève juste la couleur color
 		while(i < this.trainList.size() && 0 < carteAEnlever) {
-			this.trainList.remove(i);
-			carteAEnlever--;
-			i++;
+			if ( trainList.get(i) == color ){
+				this.trainList.remove(i);
+				carteAEnlever--;
+			} else {
+				i++ ;
+			}
     	}
+		// Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
+		// si les carte de la couleur color est insuffissant
+		int j = 0 ;
+		while ( j < this.trainList.size() && 0 < carteAEnlever ){
+			if ( trainList.get(j) == Couleur.LOC) {
+				this.trainList.remove(j);
+				carteAEnlever--;
+			} else{
+				j++ ;
+			}
+		}
     }
 
     public boolean mettreRoute(Route r) {
@@ -90,7 +105,7 @@ public class Player {
 		if ( assezDeGare() ){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
 			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
-					retirerUnPionGare(couleurCarteChoisit , nbrCarteRetirer );
+					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
 					ville.setIsOccuped( this );
 					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
 			} else {
@@ -129,16 +144,17 @@ public class Player {
 	 * @param couleur Couleur de la carte
 	 * @param carteAEnlever le nombre de cartes à retirer
 	 */
-	private void retirerUnPionGare( Couleur couleur , int carteAEnlever) {
+	private void retirerCartePourGare( Couleur couleur , int carteAEnlever) {
 		setNbrGare( getNbrGare() -1 );
 		int restant = carteAEnlever ;
-		for ( int i = 0 ; i < trainList.size() ; i++ ){
-			if ( trainList.get(i) == couleur  ){
-				trainList.remove(i) ;
-				restant -- ;
-			}
-			if ( restant > 0 ){
-				break;
+		int i = 0;
+		while(i < this.trainList.size() && 0 < restant ) {
+			if ( trainList.get(i) == couleur ) {
+				//DEBUG : System.err.println("La couleur de la carte a enlever est : " + couleur );
+				this.trainList.remove(i);
+				restant-- ;
+			} else {
+				i++ ;
 			}
 		}
 	}

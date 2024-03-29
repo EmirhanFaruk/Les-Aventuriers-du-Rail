@@ -73,6 +73,7 @@ public class MapScreen extends JPanel {
     }
     
     public void repaintAll(PlayerHandPanel php) {
+        php.getDrawPlayerHand().repaint();
     	php.repaint();
     	this.repaint();
     }

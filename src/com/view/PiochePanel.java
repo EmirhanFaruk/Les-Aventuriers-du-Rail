@@ -18,7 +18,7 @@ import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 
 public class PiochePanel extends JPanel {
-    private GameController gameController = new GameController();
+    private GameController gameController ;
     private Player player;
     private Rectangle piocheHiddenBounds;
     private Rectangle[] piocheVisibleBounds; // Pour gérer plusieurs cartes visibles
@@ -26,11 +26,12 @@ public class PiochePanel extends JPanel {
     private PlayerHandPanel mainDuJoueur;
 
     
-    public PiochePanel(int width, int height, Player player, PlayerHandPanel playerHandPanel) {
+    public PiochePanel(int width, int height, Player player, PlayerHandPanel playerHandPanel ,  GameController gameController) {
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension((int) (width * 0.15), height));
         this.player = player;
         this.mainDuJoueur = playerHandPanel;
+        this.gameController = gameController ;
         
         // Initialisation des rectangles pour les cartes visibles
         imagePiocheVisible = new CarteWagon.Couleur[3]; 
@@ -92,6 +93,7 @@ public class PiochePanel extends JPanel {
                 if (piocheHiddenBounds.contains(e.getPoint())) {
                     gameController.piocherCarteInvisible(player);
                     mainDuJoueur.repaint();
+                    mainDuJoueur.getDrawPlayerHand().repaint();
                     repaint();
                 } else {
                     for (int i = 0; i < piocheVisibleBounds.length; i++) {
@@ -99,6 +101,7 @@ public class PiochePanel extends JPanel {
                             gameController.piocherCarteVisible(player, imagePiocheVisible[i]);
                             setupCard(i); // Actualiser la carte visible après l'avoir piochée
                             mainDuJoueur.repaint();
+                            mainDuJoueur.getDrawPlayerHand().repaint();
                             repaint();
                             break; // Quitte la boucle si une correspondance est trouvée
                         }
