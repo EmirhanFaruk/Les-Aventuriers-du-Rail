@@ -37,6 +37,13 @@ public class CarteDestination extends JPanel {
         this.complete = false;
     }
 
+    public CarteDestination(Ville v1,Ville v2,int nbpoint){
+        this.premiereVille = v1;
+        this.deuxiemeVille = v2;
+        this.nombrePoints = nbpoint;
+        this.complete = false;
+    }
+
 
 
 

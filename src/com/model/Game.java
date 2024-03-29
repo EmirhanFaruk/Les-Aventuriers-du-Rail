@@ -74,7 +74,8 @@ public class Game
         for(int i = 0; i< cm.getTrainCards().length; i++){
             cm.getTrainCards()[i] = cm.drawCard();
         }
-
+        cm.initPileCarteDestination(this);
+        cm.afficherCartesDestination();
         //Initialisation des cartes destination du premier tour du board que le joueur choisit
         for(int y = 0; y < cm.getDestinationsCards().length;y++){
             cm.getDestinationsCards()[y] = cm.getDestination(this);

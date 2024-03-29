@@ -5,8 +5,8 @@ import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteWagon.Couleur;
-
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.model.config.carte.CarteWagon.Couleur.*;
 
@@ -16,14 +16,57 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[5];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
+    //La pile de cartes Wagon
+    public ArrayList<CarteWagon> PileCarteWagon = new ArrayList<>(110);
+    //La pile de cartes Destination
+    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
 
     public CarteManager(){
         //Pour initialiser les wagons
-        for(int i = 0; i< trainCards.length;i++){
-            trainCards[i] = drawCard();
+        initPileCarteWagon();
 
-        }
     }
+
+
+    private void initPileCarteWagon() {
+        for(int i=0;i<8;i++){ //8 couleurs de carteWagon
+            for(int j=0;j<12;j++) //12 wagons de chaque couleur
+            PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+        }
+        for(int i =0;i<14;i++){
+            PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
+        }
+        Collections.shuffle(PileCarteWagon); // Mélange de cartes.
+    }
+
+    public void initPileCarteDestination(Game g) {
+        ArrayList<Route> gameRoutes = g.getRoutes();
+        for(Route r : gameRoutes){
+            PileCarteDestination.add(new CarteDestination(r)); //Les cartes destinations à courte distance (une route)
+        }
+        for(int i=0; i<21; i++){
+            int nbRoutes = 1;//ThreadLocalRandom.current().nextInt(1, 4);
+            Route depart = gameRoutes.get(i);
+            Ville v1 = depart.getVille1();
+            int nbpoint = depart.getLongueur();
+            for(int j=nbRoutes;j>0;j--){
+                depart = trouverUneCorrespondance(gameRoutes,depart);
+                nbpoint += depart.getLongueur();
+            }
+            Ville v2 = depart.getVille2();
+            PileCarteDestination.add(new CarteDestination(v1, v2, nbpoint));
+        }
+        //Collections.shuffle(PileCarteDestination);
+    }
+
+    private Route trouverUneCorrespondance(ArrayList<Route> gameRoutes, Route depart) {
+        for(Route r:gameRoutes){
+            if(r.getVille1()==depart.getVille2() ||r.getVille2()==depart.getVille2() && r != depart)
+                return r;
+        }
+        return null;
+    }
+
 
     public CarteDestination[] getDestinationsCards() {
         return destinationsCards;
@@ -149,6 +192,11 @@ public class CarteManager {
         return 2;
     }
 
+    public void afficherCartesDestination(){
+        for(CarteDestination c : PileCarteDestination){
+            System.out.println("V1: "+c.getPremiereVille().getNom()+" V2: "+c.getDeuxiemeVille().getNom()+" Points: "+c.getNombrePoints());
+        }
+    }
 
 
 
