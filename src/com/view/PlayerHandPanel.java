@@ -14,12 +14,16 @@ public class PlayerHandPanel extends JPanel {
     private DrawPlayerHand drawPlayerHand ;
     private JScrollPane scrollPane;
 
+    private int width , height ;
+
     public PlayerHandPanel( Player currentPlayer , int width , int height ) {
         setPlayer(currentPlayer);
         setBackground(Color.orange);
         setPreferredSize(new Dimension( width, height ));
 
         drawPlayerHand = new DrawPlayerHand( player , height ) ;
+        this.width = width ;
+        this.height = height ;
 
         scrollPane = new JScrollPane(this.drawPlayerHand);
         scrollPane.setPreferredSize(new Dimension( width , height ));
@@ -38,6 +42,13 @@ public class PlayerHandPanel extends JPanel {
         }
 
     }
+
+    public void repaintHand(){
+        this.drawPlayerHand.repaint();
+        scrollPane.revalidate(); // Forcer la mise en page à se rafraîchir
+        scrollPane.repaint();
+        this.repaint();
+    }
     
     public DrawPlayerHand getDrawPlayerHand() {
     	return this.drawPlayerHand;
@@ -54,14 +65,14 @@ public class PlayerHandPanel extends JPanel {
             this.width = 0;
             setBackground(Color.orange);
         }
-        
+
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             if (this.player != null) {
                 this.drawPlayerHand(g2d);
                 setPreferredSize(new Dimension(width, height));
-                scrollPane.revalidate();
+                getParent().revalidate(); // Appel à revalidate() sur le parent (JScrollPane)
             }
         }
 

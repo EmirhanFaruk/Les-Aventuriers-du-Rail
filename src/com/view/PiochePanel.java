@@ -91,14 +91,14 @@ public class PiochePanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if (piocheHiddenBounds.contains(e.getPoint())) {
                     gameController.piocherCarteInvisible(player);
-                    mainDuJoueur.repaint();
+                    mainDuJoueur.repaintHand();
                     repaint();
                 } else {
                     for (int i = 0; i < piocheVisibleBounds.length; i++) {
                         if (piocheVisibleBounds[i].contains(e.getPoint())) {
                             gameController.piocherCarteVisible(player, imagePiocheVisible[i]);
                             setupCard(i); // Actualiser la carte visible après l'avoir piochée
-                            mainDuJoueur.repaint();
+                            mainDuJoueur.repaintHand();
                             repaint();
                             break; // Quitte la boucle si une correspondance est trouvée
                         }
