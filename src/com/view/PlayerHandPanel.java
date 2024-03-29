@@ -5,7 +5,6 @@ import com.model.config.Plateau;
 import com.model.config.carte.CarteWagon;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
-import com.view.graphics.MapGraphics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +30,7 @@ public class PlayerHandPanel extends JPanel {
         this.plateau = plateau ;
         this.mapScreen = mapScreen ;
 
-        scrollPane = new JScrollPane(drawPlayerHand);
+        scrollPane = new JScrollPane(this.drawPlayerHand);
         scrollPane.setPreferredSize(new Dimension( width , height ));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -42,28 +41,23 @@ public class PlayerHandPanel extends JPanel {
 
     public void setPlayer(Player player) {
         this.player = player;
-        if (drawPlayerHand != null) {
-            drawPlayerHand.setPlayer(player);
+        if (this.drawPlayerHand != null) {
+            this.drawPlayerHand.setPlayer(player);
             scrollPane.revalidate();
         }
-    }
-
-    public DrawPlayerHand getDrawPlayerHand() {
-        return drawPlayerHand;
-    }
-
-    public Plateau getPlateau() {
-        return plateau;
-    }
-
-    public MapScreen getMapScreen() {
-        return mapScreen;
     }
 
     public void setMapScreen(MapScreen mapScreen) {
         this.mapScreen = mapScreen;
     }
 
+    public DrawPlayerHand getDrawPlayerHand() {
+        return this.drawPlayerHand;
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
 
     public class DrawPlayerHand extends JPanel {
         Player player ;
@@ -72,6 +66,7 @@ public class PlayerHandPanel extends JPanel {
         int hFixe ;
         private ArrayList< CarteWagon > listCardWagon ;
         GameController gameController ;
+
         DrawPlayerHand ( Player player  , int height , GameController gameController) {
             this.player = player;
             this.height = height;
@@ -88,7 +83,6 @@ public class PlayerHandPanel extends JPanel {
                 }
             });
         }
-
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;

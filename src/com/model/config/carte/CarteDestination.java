@@ -23,6 +23,9 @@ public class CarteDestination extends JPanel {
     public int getNombrePoints() {
         return nombrePoints;
     }
+    public boolean getComplete(){
+        return complete;
+    }
 
 
     //Pour les testes on va utiliser ce constructeur

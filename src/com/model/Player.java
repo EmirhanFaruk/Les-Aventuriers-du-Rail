@@ -5,6 +5,7 @@ import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
+import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.view.graphics.VilleGraphics;
@@ -18,14 +19,16 @@ public class Player {
 
 	private final String playerCouleur ;
 	private int nbrWagon ;
-	private int nbrGare ;
+	private int nbrGare ;//Le nombre de gare que le joueur peut poser
+
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 
-	public Player ( String playerCouleur , String name , int niveau ){
+
+	public Player ( String playerCouleur , String name , int niveau, CarteManager carteManager ){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
@@ -35,30 +38,42 @@ public class Player {
 		this.nbrGare = 3 ;
 	}
 
-	private int carteDuJoueur(Rail.Content color){
+
+	private int carteDuJoueur(Route r){
 		int count = 0;
 
 		for(int i = 0; i < this.trainList.size(); i++) {
-			if(compatibleColor(color, this.trainList.get(i)))count++;
+			if(compatibleColor(r, this.trainList.get(i)))count++;
 		}
 
 		return count;
 	}
 
+	public void piocheCarteInvisible() {
+		CarteManager cm = new CarteManager();
+		this.trainList.add(cm.drawCard());
+	}
+
+	public void piocheCarteVisible(CarteWagon.Couleur carte) {
+		this.trainList.add(carte);
+	}
+
     private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
-    	
-    	for(int i=0; i<this.trainList.size(); i++) {
-    		this.trainList.remove(i);
+		while(i < this.trainList.size() && 0 < carteAEnlever) {
+			this.trainList.remove(i);
+			carteAEnlever--;
+			i++;
     	}
     }
 
     public boolean mettreRoute(Route r) {
     	if(r != null) {
-    		if (r.getLongueur() <= this.carteDuJoueur(r.getCouleur()) && r.getProprietaire() == null) {
+    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null) {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
-                System.out.println("I AM THE CAPTAIN NOW (C'EST MA ROUTE)");
+                //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
                 return true;
             }
     	}
@@ -139,21 +154,25 @@ public class Player {
 		return false;
 	}
 
-	public boolean compatibleColor(Content content, Couleur couleur){
+	public boolean compatibleColor(Route r, Couleur couleur){
+		Rail.Content color = r.getCouleur();
+		Rail.Content color2 = r.getRailsRoute().get(0).getInitialContent();
+
 		if(couleur == Couleur.LOC){
 			return true;
+		}else if(color2 == Rail.Content.JOKERETOILEE || color2 == Rail.Content.JOKER) {
+			return true;
 		}
-		
-		/*if(couleur == Couleur.LOC){
-			return true;
-		}else if(content.ordinal() == couleur.ordinal()) {
-			return true;
-		}else if(content == Content.JOKER) {
-			return true;
-		}*/
 
-		return content.ordinal() == couleur.ordinal();
+		return color.ordinal() == couleur.ordinal();
 	}
+
+
+	public void piocher(CarteManager cm)
+	{
+		trainList.add(cm.drawCard());
+	}
+
 
 
 	public int scoreFinal(){

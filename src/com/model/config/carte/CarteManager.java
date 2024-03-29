@@ -49,7 +49,7 @@ public class CarteManager {
         }
     }
 
-    public CarteWagon.Couleur takeWagon(int position, int action){
+    public CarteWagon.Couleur takeWagon(int position){
         //Fonction qui prends une carte
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
@@ -61,18 +61,24 @@ public class CarteManager {
     public CarteDestination[] takeDestination(int[] position,Game game){
         CarteDestination [] renvoie = new CarteDestination[position.length];
         //Fonction qui prends prends une carte destination
+
         for(int i = 0; i<position.length;i++){
+
+
             renvoie[i] = destinationsCards[position[i]];
         }
         rerollDestination(game);
+
         return renvoie;
     }
 
     public void rerollDestination(Game game){
+
         //Fonction qui remets de nouvelles mission
 
         //On va remplacer chaque élément par une nouvelle destination
         for(int i = 0; i<destinationsCards.length;i++){
+
             destinationsCards[i] = getDestination(game);
 
         }
@@ -117,20 +123,22 @@ public class CarteManager {
     public CarteDestination getDestination(Game game){
         //Fonction qui choisit au hasard les déstinations
 
-        //On prends 2 Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random villeRANDOM = new Random(game.getVilles().length);
-        int ville1 = villeRANDOM.nextInt();
-        int ville2 = villeRANDOM.nextInt();
+        //On prend un Random qui donne un nombre qui représente la position dans le tableau des villes
+        Random villeRANDOM = new Random();
 
         //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
-        while(ville1 == ville2){
-            ville2 = villeRANDOM.nextInt();
+
+
+        Ville v1 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+        Ville v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+
+        while (v1 == v2){
+            v2 = game.getVilles()[villeRANDOM.nextInt(game.getVilles().length)];
+
         }
-        Ville v1 = game.getVilles()[ville1];
-        Ville v2 = game.getVilles()[ville2];
 
         //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        return  new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
+        return new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
 
 
     }
@@ -145,6 +153,5 @@ public class CarteManager {
 
 
 
-
-
+    
 }

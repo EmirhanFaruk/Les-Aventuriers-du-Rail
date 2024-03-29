@@ -19,7 +19,6 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
-    private Player joueurCourant;
     private Ville[] villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -35,8 +34,8 @@ public class Game
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        this.listPlayer = initPlayers(player_names,player_types,player_colors);
-        distrubueCarte();
+        this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
+        initBoard();
         this.round = new Round();
     }
 
@@ -53,7 +52,7 @@ public class Game
 
     public void setVilles(Ville[] villes) { this.villes = villes; }
 
-    public List<Route> getRoutes() {
+    public ArrayList<Route> getRoutes() {
         return routes;
     }
 
@@ -81,15 +80,48 @@ public class Game
             cm.getDestinationsCards()[y] = cm.getDestination(this);
         }
 
+        // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
+        for (int i = 0; i < listPlayer.size(); i++)
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                listPlayer.get(i).piocher(cm);
+            }
+        }
+
     }
 
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types,Color[] player_colors){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors,  CarteManager carteManager){
         ArrayList<Player> playerlist = new ArrayList<>();
-        Player p1 = new Player(colorToString(player_colors[0]),player_names[0],StringToNiveau(player_types[0]));
-        Player p2 = new Player(colorToString(player_colors[1]),player_names[1],StringToNiveau(player_types[1]));
-        Player p3 = new Player(colorToString(player_colors[2]),player_names[2],StringToNiveau(player_types[2]));
-        Player p4 = new Player(colorToString(player_colors[3]),player_names[3],StringToNiveau(player_types[3]));
-        playerlist.add(p1);playerlist.add(p2);playerlist.add(p3);playerlist.add(p4);
+
+        for(int i = 0; i< player_types.length;i++){
+
+            switch (player_types[i]){
+
+                case "PLAYER" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,carteManager));
+                    break;
+
+                case "WEAK" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,carteManager));
+                    break;
+
+                case "NORMAL" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,carteManager));
+                    break;
+
+                case "STRONG" :
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,carteManager));
+                    break;
+
+                default: break;
+
+            }
+
+
+
+        }
+
         return playerlist;
     }
 
@@ -99,18 +131,6 @@ public class Game
         if(c.equals(Color.green)) return "VERT";
         if(c.equals(Color.yellow)) return "JAUNE";
         return "Error";
-    }
-
-    private int StringToNiveau(String s){
-        if (s.equals("PLAYER")) return 0;
-        if (s.equals("CPU")) return 1; // pour l'instant en attendant une implémentation complète.
-        return -1;
-    }
-
-    public void  dinumueCarte(){
-        for ( Player p : listPlayer ){
-            p.setNbrWagon( p.getNbrWagon() - 1 );
-        }
     }
 
 
@@ -126,20 +146,13 @@ public class Game
         }
         return false ;
     }
+    
 
-    public void distrubueCarte (){
-        for (Player p : listPlayer ){
-            for ( int i = 0 ; i < 500 ; i++){
-                p.getTrainCard().add(this.cm.drawCard()) ;
-            }
-        }
-    }
-
-    public void updateGame( ) {
+    public void updateGame( double deltaTime ) {
         //game loop
-        if (round.roundFinished()) {
+        if (!round.roundFinished()) {
 
-            round.round(this, cm);
+            round.round(this, cm, deltaTime);
 
         }
 
@@ -149,8 +162,4 @@ public class Game
         }
     }
 
-
-	public void setJoueurCourant(Player joueurCourant) {
-		this.joueurCourant = joueurCourant;
-	}
 }

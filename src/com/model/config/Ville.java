@@ -2,6 +2,8 @@ package com.model.config;
 
 import com.model.Player;
 
+import java.util.ArrayList;
+
 /**
  * La classe Ville représente une case de type ville
  * Elle hérite de la classe Case et ajoute des fonctionnalités spécifiques
@@ -18,6 +20,11 @@ public class Ville extends Case {
      */
     private Player isOccuped = null;
 
+
+    private ArrayList<Route> routes;
+
+
+
     /**
      * Constructeur de la classe Ville.
      * @param x La position horizontale de la ville sur le plateau de jeu.
@@ -27,6 +34,7 @@ public class Ville extends Case {
     public Ville(int x, int y, String nom) {
         super(x, y);
         this.nom = nom;
+        routes = new ArrayList<>();
     }
 
     /**
@@ -60,6 +68,15 @@ public class Ville extends Case {
      */
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    /**
+     * Obtient la liste des routes concerné par cette ville
+     * @return la liste des routes concerné par cette ville
+     */
+    public ArrayList<Route> getRoutes()
+    {
+        return routes;
     }
 
 	@Override

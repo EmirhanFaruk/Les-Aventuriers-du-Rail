@@ -11,10 +11,12 @@ import java.io.IOException;
 public class MapGraphics {
     private Case aCase ;
     final int tileWidth , tileHeight ;
-
-    static int cmpVille , cmpRail = 0 ;
+    private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+
+    private final int[] listx = { -1 , 0 , 1 , 0 } ;
+    private final int[] listy = { 0 , 1 , 0 , -1 } ;
 
     /**
      * Constructeur de la classe MapGraphics
@@ -22,7 +24,8 @@ public class MapGraphics {
      * @param tileWidth width de l'image
      * @param tileHeight height de l'image
      */
-    public MapGraphics( Case c , int tileWidth , int tileHeight ){
+    public MapGraphics(  Plateau plateau, Case c , int tileWidth , int tileHeight ){
+        this.plateau = plateau ;
         this.aCase = c ;
         this.tileWidth = tileWidth ;
         this.tileHeight = tileHeight ;
@@ -77,7 +80,8 @@ public class MapGraphics {
     public void draw(Graphics2D g) {
     	if(aCase != null) {
     		if (aCase instanceof Ville ) {
-                VilleGraphics.paint(g, (Ville) aCase) ;
+    			VilleGraphics.paint( g , ( Ville ) aCase ) ;
+                putsNameVille( g , ( Ville) aCase );
     		} else if (aCase instanceof Rail ) {
     			if(((Rail) aCase).getOccuper()) {
     				TrainGraphics.paint(g, (Rail) aCase);
@@ -88,6 +92,20 @@ public class MapGraphics {
     	}
     }
 
+    public void putsNameVille( Graphics2D g , Ville ville){
+        int x = ville.getX() ;
+        int y = ville.getY() ;
+        for ( int i = 0  ; i < listx.length ; i++ ){
+            if ( x - listx[i] > -1  && y - listy[i] > -1 ){
+                x = x  - listx[i] ;
+                y = y  - listy[i] ;
+                if ( ! (this.plateau.getPlateau() [ x ][ y ] instanceof Rail ) ){
+                    g.drawString( ville.getNom() , x * tileWidth , y * tileHeight );
+                    break;
+                }
+            }
+        }
+    }
 
     /*
    getteurs et setteurs

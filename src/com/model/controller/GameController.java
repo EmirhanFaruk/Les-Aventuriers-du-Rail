@@ -1,13 +1,9 @@
 package com.model.controller;
-import com.model.config.Ville;
-import com.model.config.carte.CarteWagon;
+import com.model.config.carte.*;
+import com.model.config.carte.CarteWagon.Couleur;
 import com.model.Player;
-import com.model.config.Plateau;
-import com.model.config.Rail;
-import com.model.config.carte.CarteDestination;
-import com.view.MapScreen;
-import com.view.PlayerHandPanel;
-import com.view.graphics.VilleGraphics;
+import com.model.config.*;
+import com.view.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -18,7 +14,7 @@ public class GameController {
     private CarteWagon carteWagon ;
     private CarteDestination carteDestination ;
     private int Mx , My  ;
-    
+
     public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Plateau plateau, Player joueurCourant) {
         // Obtention des coordonnées du clic de souris
     	int x = e.getX() / tileWidth;
@@ -28,12 +24,17 @@ public class GameController {
         Object clickedObject = plateau.getPlateau()[x][y];
         Rail r = null ;
         if(clickedObject instanceof Rail)r = (Rail) clickedObject;
+
+        //DEBUG : POSITION
+        /*
         System.out.println("x = " + x + " y = " + y);
         if(r!=null) {
         	System.out.println(clickedObject + " " + r.getInitialContent() + " " + r.getSaRoute());
         }else {
         	System.out.println(clickedObject);
         }
+        }*/
+
 
         if (clickedObject != null) {
             // Traitement en fonction du type de l'objet cliqué
@@ -42,8 +43,6 @@ public class GameController {
             } else if ( clickedObject instanceof Ville ){
                 Mx = x ;
                 My = y ;
-            } else if (clickedObject instanceof CarteDestination) {
-                // Pour une CarteDestination est cliquée
             }
         }
     }
@@ -110,5 +109,12 @@ public class GameController {
 
     }
 
+    public void piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
+    	player.piocheCarteVisible(imagePiocheVisible);
+	}
 
+
+	public void piocherCarteInvisible(Player player) {
+		player.piocheCarteInvisible();
+	}
 }
