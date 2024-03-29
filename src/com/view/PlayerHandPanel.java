@@ -20,6 +20,7 @@ public class PlayerHandPanel extends JPanel {
     private int imageWidth , imageHeight ;
     private Plateau plateau ;
     private MapScreen mapScreen ;
+    private int width , height ;
 
     public PlayerHandPanel(Player currentPlayer , GameController gameController, Plateau plateau , int width , int height , MapScreen mapScreen ) {
         setPlayer(currentPlayer);
@@ -29,6 +30,8 @@ public class PlayerHandPanel extends JPanel {
         drawPlayerHand = new DrawPlayerHand( player , height  , gameController) ;
         this.plateau = plateau ;
         this.mapScreen = mapScreen ;
+        this.width = width ;
+        this.height = height ;
 
         scrollPane = new JScrollPane(this.drawPlayerHand);
         scrollPane.setPreferredSize(new Dimension( width , height ));
@@ -49,6 +52,14 @@ public class PlayerHandPanel extends JPanel {
 
     public void setMapScreen(MapScreen mapScreen) {
         this.mapScreen = mapScreen;
+    }
+
+
+    public void repaintHand(){
+        this.drawPlayerHand.repaint();
+        scrollPane.revalidate(); // Forcer la mise en page à se rafraîchir
+        scrollPane.repaint();
+        this.repaint();
     }
 
     public DrawPlayerHand getDrawPlayerHand() {
@@ -83,13 +94,14 @@ public class PlayerHandPanel extends JPanel {
                 }
             });
         }
+
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             if (this.player != null) {
                 this.drawPlayerHand(g2d);
                 setPreferredSize(new Dimension(width, height));
-                scrollPane.revalidate();
+                getParent().revalidate(); // Appel à revalidate() sur le parent (JScrollPane)
             }
             repaint();
         }
