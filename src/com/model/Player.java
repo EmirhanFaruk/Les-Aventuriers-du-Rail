@@ -1,7 +1,6 @@
 package com.model;
 import com.model.config.Plateau;
 import com.model.config.Rail;
-import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
@@ -9,6 +8,7 @@ import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -33,7 +33,7 @@ public class Player {
 		this.score = 0 ;
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
-		this.nbrGare = 2 ;
+		this.nbrGare = 3 ;
 	}
 	
 	

@@ -1,11 +1,10 @@
-package com.view;
+package com.view.endgame;
 
 import com.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class ScoreBoardScreen extends JPanel{

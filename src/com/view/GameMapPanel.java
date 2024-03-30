@@ -10,6 +10,7 @@ public class GameMapPanel extends JPanel {
     GameFrame frame ;
     private MapScreen mapScreen ;
     private PlayerHandPanel playerHandPanel ;
+    private PlayerInformationBarPanel playerInformationBarPanel ;
     private PiochePanel pioche;
     private static int tile_width , tile_height ;
     private int width , height ;
@@ -29,13 +30,13 @@ public class GameMapPanel extends JPanel {
         tile_height = (int) (getHeight() * 0.8 / 24);
         tile_width = (int) (getWidth() * 0.8 / 24);
         
-        this.playerHandPanel = new PlayerHandPanel(player, width, height);
+        this.playerHandPanel = new PlayerHandPanel(player, width,  (int) (height * 0.2) );
         this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau, this.playerHandPanel) ;
-        this.playerHandPanel = new PlayerHandPanel(player, width, (int) (height * 0.2)) ;
         this.pioche = new PiochePanel(width, height, player, this.playerHandPanel);
-        
+        this.playerInformationBarPanel = new PlayerInformationBarPanel( player  , width , ( int ) ( height * 0.05 )) ;
         setLayout(new BorderLayout());
-        
+
+        add(playerInformationBarPanel , BorderLayout.NORTH ) ;
         add(mapScreen, BorderLayout.CENTER) ;
         add(playerHandPanel , BorderLayout.SOUTH ) ;
         add(pioche, BorderLayout.EAST);

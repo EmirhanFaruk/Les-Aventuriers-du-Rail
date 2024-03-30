@@ -3,8 +3,7 @@ package com.view;
 import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
-import com.model.Game ;
-import com.view.PlayerHandPanel ;
+import com.view.endgame.EndGameScreen;
 
 import javax.swing.*;
 import java.awt.*;
