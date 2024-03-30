@@ -17,8 +17,7 @@ public class ScoreBoardScreen extends JPanel{
      */
     public ScoreBoardScreen( ArrayList<Player> players ){
         this.players = players ;
-        setLayout(new GridLayout(players.size() + 1, 4 )); // +1 pour l'en-tête
-
+        setLayout(new GridLayout(players.size() + 1, 5 )); // +1 pour l'en-tête
         createEnTete();
         listePlayerTrier();
         afficheScoreBoard();
@@ -31,6 +30,7 @@ public class ScoreBoardScreen extends JPanel{
         add(createCenteredHeader("NOM"));
         add(createCenteredHeader("POINTS"));
         add(createCenteredHeader("NOMBRES DE RAILS POSER"));
+        add(createCenteredHeader("NOMBRE DE GARE RESTANTE")) ;
         add(createCenteredHeader("MISSION COMPLETE"));
     }
 
@@ -72,8 +72,9 @@ public class ScoreBoardScreen extends JPanel{
     public void afficheScoreBoard (){
         for (Player player : players) {
             add(createCenteredLabel(player.getName()));
-            add(createCenteredLabel(String.valueOf(player.getScore())));
-            add(createCenteredLabel(String.valueOf(15 - player.getNbrWagon())));
+            add(createCenteredLabel(String.valueOf(player.scoreFinal()))) ;
+            add(createCenteredLabel(String.valueOf(15 - player.getNbrWagon()))) ;
+            add(createCenteredLabel(String.valueOf(player.getNbrGare()))) ;
             add(createCenteredLabel(String.valueOf(player.getMissionComplete()))) ;
         }
     }
