@@ -18,24 +18,22 @@ import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 
 public class PiochePanel extends JPanel {
-    private GameController gameController ;
+    private GameController gameController = new GameController();
     private Player player;
     private Rectangle piocheHiddenBounds;
     private Rectangle[] piocheVisibleBounds; // Pour gérer plusieurs cartes visibles
-    private CarteWagon.Couleur[] imagePiocheVisible;
+    private CarteManager imagePiocheVisible;
     private PlayerHandPanel mainDuJoueur;
 
     
-    public PiochePanel(int width, int height, Player player, PlayerHandPanel playerHandPanel ,  GameController gameController) {
+    public PiochePanel(int width, int height, Player player, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension((int) (width * 0.15), height));
         this.player = player;
         this.mainDuJoueur = playerHandPanel;
-        this.gameController = gameController ;
         
         // Initialisation des rectangles pour les cartes visibles
-        imagePiocheVisible = new CarteWagon.Couleur[3]; 
-        this.setupAllCard();
+        this.imagePiocheVisible = carteManager;
 
         // Initialisation des rectangles dans une méthode dédiée pour plus de clarté
         initRectangles(width, height);
@@ -61,31 +59,6 @@ public class PiochePanel extends JPanel {
         }
     }
     
-    
-    private void checkCard() {
-    	if((imagePiocheVisible[0] == imagePiocheVisible[1] && imagePiocheVisible[0] == imagePiocheVisible[2]) && 
-    			imagePiocheVisible[0] == CarteWagon.Couleur.LOC) {
-    		this.setupCard(0);
-    		this.setupCard(1);
-    		this.setupCard(2);
-    	} 	
-    }
-    
-    
-    private void setupAllCard() {
-    	this.setupCard(0);
-    	this.setupCard(1);
-    	this.setupCard(2);
-    }
-    
-    
-    private void setupCard(int i) {
-        CarteManager cm = new CarteManager();
-        this.imagePiocheVisible[i] = cm.drawCard();
-        this.checkCard();
-    }
-
-    
     private void setupMouseAdapter() {
         addMouseListener(new MouseAdapter() {
             @Override
@@ -98,8 +71,8 @@ public class PiochePanel extends JPanel {
                 } else {
                     for (int i = 0; i < piocheVisibleBounds.length; i++) {
                         if (piocheVisibleBounds[i].contains(e.getPoint())) {
-                            gameController.piocherCarteVisible(player, imagePiocheVisible[i]);
-                            setupCard(i); // Actualiser la carte visible après l'avoir piochée
+                            // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
+                            gameController.piocherCarteVisible(player, imagePiocheVisible.takeWagon(i));
                             mainDuJoueur.repaint();
                             mainDuJoueur.getDrawPlayerHand().repaint();
                             repaint();
@@ -127,7 +100,7 @@ public class PiochePanel extends JPanel {
         // Dessin des cartes visibles
         for (int i = 0; i < piocheVisibleBounds.length; i++) {
             Rectangle rect = piocheVisibleBounds[i];
-            BufferedImage carteVisible = CardGraphics.getImageFromColor(imagePiocheVisible[i]);
+            BufferedImage carteVisible = CardGraphics.getImageFromColor(imagePiocheVisible.getTrainCards()[i]);
             
             if (carteVisible != null) {
                 g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);

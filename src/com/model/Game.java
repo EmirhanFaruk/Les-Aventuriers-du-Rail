@@ -161,5 +161,9 @@ public class Game
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
     }
+    
+    public CarteManager getCarteManager() {
+    	return this.cm;
+    }
 
 }
