@@ -37,9 +37,6 @@ public class CarteManager {
             PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
         }
         Collections.shuffle(PileCarteWagon); // Mélange de cartes.
-        for(int i=0; i<3;i++){
-            trainCards[i]=PileCarteWagon.remove(i).getInitialCouleur();
-        }
     }
 
     public void initPileCarteDestination(Game g) {
@@ -65,8 +62,10 @@ public class CarteManager {
 
             PileCarteDestination.add(new CarteDestination(v1,v2,nombrePointDistance(v1, v2)));
         }
-        
         Collections.shuffle(PileCarteDestination);
+        for(int i=0; i< destinationsCards.length;i++){
+            destinationsCards[i]= PileCarteDestination.remove(0);
+        }
     }
 
 
@@ -141,38 +140,7 @@ public class CarteManager {
     }
 
     public CarteWagon.Couleur drawCard(){
-        //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
-
-        Random carte = new Random();
-        int pioche = carte.nextInt(110);
-
-        //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
-        if(pioche >= 0 && pioche <= 11){
-            return Couleur.BLEU;
-        }
-        if(pioche >= 12 && pioche <= 23){
-            return Couleur.VIOLET;
-        }
-        if(pioche >= 24 && pioche <= 35){
-            return Couleur.MARRON;
-        }
-        if(pioche >= 36 && pioche <= 47){
-            return Couleur.NOIRE;
-        }
-        if(pioche >= 48 && pioche <= 59){
-            return Couleur.VERT;
-        }
-        if(pioche >= 60 && pioche <= 71){
-            return Couleur.JAUNE;
-        }
-        if(pioche >= 72 && pioche <= 83){
-            return Couleur.BLANC;
-        }
-        if(pioche >= 84 && pioche <= 95){
-            return Couleur.ROUGE;
-        }
-
-        return Couleur.LOC;
+        return PileCarteWagon.remove(0).getInitialCouleur();
 
     }
 
