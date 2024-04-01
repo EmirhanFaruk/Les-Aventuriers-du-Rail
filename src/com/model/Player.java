@@ -26,10 +26,10 @@ public class Player {
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
-	private Round round;
+	private Game game;
 
 
-	public Player ( String playerCouleur , String name , int niveau, Round round){
+	public Player ( String playerCouleur , String name , int niveau, Game game){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
@@ -37,7 +37,7 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 3 ;
-		this.round = round;
+		this.game = game;
 
 	}
 
@@ -54,7 +54,14 @@ public class Player {
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = new CarteManager();
-		this.trainList.add(cm.drawCard());
+		if(game.getRound().getAction() >1){
+			this.trainList.add(cm.drawCard());
+			game.getRound().setAction(game.getRound().getAction() - 1);
+
+		}else{
+			this.trainList.add(cm.drawCard());
+			game.getRound().endRound(game);
+		}
 	}
 
 	public void piocheCarteVisible(CarteWagon.Couleur carte) {

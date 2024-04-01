@@ -99,19 +99,19 @@ public class Game
             switch (player_types[i]){
 
                 case "PLAYER" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,round));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,this));
                     break;
 
                 case "WEAK" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,round));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,this));
                     break;
 
                 case "NORMAL" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,round));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,this));
                     break;
 
                 case "STRONG" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,round));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,this));
                     break;
 
                 default: break;
