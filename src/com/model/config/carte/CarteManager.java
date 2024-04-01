@@ -55,25 +55,24 @@ public class CarteManager {
             while (v2.getNom().equals(v1.getNom())){
                 v2 = g.getVilles()[r.nextInt(Vlength)];
             }
-            CarteDestination c = new CarteDestination(v1,v2,nombrePointDistance(v1, v2));
-            while(carteDestExistante(c)){
+            while(carteDestExistante(v1,v2)){
                 v1 = g.getVilles()[r.nextInt(Vlength)];
                 v2 = g.getVilles()[r.nextInt(Vlength)];
                 while (v2.getNom().equals(v1.getNom())){
                     v2 = g.getVilles()[r.nextInt(Vlength)];
                 }
-                c = new CarteDestination(v1,v2,nombrePointDistance(v1, v2));
             }
-            PileCarteDestination.add(c);
+
+            PileCarteDestination.add(new CarteDestination(v1,v2,nombrePointDistance(v1, v2)));
         }
         
         Collections.shuffle(PileCarteDestination);
     }
 
 
-    private boolean carteDestExistante(CarteDestination c) {
-        String cV1 = c.getPremiereVille().getNom(); //Le nom de la première ville
-        String cV2 = c.getDeuxiemeVille().getNom(); //Le nom de la deuxieme ville
+    private boolean carteDestExistante(Ville v1, Ville v2) {
+        String cV1 = v1.getNom(); //Le nom de la première ville
+        String cV2 = v2.getNom(); //Le nom de la deuxieme ville
         for(CarteDestination carte : PileCarteDestination){
             if(carte.getPremiereVille().getNom().equals(cV1) && carte.getDeuxiemeVille().getNom().equals(cV2) || carte.getPremiereVille().getNom().equals(cV2) && carte.getDeuxiemeVille().getNom().equals(cV1))
                 return true;
