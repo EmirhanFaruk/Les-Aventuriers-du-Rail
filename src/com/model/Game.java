@@ -99,19 +99,19 @@ public class Game
             switch (player_types[i]){
 
                 case "PLAYER" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,round));
                     break;
 
                 case "WEAK" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,round));
                     break;
 
                 case "NORMAL" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,round));
                     break;
 
                 case "STRONG" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,round));
                     break;
 
                 default: break;
@@ -160,6 +160,10 @@ public class Game
             System.err.println("la partie est terminée");
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
+    }
+    
+    public CarteManager getCarteManager() {
+    	return this.cm;
     }
 
 }
