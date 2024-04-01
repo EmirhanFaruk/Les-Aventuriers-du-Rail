@@ -54,6 +54,7 @@ public class Round {
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         whosNext(game);
+        System.out.println(whoIsPlaying);
     }
     public void whosNext(Game game){
         //Passer au prochain joueur

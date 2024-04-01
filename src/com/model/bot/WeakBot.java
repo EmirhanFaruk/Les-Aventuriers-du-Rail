@@ -1,6 +1,7 @@
 package com.model.bot;
 
 import com.model.Game;
+import com.model.Player;
 import com.model.Round;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
@@ -73,9 +74,15 @@ public class WeakBot implements BotAction{
 
     @Override
     public boolean takeGare(Game game, int wichStation, Round round) {
-        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares
-        if(game.getVilles()[wichStation].getIsOccuped() == null && game.getListPlayer().get(round.getWhoIsPlaying()).getNbrGare() < 0){
+        //Variable du joueur
+        Player player = game.getListPlayer().get(round.getWhoIsPlaying());
 
+        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
+        if(game.getVilles()[wichStation].getIsOccuped() == null && player.getNbrGare() < 0 && player.getTrainCard().size() >= player.nombreDeCartePourPoserUneGare()){
+
+            for(int i = 0; i< player.nombreDeCartePourPoserUneGare();i++){
+                player.getTrainCard().remove(0);
+            }
             game.getVilles()[wichStation].setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
 
             return true;
