@@ -37,6 +37,9 @@ public class CarteManager {
             PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
         }
         Collections.shuffle(PileCarteWagon); // Mélange de cartes.
+        for(int i=0; i<3;i++){
+            trainCards[i]=PileCarteWagon.remove(i).getInitialCouleur();
+        }
     }
 
     public void initPileCarteDestination(Game g) {
@@ -44,27 +47,38 @@ public class CarteManager {
         for(Route r : gameRoutes){
             PileCarteDestination.add(new CarteDestination(r)); //Les cartes destinations à courte distance (une route)
         }
-        for(int i=0; i<21; i++){
-            int nbRoutes = 1;//ThreadLocalRandom.current().nextInt(1, 4);
-            Route depart = gameRoutes.get(i);
-            Ville v1 = depart.getVille1();
-            int nbpoint = depart.getLongueur();
-            for(int j=nbRoutes;j>0;j--){
-                depart = trouverUneCorrespondance(gameRoutes,depart);
-                nbpoint += depart.getLongueur();
+        for (int i=0; i< 21;i++){
+            Random r = new Random();
+            int Vlength = g.getVilles().length;
+            Ville v1 = g.getVilles()[r.nextInt(Vlength)];
+            Ville v2 = g.getVilles()[r.nextInt(Vlength)];
+            while (v2.getNom().equals(v1.getNom())){
+                v2 = g.getVilles()[r.nextInt(Vlength)];
             }
-            Ville v2 = depart.getVille2();
-            PileCarteDestination.add(new CarteDestination(v1, v2, nbpoint));
+            CarteDestination c = new CarteDestination(v1,v2,nombrePointDistance(v1, v2));
+            while(carteDestExistante(c)){
+                v1 = g.getVilles()[r.nextInt(Vlength)];
+                v2 = g.getVilles()[r.nextInt(Vlength)];
+                while (v2.getNom().equals(v1.getNom())){
+                    v2 = g.getVilles()[r.nextInt(Vlength)];
+                }
+                c = new CarteDestination(v1,v2,nombrePointDistance(v1, v2));
+            }
+            PileCarteDestination.add(c);
         }
-        //Collections.shuffle(PileCarteDestination);
+        
+        Collections.shuffle(PileCarteDestination);
     }
 
-    private Route trouverUneCorrespondance(ArrayList<Route> gameRoutes, Route depart) {
-        for(Route r:gameRoutes){
-            if(r.getVille1()==depart.getVille2() ||r.getVille2()==depart.getVille2() && r != depart)
-                return r;
+
+    private boolean carteDestExistante(CarteDestination c) {
+        String cV1 = c.getPremiereVille().getNom(); //Le nom de la première ville
+        String cV2 = c.getDeuxiemeVille().getNom(); //Le nom de la deuxieme ville
+        for(CarteDestination carte : PileCarteDestination){
+            if(carte.getPremiereVille().getNom().equals(cV1) && carte.getDeuxiemeVille().getNom().equals(cV2) || carte.getPremiereVille().getNom().equals(cV2) && carte.getDeuxiemeVille().getNom().equals(cV1))
+                return true;
         }
-        return null;
+        return false;
     }
 
 
@@ -191,15 +205,4 @@ public class CarteManager {
         //TODO
         return 2;
     }
-
-    public void afficherCartesDestination(){
-        for(CarteDestination c : PileCarteDestination){
-            System.out.println("V1: "+c.getPremiereVille().getNom()+" V2: "+c.getDeuxiemeVille().getNom()+" Points: "+c.getNombrePoints());
-        }
-    }
-
-
-
-
-    
 }

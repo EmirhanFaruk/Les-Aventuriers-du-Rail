@@ -33,7 +33,7 @@ public class CarteDestination extends JPanel {
     public CarteDestination(Route route){
         this.premiereVille = route.getVille1();
         this.deuxiemeVille = route.getVille2();
-        this.nombrePoints = route.getNombrePoint();
+        this.nombrePoints = route.getLongueur();
         this.complete = false;
     }
 
