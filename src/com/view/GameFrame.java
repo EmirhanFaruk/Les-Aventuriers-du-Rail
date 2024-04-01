@@ -83,7 +83,7 @@ public class GameFrame extends JFrame
         /**
          * TODO : a changer le main.game.getlistPlayer().get(0) par autre chose
          */
-    	gameScreen = new GameScreen(this , map , getWidth() , getHeight() , main.game.getListPlayer().get(0) , main.game.getPlateau()) ;
+    	gameScreen = new GameScreen(this , map , getWidth() , getHeight() , main.game.getListPlayer().get(0) , main.game) ;
 
 
         main_panel.add(ingame_screen_s , gameScreen ) ;

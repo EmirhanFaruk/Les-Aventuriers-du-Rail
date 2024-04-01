@@ -166,4 +166,7 @@ public class Game
     	return this.cm;
     }
 
+    public Round getRound() {
+        return this.round;
+    }
 }

@@ -1,5 +1,6 @@
 package com.view;
 
+import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
 import com.model.config.carte.CarteWagon;
@@ -18,17 +19,17 @@ public class PlayerHandPanel extends JPanel {
     private DrawPlayerHand drawPlayerHand ;
     private JScrollPane scrollPane;
     private int imageWidth , imageHeight ;
-    private Plateau plateau ;
+    private Game game ;
     private MapScreen mapScreen ;
     private int width , height ;
 
-    public PlayerHandPanel(Player currentPlayer , GameController gameController, Plateau plateau , int width , int height , MapScreen mapScreen ) {
+    public PlayerHandPanel(Player currentPlayer , GameController gameController, Game game , int width , int height , MapScreen mapScreen ) {
         setPlayer(currentPlayer);
         setBackground(Color.orange);
         setPreferredSize(new Dimension( width, height ));
 
-        drawPlayerHand = new DrawPlayerHand( player , height  , gameController) ;
-        this.plateau = plateau ;
+        drawPlayerHand = new DrawPlayerHand( player , height  , gameController,game) ;
+        this.game = game ;
         this.mapScreen = mapScreen ;
         this.width = width ;
         this.height = height ;
@@ -66,8 +67,8 @@ public class PlayerHandPanel extends JPanel {
         return this.drawPlayerHand;
     }
 
-    public Plateau getPlateau() {
-        return plateau;
+    public Game getGame() {
+        return game;
     }
 
     public class DrawPlayerHand extends JPanel {
@@ -78,7 +79,7 @@ public class PlayerHandPanel extends JPanel {
         private ArrayList< CarteWagon > listCardWagon ;
         GameController gameController ;
 
-        DrawPlayerHand ( Player player  , int height , GameController gameController) {
+        DrawPlayerHand (Player player  , int height , GameController gameController, Game game) {
             this.player = player;
             this.height = height;
             this.width = 0;
@@ -89,7 +90,7 @@ public class PlayerHandPanel extends JPanel {
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this , mapScreen );
+                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this , mapScreen,game );
                     repaint();
                 }
             });
