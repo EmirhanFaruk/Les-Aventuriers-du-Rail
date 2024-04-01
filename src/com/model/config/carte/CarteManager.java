@@ -33,13 +33,6 @@ public class CarteManager {
         return trainCards;
     }
 
-    public void setDestinationsCards(CarteDestination[] destinationsCards) {
-        this.destinationsCards = destinationsCards;
-    }
-
-    public void setTrainCards(CarteWagon.Couleur[] trainCards) {
-        this.trainCards = trainCards;
-    }
 
     public boolean possibleTakeWagon(int action, int position){
         if(trainCards[position] == LOC){

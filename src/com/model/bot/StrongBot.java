@@ -24,14 +24,13 @@ public class StrongBot implements BotAction {
 
 
                 //9- Si on peut pas, on prends une carte locomotive sur le tas de carte visible
-            } else if(){
+            } else if(true){
 
 
 
                 //10- Sinon on pioche 2 cartes dans la pioche invisible
             } else{
 
-                joueur.piocher();
 
 
             }
@@ -238,9 +237,9 @@ public class StrongBot implements BotAction {
             }
 
 
-        }
-
     }
+
+
 
 
 

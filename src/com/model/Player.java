@@ -24,9 +24,10 @@ public class Player {
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
+	private Round round;
 
 
-	public Player ( String playerCouleur , String name , int niveau){
+	public Player ( String playerCouleur , String name , int niveau, Round round){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
@@ -34,6 +35,7 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 2 ;
+		this.round = round;
 	}
 	
 	
