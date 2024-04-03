@@ -54,18 +54,56 @@ public class Player {
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = new CarteManager();
+
+		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
 			this.trainList.add(cm.drawCard());
 			game.getRound().setAction(game.getRound().getAction() - 1);
 
 		}else{
+			//Si on a plus que une action alors on pioche puis on fini le tour
 			this.trainList.add(cm.drawCard());
 			game.getRound().endRound(game);
 		}
 	}
 
-	public void piocheCarteVisible(CarteWagon.Couleur carte) {
-		this.trainList.add(carte);
+	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
+
+		//On regarde si le joueur a 2 actions ou non
+		if(game.getRound().getAction() > 1){
+
+			//Si oui alors on regarde si c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est une locomotive on fini le tour du joueur
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+			else{
+				//Sinon on enleve une action au joueur
+				this.trainList.add(carte);
+				game.getRound().setAction(game.getRound().getAction() - 1);
+				return true;
+
+			}
+
+		}else{
+			//On verifie que c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est le cas alors on dit qu'on ne peut pas
+				return false;
+			}
+			else{
+				//Sinon on pioche la carte et on passe au joueur suivant
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+
+
+		}
+
+
 	}
 
     private void retirerLesCartes(Couleur color, int carteAEnlever) {

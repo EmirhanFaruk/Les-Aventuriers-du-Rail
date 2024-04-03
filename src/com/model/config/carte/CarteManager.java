@@ -43,6 +43,7 @@ public class CarteManager {
 
     public CarteWagon.Couleur takeWagon(int position){
         //Fonction qui prends une carte
+
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
         
@@ -54,6 +55,10 @@ public class CarteManager {
         }
 
         return renvoie;
+    }
+
+    public CarteWagon.Couleur showWagon(int position){
+        return trainCards[position];
     }
 
     public CarteDestination[] takeDestination(int[] position,Game game){

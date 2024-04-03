@@ -116,8 +116,8 @@ public class GameController {
 
     }
 
-    public void piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
-    	player.piocheCarteVisible(imagePiocheVisible);
+    public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
+    	return player.piocheCarteVisible(imagePiocheVisible);
 	}
 
 
