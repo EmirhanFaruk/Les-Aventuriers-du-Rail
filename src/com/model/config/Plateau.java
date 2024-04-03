@@ -1,8 +1,5 @@
 package com.model.config;
 import com.model.Game;
-import com.model.Player;
-import com.model.ai.Node;
-import com.model.config.carte.CarteManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

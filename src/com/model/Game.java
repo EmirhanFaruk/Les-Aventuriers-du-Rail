@@ -1,19 +1,12 @@
 package com.model;
 
-import com.model.ai.Node;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
-import com.model.config.carte.CarteWagon.Couleur;
 import com.view.GameFrame;
-import com.view.GameScreen;
 import com.model.config.Ville;
-import com.view.GameFrame;
-import com.view.GameScreen;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
 
 public class Game

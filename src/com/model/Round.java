@@ -1,18 +1,9 @@
 package com.model;
 
-import com.model.ai.Node;
-import com.model.bot.BotAction;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
-import com.model.config.Plateau;
-import com.model.config.Route;
-import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class Round {
 
@@ -78,7 +69,6 @@ public class Round {
 
     public void round(Game game, CarteManager carteManager, double deltaTime)
     {
-        Node.printWays(game.getVilles(), game.getListPlayer().get(whoIsPlaying));
         if (betweenRoundTimer <= 0)
         {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
