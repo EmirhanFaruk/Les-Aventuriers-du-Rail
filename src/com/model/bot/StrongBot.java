@@ -14,7 +14,10 @@ import java.util.ArrayList;
 
 public class StrongBot implements BotAction {
     @Override
-    public void drawCardWagon(Round round,CarteManager carteManager, Game game) {
+    public void drawCardWagon(Game game) {
+        //Variable pour appeler le joueur (le bot)
+        Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
+
         //-Si il manque une carte:
         if (true) {
 
@@ -39,13 +42,15 @@ public class StrongBot implements BotAction {
         } else {
 
             //Sinon on pioche 2 cartes aléatoire
+            player.getTrainList().add(game.getCarteManager().drawCard());
+            player.getTrainList().add(game.getCarteManager().drawCard());
 
 
         }
 
     }
 
-    public Route takeRailAux(ArrayList<Ville> villes, Round round, Game game){
+    public Route takeRailAux(ArrayList<Ville> villes){
         //Fonction qui retourne la premiere route que le joueur peut completer dans la liste
         for(int i = 1; i< villes.size() ;i++){
 
@@ -73,13 +78,16 @@ public class StrongBot implements BotAction {
 
     }
     @Override
-    public boolean takeRail(Game game, Round round) {
+    public boolean takeRail(Game game) {
+        //Variable pour avoir round
+        Round round = game.getRound();
+
         //Fonction qui permet de poser prendre des routes, et renvie false si le bot n'a pas assez de carte
         ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
         for(int i =0; i<destination.size();i++){
             ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-            Route toAdd = takeRailAux(ville,round,game);
+            Route toAdd = takeRailAux(ville);
 
             //On regarde si la route est null ou pas, si non alors on prends la route
             if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
@@ -94,27 +102,33 @@ public class StrongBot implements BotAction {
     }
 
     @Override
-    public boolean takeGare(Game game, int wichStation, Round round) {
+    public boolean takeGare(Game game, int wichStation) {
 
         return true;
     }
 
     @Override
-    public CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game) {
+    public CarteDestination[] takeMissionsCard(int max, Game game) {
         //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+
+        //Variable pour appeler cardDestination
+        CarteManager carteManager = game.getCarteManager();
 
         //On regarde lequel des cartes mission a la plus petite route,
         ArrayList<CarteDestination> tab = new ArrayList<>();
         int[] tmp = new int[2];
         //Premiere bouble qui va prendre la carte la plus petite
         for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
-            if (carteManager.getDestinationsCards()[i].getNombrePoints() < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
+            if (carteManager.getDestinationsCards()[i].getNombrePoints()
+                    < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
                 tmp[0] = i;
             }
         }
         //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
         for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
-            if ((carteManager.getDestinationsCards()[y].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && y != tmp[0])) {
+        if ((carteManager.getDestinationsCards()[y].getNombrePoints() +
+                (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
+                <= max && y != tmp[0])) {
 
                 tmp[1] = y;
             }
@@ -122,7 +136,9 @@ public class StrongBot implements BotAction {
 
         //Troisieme bouble qui regarde si la derniere carte + les cartes deja prisent soit < max
         for (int z = 0; z < carteManager.getDestinationsCards().length; z++) {
-            if ((carteManager.getDestinationsCards()[z].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && z != tmp[0] && z != tmp[1])) {
+            if ((carteManager.getDestinationsCards()[z].getNombrePoints() +
+                    (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
+                    <= max && z != tmp[0] && z != tmp[1])) {
 
                 tmp[2] = z;
             }
@@ -136,10 +152,10 @@ public class StrongBot implements BotAction {
 
 
 
-    private boolean allMissionIsCompleted(Game game, Round round){
-        for (int i = 0; i < game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().size(); i++) {
+    private boolean allMissionIsCompleted(Game game){
+        for (int i = 0; i < game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().size(); i++) {
 
-            if (!game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
+            if (!game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
                 return false;
             }
 
@@ -148,9 +164,9 @@ public class StrongBot implements BotAction {
     }
 
 
-    private boolean canCompletePath(Game game,Round round){
+    private boolean canCompletePath(Game game){
         //Variable qui donne la liste de destination
-        ArrayList<CarteDestination> destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
+        ArrayList<CarteDestination> destination =  game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList();
 
         //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
         for (int l = 0; l <destination.size(); l++) {
@@ -174,26 +190,26 @@ public class StrongBot implements BotAction {
 
 
     @Override
-    public void play(Game game, CarteManager carteManager, Round round) {
+    public void play(Game game) {
         //Fonction principale du bot fort
 
         //Variable du joueur
-        Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
+        Player joueur = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
         //1- On regarde si il a complété toute ses missions ou pas :
-        if (allMissionIsCompleted(game,round)) {
+        if (allMissionIsCompleted(game)) {
 
             //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
-            CarteDestination[] addCard = takeMissionsCard(6, carteManager, game);
+            CarteDestination[] addCard = takeMissionsCard(6, game);
             for (int j = 0; j < addCard.length; j++) {
-                game.getListPlayer().get(round.getAction()).getDestinationsList().add(addCard[j]);
+                game.getListPlayer().get(game.getRound().getAction()).getDestinationsList().add(addCard[j]);
             }
 
             //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
         } else {
 
                 //Si non:
-                if (! canCompletePath(game,round)) {
+                if (! canCompletePath(game)) {
 
                             /*
 
@@ -213,17 +229,17 @@ public class StrongBot implements BotAction {
                 } else {
 
                     //6- On pose les wagons
-                    if (takeRail(game,round)) {
+                    if (takeRail(game)) {
 
-                        round.endRound(game);
+                        game.getRound().endRound(game);
 
 
                         //Sinon :  7- On pioche :
                     } else {
 
-                        drawCardWagon(round,carteManager,game);
+                        drawCardWagon(game);
 
-                        round.endRound(game);
+                        game.getRound().endRound(game);
 
                         }
 
