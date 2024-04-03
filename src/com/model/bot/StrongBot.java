@@ -9,30 +9,125 @@ import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
+import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
 
 public class StrongBot implements BotAction {
+
+    private void MissWichCard(Route route) {
+        int i = 0;
+        setNbrWagon(this.nbrWagon - carteAEnlever);
+        // Premiere boucle qui enlève juste la couleur color
+        while(i < this.trainList.size() && 0 < carteAEnlever) {
+            if ( trainList.get(i) == color ){
+                this.trainList.remove(i);
+                carteAEnlever--;
+            } else {
+                i++ ;
+            }
+        }
+        // Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
+        // si les carte de la couleur color est insuffissant
+        int j = 0 ;
+        while ( j < this.trainList.size() && 0 < carteAEnlever ){
+            if ( trainList.get(j) == CarteWagon.Couleur.LOC) {
+                this.trainList.remove(j);
+                carteAEnlever--;
+            } else{
+                j++ ;
+            }
+        }
+    }
+
+    public CarteWagon.Couleur canCompletePathWithWagonListCard(Route route){
+
+        return CarteWagon.Couleur.LOC;
+    }
+
+    public CarteWagon.Couleur canCompletePathMissingOneCard(Game game) {
+
+        //Fonction qui si il manque une carte pour completer une route dans la liste de carte
+
+        //Variable pour avoir round
+        Round round = game.getRound();
+        //Variable pour avoir Player du bot
+        Player player= game.getListPlayer().get(round.getWhoIsPlaying());
+        //Variable pour avoir les cartes destination du bot
+        ArrayList<CarteDestination> destination = player.getDestinationsList();
+
+
+        //On cherche la route la meilleure route possible
+        for (int i = 0; i < destination.size(); i++) {
+
+            //On stock la liste de ville dans une variable (ce qui forme une route)
+            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(), destination.get(i).getDeuxiemeVille());
+
+            //On regarde la
+            Route toComplete = takeRailAux(ville);
+
+            if(toComplete.getLongueur() <= player.getTrainCard().size() && toComplete.getProprietaire() == null){
+
+
+
+            }
+
+
+
+        }
+        return null;
+    }
+
     @Override
     public void drawCardWagon(Game game) {
         //Variable pour appeler le joueur (le bot)
         Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
+        //Variable qui va déterminer si oui ou non on peut prendre
+        CarteWagon.Couleur color = canCompletePathMissingOneCard(game);
         //-Si il manque une carte:
-        if (true) {
+        if (color != null) {
+
+            int position = -1;
+
+            //On cherche la couleur correspondante
+            for(int i = 0; i< game.getCarteManager().getTrainCards().length;i++){
+                if(game.getCarteManager().getTrainCards()[i] == color){
+                    position = i;
+                }
+            }
 
             // 8- On prends la couleur manquante sur le tas de carte visible et on tire aléatoirement dans la pioche invisible
-            if (true) {
+            if (position != -1) {
+
+                player.getTrainList().add(game.getCarteManager().takeWagon(position));
+                player.getTrainList().add(game.getCarteManager().drawCard());
 
 
 
                 //9- Si on peut pas, on prends une carte locomotive sur le tas de carte visible
-            } else if(true){
-
-
-
-                //10- Sinon on pioche 2 cartes dans la pioche invisible
             } else{
+                //On cherche une carte locomotive
+
+                int positionLoc = -1;
+
+                for(int i = 0; i< game.getCarteManager().getTrainCards().length;i++){
+                    if(game.getCarteManager().getTrainCards()[i] == CarteWagon.Couleur.LOC){
+                        position = i;
+                    }
+                }
+
+                if(positionLoc != -1){
+
+                    player.getTrainList().add(game.getCarteManager().takeWagon(positionLoc));
+
+                    //10- Sinon on pioche 2 cartes dans la pioche invisible
+                } else{
+
+                    player.getTrainList().add(game.getCarteManager().drawCard());
+                    player.getTrainList().add(game.getCarteManager().drawCard());
+
+                }
 
 
 
@@ -83,17 +178,26 @@ public class StrongBot implements BotAction {
         Round round = game.getRound();
 
         //Fonction qui permet de poser prendre des routes, et renvie false si le bot n'a pas assez de carte
+
+        //Variable pour avoir les cartes destination du bot
         ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
         for(int i =0; i<destination.size();i++){
             ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-            Route toAdd = takeRailAux(ville);
+            for(int z = 1; z < ville.size();z++){
 
-            //On regarde si la route est null ou pas, si non alors on prends la route
-            if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
-                return true ;
+                //TODO cela ne prend que 1 route et non toute les possibilités dans la route
+                Route toAdd = takeRailAux(ville);
 
+
+                //On regarde si la route est null ou pas, si non alors on prends la route
+                if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
+                    return true ;
+
+                }
             }
+
+
 
 
         }
@@ -116,7 +220,7 @@ public class StrongBot implements BotAction {
 
         //On regarde lequel des cartes mission a la plus petite route,
         ArrayList<CarteDestination> tab = new ArrayList<>();
-        int[] tmp = new int[2];
+        int[] tmp = new int[3];
         //Premiere bouble qui va prendre la carte la plus petite
         for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
             if (carteManager.getDestinationsCards()[i].getNombrePoints()
@@ -153,6 +257,7 @@ public class StrongBot implements BotAction {
 
 
     private boolean allMissionIsCompleted(Game game){
+        //Fonction qui regarde si toute les missions sont complétés
         for (int i = 0; i < game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().size(); i++) {
 
             if (!game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
@@ -165,6 +270,8 @@ public class StrongBot implements BotAction {
 
 
     private boolean canCompletePath(Game game){
+        //Fonction qui regarde si on peut completer une route pour une mission
+
         //Variable qui donne la liste de destination
         ArrayList<CarteDestination> destination =  game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList();
 

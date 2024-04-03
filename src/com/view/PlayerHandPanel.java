@@ -85,11 +85,6 @@ public class PlayerHandPanel extends JPanel {
 
 
 
-    public void setMapScreen(MapScreen mapScreen) {
-        this.mapScreen = mapScreen;
-    }
-
-
 
     public DrawPlayerHand getDrawPlayerHand() {
         int whoIsPlaying = game.getRound().getWhoIsPlaying();
