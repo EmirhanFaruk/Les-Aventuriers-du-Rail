@@ -82,15 +82,15 @@ public class Round {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
 
                 case(1):
-                    weakBotPlay.play(game,carteManager,this);
+                    weakBotPlay.play(game);
                     break;
 
                 case(2):
-                    normalBotPlay.play(game,carteManager,this);
+                    normalBotPlay.play(game);
                     break;
 
                 case(3):
-                    strongBotPlay.play(game,carteManager,this);
+                    strongBotPlay.play(game);
                     break;
 
                 default:
