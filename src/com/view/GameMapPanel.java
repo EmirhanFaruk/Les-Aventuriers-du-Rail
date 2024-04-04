@@ -53,7 +53,28 @@ public class GameMapPanel extends JPanel {
     public void make( Plateau plateau ){
         mapScreen.makeMap( plateau );
     }
+
+    public void mapRepaint(){
+        this.mapScreen.repaintAll(this.playerHandPanel);
+        this.pioche.repaint();
+        this.playerInformationBarPanel.repaint();
+        this.repaint();
+    }
+
+    public void playerInfoBarUpdate() {
+        this.playerInformationBarPanel.playerInfoBarUpdate() ;
+    }
+
     public void setPlayerCourant(Player playerCourant) {
         this.playerHandPanel.setPlayer(playerCourant);
+    }
+
+
+    public PlayerInformationBarPanel getPlayerInformationBarPanel() {
+        return playerInformationBarPanel;
+    }
+
+    public void setPlayerInformationBarPanel(PlayerInformationBarPanel playerInformationBarPanel) {
+        this.playerInformationBarPanel = playerInformationBarPanel;
     }
 }

@@ -98,7 +98,7 @@ public class GameController {
                 tenterDePoserUneGare( ville , player );
                 mapScreen.repaintAll(playerHandPanel);
             } catch ( Exception exception ){
-                System.err.println( "D'abord selectionner une ville" ) ;
+                //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
             }
 
         }

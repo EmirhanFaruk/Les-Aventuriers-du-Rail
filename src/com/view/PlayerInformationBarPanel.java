@@ -59,6 +59,8 @@ public class PlayerInformationBarPanel extends JPanel {
         add(wagonLabel);
         add(gareLabel);
 
+        repaint();
+
     }
 
     public void afficheInformationOtherPlayer() {
@@ -73,5 +75,37 @@ public class PlayerInformationBarPanel extends JPanel {
             }
         }
 
+        repaint();
+    }
+
+    public void playerInfoBarUpdate(){
+        if ( this.playerCourant.getNbrWagonInstance() > this.playerCourant.getNbrWagon()
+                || this.playerCourant.getNbrGareInstance() > this.playerCourant.getNbrGare() ){
+            repaintInfoJoueurCourant() ;
+            this.repaint();
+            System.err.println("Il est bien repaint");
+        }
+    }
+
+    public void repaintInfoJoueurCourant (){
+        setLayout(new GridLayout( 1 , players.size() ) );
+        playerCourant.setNbrGareInstance( playerCourant.getNbrGare() ) ;
+        playerCourant.setNbrWagonInstance( playerCourant.getNbrWagon() ) ;
+        afficheInformationJoueurCourant();
+        afficheInformationOtherPlayer();
+        this.repaint();
+        System.out.println("gare :" +playerCourant.getNbrGare() + " , rail :" +  playerCourant.getNbrWagon() );
+        System.out.println("instance gare :" +  playerCourant.getNbrGareInstance() + " , rail :" + playerCourant.getNbrWagonInstance() );
+    }
+
+    public void setPlayerCourant(Player playerCourant) {
+        this.playerCourant = playerCourant;
+        afficheInformationJoueurCourant();
+        afficheInformationOtherPlayer();
+    }
+
+
+    public Player getPlayerCourant() {
+        return playerCourant;
     }
 }

@@ -19,6 +19,8 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
+	private int nbrWagonInstance ;
+	private int nbrGareInstance ;
 
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
@@ -35,6 +37,8 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 3 ;
+		this.nbrGareInstance = this.nbrGare ;
+		this.nbrWagonInstance = this.nbrWagon ;
 	}
 
 
@@ -254,6 +258,22 @@ public class Player {
 
 	public int getMissionComplete() {
 		return missionComplete;
+	}
+
+	public int getNbrGareInstance() {
+		return nbrGareInstance;
+	}
+
+	public void setNbrGareInstance(int nbrGareInstance) {
+		this.nbrGareInstance = nbrGareInstance;
+	}
+
+	public int getNbrWagonInstance() {
+		return nbrWagonInstance;
+	}
+
+	public void setNbrWagonInstance(int nbrWagonInstance) {
+		this.nbrWagonInstance = nbrWagonInstance;
 	}
 
 	public void setMissionComplete(int missionComplete) {
