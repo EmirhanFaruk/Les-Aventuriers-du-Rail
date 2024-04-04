@@ -1,7 +1,9 @@
 package com.view;
 
+import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
+import com.model.controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ public class GameMapPanel extends JPanel {
     private PiochePanel pioche;
     private static int tile_width , tile_height ;
     private int width , height ;
+    private GameController gameController = new GameController();
 
     /**
      * Constructeur de la classe GameManagerScreen
@@ -21,24 +24,25 @@ public class GameMapPanel extends JPanel {
      * @param width
      * @param height
      */
-    public GameMapPanel (GameFrame frame , String map , int width , int height , Player player , Plateau plateau ){
+    public GameMapPanel (GameFrame frame , String map , int width , int height , Player player , Game game ){
         this.frame = frame ;
         setSize(width , height );
         this.height = height ;
         this.width = width ;
         tile_height = (int) (getHeight() * 0.8 / 24);
         tile_width = (int) (getWidth() * 0.8 / 24);
-        
-        this.playerHandPanel = new PlayerHandPanel(player, width, height);
-        this.mapScreen = new MapScreen( map , width , height ,tile_width , tile_height  , player , plateau, this.playerHandPanel) ;
-        this.playerHandPanel = new PlayerHandPanel(player, width, (int) (height * 0.2)) ;
-        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel);
-        
+
+        this.playerHandPanel = new PlayerHandPanel() ;
+        this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
+        this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2),mapScreen);
+        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel, frame.getMain().game.getCarteManager());
         setLayout(new BorderLayout());
-        
-        add(mapScreen, BorderLayout.CENTER) ;
-        add(playerHandPanel , BorderLayout.SOUTH ) ;
+
+        add( mapScreen , BorderLayout.CENTER ) ;
         add(pioche, BorderLayout.EAST);
+        add( playerHandPanel , BorderLayout.SOUTH ) ;
+
+
     }
 
     /**
@@ -49,6 +53,7 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
     public void setPlayerCourant(Player playerCourant) {
-        this.playerHandPanel.setPlayer(playerCourant);
+        this.pioche.setPlayer(playerCourant);
+        this.mapScreen.setPlayer( playerCourant );
     }
 }

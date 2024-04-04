@@ -9,19 +9,19 @@ import com.model.config.carte.CarteWagon;
 public interface BotAction {
 
     //Piocher une/des cartes wagons visible
-    abstract void drawCardWagon(Round round,CarteManager carteManager, Game game);
+    abstract void drawCardWagon(Game game);
 
     //Prendre des rails
-    abstract boolean takeRail(Game game,Round round);
+    abstract boolean takeRail(Game game);
 
     //Poser une gare
-    abstract boolean takeGare(Game game, int wichStation, Round round);
+    abstract boolean takeGare(Game game, int wichStation);
 
     //Prendre une/des cartes missions
-    abstract CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game);
+    abstract CarteDestination[] takeMissionsCard(int max, Game game);
 
     //La fonction principale du bot
-    abstract void play(Game game, CarteManager carteManager, Round round);
+    abstract void play(Game game);
 
 
 }

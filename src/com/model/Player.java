@@ -8,7 +8,9 @@ import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
+import com.view.graphics.VilleGraphics;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -24,19 +26,22 @@ public class Player {
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
+	private Game game;
 
 
-	public Player ( String playerCouleur , String name , int niveau, CarteManager carteManager ){
+	public Player ( String playerCouleur , String name , int niveau, Game game){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
 		this.score = 0 ;
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
-		this.nbrGare = 2 ;
+		this.nbrGare = 3 ;
+		this.game = game;
+
 	}
-	
-	
+
+
 	private int carteDuJoueur(Route r){
 		int count = 0;
 
@@ -46,24 +51,84 @@ public class Player {
 
 		return count;
 	}
-	
+
 	public void piocheCarteInvisible() {
 		CarteManager cm = new CarteManager();
-		this.trainList.add(cm.drawCard());
+
+		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
+		if(game.getRound().getAction() >1){
+			this.trainList.add(cm.drawCard());
+			game.getRound().setAction(game.getRound().getAction() - 1);
+
+		}else{
+			//Si on a plus que une action alors on pioche puis on fini le tour
+			this.trainList.add(cm.drawCard());
+			game.getRound().endRound(game);
+		}
 	}
-	
-	public void piocheCarteVisible(CarteWagon.Couleur carte) {
-		this.trainList.add(carte);
+
+	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
+
+		//On regarde si le joueur a 2 actions ou non
+		if(game.getRound().getAction() > 1){
+
+			//Si oui alors on regarde si c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est une locomotive on fini le tour du joueur
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+			else{
+				//Sinon on enleve une action au joueur
+				this.trainList.add(carte);
+				game.getRound().setAction(game.getRound().getAction() - 1);
+				return true;
+
+			}
+
+		}else{
+			//On verifie que c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est le cas alors on dit qu'on ne peut pas
+				return false;
+			}
+			else{
+				//Sinon on pioche la carte et on passe au joueur suivant
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+
+
+		}
+
+
 	}
 
     private void retirerLesCartes(Couleur color, int carteAEnlever) {
-    	int i = 0; 
+    	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
+		// Premiere boucle qui enlève juste la couleur color
 		while(i < this.trainList.size() && 0 < carteAEnlever) {
-			this.trainList.remove(i);
-			carteAEnlever--;
-			i++;
+			if ( trainList.get(i) == color ){
+				this.trainList.remove(i);
+				carteAEnlever--;
+			} else {
+				i++ ;
+			}
     	}
+		// Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
+		// si les carte de la couleur color est insuffissant
+		int j = 0 ;
+		while ( j < this.trainList.size() && 0 < carteAEnlever ){
+			if ( trainList.get(j) == Couleur.LOC) {
+				this.trainList.remove(j);
+				carteAEnlever--;
+			} else{
+				j++ ;
+			}
+		}
     }
 
     public boolean mettreRoute(Route r) {
@@ -79,6 +144,69 @@ public class Player {
     	return false;
     }
 
+	/**
+	 * Une fonction qui renvoie true si le joueur peut changer la ville en gare
+	 * @param ville Ville
+	 * @param couleurCarteChoisit une couleur de carte
+	 */
+	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
+		if ( assezDeGare() ){
+			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
+			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
+					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
+					ville.setIsOccuped( this );
+					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+			} else {
+				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+			}
+		}
+
+	}
+
+	/**
+	 * Une fonction qui donne le bon nombre de cartes à échanger contre des gares
+	 * @return le nombre de cartes à échanger
+	 */
+	public int nombreDeCartePourPoserUneGare(){
+		if ( nbrGare == 3 )  return 1 ;
+		if ( nbrGare == 2 ) return 2 ;
+		if ( nbrGare == 1 ) return 3 ;
+		return 0 ;
+	}
+
+	/**
+	 * Une fonction qui compte le nombre de cartes de la couleur que le joueur a choisi pour changer les cartes en gare
+	 * @param couleurCarteChoisit couleur choisit
+	 * @return le nombre de cartes de la couleur
+	 */
+	public int peutChangerAvecCetteCarte ( Couleur couleurCarteChoisit ){
+		int count = 0;
+		for ( Couleur c : trainList ) {
+			if ( couleurCarteChoisit == c ) count++ ;
+		}
+		return count;
+	}
+
+	/**
+	 * Une fonction qui enlève une gare et les carte necessaire pour faire l'échange
+	 * @param couleur Couleur de la carte
+	 * @param carteAEnlever le nombre de cartes à retirer
+	 */
+	private void retirerCartePourGare( Couleur couleur , int carteAEnlever) {
+		setNbrGare( getNbrGare() -1 );
+		int restant = carteAEnlever ;
+		int i = 0;
+		while(i < this.trainList.size() && 0 < restant ) {
+			if ( trainList.get(i) == couleur ) {
+				//DEBUG : System.err.println("La couleur de la carte a enlever est : " + couleur );
+				this.trainList.remove(i);
+				restant-- ;
+			} else {
+				i++ ;
+			}
+		}
+	}
+
     //ATTENTION ! Si c'est true, passer le prochain tour du joueur.
     public boolean changerGareEnVille(int x, int y, Plateau p){
     	if(p.positionValide(x, y)){
@@ -93,7 +221,7 @@ public class Player {
 	public boolean compatibleColor(Route r, Couleur couleur){
 		Rail.Content color = r.getCouleur();
 		Rail.Content color2 = r.getRailsRoute().get(0).getInitialContent();
-		
+
 		if(couleur == Couleur.LOC){
 			return true;
 		}else if(color2 == Rail.Content.JOKERETOILEE || color2 == Rail.Content.JOKER) {
@@ -109,6 +237,11 @@ public class Player {
 		trainList.add(cm.drawCard());
 	}
 
+
+
+	public int scoreFinal(){
+		return this.score + nbrGare*4 ;
+	}
 
 	/**
 	 * Une fonction qui verifie si le joueur a assez de gare
