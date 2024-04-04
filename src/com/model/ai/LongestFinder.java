@@ -85,7 +85,11 @@ public class LongestFinder
      */
     private static boolean samePlayer(Player p1, Player p2)
     {
-        return p1.getName().equals(p2.getName());
+        if (p1 != null && p2 != null)
+        {
+            return p1.getName().equals(p2.getName());
+        }
+        return true;
     }
 
     /**
@@ -167,4 +171,38 @@ public class LongestFinder
         return res;
     }
 
+
+
+    public static void printWay(ArrayList<Route> routes, Ville v1, Ville v2)
+    {
+        System.out.println("Printing the way from " + v1.getNom() + " to " + v2.getNom());
+
+        Ville ville1 = v1;
+        Ville ville2 = null;
+
+        for (Route route : routes)
+        {
+            ville2 = findOtherVille(route, ville1);
+            ville1 = findOtherVille(route, ville2);
+            System.out.println("Route between " + ville1.getNom() + " - " + ville2.getNom());
+        }
+
+        System.out.println("Way done.");
+    }
+
+    public static void doForAll(ArrayList<Ville> villes, Player player)
+    {
+        for (Ville ville1 : villes)
+        {
+            for (Ville ville2 : villes)
+            {
+                if (!sameVille(ville1, ville2))
+                {
+                    ArrayList<Route> longestWay = findLongestWay(ville1, ville2, player);
+
+                    printWay(longestWay, ville1, ville2);
+                }
+            }
+        }
+    }
 }
