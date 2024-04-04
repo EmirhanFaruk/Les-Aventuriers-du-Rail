@@ -58,7 +58,7 @@ public class LongestFinder
         {
             for (Route route : currentVille.getRoutes())
             {
-                boolean condition = samePlayer(route.getProprietaire(), player) && getExists(route, currentVille, visited);
+                boolean condition = samePlayer(route.getProprietaire(), player) && !getExists(route, currentVille, visited);
                 if (condition)
                 {
                     currentWay.add(route);
@@ -94,7 +94,7 @@ public class LongestFinder
         {
             return p1.getName().equals(p2.getName());
         }
-        return true;
+        return false;
     }
 
     /**
