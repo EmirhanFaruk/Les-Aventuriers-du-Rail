@@ -1,6 +1,8 @@
 package com.view;
 
+import com.model.Game;
 import com.model.Player;
+import com.model.Round;
 import com.model.config.Case;
 import com.model.config.Plateau;
 import com.model.controller.GameController;
@@ -31,7 +33,7 @@ public class MapScreen extends JPanel {
      * @param playerHandPanel 
      */
     public MapScreen(String mapName , int width , int height , int tileWidth , int tileHeight,
-    		Player joueur, Plateau plateau, PlayerHandPanel playerHandPanel , GameController gameController){
+                     Player joueur, Game game, PlayerHandPanel playerHandPanel , GameController gameController){
         this.mapName = mapName+".png" ;
         this.width = width ;
         this.height = height ;
@@ -42,7 +44,7 @@ public class MapScreen extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	gameController.mouseClicked(e, tileWidth, tileHeight, plateau, joueur );
+            	gameController.mouseClicked(e, tileWidth, tileHeight, game, joueur );
             	repaintAll(playerHandPanel);
             }
         });

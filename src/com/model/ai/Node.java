@@ -273,7 +273,7 @@ public class Node
      * @param ville2 2nd ville
      * @return the villes to get to in order to get the shortest path
      */
-    private static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2)
+    public static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2)
     {
         ArrayList<Ville> res = new ArrayList<>();
 

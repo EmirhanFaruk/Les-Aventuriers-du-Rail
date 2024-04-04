@@ -1,4 +1,6 @@
 package com.model.controller;
+import com.model.Game;
+import com.model.Round;
 import com.model.config.carte.*;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.model.Player;
@@ -12,16 +14,15 @@ import java.util.ArrayList;
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
     private CarteWagon carteWagon ;
-    private CarteDestination carteDestination ;
     private int Mx , My  ;
 
-    public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Plateau plateau, Player joueurCourant) {
+    public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Game game, Player joueurCourant) {
         // Obtention des coordonnées du clic de souris
     	int x = e.getX() / tileWidth;
     	int y = e.getY() / tileHeight;
 
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
-        Object clickedObject = plateau.getPlateau()[x][y];
+        Object clickedObject = game.getPlateau().getPlateau()[x][y];
         Rail r = null ;
         if(clickedObject instanceof Rail)r = (Rail) clickedObject;
 
@@ -39,7 +40,7 @@ public class GameController {
         if (clickedObject != null) {
             // Traitement en fonction du type de l'objet cliqué
             if (clickedObject instanceof Rail) {
-                tenterAcquisitionRoute((Rail) clickedObject, plateau, joueurCourant);
+                tenterAcquisitionRoute((Rail) clickedObject, game.getPlateau(), joueurCourant,game.getRound(),game);
             } else if ( clickedObject instanceof Ville ){
                 Mx = x ;
                 My = y ;
@@ -70,7 +71,7 @@ public class GameController {
         return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
     }
      
-    public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player) {
+    public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player, Round round, Game game) {
         // Vérifie si le rail a déjà un propriétaire
         if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null) {
             System.out.println("Ce rail a déjà un propriétaire.");
@@ -85,18 +86,27 @@ public class GameController {
         	for(int i=0; i<tailleRoute; i++) {
         		listeRail.get(i).setOccuperPar(player);
         	}
+
+            Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
+
+            round.endRound(game);
+
+
         }
     }
 
-    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel , MapScreen mapScreen ){
+    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel , MapScreen mapScreen, Game game){
         CarteWagon source = playerHandPanel.getDrawPlayerHand().CardClicked( e.getX() , e.getY() );
         if ( source != null ) {
             // Si la source est une carte wagon
             this.carteWagon = source;
             try {
-                Ville ville = (Ville) playerHandPanel.getPlateau().getPlateau()[Mx][My];
+                Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
                 tenterDePoserUneGare( ville , player );
                 mapScreen.repaintAll(playerHandPanel);
+                game.getRound().endRound(game);
+
+
             } catch ( Exception exception ){
                 System.err.println( "D'abord selectionner une ville" ) ;
             }
@@ -109,8 +119,8 @@ public class GameController {
 
     }
 
-    public void piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
-    	player.piocheCarteVisible(imagePiocheVisible);
+    public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
+    	return player.piocheCarteVisible(imagePiocheVisible);
 	}
 
 

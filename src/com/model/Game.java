@@ -34,7 +34,7 @@ public class Game
     {
         this.cm = new CarteManager();
         this.plateau = Plateau.makePlateau(nomMap, this);
-        this.listPlayer = initPlayers(player_names,player_types,player_colors,cm);
+        this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
     }
@@ -60,6 +60,10 @@ public class Game
 
     public ArrayList<Player> getListPlayer() {
         return listPlayer;
+    }
+
+    public GameFrame getGameFrame() {
+        return gameFrame;
     }
 
     public void setListPlayer(ArrayList<Player> listPlayer) {
@@ -91,7 +95,7 @@ public class Game
 
     }
 
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors,  CarteManager carteManager){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors){
         ArrayList<Player> playerlist = new ArrayList<>();
 
         for(int i = 0; i< player_types.length;i++){
@@ -99,19 +103,19 @@ public class Game
             switch (player_types[i]){
 
                 case "PLAYER" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,carteManager));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,this));
                     break;
 
                 case "WEAK" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,carteManager));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,this));
                     break;
 
                 case "NORMAL" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,carteManager));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,this));
                     break;
 
                 case "STRONG" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,carteManager));
+                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,this));
                     break;
 
                 default: break;
@@ -166,4 +170,7 @@ public class Game
     	return this.cm;
     }
 
+    public Round getRound() {
+        return this.round;
+    }
 }

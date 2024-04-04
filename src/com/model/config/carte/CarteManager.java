@@ -32,13 +32,6 @@ public class CarteManager {
         return trainCards;
     }
 
-    public void setDestinationsCards(CarteDestination[] destinationsCards) {
-        this.destinationsCards = destinationsCards;
-    }
-
-    public void setTrainCards(CarteWagon.Couleur[] trainCards) {
-        this.trainCards = trainCards;
-    }
 
     public boolean possibleTakeWagon(int action, int position){
         if(trainCards[position] == LOC){
@@ -50,6 +43,7 @@ public class CarteManager {
 
     public CarteWagon.Couleur takeWagon(int position){
         //Fonction qui prends une carte
+
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
         
@@ -61,6 +55,10 @@ public class CarteManager {
         }
 
         return renvoie;
+    }
+
+    public CarteWagon.Couleur showWagon(int position){
+        return trainCards[position];
     }
 
     public CarteDestination[] takeDestination(int[] position,Game game){

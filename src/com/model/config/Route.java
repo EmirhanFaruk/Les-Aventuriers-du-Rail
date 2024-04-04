@@ -163,4 +163,19 @@ public class Route {
         }
         return res;
     }
+
+
+    public boolean links(Ville ville1, Ville ville2){
+        boolean possibility1 = ville1 == this.getVille1() && ville2 == this.getVille2();
+        boolean possibility2 = ville1 == this.getVille2() && ville2 == this.getVille1();
+
+        return possibility1 || possibility2;
+    }
+
+
+
+
+
+
+
 }

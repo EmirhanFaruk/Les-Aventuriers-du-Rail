@@ -19,13 +19,13 @@ public class GameManagerScreen extends JPanel {
     private int width , height ;
     private GameScreen gameScreen ;
 
-    public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height , Player player , Plateau plateau ){
+    public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height , Player player , Game game ){
         this.frame = frame ;
         this.gameScreen = gameScreen ;
         setSize(width , height );
         this.width = width ;
         this.height = height ;
-        this.gameMapPanel = new GameMapPanel(frame , map , width , height  , player , plateau ) ;
+        this.gameMapPanel = new GameMapPanel(frame , map , width , height  , player , game ) ;
         this.game = this.frame.getMain().getGame();
         setLayout( cardLayout );
         add( frame.getIngame_screen_s() , gameMapPanel ) ;
