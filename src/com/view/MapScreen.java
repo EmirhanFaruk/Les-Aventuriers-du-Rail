@@ -19,7 +19,7 @@ public class MapScreen extends JPanel {
     final int tileWidth , tileHeight ;
 
     private Plateau plateau ;
-    GameController gameController = new GameController();
+    GameController gameController ;
 
     /**
      * Constructeur de MapScreen
@@ -31,18 +31,18 @@ public class MapScreen extends JPanel {
      * @param playerHandPanel 
      */
     public MapScreen(String mapName , int width , int height , int tileWidth , int tileHeight,
-    		Player joueur, Plateau plateau, PlayerHandPanel playerHandPanel){
+    		Player joueur, Plateau plateau, PlayerHandPanel playerHandPanel , GameController gameController){
         this.mapName = mapName+".png" ;
         this.width = width ;
         this.height = height ;
         this.tileWidth = tileWidth ;
         this.tileHeight = tileHeight ;
-        this.plateau  = plateau ;
-        
+        this.gameController = gameController ;
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	gameController.mouseClicked(e, tileWidth, tileHeight, plateau, joueur);
+            	gameController.mouseClicked(e, tileWidth, tileHeight, plateau, joueur );
             	repaintAll(playerHandPanel);
             }
         });
@@ -73,6 +73,7 @@ public class MapScreen extends JPanel {
     }
     
     public void repaintAll(PlayerHandPanel php) {
+        php.getDrawPlayerHand().repaint();
     	php.repaint();
     	this.repaint();
     }
