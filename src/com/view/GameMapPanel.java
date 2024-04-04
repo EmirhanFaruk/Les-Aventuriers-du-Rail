@@ -37,7 +37,7 @@ public class GameMapPanel extends JPanel {
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
         this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2),mapScreen);
         this.pioche = new PiochePanel(width, height, player, this.playerHandPanel, frame.getMain().game.getCarteManager());
-        this.playerInformationBarPanel = new PlayerInformationBarPanel( frame.getMain().getGame().getListPlayer() , player  , width , ( int ) ( height * 0.05 )) ;
+        this.playerInformationBarPanel = new PlayerInformationBarPanel( player  , width , ( int ) ( height * 0.05 )) ;
 
         setLayout(new BorderLayout());
 
@@ -56,19 +56,10 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
 
-    public void mapRepaint(){
-        this.mapScreen.repaintAll(this.playerHandPanel);
-        this.pioche.repaint();
-        this.playerInformationBarPanel.repaint();
-        this.repaint();
-    }
-
-    public void playerInfoBarUpdate() {
-        this.playerInformationBarPanel.playerInfoBarUpdate() ;
-    }
 
     public void setPlayerCourant(Player playerCourant) {
         this.pioche.setPlayer(playerCourant);
+        this.playerInformationBarPanel.setPlayerCourant(playerCourant);
     }
 
 

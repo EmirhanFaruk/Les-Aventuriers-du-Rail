@@ -7,17 +7,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class PlayerInformationBarPanel extends JPanel {
-    private ArrayList<Player> players;
     private Player playerCourant;
+    private CardLayout cardLayout;
 
-    public PlayerInformationBarPanel(ArrayList<Player> players, Player player, int w, int h) {
-        this.players = players;
+    public PlayerInformationBarPanel( Player player, int w, int h) {
         this.playerCourant = player;
         setPreferredSize(new Dimension(w, h));
-        setLayout(new GridLayout(1, players.size()));
+
+        cardLayout = new CardLayout();
+        setLayout(cardLayout);
 
         afficheInformationJoueurCourant();
-        afficheInformationOtherPlayer();
     }
 
     private Color playerColor(String str) {
@@ -35,77 +35,60 @@ public class PlayerInformationBarPanel extends JPanel {
         }
     }
 
-    private JLabel createAndConfigureLabel(String text, Color bgColor, Font font) {
-        JLabel label = new JLabel(text);
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setOpaque(true);
-        label.setBackground(bgColor);
-        label.setFont(font);
-        return label;
+    private JPanel createPlayerPanel(Player player, Color bgColor, Font font) {
+        JPanel panel = new JPanel(new GridLayout(1 , 4 ));
+        panel.setBackground(bgColor);
+
+        JLabel nameLabel = new JLabel(player.getName());
+        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        nameLabel.setFont(font);
+
+        JLabel scoreLabel = new JLabel("Score : " + player.getScore());
+        scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel wagonLabel = new JLabel("Wagon : " + player.getNbrWagon());
+        wagonLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JLabel gareLabel = new JLabel("Gare : " + player.getNbrGare());
+        gareLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        panel.add(nameLabel);
+        panel.add(scoreLabel);
+        panel.add(wagonLabel);
+        panel.add(gareLabel);
+
+        return panel;
     }
 
     public void afficheInformationJoueurCourant() {
         Color playerColor = playerColor(playerCourant.getPlayerCouleur());
-        Font playerNameFont = new Font(Font.SANS_SERIF, Font.BOLD, 18); // Définir une police plus grande pour le nom du joueur courant
-        Font otherInfoFont = new Font(Font.SANS_SERIF, Font.PLAIN, 12); // Utiliser une police normale pour les autres informations
+        assert playerColor != null;
+        Color newColor = new Color( playerColor.getRed() , playerColor.getGreen() , playerColor.getBlue() ,100 ) ;
+        Font playerNameFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
 
-        JLabel nameLabel = createAndConfigureLabel(playerCourant.getName(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), playerNameFont);
-        JLabel scoreLabel = createAndConfigureLabel("Score : " + playerCourant.getScore(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherInfoFont);
-        JLabel wagonLabel = createAndConfigureLabel("Wagon : " + playerCourant.getNbrWagon(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherInfoFont);
-        JLabel gareLabel = createAndConfigureLabel("Gare : " + playerCourant.getNbrGare(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherInfoFont);
-
-        add(nameLabel);
-        add(scoreLabel);
-        add(wagonLabel);
-        add(gareLabel);
-
-        repaint();
-
+        JPanel currentPlayerPanel = createPlayerPanel(playerCourant, newColor , playerNameFont);
+        add(currentPlayerPanel, "currentPlayer");
     }
 
-    public void afficheInformationOtherPlayer() {
-        for (Player otherPlayer : players) {
-            if (!otherPlayer.equals(playerCourant)) {
-                Color playerColor = playerColor(otherPlayer.getPlayerCouleur());
-                Font otherPlayerFont = new Font(Font.SANS_SERIF, Font.PLAIN, 12); // Utiliser une police normale pour les autres joueurs
-                add(createAndConfigureLabel(otherPlayer.getName(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherPlayerFont));
-                add(createAndConfigureLabel("Score : " + otherPlayer.getScore(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherPlayerFont));
-                add(createAndConfigureLabel("Wagon : " + otherPlayer.getNbrWagon(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherPlayerFont));
-                add(createAndConfigureLabel("Gare : " + otherPlayer.getNbrGare(), new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherPlayerFont));
-            }
-        }
+    public void updateCurrentPlayer(Player newPlayerCourant) {
+        removeAll();
 
+        Color playerColor = playerColor(newPlayerCourant.getPlayerCouleur());
+        assert playerColor != null;
+        Color newColor = new Color( playerColor.getRed() , playerColor.getGreen() , playerColor.getBlue() ,  100 ) ;
+        Font playerNameFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
+
+        JPanel currentPlayerPanel = createPlayerPanel(newPlayerCourant, newColor , playerNameFont);
+        add(currentPlayerPanel, "currentPlayer");
+
+        cardLayout.show(this, "currentPlayer");
+        revalidate();
         repaint();
     }
 
-    public void playerInfoBarUpdate(){
-        if ( this.playerCourant.getNbrWagonInstance() > this.playerCourant.getNbrWagon()
-                || this.playerCourant.getNbrGareInstance() > this.playerCourant.getNbrGare() ){
-            repaintInfoJoueurCourant() ;
-            this.repaint();
-            System.err.println("Il est bien repaint");
-        }
+    public void setPlayerCourant(Player playerCourant ) {
+        this.playerCourant = playerCourant ;
+        updateCurrentPlayer( playerCourant ) ;
     }
 
-    public void repaintInfoJoueurCourant (){
-        setLayout(new GridLayout( 1 , players.size() ) );
-        playerCourant.setNbrGareInstance( playerCourant.getNbrGare() ) ;
-        playerCourant.setNbrWagonInstance( playerCourant.getNbrWagon() ) ;
-        afficheInformationJoueurCourant();
-        afficheInformationOtherPlayer();
-        this.repaint();
-        System.out.println("gare :" +playerCourant.getNbrGare() + " , rail :" +  playerCourant.getNbrWagon() );
-        System.out.println("instance gare :" +  playerCourant.getNbrGareInstance() + " , rail :" + playerCourant.getNbrWagonInstance() );
-    }
-
-    public void setPlayerCourant(Player playerCourant) {
-        this.playerCourant = playerCourant;
-        afficheInformationJoueurCourant();
-        afficheInformationOtherPlayer();
-    }
-
-
-    public Player getPlayerCourant() {
-        return playerCourant;
-    }
 }

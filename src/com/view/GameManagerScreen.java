@@ -51,8 +51,6 @@ public class GameManagerScreen extends JPanel {
             System.err.println("la partie est terminée");
         }
 
-        this.gameMapPanel.playerInfoBarUpdate() ;
-        this.gameMapPanel.mapRepaint();
         this.gameMapPanel.repaint();
     }
 
