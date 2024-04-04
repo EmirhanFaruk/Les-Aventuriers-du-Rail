@@ -14,7 +14,7 @@ import com.model.config.carte.CarteWagon;
 import java.util.ArrayList;
 
 public class StrongBot implements BotAction {
-
+/*
     private void MissWichCard(Route route) {
         int i = 0;
         setNbrWagon(this.nbrWagon - carteAEnlever);
@@ -77,6 +77,7 @@ public class StrongBot implements BotAction {
         }
         return null;
     }
+    */
 
     @Override
     public void drawCardWagon(Game game) {
@@ -84,7 +85,7 @@ public class StrongBot implements BotAction {
         Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
         //Variable qui va déterminer si oui ou non on peut prendre
-        CarteWagon.Couleur color = canCompletePathMissingOneCard(game);
+        CarteWagon.Couleur color = null ;// canCompletePathMissingOneCard(game);
         //-Si il manque une carte:
         if (color != null) {
 
@@ -361,11 +362,4 @@ public class StrongBot implements BotAction {
 
 
     }
-
-
-
-
-
-
-
 
