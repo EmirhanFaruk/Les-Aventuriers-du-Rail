@@ -87,7 +87,8 @@ public class GameController {
         		listeRail.get(i).setOccuperPar(player);
         	}
 
-            game.getGameFrame().getGameScreen().get
+            Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
+
             round.endRound(game);
 
 

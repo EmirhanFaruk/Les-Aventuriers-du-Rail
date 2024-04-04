@@ -53,6 +53,6 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
     public void setPlayerCourant(Player playerCourant) {
-        this.playerHandPanel.setPlayer(playerCourant);
+        this.pioche.setPlayer(playerCourant);
     }
 }
