@@ -7,17 +7,19 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class PlayerInformationBarPanel extends JPanel {
+    private ArrayList<Player> players;
     private Player playerCourant;
     private CardLayout cardLayout;
 
-    public PlayerInformationBarPanel( Player player, int w, int h) {
+    public PlayerInformationBarPanel(  ArrayList<Player> players ,  Player player, int w, int h) {
+        this.players = players ;
         this.playerCourant = player;
         setPreferredSize(new Dimension(w, h));
 
         cardLayout = new CardLayout();
         setLayout(cardLayout);
 
-        afficheInformationJoueurCourant();
+        afficheInfoAll();
     }
 
     private Color playerColor(String str) {
@@ -60,14 +62,36 @@ public class PlayerInformationBarPanel extends JPanel {
         return panel;
     }
 
-    public void afficheInformationJoueurCourant() {
+    public void afficheInfoAll(){
+        JPanel panel = new JPanel( ) ;
+        panel.setLayout( new GridLayout( 1 , 4 ) ) ;
+        panel.add( afficheInformationJoueurCourant() ) ;
+        afficheInformationOtherPlayer( panel );
+
+        add( panel , "AllInformation") ;
+    }
+
+    public JPanel afficheInformationJoueurCourant() {
         Color playerColor = playerColor(playerCourant.getPlayerCouleur());
         assert playerColor != null;
         Color newColor = new Color( playerColor.getRed() , playerColor.getGreen() , playerColor.getBlue() ,100 ) ;
         Font playerNameFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
 
-        JPanel currentPlayerPanel = createPlayerPanel(playerCourant, newColor , playerNameFont);
-        add(currentPlayerPanel, "currentPlayer");
+        return createPlayerPanel(playerCourant, newColor , playerNameFont);
+    }
+
+    public void afficheInformationOtherPlayer( JPanel panel ) {
+        for (Player otherPlayer : players) {
+            if (!otherPlayer.equals(playerCourant)) {
+                Color playerColor = playerColor(otherPlayer.getPlayerCouleur());
+                Font otherPlayerFont = new Font(Font.SANS_SERIF, Font.PLAIN, 12); // Utiliser une police normale pour les autres joueurs
+                assert playerColor != null;
+                panel.add(createPlayerPanel(otherPlayer , new Color(playerColor.getRed(), playerColor.getGreen(), playerColor.getBlue(), 100), otherPlayerFont));
+            }
+        }
+
+        revalidate();
+        repaint();
     }
 
     public void updateCurrentPlayer(Player newPlayerCourant) {
@@ -75,11 +99,8 @@ public class PlayerInformationBarPanel extends JPanel {
 
         Color playerColor = playerColor(newPlayerCourant.getPlayerCouleur());
         assert playerColor != null;
-        Color newColor = new Color( playerColor.getRed() , playerColor.getGreen() , playerColor.getBlue() ,  100 ) ;
-        Font playerNameFont = new Font(Font.SANS_SERIF, Font.BOLD, 18);
 
-        JPanel currentPlayerPanel = createPlayerPanel(newPlayerCourant, newColor , playerNameFont);
-        add(currentPlayerPanel, "currentPlayer");
+        afficheInfoAll();
 
         cardLayout.show(this, "currentPlayer");
         revalidate();
