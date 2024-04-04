@@ -13,7 +13,7 @@ import static com.model.config.carte.CarteWagon.Couleur.*;
 public class CarteManager {
 
     //Le tableau des cartes Wagon du jeu
-    private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[5];
+    private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[3];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
 
@@ -21,7 +21,6 @@ public class CarteManager {
         //Pour initialiser les wagons
         for(int i = 0; i< trainCards.length;i++){
             trainCards[i] = drawCard();
-
         }
     }
 
@@ -33,13 +32,6 @@ public class CarteManager {
         return trainCards;
     }
 
-    public void setDestinationsCards(CarteDestination[] destinationsCards) {
-        this.destinationsCards = destinationsCards;
-    }
-
-    public void setTrainCards(CarteWagon.Couleur[] trainCards) {
-        this.trainCards = trainCards;
-    }
 
     public boolean possibleTakeWagon(int action, int position){
         if(trainCards[position] == LOC){
@@ -51,11 +43,22 @@ public class CarteManager {
 
     public CarteWagon.Couleur takeWagon(int position){
         //Fonction qui prends une carte
+
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
+        
+        while((trainCards[0] == trainCards[1] && trainCards[0] == trainCards[2]) && 
+        trainCards[0] == CarteWagon.Couleur.LOC) {
+        	trainCards[0] = drawCard();
+        	trainCards[1] = drawCard();
+        	trainCards[2] = drawCard();
+        }
 
         return renvoie;
+    }
 
+    public CarteWagon.Couleur showWagon(int position){
+        return trainCards[position];
     }
 
     public CarteDestination[] takeDestination(int[] position,Game game){
