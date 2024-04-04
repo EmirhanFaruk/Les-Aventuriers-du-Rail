@@ -47,7 +47,6 @@ public class PlayerHandPanel extends JPanel {
 
     public void initDrawPlayerHand(Game game, GameController gameController, int height){
         //Initialise la liste des DrawPlayerHand, pour permettre d'afficher la main du joueur qui joue
-        DrawPlayerHand[] drawPlayerHands = {drawPlayerHands1,drawPlayerHands2,drawPlayerHands3,drawPlayerHands4};
         for(int i = 0; i< game.getListPlayer().size();i++){
             DrawPlayerHand drawPlayerHand = new DrawPlayerHand(game.getListPlayer().get(i), height, gameController,game);
 
@@ -72,7 +71,6 @@ public class PlayerHandPanel extends JPanel {
 
     public void initScrollPane(int width , int height ){
         //Initilisation d'une liste de JScrollPane pour changer l'affichage de la main courante a chaque fois
-        JScrollPane[] scrollPanes = {scrollPanes1,scrollPanes2,scrollPanes3,scrollPanes4} ;
         DrawPlayerHand[] drawPlayerHands = {drawPlayerHands1,drawPlayerHands2,drawPlayerHands3,drawPlayerHands4};
 
         for(int i = 0; i< drawPlayerHands.length;i++){
@@ -148,11 +146,21 @@ public class PlayerHandPanel extends JPanel {
         this.mapScreen = mapScreen;
     }
 
-    DrawPlayerHand[] drawPlayerHands = {drawPlayerHands1,drawPlayerHands2,drawPlayerHands3,drawPlayerHands4};
 
     public DrawPlayerHand getDrawPlayerHand() {
         int whoIsPlaying = game.getRound().getWhoIsPlaying();
-        return drawPlayerHands[whoIsPlaying];
+        switch (whoIsPlaying) {
+            case 0:
+                return drawPlayerHands1;
+            case 1:
+                return drawPlayerHands2;
+            case 2:
+                return drawPlayerHands3;
+            case 3:
+                return drawPlayerHands4;
+
+        }
+        return null;
     }
 
     public Game getGame() {
