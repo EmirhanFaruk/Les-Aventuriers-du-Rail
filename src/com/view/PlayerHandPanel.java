@@ -92,7 +92,9 @@ public class PlayerHandPanel extends JPanel {
 
 
     public DrawPlayerHand getDrawPlayerHand() {
+
         int whoIsPlaying = game.getRound().getWhoIsPlaying();
+        cardLayout.show(this, whoSHand.get(whoIsPlaying));
         return this.drawPlayerHands.get(whoIsPlaying);
     }
 
