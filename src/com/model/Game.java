@@ -161,7 +161,7 @@ public class Game
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
-            System.err.println("la partie est terminée");
+            // DEBUG : System.err.println("la partie est terminée");
             this.gameFrame.getGameScreen().getGameManagerScreen().update();
         }
     }
