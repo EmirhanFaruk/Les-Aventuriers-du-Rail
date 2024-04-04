@@ -15,31 +15,16 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class PlayerHandPanel extends JPanel {
-
-    private DrawPlayerHand drawPlayerHands1 ;
-    private DrawPlayerHand drawPlayerHands2 ;
-    private DrawPlayerHand drawPlayerHands3 ;
-    private DrawPlayerHand drawPlayerHands4;
-
-
-    private JScrollPane scrollPanes1;
-    private JScrollPane scrollPanes2;
-    private JScrollPane scrollPanes3;
-    private JScrollPane scrollPanes4;
-
+    private ArrayList<DrawPlayerHand> drawPlayerHands ;
+    private ArrayList<JScrollPane> scrollPanes;
     private ArrayList<String> whoSHand;
     private int imageWidth , imageHeight ;
     private Game game ;
     private MapScreen mapScreen ;
     private int width , height ;
-    private JPanel capsulPanel;
 
     private CardLayout cardLayout = new CardLayout();
 
-
-    public PlayerHandPanel(GameController gameController, Game game , int width , int height , MapScreen mapScreen){
-        make(gameController,game,width,height,mapScreen);
-    }
 
     public void setPlayer(Player player) {
         cardLayout.show(this,player.getName());
@@ -47,84 +32,46 @@ public class PlayerHandPanel extends JPanel {
 
     public void initDrawPlayerHand(Game game, GameController gameController, int height){
         //Initialise la liste des DrawPlayerHand, pour permettre d'afficher la main du joueur qui joue
+        this.drawPlayerHands = new ArrayList<>();
         for(int i = 0; i< game.getListPlayer().size();i++){
-            DrawPlayerHand drawPlayerHand = new DrawPlayerHand(game.getListPlayer().get(i), height, gameController,game);
-
-            switch (i){
-                case 0 :
-                    drawPlayerHands1 = drawPlayerHand ;
-                    break;
-                case 1 :
-                    drawPlayerHands2 = drawPlayerHand;
-                    break;
-                case 2 :
-                    drawPlayerHands3 = drawPlayerHand;
-                    break;
-                case 3 :
-                    drawPlayerHands4 = drawPlayerHand;
-                    break;
-
-
-            }
+            this.drawPlayerHands.add(new DrawPlayerHand(game.getListPlayer().get(i), height, gameController,game));
         }
     }
 
     public void initScrollPane(int width , int height ){
         //Initilisation d'une liste de JScrollPane pour changer l'affichage de la main courante a chaque fois
-        DrawPlayerHand[] drawPlayerHands = {drawPlayerHands1,drawPlayerHands2,drawPlayerHands3,drawPlayerHands4};
+        this.scrollPanes = new ArrayList<>();
 
-        for(int i = 0; i< drawPlayerHands.length;i++){
-            JScrollPane scrollPane = new JScrollPane(drawPlayerHands[i]);
+
+        for(int i = 0; i< drawPlayerHands.size();i++){
+            JScrollPane scrollPane = new JScrollPane(drawPlayerHands.get(i));
             scrollPane.setPreferredSize(new Dimension( width , height ));
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.getHorizontalScrollBar().setBackground(Color.ORANGE);
-
-            switch (i){
-                case 0 :
-                    scrollPanes1 = scrollPane;
-                    break;
-                case 1 :
-                    scrollPanes2 = scrollPane;
-                    break;
-                case 2 :
-                    scrollPanes3 = scrollPane;
-                    break;
-                case 3 :
-                    scrollPanes4 = scrollPane;
-                    break;
-
-
-            }
-
-
+            this.scrollPanes.add(scrollPane);
         }
     }
 
     public void initWhosHand(Game game){
-        this.whoSHand = new ArrayList<>();
         //Initialisation de la liste de String pour le cardLayout (pour se déplacer entre les joueurs)
+        this.whoSHand = new ArrayList<>();
+
         for (int i = 0; i< game.getListPlayer().size();i++){
             this.whoSHand.add(game.getListPlayer().get(i).getName());
         }
     }
 
-    public void initCardLayout(JPanel capsulPanel){
+    public void initCardLayout(){
         //Initialisation du contenu du cardLayout
-
-        JScrollPane[] scrollPanes = {scrollPanes1,scrollPanes2,scrollPanes3,scrollPanes4} ;
-
         this.setLayout(cardLayout);
         for(int i = 0; i< this.whoSHand.size();i++){
-
-            capsulPanel.add(whoSHand.get(i),scrollPanes[i]);
+            this.add(whoSHand.get(i),scrollPanes.get(i));
         }
     }
 
     public void make(GameController gameController, Game game , int width , int height , MapScreen mapScreen){
-        //Initialisation de tout les attributs de la classe
 
-        this.capsulPanel = new JPanel();
         this.game = game ;
         this.mapScreen = mapScreen ;
         this.width = width ;
@@ -136,31 +83,17 @@ public class PlayerHandPanel extends JPanel {
         initDrawPlayerHand(game,gameController, this.height);
         initScrollPane(this.width, this.height);
         initWhosHand(game);
-        initCardLayout(capsulPanel);
-        this.add(capsulPanel, BorderLayout.SOUTH);
+        initCardLayout();
 
 
     }
 
-    public void setMapScreen(MapScreen mapScreen) {
-        this.mapScreen = mapScreen;
-    }
+
 
 
     public DrawPlayerHand getDrawPlayerHand() {
         int whoIsPlaying = game.getRound().getWhoIsPlaying();
-        switch (whoIsPlaying) {
-            case 0:
-                return drawPlayerHands1;
-            case 1:
-                return drawPlayerHands2;
-            case 2:
-                return drawPlayerHands3;
-            case 3:
-                return drawPlayerHands4;
-
-        }
-        return null;
+        return this.drawPlayerHands.get(whoIsPlaying);
     }
 
     public Game getGame() {
@@ -238,7 +171,7 @@ public class PlayerHandPanel extends JPanel {
                     return c ;
                 }
             }
-           return null ;
+            return null ;
         }
 
         public void setPlayer(Player player) {
