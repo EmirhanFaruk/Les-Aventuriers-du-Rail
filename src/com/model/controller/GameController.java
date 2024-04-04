@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class GameController {
     private String detailsCarte; // Variable pour sauvegarder les détails de la carte
     private CarteWagon carteWagon ;
-    private CarteDestination carteDestination ;
     private int Mx , My  ;
 
     public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Game game, Player joueurCourant) {
@@ -88,7 +87,9 @@ public class GameController {
         		listeRail.get(i).setOccuperPar(player);
         	}
 
+            game.getGameFrame().getGameScreen().get
             round.endRound(game);
+
 
         }
     }
@@ -103,6 +104,7 @@ public class GameController {
                 tenterDePoserUneGare( ville , player );
                 mapScreen.repaintAll(playerHandPanel);
                 game.getRound().endRound(game);
+
 
             } catch ( Exception exception ){
                 System.err.println( "D'abord selectionner une ville" ) ;

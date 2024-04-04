@@ -112,6 +112,11 @@ public class PiochePanel extends JPanel {
             }
         }
     }
+
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }
 
     

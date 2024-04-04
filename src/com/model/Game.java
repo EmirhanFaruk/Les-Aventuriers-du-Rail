@@ -62,6 +62,10 @@ public class Game
         return listPlayer;
     }
 
+    public GameFrame getGameFrame() {
+        return gameFrame;
+    }
+
     public void setListPlayer(ArrayList<Player> listPlayer) {
         this.listPlayer = listPlayer;
     }
