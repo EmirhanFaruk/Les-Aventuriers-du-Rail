@@ -54,5 +54,6 @@ public class GameMapPanel extends JPanel {
     }
     public void setPlayerCourant(Player playerCourant) {
         this.pioche.setPlayer(playerCourant);
+        this.mapScreen.setPlayer( playerCourant );
     }
 }
