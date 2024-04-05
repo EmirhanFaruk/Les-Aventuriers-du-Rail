@@ -10,6 +10,7 @@ import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.view.graphics.VilleGraphics;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -155,10 +156,15 @@ public class Player {
 			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
 					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
 					ville.setIsOccuped( this );
-					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
 			} else {
-				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+						"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+				// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
 			}
+		} else {
+			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 		}
 
 	}
@@ -277,7 +283,11 @@ public class Player {
         this.destinationsList = destinationsList;
     }
 
-    public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
+	public Game getGame() {
+		return game;
+	}
+
+	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
         this.trainList = trainList;
     }
 
