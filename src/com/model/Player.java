@@ -109,7 +109,7 @@ public class Player {
 
 	}
 
-    private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    public void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
 		// Premiere boucle qui enlève juste la couleur color
@@ -158,7 +158,7 @@ public class Player {
 			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
 					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
 					ville.setIsOccuped( this );
-					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+					System.out.println("JE SUIS LE NOUVEAU MAIRE DE LA VILLE " + ville.getNom() + " JE SUIS " + this.getName() );
 			} else {
 				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
 			}

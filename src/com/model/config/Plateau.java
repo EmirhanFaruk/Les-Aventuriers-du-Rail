@@ -210,8 +210,8 @@ public class Plateau {
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]); //CHECK
             String nom = stville[i][1];
-            villes[i] = new Ville(x, y, nom);
             plateau.plateau[x][y] = new Ville(x, y, nom);
+            villes[i] = ( Ville ) plateau.plateau[x][y] ;
         }
     }
 
