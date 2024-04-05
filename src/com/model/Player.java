@@ -157,14 +157,21 @@ public class Player {
 	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 		if ( assezDeGare() ){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
-			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
-					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
-					ville.setIsOccuped( this );
+
+			int choixUtilisateur = JOptionPane.showConfirmDialog(
+					game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+
+			if (choixUtilisateur == JOptionPane.YES_OPTION) {
+				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+					ville.setIsOccuped(this);
 					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
-			} else {
-				JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-						"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
-				// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				} else {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+					// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				}
 			}
 		} else {
 			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
