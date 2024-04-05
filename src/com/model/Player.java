@@ -1,6 +1,7 @@
 package com.model;
 import com.model.config.Plateau;
 import com.model.config.Rail;
+import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
@@ -9,6 +10,7 @@ import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.view.graphics.VilleGraphics;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -155,13 +157,28 @@ public class Player {
 	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 		if ( assezDeGare() ){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
-			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
-					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
-					ville.setIsOccuped( this );
-					System.out.println("JE SUIS LE NOUVEAU MAIRE DE LA VILLE " + ville.getNom() + " JE SUIS " + this.getName() );
-			} else {
-				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+
+			int choixUtilisateur = JOptionPane.showConfirmDialog(
+					game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+
+			if (choixUtilisateur == JOptionPane.YES_OPTION) {
+				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+					ville.setIsOccuped(this);
+					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+				} else if ( ville.getIsOccuped() != null ) {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+					// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				}
 			}
+		} else {
+			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 		}
 
 	}
@@ -280,7 +297,11 @@ public class Player {
         this.destinationsList = destinationsList;
     }
 
-    public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
+	public Game getGame() {
+		return game;
+	}
+
+	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
         this.trainList = trainList;
     }
 
