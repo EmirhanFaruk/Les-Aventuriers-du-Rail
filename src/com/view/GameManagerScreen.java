@@ -3,8 +3,7 @@ package com.view;
 import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
-import com.model.Game ;
-import com.view.PlayerHandPanel ;
+import com.view.endgame.EndGameScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +48,9 @@ public class GameManagerScreen extends JPanel {
             add( frame.getEndgame_screen_s() , endGameScreen ) ;
             cardLayout.show(this , frame.getEndgame_screen_s());
             this.frame.getMain().setRunning( false );
+            System.err.println("la partie est terminée");
         }
+
         this.gameMapPanel.repaint();
     }
 

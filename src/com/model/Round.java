@@ -62,7 +62,7 @@ public class Round {
         GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
 
         gameMapPanel.setPlayerCourant(joueur);
-        System.out.println(whoIsPlaying);
+        //DEBUG : System.out.println(whoIsPlaying);
     }
     public void whosNext(Game game){
         //Passer au prochain joueur
