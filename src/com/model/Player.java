@@ -167,6 +167,9 @@ public class Player {
 					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 					ville.setIsOccuped(this);
 					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+				} else if ( ville.getIsOccuped() != null ) {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
