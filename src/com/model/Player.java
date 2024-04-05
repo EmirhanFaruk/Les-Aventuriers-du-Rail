@@ -137,6 +137,7 @@ public class Player {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
+				this.score += r.getNombrePoint();
                 return true;
             }
     	}
