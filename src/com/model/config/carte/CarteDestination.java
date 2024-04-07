@@ -26,6 +26,9 @@ public class CarteDestination extends JPanel {
     public boolean getComplete(){
         return complete;
     }
+    public void setComplete(){
+        complete = true;
+    }
 
 
     //Pour les testes on va utiliser ce constructeur

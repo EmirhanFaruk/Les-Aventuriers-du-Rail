@@ -20,7 +20,7 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
-
+	private ArrayList<Route> playerRoutes = new ArrayList<>();
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
@@ -38,7 +38,6 @@ public class Player {
 		this.nbrWagon = 15 ;
 		this.nbrGare = 3 ;
 		this.game = game;
-
 	}
 
 
@@ -138,12 +137,44 @@ public class Player {
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
 				this.score += r.getNombrePoint();
-                return true;
+				playerRoutes.add(r);
+				score += aCompleterUneMission(r); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
+				return true;
             }
     	}
     	
     	return false;
     }
+
+	private int aCompleterUneMission(Route r) {
+		if(destinationsList.size() == 0) return 0;
+		int cumulPoints=0;
+		for(CarteDestination c : destinationsList){
+			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
+			if(completerChemin(c.getPremiereVille(),c.getDeuxiemeVille(),null)){
+				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
+				c.setComplete();
+			} 
+		}
+		return cumulPoints;
+	}
+
+
+	private boolean completerChemin(Ville ville1, Ville ville2,Route routePrec) {
+		for(Route r : playerRoutes){
+			if(r == routePrec) continue; // éviter de revenir en arrière(boucle infini)
+			String rV1 = r.getVille1().getNom(),rV2 = r.getVille2().getNom();
+			if(rV1.equals(ville1.getNom()) && rV2.equals(ville2.getNom()) || rV1.equals(ville2.getNom()) && rV2.equals(ville1.getNom()) ) return true; //le cas de la dernière route.
+			
+			if(rV1.equals(ville1.getNom()) && completerChemin(r.getVille2(), ville2,r)) return true;
+			if(rV1.equals(ville2.getNom()) && completerChemin(r.getVille2(), ville1,r)) return true;
+
+			if(rV2.equals(ville1.getNom()) && completerChemin(r.getVille1(), ville2,r)) return true;
+			if(rV2.equals(ville2.getNom()) && completerChemin(r.getVille1(), ville1,r)) return true;	
+		}
+		return false;
+	}
+
 
 	/**
 	 * Une fonction qui renvoie true si le joueur peut changer la ville en gare
