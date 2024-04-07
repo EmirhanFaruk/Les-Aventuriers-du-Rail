@@ -1,4 +1,7 @@
-package com.view;
+package com.view.endgame;
+
+import com.view.GameScreen;
+import com.view.endgame.ScoreBoardScreen;
 
 import javax.swing.*;
 import java.awt.*;

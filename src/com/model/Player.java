@@ -10,6 +10,7 @@ import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.view.graphics.VilleGraphics;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -21,6 +22,8 @@ public class Player {
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
 	private ArrayList<Route> playerRoutes = new ArrayList<>();
+	private int nbrWagonInstance ;
+	private int nbrGareInstance ;
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
@@ -37,6 +40,8 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 3 ;
+		this.nbrGareInstance = this.nbrGare ;
+		this.nbrWagonInstance = this.nbrWagon ;
 		this.game = game;
 	}
 
@@ -105,7 +110,7 @@ public class Player {
 
 	}
 
-    private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    public void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
 		// Premiere boucle qui enlève juste la couleur color
@@ -184,13 +189,28 @@ public class Player {
 	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 		if ( assezDeGare() ){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
-			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
-					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
-					ville.setIsOccuped( this );
-					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
-			} else {
-				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+
+			int choixUtilisateur = JOptionPane.showConfirmDialog(
+					game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+
+			if (choixUtilisateur == JOptionPane.YES_OPTION) {
+				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+					ville.setIsOccuped(this);
+					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+				} else if ( ville.getIsOccuped() != null ) {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+					// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				}
 			}
+		} else {
+			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 		}
 
 	}
@@ -309,7 +329,11 @@ public class Player {
         this.destinationsList = destinationsList;
     }
 
-    public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
+	public Game getGame() {
+		return game;
+	}
+
+	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
         this.trainList = trainList;
     }
 
@@ -335,6 +359,22 @@ public class Player {
 
 	public int getMissionComplete() {
 		return missionComplete;
+	}
+
+	public int getNbrGareInstance() {
+		return nbrGareInstance;
+	}
+
+	public void setNbrGareInstance(int nbrGareInstance) {
+		this.nbrGareInstance = nbrGareInstance;
+	}
+
+	public int getNbrWagonInstance() {
+		return nbrWagonInstance;
+	}
+
+	public void setNbrWagonInstance(int nbrWagonInstance) {
+		this.nbrWagonInstance = nbrWagonInstance;
 	}
 
 	public void setMissionComplete(int missionComplete) {

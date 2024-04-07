@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.model.Player;
 import com.model.config.carte.CarteManager;
@@ -75,8 +75,8 @@ public class PiochePanel extends JPanel {
                             if(gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))){
                                 imagePiocheVisible.takeWagon(i);
                             }else{
-                                //TODO AFFICHER UN TEXTE QUI DIT ON NE PEUT PAS PRENDRE CETTE CARTE
-
+                                JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                                        ,"Vous ne pouvez pas choisir cette carte ! ","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
                             }
                             mainDuJoueur.repaint();
                             mainDuJoueur.getDrawPlayerHand().repaint();

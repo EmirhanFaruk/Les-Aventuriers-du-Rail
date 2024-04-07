@@ -20,6 +20,11 @@ public class CarteWagon extends JPanel {
         this.heightInPanel = h ;
 	}
 
+    public CarteWagon(Couleur couleur)
+    {
+        this.initialCouleur = couleur;
+    }
+
 	public Couleur getInitialCouleur() {
         return initialCouleur;
     }

@@ -5,8 +5,8 @@ import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteWagon.Couleur;
-
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.model.config.carte.CarteWagon.Couleur.*;
 
@@ -16,13 +16,69 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[3];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
+    //La pile de cartes Wagon
+    public ArrayList<CarteWagon> PileCarteWagon = new ArrayList<>(110);
+    //La pile de cartes Destination
+    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
 
     public CarteManager(){
         //Pour initialiser les wagons
-        for(int i = 0; i< trainCards.length;i++){
-            trainCards[i] = drawCard();
+        initPileCarteWagon();
+
+    }
+
+
+    private void initPileCarteWagon() {
+        for(int i=0;i<8;i++){ //8 couleurs de carteWagon
+            for(int j=0;j<12;j++) //12 wagons de chaque couleur
+            PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+        }
+        for(int i =0;i<14;i++){
+            PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
+        }
+        Collections.shuffle(PileCarteWagon); // Mélange de cartes.
+    }
+
+    public void initPileCarteDestination(Game g) {
+        ArrayList<Route> gameRoutes = g.getRoutes();
+        for(Route r : gameRoutes){
+            PileCarteDestination.add(new CarteDestination(r)); //Les cartes destinations à courte distance (une route)
+        }
+        for (int i=0; i< 21;i++){
+            Random r = new Random();
+            int Vlength = g.getVilles().length;
+            Ville v1 = g.getVilles()[r.nextInt(Vlength)];
+            Ville v2 = g.getVilles()[r.nextInt(Vlength)];
+            while (v2.getNom().equals(v1.getNom())){
+                v2 = g.getVilles()[r.nextInt(Vlength)];
+            }
+            while(carteDestExistante(v1,v2)){
+                v1 = g.getVilles()[r.nextInt(Vlength)];
+                v2 = g.getVilles()[r.nextInt(Vlength)];
+                while (v2.getNom().equals(v1.getNom())){
+                    v2 = g.getVilles()[r.nextInt(Vlength)];
+                }
+            }
+
+            PileCarteDestination.add(new CarteDestination(v1,v2,nombrePointDistance(v1, v2)));
+        }
+        Collections.shuffle(PileCarteDestination);
+        for(int i=0; i< destinationsCards.length;i++){
+            destinationsCards[i]= PileCarteDestination.remove(0);
         }
     }
+
+
+    private boolean carteDestExistante(Ville v1, Ville v2) {
+        String cV1 = v1.getNom(); //Le nom de la première ville
+        String cV2 = v2.getNom(); //Le nom de la deuxieme ville
+        for(CarteDestination carte : PileCarteDestination){
+            if(carte.getPremiereVille().getNom().equals(cV1) && carte.getDeuxiemeVille().getNom().equals(cV2) || carte.getPremiereVille().getNom().equals(cV2) && carte.getDeuxiemeVille().getNom().equals(cV1))
+                return true;
+        }
+        return false;
+    }
+
 
     public CarteDestination[] getDestinationsCards() {
         return destinationsCards;
@@ -88,38 +144,7 @@ public class CarteManager {
     }
 
     public CarteWagon.Couleur drawCard(){
-        //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
-
-        Random carte = new Random();
-        int pioche = carte.nextInt(110);
-
-        //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
-        if(pioche >= 0 && pioche <= 11){
-            return Couleur.BLEU;
-        }
-        if(pioche >= 12 && pioche <= 23){
-            return Couleur.VIOLET;
-        }
-        if(pioche >= 24 && pioche <= 35){
-            return Couleur.MARRON;
-        }
-        if(pioche >= 36 && pioche <= 47){
-            return Couleur.NOIRE;
-        }
-        if(pioche >= 48 && pioche <= 59){
-            return Couleur.VERT;
-        }
-        if(pioche >= 60 && pioche <= 71){
-            return Couleur.JAUNE;
-        }
-        if(pioche >= 72 && pioche <= 83){
-            return Couleur.BLANC;
-        }
-        if(pioche >= 84 && pioche <= 95){
-            return Couleur.ROUGE;
-        }
-
-        return Couleur.LOC;
+        return PileCarteWagon.remove(0).getInitialCouleur();
 
     }
 
@@ -151,10 +176,4 @@ public class CarteManager {
         //TODO
         return 2;
     }
-
-
-
-
-
-    
 }
