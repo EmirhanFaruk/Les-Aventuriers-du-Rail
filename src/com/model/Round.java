@@ -1,6 +1,5 @@
 package com.model;
 
-import com.model.ai.LongestFinder;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
@@ -80,8 +79,6 @@ public class Round {
 
     public void round(Game game, CarteManager carteManager, double deltaTime)
     {
-        System.out.println("\n\n\n\n\n\n\n\nBout to print da way");
-        LongestFinder.doForAll(game.getVilles(), game.getListPlayer().get(whoIsPlaying));
         if (betweenRoundTimer <= 0)
         {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {

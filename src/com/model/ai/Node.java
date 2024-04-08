@@ -101,10 +101,14 @@ public class Node
                     {
                         Node node = new Node(routeVille, this);
                         node.g = this.g + route.getLongueur();
-                        // If owned by player, cost stays the same
+                        // If owned by player(either ville as gares or the route itself), cost stays the same
                         if (player != null)
                         {
-                            if (routeVille.getIsOccuped() == player)
+                            boolean noCost =
+                                    routeVille.getIsOccuped() == player ||
+                                            ville.getIsOccuped() == player ||
+                                    route.getProprietaire() == player;
+                            if (noCost)
                             {
                                 node.g = this.g;
                             }
