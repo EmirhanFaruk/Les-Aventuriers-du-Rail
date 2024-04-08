@@ -58,8 +58,7 @@ public class Player {
 	}
 
 	public void piocheCarteInvisible() {
-		CarteManager cm = new CarteManager();
-
+		CarteManager cm = game.getCarteManager();
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
 			this.trainList.add(cm.drawCard());

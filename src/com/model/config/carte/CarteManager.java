@@ -144,8 +144,9 @@ public class CarteManager {
     }
 
     public CarteWagon.Couleur drawCard(){
+        if(!PileCarteWagon.isEmpty())
         return PileCarteWagon.remove(0).getInitialCouleur();
-
+        return null;
     }
 
     public CarteDestination getDestination(Game game){
