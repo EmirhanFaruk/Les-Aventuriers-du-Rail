@@ -28,7 +28,7 @@ public class CarteManager {
     }
 
 
-    private void initPileCarteWagon() {
+ private void initPileCarteWagon() {
         for(int i=0;i<8;i++){ //8 couleurs de carteWagon
             for(int j=0;j<12;j++) //12 wagons de chaque couleur
             PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
@@ -176,5 +176,12 @@ public class CarteManager {
     public int nombrePointDistance(Ville v1, Ville v2){
         //TODO
         return 2;
+    }
+
+    public boolean trainCardisEmpty(){
+        for(CarteWagon.Couleur c : trainCards){
+            if(c != null) return false;
+        }
+        return true;
     }
 }
