@@ -62,12 +62,12 @@ public class Player {
 
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
-			this.trainList.add(cm.drawCard());
+			insertCarte(cm.drawCard());
 			game.getRound().setAction(game.getRound().getAction() - 1);
 
 		}else{
 			//Si on a plus que une action alors on pioche puis on fini le tour
-			this.trainList.add(cm.drawCard());
+			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
 	}
@@ -80,13 +80,13 @@ public class Player {
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
 
@@ -100,16 +100,54 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
+		}
+	}
 
 
+
+	private void insertCarte(Couleur carte)
+	{
+		int i = findCarteIndex(carte);
+
+		this.trainList.add(i, carte);
+	}
+
+
+	/**
+	 * Trouver le bon index pour inserer la carte obtenu.
+	 * @param carte carte a inserer
+	 * @return le bon index
+	 */
+	private int findCarteIndex(Couleur carte)
+	{
+		int res = this.trainList.size();
+
+		if (carte != Couleur.LOC)
+		{
+			int i = 0;
+			while (i < this.trainList.size())
+			{
+				if (carte.ordinal() > this.trainList.get(i).ordinal())
+				{
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			res = i;
 		}
 
-
+		return res;
 	}
+
+
 
     public void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
@@ -254,7 +292,7 @@ public class Player {
 
 	public void piocher(CarteManager cm)
 	{
-		trainList.add(cm.drawCard());
+		insertCarte(cm.drawCard());
 	}
 
 
