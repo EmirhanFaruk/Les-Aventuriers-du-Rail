@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.model.Player;
 import com.model.config.carte.CarteManager;
@@ -72,7 +72,12 @@ public class PiochePanel extends JPanel {
                     for (int i = 0; i < piocheVisibleBounds.length; i++) {
                         if (piocheVisibleBounds[i].contains(e.getPoint())) {
                             // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
-                            gameController.piocherCarteVisible(player, imagePiocheVisible.takeWagon(i));
+                            if(gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))){
+                                imagePiocheVisible.takeWagon(i);
+                            }else{
+                                JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                                        ,"Vous ne pouvez pas choisir cette carte ! ","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+                            }
                             mainDuJoueur.repaint();
                             mainDuJoueur.getDrawPlayerHand().repaint();
                             repaint();
@@ -106,6 +111,11 @@ public class PiochePanel extends JPanel {
                 g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);
             }
         }
+    }
+
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }
 

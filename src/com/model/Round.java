@@ -6,6 +6,8 @@ import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
 import com.model.config.carte.CarteManager;
 
+import com.view.GameMapPanel;
+
 public class Round {
 
     private boolean playing = true; //Le jeu en pose ou pas
@@ -48,6 +50,14 @@ public class Round {
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         whosNext(game);
+
+        //Variable pour avoir Player
+        Player joueur = game.getListPlayer().get(whoIsPlaying);
+
+        GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
+
+        gameMapPanel.setPlayerCourant(joueur);
+        // DEBUG :System.out.println(whoIsPlaying);
     }
     public void whosNext(Game game){
         //Passer au prochain joueur
@@ -77,15 +87,15 @@ public class Round {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
 
                 case(1):
-                    weakBotPlay.play(game,carteManager,this);
+                    weakBotPlay.play(game);
                     break;
 
                 case(2):
-                    normalBotPlay.play(game,carteManager,this);
+                    normalBotPlay.play(game);
                     break;
 
                 case(3):
-                    strongBotPlay.play(game,carteManager,this);
+                    strongBotPlay.play(game);
                     break;
 
                 default:

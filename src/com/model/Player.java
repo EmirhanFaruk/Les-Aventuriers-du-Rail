@@ -10,6 +10,7 @@ import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.view.graphics.VilleGraphics;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -20,15 +21,18 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
+	private int nbrWagonInstance ;
+	private int nbrGareInstance ;
 
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
+	private Game game;
 
 
-	public Player ( String playerCouleur , String name , int niveau, CarteManager carteManager ){
+	public Player ( String playerCouleur , String name , int niveau, Game game){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
@@ -36,6 +40,10 @@ public class Player {
 		this.missionComplete = 0 ;
 		this.nbrWagon = 15 ;
 		this.nbrGare = 3 ;
+		this.nbrGareInstance = this.nbrGare ;
+		this.nbrWagonInstance = this.nbrWagon ;
+		this.game = game;
+
 	}
 
 
@@ -51,14 +59,59 @@ public class Player {
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = new CarteManager();
-		this.trainList.add(cm.drawCard());
+
+		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
+		if(game.getRound().getAction() >1){
+			this.trainList.add(cm.drawCard());
+			game.getRound().setAction(game.getRound().getAction() - 1);
+
+		}else{
+			//Si on a plus que une action alors on pioche puis on fini le tour
+			this.trainList.add(cm.drawCard());
+			game.getRound().endRound(game);
+		}
 	}
 
-	public void piocheCarteVisible(CarteWagon.Couleur carte) {
-		this.trainList.add(carte);
+	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
+
+		//On regarde si le joueur a 2 actions ou non
+		if(game.getRound().getAction() > 1){
+
+			//Si oui alors on regarde si c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est une locomotive on fini le tour du joueur
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+			else{
+				//Sinon on enleve une action au joueur
+				this.trainList.add(carte);
+				game.getRound().setAction(game.getRound().getAction() - 1);
+				return true;
+
+			}
+
+		}else{
+			//On verifie que c'est une carte locomotive ou non
+			if(carte == Couleur.LOC){
+				//Si c'est le cas alors on dit qu'on ne peut pas
+				return false;
+			}
+			else{
+				//Sinon on pioche la carte et on passe au joueur suivant
+				this.trainList.add(carte);
+				game.getRound().endRound(game);
+				return true;
+			}
+
+
+		}
+
+
 	}
 
-    private void retirerLesCartes(Couleur color, int carteAEnlever) {
+    public void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
     	setNbrWagon(this.nbrWagon - carteAEnlever);
 		// Premiere boucle qui enlève juste la couleur color
@@ -104,13 +157,28 @@ public class Player {
 	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 		if ( assezDeGare() ){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
-			if (  nbrCarteRetirer <= peutChangerAvecCetteCarte( couleurCarteChoisit ) && ville.getIsOccuped() == null ) {
-					retirerCartePourGare(couleurCarteChoisit , nbrCarteRetirer );
-					ville.setIsOccuped( this );
-					System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
-			} else {
-				System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+
+			int choixUtilisateur = JOptionPane.showConfirmDialog(
+					game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+
+			if (choixUtilisateur == JOptionPane.YES_OPTION) {
+				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+					ville.setIsOccuped(this);
+					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+				} else if ( ville.getIsOccuped() != null ) {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+					// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+				}
 			}
+		} else {
+			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 		}
 
 	}
@@ -229,7 +297,11 @@ public class Player {
         this.destinationsList = destinationsList;
     }
 
-    public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
+	public Game getGame() {
+		return game;
+	}
+
+	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
         this.trainList = trainList;
     }
 
@@ -255,6 +327,22 @@ public class Player {
 
 	public int getMissionComplete() {
 		return missionComplete;
+	}
+
+	public int getNbrGareInstance() {
+		return nbrGareInstance;
+	}
+
+	public void setNbrGareInstance(int nbrGareInstance) {
+		this.nbrGareInstance = nbrGareInstance;
+	}
+
+	public int getNbrWagonInstance() {
+		return nbrWagonInstance;
+	}
+
+	public void setNbrWagonInstance(int nbrWagonInstance) {
+		this.nbrWagonInstance = nbrWagonInstance;
 	}
 
 	public void setMissionComplete(int missionComplete) {

@@ -1,18 +1,25 @@
 package com.model.bot;
 
 import com.model.Game;
+import com.model.Player;
 import com.model.Round;
+import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WeakBot implements BotAction{
 
     @Override
-    public void drawCardWagon(Round round,CarteManager carteManager, Game game) {
+    public void drawCardWagon(Game game) {
         Random random = new Random();
+        //Variable pour avoir round
+        Round round = game.getRound();
+        //Variable pour avoir carteManager
+        CarteManager carteManager = game.getCarteManager();
 
         //Si l'ia a encore des actions
         while (round.getAction() < 0){
@@ -51,8 +58,11 @@ public class WeakBot implements BotAction{
     }
 
     @Override
-    public boolean takeRail(Game game,Round round) {
+    public boolean takeRail(Game game) {
         //On a toSetDownWagon qui verifie que le joueur a pris ou non une route, si oui alors on arrete la fonction, sinon on rappelle la fonction
+
+        //Variable pour avoir round
+        Round round = game.getRound();
 
         boolean toSetDownWagon = false;
 
@@ -63,6 +73,15 @@ public class WeakBot implements BotAction{
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
+                ArrayList<Rail> listeRail =   game.getRoutes().get(i).getRailsRoute() ;
+                int tailleRoute =  game.getRoutes().get(i).getLongueur();
+                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
+
+                for(int j = 0 ; j  < tailleRoute ; j++) {
+                    listeRail.get( j ).setOccuperPar( bot );
+                }
+                game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint();
+                // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
             }
@@ -72,11 +91,20 @@ public class WeakBot implements BotAction{
     }
 
     @Override
-    public boolean takeGare(Game game, int wichStation, Round round) {
-        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares
-        if(game.getVilles().get(wichStation).getIsOccuped() == null && game.getListPlayer().get(round.getWhoIsPlaying()).getNbrGare() < 0){
+    public boolean takeGare(Game game, int wichStation) {
+        //Variable pour avoir round
+        Round round = game.getRound();
+        //Variable du joueur
+        Player player = game.getListPlayer().get(round.getWhoIsPlaying());
 
-            game.getVilles().get(wichStation).setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
+        Random random = new Random();
+        int card = random.nextInt( player.getTrainCard().size() ) ;
+        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
+        if( game.getVilles().get(wichStation).getIsOccuped() == null ){
+            player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainCard().get( card ) );
+            System.err.println( "Le botW a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
+
+            game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint(); ;
 
             return true;
         }
@@ -86,7 +114,9 @@ public class WeakBot implements BotAction{
     }
 
     @Override
-    public CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game){
+    public CarteDestination[] takeMissionsCard(int max, Game game){
+        //Variable pour avoir carteManager
+        CarteManager carteManager = game.getCarteManager();
 
         Random random = new Random();
 
@@ -109,7 +139,7 @@ public class WeakBot implements BotAction{
 
 
     @Override
-    public void play(Game game, CarteManager carteManager, Round round) {
+    public void play(Game game) {
         //Fonction principale du bot faible
 
         Random random = new Random();
@@ -121,9 +151,9 @@ public class WeakBot implements BotAction{
             case(0):
                 /*        CARTES WAGONS        */
 
-                drawCardWagon(round,carteManager,game);
+                drawCardWagon(game);
 
-                round.endRound(game);
+                game.getRound().endRound(game);
 
                 break;
 
@@ -131,15 +161,15 @@ public class WeakBot implements BotAction{
             case(1):
                 /*        CARTES MISSIONS        */
 
-                CarteDestination[] carteDestination = takeMissionsCard(0,carteManager,game);
+                CarteDestination[] carteDestination = takeMissionsCard(0,game);
 
                 //Pour ensuite les ajouter dans la liste des missions du bot
                 for(int z = 0; z<carteDestination.length;z++){
 
-                    game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
+                    game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
                 }
 
-                round.endRound(game);
+                game.getRound().endRound(game);
 
                 break;
 
@@ -149,13 +179,13 @@ public class WeakBot implements BotAction{
                 /*        POSER DES WAGONS       */
 
                 //On regarde si les rails ont bien était posés
-                if(takeRail(game,round)){
+                if(takeRail(game)){
 
-                    round.endRound(game);
+                    game.getRound().endRound(game);
 
                 }
                 else{
-                    play(game,carteManager,round);
+                    play(game);
 
                 }
 
@@ -167,12 +197,12 @@ public class WeakBot implements BotAction{
 
                 int wichStation = random.nextInt(game.getVilles().size());
 
-                if(takeGare(game,wichStation,round)){
-                  round.endRound(game);
+                if(takeGare(game,wichStation)){
+                  game.getRound().endRound(game);
 
                 }
                 else{
-                    play(game,carteManager,round);
+                    play(game);
                 }
 
 

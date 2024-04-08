@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class NormalBot implements BotAction{
     @Override
-    public void drawCardWagon(Round round,CarteManager carteManager, Game game) {
+    public void drawCardWagon(Game game) {
         //Si il peut completer une route avec 2 carte alors piocher les 2 cartes
 
         //Si il peut completer une route avec 1 carte alors piocher la carte
@@ -19,7 +19,10 @@ public class NormalBot implements BotAction{
 
     }
 
-    public boolean takeRail(Game game,Round round) {
+    public boolean takeRail(Game game) {
+        //Variable pour avoir round
+        Round round = game.getRound();
+
         //On a toSetDownWagon qui verifie que le joueur a pris ou non une route, si oui alors on arrete la fonction, sinon on rappelle la fonction
 
         boolean toSetDownWagon = false;
@@ -40,14 +43,17 @@ public class NormalBot implements BotAction{
     }
 
     @Override
-    public boolean takeGare(Game game, int wichStation, Round round) {
+    public boolean takeGare(Game game, int wichStation) {
         //Meme logique que le bot intelligent
 
         return true;
     }
 
     @Override
-    public CarteDestination[] takeMissionsCard(int max, CarteManager carteManager, Game game) {
+    public CarteDestination[] takeMissionsCard(int max,Game game) {
+        //Variable pour avoir carteManager
+        CarteManager carteManager = game.getCarteManager();
+
         //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
 
         //On regarde lequel des cartes mission a la plus petite route,
@@ -82,7 +88,7 @@ public class NormalBot implements BotAction{
 
 
     @Override
-    public void play(Game game, CarteManager carteManager, Round round) {
+    public void play(Game game) {
         //Fonction principale du bot normal
 
         Random random = new Random();
@@ -107,11 +113,11 @@ public class NormalBot implements BotAction{
                 /*        POSER DES WAGONS       */
 
                 //On regarde si les rails ont bien était posés
-                if (takeRail(game, round)) {
-                    round.endRound(game);
+                if (takeRail(game)) {
+                    game.getRound().endRound(game);
 
                 } else {
-                    play(game, carteManager, round);
+                    play(game);
 
                 }
 

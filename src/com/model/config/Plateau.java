@@ -209,9 +209,9 @@ public class Plateau {
             int x = Integer.parseInt(stville[i][2]);
             int y = Integer.parseInt(stville[i][3]); //CHECK
             String nom = stville[i][1];
-            Ville ville = new Ville(x, y, nom);
-            res.add(ville);
-            plateau.plateau[x][y] = ville;
+
+            plateau.plateau[x][y] = new Ville(x, y, nom);
+            res.add(( Ville ) plateau.plateau[x][y]) ;
         }
         return res;
     }
