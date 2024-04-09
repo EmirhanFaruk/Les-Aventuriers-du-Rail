@@ -3,10 +3,12 @@ package com.model.bot;
 import com.model.Game;
 import com.model.Player;
 import com.model.Round;
+import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class WeakBot implements BotAction{
@@ -65,12 +67,21 @@ public class WeakBot implements BotAction{
         boolean toSetDownWagon = false;
 
         //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().length;i++){
+        for(int i = 0; i< game.getRoutes().size() ; i++){
 
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
+                ArrayList<Rail> listeRail =   game.getRoutes().get(i).getRailsRoute() ;
+                int tailleRoute =  game.getRoutes().get(i).getLongueur();
+                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
+
+                for(int j = 0 ; j  < tailleRoute ; j++) {
+                    listeRail.get( j ).setOccuperPar( bot );
+                }
+                game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint();
+                // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
             }
@@ -86,13 +97,14 @@ public class WeakBot implements BotAction{
         //Variable du joueur
         Player player = game.getListPlayer().get(round.getWhoIsPlaying());
 
+        Random random = new Random();
+        int card = random.nextInt( player.getTrainCard().size() ) ;
         //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
-        if(game.getVilles()[wichStation].getIsOccuped() == null && player.getNbrGare() < 0 && player.getTrainCard().size() >= player.nombreDeCartePourPoserUneGare()){
+        if( game.getVilles()[wichStation].getIsOccuped() == null ){
+            player.transformerEnGare( game.getVilles()[wichStation] , player.getTrainCard().get( card ) );
+            System.err.println( "Le botW a poser une gare, le nom de la ville est " +   game.getVilles()[wichStation].getNom() );
 
-            for(int i = 0; i< player.nombreDeCartePourPoserUneGare();i++){
-                player.getTrainCard().remove(0);
-            }
-            game.getVilles()[wichStation].setIsOccuped(game.getListPlayer().get(round.getWhoIsPlaying()));
+            game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint(); ;
 
             return true;
         }

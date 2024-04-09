@@ -7,6 +7,7 @@ import com.model.Player;
 import com.model.config.*;
 import com.view.*;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -78,24 +79,31 @@ public class GameController {
     public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player, Round round, Game game) {
         // Vérifie si le rail a déjà un propriétaire
         if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null) {
-            System.out.println("Ce rail a déjà un propriétaire.");
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
             return;
         }
 
-        //TODO : Bouton de confirmation      
-        if(player.mettreRoute(r.getSaRoute())) {
-        	int tailleRoute = r.getSaRoute().getRailsRoute().size();
-        	ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute(); 
-        	
-        	for(int i=0; i<tailleRoute; i++) {
-        		listeRail.get(i).setOccuperPar(player);
-        	}
+        int choixUtilisateur = JOptionPane.showConfirmDialog(
+                game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                "Êtes-vous sûr de vouloir poser votre rail ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
 
-            Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
+        if (choixUtilisateur == JOptionPane.YES_OPTION) {
+            if (player.mettreRoute(r.getSaRoute())) {
+                int tailleRoute = r.getSaRoute().getRailsRoute().size();
+                ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
 
-            round.endRound(game);
+                for (int i = 0; i < tailleRoute; i++) {
+                    listeRail.get(i).setOccuperPar(player);
+                }
 
+                Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
 
+                round.endRound(game);
+            } else {
+                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                        "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+            }
         }
     }
 
@@ -110,9 +118,10 @@ public class GameController {
                 mapScreen.repaintAll(playerHandPanel);
                 game.getRound().endRound(game);
 
-
             } catch ( Exception exception ){
-                System.err.println( "D'abord selectionner une ville" ) ;
+                JOptionPane.showMessageDialog( game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                        ,"Veuillez choisir une ville avant de choisir la carte !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+                //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
             }
 
         }
@@ -120,7 +129,8 @@ public class GameController {
 
     public void tenterDePoserUneGare(Ville ville , Player player ){
         player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
-
+        Mx = -1 ;
+        My = -1 ;
     }
 
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
