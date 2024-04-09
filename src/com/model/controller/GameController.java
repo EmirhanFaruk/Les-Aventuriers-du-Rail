@@ -22,11 +22,12 @@ public class GameController {
     	int y = e.getY() / tileHeight;
 
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
-        Object clickedObject = game.getPlateau().getPlateau()[x][y];
-        Rail r = null ;
-        if(clickedObject instanceof Rail)r = (Rail) clickedObject;
+        try {
+            Object clickedObject = game.getPlateau().getPlateau()[x][y];
+            Rail r = null;
+            if (clickedObject instanceof Rail) r = (Rail) clickedObject;
 
-        //DEBUG : POSITION
+            //DEBUG : POSITION
         /*
         System.out.println("x = " + x + " y = " + y);
         if(r!=null) {
@@ -37,14 +38,17 @@ public class GameController {
         }*/
 
 
-        if (clickedObject != null) {
-            // Traitement en fonction du type de l'objet cliqué
-            if (clickedObject instanceof Rail) {
-                tenterAcquisitionRoute((Rail) clickedObject, game.getPlateau(), joueurCourant,game.getRound(),game);
-            } else if ( clickedObject instanceof Ville ){
-                Mx = x ;
-                My = y ;
+            if (clickedObject != null) {
+                // Traitement en fonction du type de l'objet cliqué
+                if (clickedObject instanceof Rail) {
+                    tenterAcquisitionRoute((Rail) clickedObject, game.getPlateau(), joueurCourant, game.getRound(), game);
+                } else if (clickedObject instanceof Ville) {
+                    Mx = x;
+                    My = y;
+                }
             }
+        } catch ( Exception exception ){
+            // DEBUG : System.out.println("Nope hihi");
         }
     }
 
