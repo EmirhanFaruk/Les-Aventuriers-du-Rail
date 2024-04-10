@@ -249,7 +249,7 @@ public class StrongBot implements BotAction {
             }
         }
 
-        return carteManager.takeDestination(tmp, game);
+        return carteManager.takeDestination(tmp);
 
 
     }

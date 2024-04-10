@@ -81,7 +81,7 @@ public class NormalBot implements BotAction{
             }
         }
 
-        return carteManager.takeDestination(tmp, game);
+        return carteManager.takeDestination(tmp);
 
 
     }
