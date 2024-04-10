@@ -1,17 +1,11 @@
 package com.model;
 
-import com.model.bot.BotAction;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
-import com.model.config.Route;
-import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
-import com.view.GameMapPanel;
 
-import java.util.ArrayList;
-import java.util.Random;
+import com.view.GameMapPanel;
 
 public class Round {
 
@@ -83,7 +77,7 @@ public class Round {
 
 
 
-    public void round(Game game,CarteManager carteManager, double deltaTime)
+    public void round(Game game, CarteManager carteManager, double deltaTime)
     {
         if (betweenRoundTimer <= 0)
         {

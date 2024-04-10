@@ -21,9 +21,9 @@ public class Player {
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
+	private ArrayList<Route> playerRoutes = new ArrayList<>();
 	private int nbrWagonInstance ;
 	private int nbrGareInstance ;
-
 	private int missionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
@@ -43,7 +43,6 @@ public class Player {
 		this.nbrGareInstance = this.nbrGare ;
 		this.nbrWagonInstance = this.nbrWagon ;
 		this.game = game;
-
 	}
 
 
@@ -69,12 +68,12 @@ public class Player {
 		}
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
-			this.trainList.add(cm.drawCard());
+			insertCarte(cm.drawCard());
 			game.getRound().setAction(game.getRound().getAction() - 1);
 
 		}else{
 			//Si on a plus que une action alors on pioche puis on fini le tour
-			this.trainList.add(cm.drawCard());
+			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
 	}
@@ -87,13 +86,13 @@ public class Player {
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
 
@@ -107,16 +106,54 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
-				this.trainList.add(carte);
+				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
+		}
+	}
 
 
+
+	private void insertCarte(Couleur carte)
+	{
+		int i = findCarteIndex(carte);
+
+		this.trainList.add(i, carte);
+	}
+
+
+	/**
+	 * Trouver le bon index pour inserer la carte obtenu.
+	 * @param carte carte a inserer
+	 * @return le bon index
+	 */
+	private int findCarteIndex(Couleur carte)
+	{
+		int res = this.trainList.size();
+
+		if (carte != Couleur.LOC)
+		{
+			int i = 0;
+			while (i < this.trainList.size())
+			{
+				if (carte.ordinal() > this.trainList.get(i).ordinal())
+				{
+					i++;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			res = i;
 		}
 
-
+		return res;
 	}
+
+
 
     public void retirerLesCartes(Couleur color, int carteAEnlever) {
     	int i = 0;
@@ -149,12 +186,45 @@ public class Player {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
-                return true;
+				this.score += r.getNombrePoint();
+				playerRoutes.add(r);
+				score += aCompleterUneMission(r); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
+				return true;
             }
     	}
     	
     	return false;
     }
+
+	private int aCompleterUneMission(Route r) {
+		if(destinationsList.size() == 0) return 0;
+		int cumulPoints=0;
+		for(CarteDestination c : destinationsList){
+			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
+			if(completerChemin(c.getPremiereVille(),c.getDeuxiemeVille(),null)){
+				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
+				c.setComplete();
+			} 
+		}
+		return cumulPoints;
+	}
+
+
+	private boolean completerChemin(Ville ville1, Ville ville2,Route routePrec) {
+		for(Route r : playerRoutes){
+			if(r == routePrec) continue; // éviter de revenir en arrière(boucle infini)
+			String rV1 = r.getVille1().getNom(),rV2 = r.getVille2().getNom();
+			if(rV1.equals(ville1.getNom()) && rV2.equals(ville2.getNom()) || rV1.equals(ville2.getNom()) && rV2.equals(ville1.getNom()) ) return true; //le cas de la dernière route.
+			
+			if(rV1.equals(ville1.getNom()) && completerChemin(r.getVille2(), ville2,r)) return true;
+			if(rV1.equals(ville2.getNom()) && completerChemin(r.getVille2(), ville1,r)) return true;
+
+			if(rV2.equals(ville1.getNom()) && completerChemin(r.getVille1(), ville2,r)) return true;
+			if(rV2.equals(ville2.getNom()) && completerChemin(r.getVille1(), ville1,r)) return true;	
+		}
+		return false;
+	}
+
 
 	/**
 	 * Une fonction qui renvoie true si le joueur peut changer la ville en gare
@@ -261,7 +331,7 @@ public class Player {
 
 	public void piocher(CarteManager cm)
 	{
-		trainList.add(cm.drawCard());
+		insertCarte(cm.drawCard());
 	}
 
 

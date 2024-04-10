@@ -3,23 +3,18 @@ package com.model;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
-import com.model.config.carte.CarteWagon.Couleur;
 import com.view.GameFrame;
-import com.view.GameScreen;
 import com.model.config.Ville;
-import com.view.GameFrame;
-import com.view.GameScreen;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
 
 public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
-    private Ville[] villes;
+    private Player joueurCourant;
+    private ArrayList<Ville> villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
     private Round round;
@@ -46,11 +41,11 @@ public class Game
         return plateau;
     }
 
-    public Ville[] getVilles() {
+    public ArrayList<Ville> getVilles() {
         return villes;
     }
 
-    public void setVilles(Ville[] villes) { this.villes = villes; }
+    public void setVilles(ArrayList<Ville> villes) { this.villes = villes; }
 
     public ArrayList<Route> getRoutes() {
         return routes;
@@ -147,7 +142,6 @@ public class Game
         if (!round.roundFinished()) {
 
             round.round(this, cm, deltaTime);
-
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
