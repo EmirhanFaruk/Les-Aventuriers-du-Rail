@@ -1,7 +1,6 @@
 package com.model.ai;
 
 import com.model.Player;
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 
@@ -14,7 +13,7 @@ public class Node
 {
     private Node parent;
 
-    private Ville ville;
+    private final Ville ville;
 
     private ArrayList<Node> neighbors;
 
@@ -92,25 +91,33 @@ public class Node
 
         for (Route route : ville.getRoutes())
         {
-            Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
-            for (Ville routeVille : villes)
+            boolean available = route.getProprietaire() == player || route.getProprietaire() == null;
+            if(available)
             {
-                if(routeVille != ville)
+                Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
+                for (Ville routeVille : villes)
                 {
-                    Node node = new Node(routeVille, this);
-                    node.g = this.g + route.getLongueur();
-                    // If owned by player, cost stays the same
-                    if (player != null)
+                    if (routeVille != ville)
                     {
-                        if (routeVille.getIsOccuped() == player)
+                        Node node = new Node(routeVille, this);
+                        node.g = this.g + route.getLongueur();
+                        // If owned by player(either ville as gares or the route itself), cost stays the same
+                        if (player != null)
                         {
-                            node.g = this.g;
+                            boolean noCost =
+                                    routeVille.getIsOccuped() == player ||
+                                            ville.getIsOccuped() == player ||
+                                    route.getProprietaire() == player;
+                            if (noCost)
+                            {
+                                node.g = this.g;
+                            }
                         }
-                    }
 
-                    if(!Node.same(this, node))
-                    {
-                        neighbors.add(node);
+                        if (!Node.same(this, node))
+                        {
+                            neighbors.add(node);
+                        }
                     }
                 }
             }
@@ -133,6 +140,7 @@ public class Node
             {
                 res = n;
             }
+
         }
         return res;
     }
@@ -216,20 +224,30 @@ public class Node
 
         while(!openList.isEmpty())
         {
+            // Get lowest cost node and use that node to proceed
             Node current = Node.findLowestCost(openList);
+
+            // Remove it from the open list because now it's closed
             openList.remove(current);
+            // End algo if arrived to the end
             if(Node.same(current, end))
             {
                 return current;
             }
 
+            // Get neightbors, update total cost and add to the closed list
             current.getNeighbors(player);
             current.calculateTotal(e);
             addListDistinctive(closedList, current);
 
+            // For each neighbor, we will try to add the possible ones to the open list
+            // so we can proceed with these
             for(Node neighbor : current.neighbors)
             {
+                // Calculate total cost
                 neighbor.calculateTotal(e);
+
+                // See if this neighbor is in closedList
                 boolean flag = false;
                 for(Node c : closedList)
                 {
@@ -239,30 +257,30 @@ public class Node
                     }
                 }
 
+                // If not in closedList, we can check if we can add it
                 if(!flag)
                 {
                     neighbor.getNeighbors(player);
-                    // if in open and new path shorter
+                    // If already in open and new path shorter,
+                    // update the one in the list and do not add it again
                     Node checker = Node.sameIn(openList, neighbor);
                     if((checker != null && neighbor.f < checker.f))
                     {
                         checker.f = neighbor.f;
                         checker.parent = current;
                     }
+                    // If it doesn't exist in the list,
+                    // Add it to the list
                     if(!exists(openList, neighbor))
                     {
-                        if(checker != null && neighbor.f < checker.f)
-                        {
-                            checker.f = neighbor.f;
-                            checker.parent = current;
-                        }
-                        neighbor.calculateTotal(e);
                         openList.add(neighbor);
                     }
                 }
             }
         }
 
+        // If the open list has no more elements,
+        // it means it's impossible to reach the target node
         return null;
     }
 
@@ -319,24 +337,12 @@ public class Node
     }
 
 
-    /**
-     * Returns an ArrayList of strings that makes the longest path between 2 villes using owned routes
-     * @return
-     */
-    private static ArrayList<Ville> findLongestPath(Ville ville1, Ville ville2, Player propriataire)
-    {
-        ArrayList<Ville> res = new ArrayList<>();
-
-        return res;
-    }
-
-
     public static void printWay(ArrayList<Ville> villes)
     {
         if(!villes.isEmpty())
         {
             System.out.println("\n\n===========================================================\n\n");
-            System.out.println("The shortest way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
+            System.out.println("The way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
             for (int i = 0; i < villes.size(); i++)
             {
                 System.out.print(villes.get(i).getNom());
@@ -352,6 +358,23 @@ public class Node
                     }
                 }
                 System.out.println();
+            }
+        }
+    }
+    
+    public static void printWays(ArrayList<Ville> villes, Player player)
+    {
+        for (int i = 0; i < villes.size(); i++)
+        {
+            for (int j = 0; j < villes.size(); j++)
+            {
+                if (i != j)
+                {
+                    Ville v1 = villes.get(i);
+                    Ville v2 = villes.get(j);
+                    ArrayList<Ville> way = Node.findClosestPath(v1, v2, player);
+                    Node.printWay(way);
+                }
             }
         }
     }

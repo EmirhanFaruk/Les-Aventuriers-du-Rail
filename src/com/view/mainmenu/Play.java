@@ -104,6 +104,27 @@ public class Play extends JPanel
     }
 
 
+    private JPanel makeVerticalCenteringPanel(JComponent comp)
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new GridLayout(3, 1));
+
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BorderLayout());
+
+        res.add(makeDefaultPanel());
+
+        middlePanel.add(makeDefaultPanel(), BorderLayout.WEST);
+        middlePanel.add(comp, BorderLayout.CENTER);
+        res.add(middlePanel);
+
+        res.add(makeDefaultPanel());
+
+        return res;
+    }
+
+
     // START OF PLAYER PANEL FUNCTIONS
 
     /**
@@ -134,12 +155,12 @@ public class Play extends JPanel
     private JPanel makePlayerNamePanel(int i)
     {
         JTextArea playerName = new JTextArea("Player " + (i + 1));
-        playerName.setBackground(Color.BLACK);
-        playerName.setForeground(Color.GRAY);
+        playerName.setBackground(Color.GRAY);
+        playerName.setForeground(Color.BLACK);
 
         player_name_list_tag[i] = playerName;
 
-        return makeCenteringPanel(playerName);
+        return makeVerticalCenteringPanel(playerName);
     }
 
 

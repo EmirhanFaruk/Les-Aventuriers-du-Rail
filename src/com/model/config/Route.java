@@ -75,6 +75,8 @@ public class Route {
         this.proprietaire = proprietaire;
     }
 
+    public void setLongueur(int longueur) { this.longueur = longueur; }
+
     public int getNombrePoint() {
         return nombrePoint;
     }
