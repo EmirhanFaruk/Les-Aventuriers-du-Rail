@@ -132,7 +132,10 @@ public class GameController {
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
     	return player.piocheCarteVisible(imagePiocheVisible);
 	}
-
+    
+    public boolean piocherCarteDestination(Player player, CarteManager cm, int i) {
+    	return player.piocheCarteDestination(cm, i);
+	}
 
 	public void piocherCarteInvisible(Player player) {
 		player.piocheCarteInvisible();

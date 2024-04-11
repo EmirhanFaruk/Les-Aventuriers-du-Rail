@@ -55,6 +55,15 @@ public class Player {
 
 		return count;
 	}
+	
+	public boolean piocheCarteDestination(CarteManager cm, int i) {
+		if(!this.destinationsList.contains(cm.getDestinationsCards()[i])) {
+			this.destinationsList.add(cm.getDestinationsCards()[i]);
+			return true;
+		}
+		
+		return false;
+	}
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = new CarteManager();

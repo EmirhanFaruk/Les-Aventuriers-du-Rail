@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class PlayerHandPanel extends JPanel {
     private ArrayList<DrawPlayerHand> drawPlayerHands ;
+	private ArrayList<DrawPlayerHand2> drawPlayerHands2;
     private ArrayList<JScrollPane> scrollPanes;
     private ArrayList<String> whoSHand;
     private int imageWidth , imageHeight ;
@@ -30,11 +31,14 @@ public class PlayerHandPanel extends JPanel {
         cardLayout.show(this,player.getName());
     }
 
-    public void initDrawPlayerHand(Game game, GameController gameController, int height){
+    public void initDrawPlayerHands(Game game, GameController gameController, int height){
         //Initialise la liste des DrawPlayerHand, pour permettre d'afficher la main du joueur qui joue
         this.drawPlayerHands = new ArrayList<>();
+        this.drawPlayerHands2 = new ArrayList<>();
+        
         for(int i = 0; i< game.getListPlayer().size();i++){
             this.drawPlayerHands.add(new DrawPlayerHand(game.getListPlayer().get(i), height, gameController,game));
+        	this.drawPlayerHands2.add(new DrawPlayerHand2(game.getListPlayer().get(i), height, game));
         }
     }
 
@@ -62,41 +66,64 @@ public class PlayerHandPanel extends JPanel {
         }
     }
 
-    public void initCardLayout(){
+    public void initCardLayout(){    
+        // Création du JSplitPane pour séparer les panneaux DrawPlayerHand et DrawPlayerHand2
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        // Définit la répartition de l'espace entre les panneaux
+        splitPane.setResizeWeight(0.5);
+        
         //Initialisation du contenu du cardLayout
         this.setLayout(cardLayout);
+        
         for(int i = 0; i< this.whoSHand.size();i++){
-            this.add(whoSHand.get(i),scrollPanes.get(i));
+            // Ajout du panneau DrawPlayerHand à droite
+            JPanel panelDrawPlayerHand = new JPanel(new BorderLayout());
+            panelDrawPlayerHand.add(scrollPanes.get(i), BorderLayout.CENTER);
+            splitPane.setRightComponent(panelDrawPlayerHand);
+
+            // Ajout du panneau DrawPlayerHand2 à gauche
+            splitPane.setLeftComponent(drawPlayerHands2.get(i));
+                     
+            // Définir la position de la barre fixe au milieu
+            splitPane.setDividerLocation(width / 2);
+            
+            // Rendre le diviseur non déplaçable
+            splitPane.setEnabled(false);
+            
+            // Ajout du JSplitPane à la fenêtre principale
+            add(this.whoSHand.get(i), splitPane);
         }
     }
 
-    public void make(GameController gameController, Game game , int width , int height , MapScreen mapScreen){
+    public void make(GameController gameController, Game game, int width, int height, MapScreen mapScreen) {
 
-        this.game = game ;
-        this.mapScreen = mapScreen ;
-        this.width = width ;
-        this.height = height ;
+        this.game = game;
+        this.mapScreen = mapScreen;
+        this.width = width;
+        this.height = height;
 
         setBackground(Color.orange);
-        setPreferredSize(new Dimension( this.width, this.height ));
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(this.width, this.height));
 
-        initDrawPlayerHand(game,gameController, this.height);
+        // Initialisation des panneaux DrawPlayerHand et DrawPlayerHand2
+        initDrawPlayerHands(game, gameController, this.height);
         initScrollPane(this.width, this.height);
         initWhosHand(game);
         initCardLayout();
-
-
     }
 
-
-
-
     public DrawPlayerHand getDrawPlayerHand() {
-
         int whoIsPlaying = game.getRound().getWhoIsPlaying();
         cardLayout.show(this, whoSHand.get(whoIsPlaying));
         return this.drawPlayerHands.get(whoIsPlaying);
     }
+    
+	public Component getDrawPlayerHand2() {
+		int whoIsPlaying = game.getRound().getWhoIsPlaying();
+        cardLayout.show(this, whoSHand.get(whoIsPlaying));
+        return this.drawPlayerHands2.get(whoIsPlaying);
+	}
 
     public Game getGame() {
         return game;
@@ -175,6 +202,58 @@ public class PlayerHandPanel extends JPanel {
             }
             return null ;
         }
+
+        public void setPlayer(Player player) {
+            this.player = player;
+            repaint();
+        }
+
+    }
+    
+    public class DrawPlayerHand2 extends JPanel {
+        Player player ;
+        int height ;
+        int width ;
+        int hFixe ;
+
+        DrawPlayerHand2 (Player player  , int height , Game game) {
+            this.player = player;
+            this.height = height;
+            this.width = 0;
+            this.hFixe = 30 ;
+
+            setBackground(Color.orange);
+        }
+
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            if (this.player != null) {
+                this.drawPlayerHand2(g2d);
+                setPreferredSize(new Dimension(width, height));
+                getParent().revalidate(); // Appel à revalidate() sur le parent (JScrollPane)
+            }
+            repaint();
+        }
+
+        private void drawPlayerHand2(Graphics2D g) {
+            int x = 30, i = 0;
+            
+            while (i < this.player.getDestinationsList().size()) {
+                BufferedImage image = CardGraphics.getCardObjectif();
+
+                if (image != null) {
+                    g.drawImage(image, x , hFixe , null);
+                    x += image.getWidth() + 10;
+                    width = x;
+                    imageWidth = image.getWidth() ;
+                    imageHeight = image.getHeight() ;
+                }
+                i++;
+            }
+        }
+
+        //TODO : Description de la carte une fois touché
 
         public void setPlayer(Player player) {
             this.player = player;
