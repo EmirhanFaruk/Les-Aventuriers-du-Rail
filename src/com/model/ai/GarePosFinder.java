@@ -4,55 +4,82 @@ import com.model.Player;
 import com.model.config.Rail;
 import com.model.config.Route;
 import com.model.config.Ville;
-import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
 
 public class GarePosFinder
 {
+
+    /**
+     * Gets the length of the new possible way of the wannabeGare.
+     * @param start start ville for the destination
+     * @param end end ville for the destination
+     * @param wannaBeGare the ville to try as a gare
+     * @param byRail true if counting rails, route if false
+     * @param player player for the A* algorithm
+     * @return the number wanted
+     */
+    private static int trySingleVille(Ville start, Ville end, Ville wannaBeGare, boolean byRail, Player player)
+    {
+        ArrayList<Ville> gareTry = Node.findClosestPath(start, end, player, wannaBeGare);
+
+        ArrayList<Route> neededRoutes = getNeededRoutes(gareTry, player);
+        int newLength = neededRoutes.size();
+        if (!byRail)
+        {
+            newLength = getRailCount(neededRoutes);
+        }
+
+        return newLength;
+    }
+
+
     /**
      * Tries a Ville as a gare, to see if it shortens the path by routeToReduce.
      * @param start start ville for the destination
      * @param end end ville for the destination
      * @param wannaBeGare the ville to try as a gare
      * @param routeToReduce wanted route number to be reduced
+     * @param byRail true if counting rails, route if false
      * @param player player for the A* algorithm
      * @return if the difference is less or equal than routeToReduce
      */
-    private static boolean tryVille(Ville start, Ville end, Ville wannaBeGare, int routeToReduce, Player player)
+    private static boolean tryVilleDiff(Ville start, Ville end, Ville wannaBeGare, int routeToReduce, boolean byRail, Player player, int ogLength)
     {
-        ArrayList<Ville> shortestWay = Node.findClosestPath(start, end, player);
+        int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
 
-        ArrayList<Ville> gareTry = Node.findClosestPath(start, end, player, wannaBeGare);
-
-        int ogLength = shortestWay.size();
-        int newLength = gareTry.size();
-
-        if (ogLength > 1)
+        // Check if a way exists
+        if (ogLength > 0)
         {
             return ogLength - newLength <= routeToReduce;
         }
 
-        return false;
+        // If not, if a way can be made then true
+        return newLength > 0;
     }
 
 
     /**
-     * Tries all villes to find the possible solutions(put a gare to somewhere).
+     * Tries all villes to find the possible solutions(put a gare to somewhere), using tryVilleDiff.
      * @param start start ville for the destination
      * @param end end ville for the destination
      * @param villesToTry villes to try as a gare
      * @param routeToReduce wanted route number to be reduced
+     * @param byRail true if counting rails, route if false
      * @param player player for the A* algorithm
      * @return the list of the possible villes
      */
-    private static ArrayList<Ville> tryAllVilles(Ville start, Ville end, ArrayList<Ville> villesToTry, int routeToReduce, Player player)
+    private static ArrayList<Ville> tryAllVillesDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int routeToReduce, boolean byRail, Player player)
     {
         ArrayList<Ville> res = new ArrayList<>();
 
+        ArrayList<Ville> shortestWay = Node.findClosestPath(start, end, player);
+        int ogLength = getNeededRoutes(shortestWay, player).size();
+
+
         for (Ville wannaBeGare : villesToTry)
         {
-            if (tryVille(start, end, wannaBeGare, routeToReduce, player))
+            if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength))
             {
                 res.add(wannaBeGare);
             }
@@ -62,18 +89,64 @@ public class GarePosFinder
     }
 
     /**
-     * Gets wanted villes to pose as a gare within the limit of the max route/rail(to put) number difference.
+     * Tries all villes to find the possible solutions(put a gare to somewhere), using trySingleVille.
+     * @param start start ville for the destination
+     * @param end end ville for the destination
+     * @param villesToTry villes to try as a gare
+     * @param limit max number of routes/rails wanted to use
+     * @param byRail true if counting rails, route if false
+     * @param player player for the A* algorithm
+     * @return the list of the possible villes
+     */
+    private static ArrayList<Ville> tryAllVilles(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    {
+        ArrayList<Ville> res = new ArrayList<>();
+
+        for (Ville wannaBeGare : villesToTry)
+        {
+            if (trySingleVille(start, end, wannaBeGare,  byRail, player) <= limit)
+            {
+                res.add(wannaBeGare);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Gets wanted ville to pose as a gare within the limit of the max route/rail(to put) number difference.
      * @param start start ville for the destination
      * @param end end ville for the destination
      * @param villesToTry villes to try as a gare
      * @param limit max route number difference
      * @param byRail true if counting rails, route if false
      * @param player player
-     * @return the wanted villes
+     * @return the wanted ville
      */
-    public static ArrayList<Ville> getWantedVillesDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    public static Ville getWantedVilleDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
     {
+        Ville min = null;
 
+        ArrayList<Ville> allVilles = tryAllVillesDiff(start, end, villesToTry, limit, byRail, player);
+
+        if (!allVilles.isEmpty())
+        {
+            min = allVilles.get(0);
+            int minLength = trySingleVille(start, end, min, byRail, player);
+
+            for (Ville wannaBeGare : allVilles)
+            {
+                int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
+                if (newLength < minLength)
+                {
+                    min = wannaBeGare;
+                    minLength = trySingleVille(start, end, min, byRail, player);
+                }
+            }
+
+        }
+
+        return min;
     }
 
     /**
@@ -86,9 +159,30 @@ public class GarePosFinder
      * @param player player
      * @return the wanted villes
      */
-    public static ArrayList<Ville> getWantedVilles(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    public static Ville getWantedVille(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
     {
+        Ville min = null;
 
+        ArrayList<Ville> allVilles = tryAllVilles(start, end, villesToTry, limit, byRail, player);
+
+        if (!allVilles.isEmpty())
+        {
+            min = allVilles.get(0);
+            int minLength = trySingleVille(start, end, min, byRail, player);
+
+            for (Ville wannaBeGare : allVilles)
+            {
+                int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
+                if (newLength < minLength)
+                {
+                    min = wannaBeGare;
+                    minLength = trySingleVille(start, end, min, byRail, player);
+                }
+            }
+
+        }
+
+        return min;
     }
 
 
