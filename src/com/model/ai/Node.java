@@ -82,10 +82,20 @@ public class Node
     }
 
     /**
-     * Gets possible neighbor nodes.
+     * Gets possible neighbor nodes. Sets wannaBeGare as null
      * @param player if a route is already owned by player, its cost is 0
      */
     private void getNeighbors(Player player)
+    {
+        getNeighbors(player, null);
+    }
+
+
+    /**
+     * Gets possible neighbor nodes. Uses wannabeGare to think as if that ville is owned by the player for the GarePosFinder func.
+     * @param player if a route is already owned by player, its cost is 0
+     */
+    private void getNeighbors(Player player, Ville wannaBeGare)
     {
         neighbors = new ArrayList<>();
 
@@ -106,8 +116,9 @@ public class Node
                         {
                             boolean noCost =
                                     routeVille.getIsOccuped() == player ||
-                                            ville.getIsOccuped() == player ||
-                                    route.getProprietaire() == player;
+                                    ville.getIsOccuped() == player ||
+                                    route.getProprietaire() == player ||
+                                    wannaBeGare == ville;
                             if (noCost)
                             {
                                 node.g = this.g;
@@ -123,6 +134,8 @@ public class Node
             }
         }
     }
+
+
 
     /**
      * Finds lowest cost node of the list.
@@ -212,6 +225,19 @@ public class Node
      */
     private static Node aStar(Ville s, Ville e, Player player)
     {
+        return aStar(s, e, player, null);
+    }
+
+    /**
+     * Puts almost every other functions together to make the A* algorithm.
+     * @param s the start ville
+     * @param e the target ville
+     * @param player the player for the routes
+     * @param wannaBeGare used for the GarePosFinder, to try as a gare without changing the ville structure
+     * @return the node containing a path from end to start with its one way chained parents
+     */
+    private static Node aStar(Ville s, Ville e, Player player, Ville wannaBeGare)
+    {
         Node start = new Node(s, null);
         Node end = new Node(e, null);
         ArrayList<Node> closedList = new ArrayList<>();
@@ -236,7 +262,7 @@ public class Node
             }
 
             // Get neightbors, update total cost and add to the closed list
-            current.getNeighbors(player);
+            current.getNeighbors(player, wannaBeGare);
             current.calculateTotal(e);
             addListDistinctive(closedList, current);
 
@@ -325,6 +351,36 @@ public class Node
         ArrayList<Ville> res = new ArrayList<>();
 
         Node resNode = aStar(ville1, ville2, player);
+
+        while(resNode != null)
+        {
+            res.add(0, resNode.ville);
+            resNode = resNode.parent;
+        }
+
+
+        return res;
+    }
+
+    /**
+     * Returns an ArrayList of strings that makes the shortest path between 2 villes,
+     * by also including the player owned routes. Can be used by GarePosFinder.
+     * @param ville1 1st ville
+     * @param ville2 2nd ville
+     * @param player the player to find the owned routes. Put null if player isn't needed
+     * @param wannaBeGare used for the GarePosFinder, to try as a gare without changing the ville structure
+     * @return the villes to get to in order to get the shortest path
+     */
+    public static ArrayList<Ville> findClosestPath(Ville ville1, Ville ville2, Player player, Ville wannaBeGare)
+    {
+        if (wannaBeGare == null)
+        {
+            return findClosestPath(ville1, ville2, player);
+        }
+
+        ArrayList<Ville> res = new ArrayList<>();
+
+        Node resNode = aStar(ville1, ville2, player, wannaBeGare);
 
         while(resNode != null)
         {
