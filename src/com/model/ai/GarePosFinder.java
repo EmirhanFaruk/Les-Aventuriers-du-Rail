@@ -113,22 +113,19 @@ public class GarePosFinder
         return res;
     }
 
+
     /**
-     * Gets wanted ville to pose as a gare within the limit of the max route/rail(to put) number difference.
+     * Gets the lowest cost ville. Used in getWantedVille and getWantedVilleDiff.
      * @param start start ville for the destination
      * @param end end ville for the destination
-     * @param villesToTry villes to try as a gare
-     * @param limit max route number difference
+     * @param allVilles villes to find the lowest cost ville
      * @param byRail true if counting rails, route if false
      * @param player player
-     * @return the wanted ville
+     * @return the lowest cost ville
      */
-    public static Ville getWantedVilleDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    private static Ville getMinVille(Ville start, Ville end, ArrayList<Ville> allVilles, boolean byRail, Player player)
     {
         Ville min = null;
-
-        ArrayList<Ville> allVilles = tryAllVillesDiff(start, end, villesToTry, limit, byRail, player);
-
         if (!allVilles.isEmpty())
         {
             min = allVilles.get(0);
@@ -150,6 +147,23 @@ public class GarePosFinder
     }
 
     /**
+     * Gets wanted ville to pose as a gare within the limit of the max route/rail(to put) number difference.
+     * @param start start ville for the destination
+     * @param end end ville for the destination
+     * @param villesToTry villes to try as a gare
+     * @param limit max route number difference
+     * @param byRail true if counting rails, route if false
+     * @param player player
+     * @return the wanted ville
+     */
+    public static Ville getWantedVilleDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    {
+        ArrayList<Ville> allVilles = tryAllVillesDiff(start, end, villesToTry, limit, byRail, player);
+
+        return getMinVille(start, end, allVilles, byRail, player);
+    }
+
+    /**
      * Gets wanted villes to pose as a gare within the limit of the max route/rail to put.
      * @param start start ville for the destination
      * @param end end ville for the destination
@@ -161,28 +175,9 @@ public class GarePosFinder
      */
     public static Ville getWantedVille(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
     {
-        Ville min = null;
-
         ArrayList<Ville> allVilles = tryAllVilles(start, end, villesToTry, limit, byRail, player);
 
-        if (!allVilles.isEmpty())
-        {
-            min = allVilles.get(0);
-            int minLength = trySingleVille(start, end, min, byRail, player);
-
-            for (Ville wannaBeGare : allVilles)
-            {
-                int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
-                if (newLength < minLength)
-                {
-                    min = wannaBeGare;
-                    minLength = trySingleVille(start, end, min, byRail, player);
-                }
-            }
-
-        }
-
-        return min;
+        return getMinVille(start, end, allVilles, byRail, player);
     }
 
 
