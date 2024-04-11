@@ -151,7 +151,7 @@ public class Game
         //game loop
         if (!round.roundFinished()) {
 
-            round.round(this, cm, deltaTime);
+            round.round(this, deltaTime);
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
