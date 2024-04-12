@@ -5,6 +5,7 @@ import com.model.config.Route;
 import com.model.config.carte.CarteManager;
 import com.view.GameFrame;
 import com.model.config.Ville;
+import com.view.GameMapPanel;
 import com.view.MapScreen;
 
 import java.util.ArrayList;
@@ -67,6 +68,16 @@ public class Game
         if (gameFrame != null)
         {
             return gameFrame.getMapScreen();
+        }
+
+        return null;
+    }
+
+    public GameMapPanel getGameMapPanel()
+    {
+        if (gameFrame != null)
+        {
+            return gameFrame.getGameMapPanel();
         }
 
         return null;

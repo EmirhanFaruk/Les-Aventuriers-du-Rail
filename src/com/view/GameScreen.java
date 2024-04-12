@@ -44,6 +44,16 @@ public class GameScreen extends JPanel {
         return null;
     }
 
+    public GameMapPanel getGameMapPanel()
+    {
+        if (gameManagerScreen != null)
+        {
+            return gameManagerScreen.getGameMapPanel();
+        }
+
+        return null;
+    }
+
     public GameFrame getFrame() {
         return frame;
     }

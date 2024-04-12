@@ -133,6 +133,16 @@ public class GameFrame extends JFrame
         return null;
     }
 
+    public GameMapPanel getGameMapPanel()
+    {
+        if (gameScreen != null)
+        {
+            return gameScreen.getGameMapPanel();
+        }
+
+        return null;
+    }
+
 
     public String getIngame_screen_s() {
         return ingame_screen_s;

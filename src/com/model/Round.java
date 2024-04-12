@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.GarePosFinder;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
@@ -46,6 +47,13 @@ public class Round {
     }
 
     public void endRound(Game game) {
+
+        GarePosFinder.printForAll(game.getVilles(), 6, true, game.getListPlayer().get(whoIsPlaying));
+        GarePosFinder.printForAll(game.getVilles(), 2, false, game.getListPlayer().get(whoIsPlaying));
+        GarePosFinder.printForAllDiff(game.getVilles(), 999, true, game.getListPlayer().get(whoIsPlaying));
+        GarePosFinder.printForAllDiff(game.getVilles(), 999, false, game.getListPlayer().get(whoIsPlaying));
+
+
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         whosNext(game);
@@ -53,7 +61,7 @@ public class Round {
         //Variable pour avoir Player
         Player joueur = game.getListPlayer().get(whoIsPlaying);
 
-        GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
+        GameMapPanel gameMapPanel = game.getGameMapPanel();
 
         gameMapPanel.setPlayerCourant(joueur);
         // DEBUG :System.out.println(whoIsPlaying);

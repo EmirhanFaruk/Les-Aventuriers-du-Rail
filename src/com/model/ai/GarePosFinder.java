@@ -51,7 +51,7 @@ public class GarePosFinder
         // Check if a way exists
         if (ogLength > 0)
         {
-            return ogLength - newLength <= routeToReduce;
+            return ogLength - newLength < routeToReduce;
         }
 
         // If not, if a way can be made then true
@@ -214,16 +214,24 @@ public class GarePosFinder
                         }
                         else
                         {
-                            // Sinon on trouve la meilleur route a ajouter(pour le cost)
-                            boolean shouldReplace =
-                                    !(routeNeeded.getCouleur() == Rail.Content.JOKER &&
-                                    route.getCouleur() != Rail.Content.JOKER)
-                                    ||
-                                    !(routeNeeded.getCouleur() != Rail.Content.JOKERETOILEE &&
-                                    route.getCouleur() == Rail.Content.JOKERETOILEE);
-                            if (shouldReplace)
+                            if (route.getProprietaire() != null)
                             {
-                                routeNeeded = route;
+                                // Sinon on trouve la meilleur route a ajouter(pour le cost)
+                                boolean shouldReplace = true;
+                                if (routeNeeded != null)
+                                {
+                                    shouldReplace =
+                                            !(routeNeeded.getCouleur() == Rail.Content.JOKER &&
+                                                    route.getCouleur() != Rail.Content.JOKER)
+                                                    ||
+                                                    !(routeNeeded.getCouleur() != Rail.Content.JOKERETOILEE &&
+                                                            route.getCouleur() == Rail.Content.JOKERETOILEE);
+                                }
+
+                                if (shouldReplace)
+                                {
+                                    routeNeeded = route;
+                                }
                             }
                         }
                     }
@@ -241,6 +249,11 @@ public class GarePosFinder
     }
 
 
+    /**
+     * Compter les rails depuis la liste des routes.
+     * @param routes la liste des routes
+     * @return le nombre des rails
+     */
     private static int getRailCount(ArrayList<Route> routes)
     {
         int res = 0;
@@ -251,5 +264,52 @@ public class GarePosFinder
         }
 
         return res;
+    }
+
+
+    public static void printForAll(ArrayList<Ville> villes, int limit, boolean byRail, Player player)
+    {
+        System.out.println("-\n-\n-\n-\nStart of printForAll with limit = " + limit + ", byRail = " + byRail + ", Player = " + player.getName());
+        for (int i = 0; i < villes.size() - 1; i++)
+        {
+            for (int j = i + 1; j < villes.size(); j++)
+            {
+                Ville ville1 = villes.get(i);
+                Ville ville2 = villes.get(j);
+                Ville wantedVille = getWantedVille(ville1, ville2, villes, limit, byRail, player);
+                System.out.print("========\nStart: " + ville1.getNom() + "\nEnd: " + ville2.getNom() + "\nGareVille: ");
+                if (wantedVille != null)
+                {
+                    System.out.println(wantedVille.getNom());
+                }
+                else
+                {
+                    System.out.println("null");
+                }
+            }
+        }
+    }
+
+    public static void printForAllDiff(ArrayList<Ville> villes, int limit, boolean byRail, Player player)
+    {
+        System.out.println("-\n-\n-\n-\nStart of printForAll with limit = " + limit + ", byRail = " + byRail + ", Player = " + player.getName());
+        for (int i = 0; i < villes.size() - 1; i++)
+        {
+            for (int j = i + 1; j < villes.size(); j++)
+            {
+                Ville ville1 = villes.get(i);
+                Ville ville2 = villes.get(j);
+                Ville wantedVille = getWantedVilleDiff(ville1, ville2, villes, limit, byRail, player);
+                System.out.print("========\nStart: " + ville1.getNom() + "\nEnd: " + ville2.getNom() + "\nGareVille: ");
+                if (wantedVille != null)
+                {
+                    System.out.println(wantedVille.getNom());
+                }
+                else
+                {
+                    System.out.println("null");
+                }
+            }
+        }
     }
 }
