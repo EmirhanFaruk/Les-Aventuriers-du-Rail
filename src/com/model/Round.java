@@ -7,6 +7,8 @@ import com.model.bot.WeakBot;
 import com.model.config.carte.CarteManager;
 
 import com.view.GameMapPanel;
+import com.view.MapScreen;
+import com.view.PlayerHandPanel;
 
 public class Round {
 
@@ -61,9 +63,17 @@ public class Round {
         //Variable pour avoir Player
         Player joueur = game.getListPlayer().get(whoIsPlaying);
 
+        //Variable pour avoir acces au gameMapPanel
         GameMapPanel gameMapPanel = game.getGameMapPanel();
 
+        //Variable pour avoir acces au PlayerHandPanel
+        PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
+
         gameMapPanel.setPlayerCourant(joueur);
+
+        gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
+
+
         // DEBUG :System.out.println(whoIsPlaying);
     }
     public void whosNext(Game game){
@@ -85,14 +95,19 @@ public class Round {
 
 
 
-    public void round(Game game, CarteManager carteManager, double deltaTime)
+    public void round(Game game, double deltaTime)
     {
+
+
+
+
         if (betweenRoundTimer <= 0)
         {
             switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
 
                 case(1):
                     weakBotPlay.play(game);
+
                     break;
 
                 case(2):

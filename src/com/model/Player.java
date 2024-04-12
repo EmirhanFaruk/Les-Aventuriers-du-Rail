@@ -1,17 +1,15 @@
 package com.model;
+import com.model.ai.LongestFinder;
 import com.model.config.Plateau;
 import com.model.config.Rail;
-import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
-import com.view.graphics.VilleGraphics;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -154,10 +152,11 @@ public class Player {
 	}
 
 
+	public void retirerCarteNonLoc(Couleur color ,int carteAEnlever){
+		//Fonction qui enleve les cartes si c'est pas multicolor
 
-    public void retirerLesCartes(Couleur color, int carteAEnlever) {
-    	int i = 0;
-    	setNbrWagon(this.nbrWagon - carteAEnlever);
+		int i = 0;
+		setNbrWagon(this.nbrWagon - carteAEnlever);
 		// Premiere boucle qui enlève juste la couleur color
 		while(i < this.trainList.size() && 0 < carteAEnlever) {
 			if ( trainList.get(i) == color ){
@@ -166,7 +165,7 @@ public class Player {
 			} else {
 				i++ ;
 			}
-    	}
+		}
 		// Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
 		// si les carte de la couleur color est insuffissant
 		int j = 0 ;
@@ -178,6 +177,34 @@ public class Player {
 				j++ ;
 			}
 		}
+	}
+
+	public void retirerCarteLoc(int carteAEnlever){
+		//Fonction qui enleve les cartes si c'est une route multicolor
+		int i = 0;
+		setNbrWagon(this.nbrWagon - carteAEnlever);
+		// Premiere boucle qui enlève juste la couleur color
+		while(i < this.trainList.size() && 0 < carteAEnlever) {
+			this.trainList.remove(i);
+			carteAEnlever--;
+
+		}
+
+	}
+
+
+
+    public void retirerLesCartes(Couleur color, int carteAEnlever) {
+
+		//Si la route n'est pas une route multicolor
+		if(color != Couleur.LOC){
+
+			retirerCarteNonLoc(color,carteAEnlever);
+
+		}else{
+			//Sinon on enleve avec une autre fonction
+			retirerCarteLoc(carteAEnlever);
+		}
     }
 
     public boolean mettreRoute(Route r) {
@@ -188,7 +215,7 @@ public class Player {
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
 				this.score += r.getNombrePoint();
 				playerRoutes.add(r);
-				score += aCompleterUneMission(r); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
+				score += aCompleterUneMission(); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
 				return true;
             }
     	}
@@ -196,12 +223,13 @@ public class Player {
     	return false;
     }
 
-	private int aCompleterUneMission(Route r) {
+	private int aCompleterUneMission() {
 		if(destinationsList.size() == 0) return 0;
 		int cumulPoints=0;
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
-			if(completerChemin(c.getPremiereVille(),c.getDeuxiemeVille(),null)){
+			ArrayList<Route> longestWay = LongestFinder.findLongestWay(c.getPremiereVille(), c.getDeuxiemeVille(), this);
+			if(!longestWay.isEmpty()){
 				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
 				c.setComplete();
 			} 
@@ -210,33 +238,20 @@ public class Player {
 	}
 
 
-	private boolean completerChemin(Ville ville1, Ville ville2,Route routePrec) {
-		for(Route r : playerRoutes){
-			if(r == routePrec) continue; // éviter de revenir en arrière(boucle infini)
-			String rV1 = r.getVille1().getNom(),rV2 = r.getVille2().getNom();
-			if(rV1.equals(ville1.getNom()) && rV2.equals(ville2.getNom()) || rV1.equals(ville2.getNom()) && rV2.equals(ville1.getNom()) ) return true; //le cas de la dernière route.
-			
-			if(rV1.equals(ville1.getNom()) && completerChemin(r.getVille2(), ville2,r)) return true;
-			if(rV1.equals(ville2.getNom()) && completerChemin(r.getVille2(), ville1,r)) return true;
-
-			if(rV2.equals(ville1.getNom()) && completerChemin(r.getVille1(), ville2,r)) return true;
-			if(rV2.equals(ville2.getNom()) && completerChemin(r.getVille1(), ville1,r)) return true;	
-		}
-		return false;
-	}
-
 
 	/**
 	 * Une fonction qui renvoie true si le joueur peut changer la ville en gare
 	 * @param ville Ville
 	 * @param couleurCarteChoisit une couleur de carte
 	 */
-	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ) {
-		if (assezDeGare()) {
-			int nbrCarteRetirer = nombreDeCartePourPoserUneGare();
+	public boolean transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 
-			// Affiche les messages si seulement si le joueur est un humain
-			if (this.niveau == 0) {
+		if ( assezDeGare() ){
+			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
+
+
+			//Si c'est un joueur alors on fait la demande, sinon pour les bots on fait directement le procédé
+			if(this.niveau == 0){
 
 				int choixUtilisateur = JOptionPane.showConfirmDialog(
 						game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
@@ -247,26 +262,45 @@ public class Player {
 						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 						ville.setIsOccuped(this);
 						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
-					} else if (ville.getIsOccuped() != null) {
+						return true;
+
+					} else if ( ville.getIsOccuped() != null ) {
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+						return false;
+
+
 					} else {
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+
+						return false;
+
 					}
+
 				}
-			} else {
-				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
-					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
-					ville.setIsOccuped(this);
-				}
+
 			}
-		} else if (this.niveau == 0) {
-			JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+			else{
+
+				retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+				ville.setIsOccuped(this);
+				return true;
+
+			}
+
+
+
+
+
+		} else {
+			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+			return false;
 		}
 
+		return false;
 	}
 
 	/**
@@ -437,10 +471,6 @@ public class Player {
 
 	public ArrayList<CarteDestination> getDestinationsList() {
         return destinationsList;
-    }
-
-    public ArrayList<CarteWagon.Couleur> getTrainCard() {
-        return trainList;
     }
 
     public ArrayList<Couleur> getTrainList() {

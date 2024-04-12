@@ -15,7 +15,6 @@ public class Game
 {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
-    private Player joueurCourant;
     private ArrayList<Ville> villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
@@ -163,7 +162,7 @@ public class Game
         //game loop
         if (!round.roundFinished()) {
 
-            round.round(this, cm, deltaTime);
+            round.round(this, deltaTime);
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
@@ -178,5 +177,9 @@ public class Game
 
     public Round getRound() {
         return this.round;
+    }
+
+    public Player getJoueurCourant(){
+        return listPlayer.get(round.getWhoIsPlaying());
     }
 }

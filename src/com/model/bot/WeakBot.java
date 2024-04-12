@@ -22,14 +22,17 @@ public class WeakBot implements BotAction{
         CarteManager carteManager = game.getCarteManager();
 
         //Si l'ia a encore des actions
-        while (round.getAction() < 0){
+        while (round.getAction() > 0){
+
             int nbr = random.nextInt(2);
             //Savoir si elle pioche ou prends une carte du board
 
-            if(random.nextInt() == 0){
+
+            if(nbr == 0){
                 //On enleve 1 action et pioche une carte
-                game.getListPlayer().get(round.getWhoIsPlaying()).getTrainList().add(carteManager.drawCard());
+                game.getJoueurCourant().getTrainList().add(carteManager.drawCard());
                 round.setAction(round.getAction()-1);
+
             }
 
             else{
@@ -40,15 +43,18 @@ public class WeakBot implements BotAction{
                 if(carteManager.possibleTakeWagon(round.getAction(), position)){
                     CarteWagon.Couleur carte = carteManager.takeWagon(position);
 
-                    //Si la carte pioché est une locomotive, on eneleve 2 points
+                    //Si la carte pioché est une locomotive, on enleve 2 points
                     if(carte == CarteWagon.Couleur.LOC){
+
                         round.setAction(round.getAction()-2);
                     }else{
                         //Sinon on enleve 1 point
                         round.setAction(round.getAction()-1);
+
                     }
                     //Puis on l'ajoute dans la liste de carte
                     game.getListPlayer().get(round.getWhoIsPlaying()).getTrainList().add(carte);
+
 
                 }
 
@@ -67,17 +73,17 @@ public class WeakBot implements BotAction{
         boolean toSetDownWagon = false;
 
         //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().size(); i++){
+        for(int i = 0; i< game.getRoutes().size(); i++){
 
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
-                ArrayList<Rail> listeRail =   game.getRoutes().get(i).getRailsRoute() ;
-                int tailleRoute =  game.getRoutes().get(i).getLongueur();
+                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
+                int tailleRoute =  listeRail.size();
                 Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
 
-                for(int j = 0 ; j  < tailleRoute ; j++) {
+                for(int j = 0 ; j  < tailleRoute  ; j++) {
                     listeRail.get( j ).setOccuperPar( bot );
                 }
                 game.getMapScreen().repaint();
@@ -98,10 +104,14 @@ public class WeakBot implements BotAction{
         Player player = game.getListPlayer().get(round.getWhoIsPlaying());
 
         Random random = new Random();
-        int card = random.nextInt( player.getTrainCard().size() ) ;
+
         //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
-        if( game.getVilles().get(wichStation).getIsOccuped() == null ){
-            player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainCard().get( card ) );
+
+        if( game.getVilles().get(wichStation).getIsOccuped() == null &&  player.getTrainList().size() > player.nombreDeCartePourPoserUneGare() && player.getNbrGare() > 0 ){
+
+            int card = random.nextInt( player.getTrainList().size() ) ;
+
+            player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainList().get( card ) );
             //DEBUG System.err.println( "Le botW " + player.getName() +" a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
 
             game.getMapScreen().repaint();
@@ -150,7 +160,6 @@ public class WeakBot implements BotAction{
 
             case(0):
                 /*        CARTES WAGONS        */
-
                 drawCardWagon(game);
 
                 game.getRound().endRound(game);

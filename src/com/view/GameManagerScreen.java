@@ -78,6 +78,7 @@ public class GameManagerScreen extends JPanel {
     }
 
 
+
     /*
     public void setPlayerCourant(Player playerCourant) {
 		this.playerHandPanel.setPlayer(playerCourant);

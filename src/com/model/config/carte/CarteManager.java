@@ -31,7 +31,7 @@ public class CarteManager {
     }
 
 
- private void initPileCarteWagon() {
+    private void initPileCarteWagon() {
         for(int i=0;i<8;i++){ //8 couleurs de carteWagon
             for(int j=0;j<12;j++) //12 wagons de chaque couleur
             PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
@@ -43,6 +43,7 @@ public class CarteManager {
         for(int i=0; i<trainCards.length;i++){
             trainCards[i] = PileCarteWagon.remove(0).getInitialCouleur();
         }
+        verifAllDifferent();
     }
 
     public void initPileCarteDestination(Game g) {
@@ -109,14 +110,18 @@ public class CarteManager {
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
         
-        while((trainCards[0] == trainCards[1] && trainCards[0] == trainCards[2]) && 
-        trainCards[0] == CarteWagon.Couleur.LOC) {
-        	trainCards[0] = drawCard();
-        	trainCards[1] = drawCard();
-        	trainCards[2] = drawCard();
-        }
+        verifAllDifferent();
 
         return renvoie;
+    }
+
+    private void verifAllDifferent() {
+        while((trainCards[0] == trainCards[1] && trainCards[0] == trainCards[2]) &&
+                trainCards[0] == CarteWagon.Couleur.LOC) {
+            trainCards[0] = drawCard();
+            trainCards[1] = drawCard();
+            trainCards[2] = drawCard();
+        }
     }
 
     public CarteWagon.Couleur showWagon(int position){
