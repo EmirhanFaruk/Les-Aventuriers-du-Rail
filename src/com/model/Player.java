@@ -57,8 +57,15 @@ public class Player {
 	}
 
 	public void piocheCarteInvisible() {
-		CarteManager cm = new CarteManager();
-
+		CarteManager cm = game.getCarteManager();
+		if(cm.PileCarteWagon.isEmpty()){
+			if(cm.trainCardisEmpty()){
+			JOptionPane.showMessageDialog(new JFrame(),"Il y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
+		}else{
+			JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
+		}
+			return;
+		}
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
 			insertCarte(cm.drawCard());
@@ -224,31 +231,40 @@ public class Player {
 	 * @param ville Ville
 	 * @param couleurCarteChoisit une couleur de carte
 	 */
-	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
-		if ( assezDeGare() ){
-			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
+	public void transformerEnGare( Ville ville , Couleur couleurCarteChoisit ) {
+		if (assezDeGare()) {
+			int nbrCarteRetirer = nombreDeCartePourPoserUneGare();
 
-			int choixUtilisateur = JOptionPane.showConfirmDialog(
-					game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-					"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+			// Affiche les messages si seulement si le joueur est un humain
+			if (this.niveau == 0) {
 
-			if (choixUtilisateur == JOptionPane.YES_OPTION) {
+				int choixUtilisateur = JOptionPane.showConfirmDialog(
+						game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+						"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+
+				if (choixUtilisateur == JOptionPane.YES_OPTION) {
+					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
+						ville.setIsOccuped(this);
+						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
+					} else if (ville.getIsOccuped() != null) {
+						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+								"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+								"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+						// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
+					}
+				}
+			} else {
 				if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
 					retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 					ville.setIsOccuped(this);
-					// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
-				} else if ( ville.getIsOccuped() != null ) {
-					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-							"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-							"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-					// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
 				}
 			}
-		} else {
-			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+		} else if (this.niveau == 0) {
+			JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}

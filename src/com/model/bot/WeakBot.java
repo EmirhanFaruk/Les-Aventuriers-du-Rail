@@ -80,7 +80,7 @@ public class WeakBot implements BotAction{
                 for(int j = 0 ; j  < tailleRoute ; j++) {
                     listeRail.get( j ).setOccuperPar( bot );
                 }
-                game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint();
+                game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().getMapScreen().repaint();
                 // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
@@ -102,9 +102,9 @@ public class WeakBot implements BotAction{
         //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
         if( game.getVilles().get(wichStation).getIsOccuped() == null ){
             player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainCard().get( card ) );
-            System.err.println( "Le botW a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
+            //DEBUG System.err.println( "Le botW " + player.getName() +" a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
 
-            game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().repaint(); ;
+            game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().getMapScreen().repaint();
 
             return true;
         }
@@ -132,7 +132,7 @@ public class WeakBot implements BotAction{
         }
 
         //Je stock les cartes destinations dans une liste
-        return carteManager.takeDestination(tabNombre,game);
+        return carteManager.takeDestination(tabNombre);
 
 
     }
