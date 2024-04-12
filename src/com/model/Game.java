@@ -5,6 +5,7 @@ import com.model.config.Route;
 import com.model.config.carte.CarteManager;
 import com.view.GameFrame;
 import com.model.config.Ville;
+import com.view.MapScreen;
 
 import java.util.ArrayList;
 import java.awt.*;
@@ -59,6 +60,16 @@ public class Game
 
     public GameFrame getGameFrame() {
         return gameFrame;
+    }
+
+    public MapScreen getMapScreen()
+    {
+        if (gameFrame != null)
+        {
+            return gameFrame.getMapScreen();
+        }
+
+        return null;
     }
 
     public void setListPlayer(ArrayList<Player> listPlayer) {
