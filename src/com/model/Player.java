@@ -489,10 +489,6 @@ public class Player {
         return destinationsList;
     }
 
-    public ArrayList<CarteWagon.Couleur> getTrainCard() {
-        return trainList;
-    }
-
     public ArrayList<Couleur> getTrainList() {
         return trainList;
     }

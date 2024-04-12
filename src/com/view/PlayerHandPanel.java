@@ -141,8 +141,8 @@ public class PlayerHandPanel extends JPanel {
         private void drawPlayerHand(Graphics2D g) {
             int x = 30, i = 0;
             listCardWagon = new ArrayList<>();
-            while (i < this.player.getTrainCard().size()) {
-                CarteWagon.Couleur couleur = this.player.getTrainCard().get(i);
+            while (i < this.player.getTrainList().size()) {
+                CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
                 CarteWagon carteWagon = new CarteWagon( couleur , x , hFixe );
                 listCardWagon.add( carteWagon ) ;
                 BufferedImage image = CardGraphics.getImage(carteWagon);
