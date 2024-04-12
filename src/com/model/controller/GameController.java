@@ -23,11 +23,12 @@ public class GameController {
     	int y = e.getY() / tileHeight;
 
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
-        Object clickedObject = game.getPlateau().getPlateau()[x][y];
-        Rail r = null ;
-        if(clickedObject instanceof Rail)r = (Rail) clickedObject;
+        try {
+            Object clickedObject = game.getPlateau().getPlateau()[x][y];
+            Rail r = null;
+            if (clickedObject instanceof Rail) r = (Rail) clickedObject;
 
-        //DEBUG : POSITION
+            //DEBUG : POSITION
         /*
         System.out.println("x = " + x + " y = " + y);
         if(r!=null) {
@@ -38,14 +39,17 @@ public class GameController {
         }*/
 
 
-        if (clickedObject != null) {
-            // Traitement en fonction du type de l'objet cliqué
-            if (clickedObject instanceof Rail) {
-                tenterAcquisitionRoute((Rail) clickedObject, game.getPlateau(), joueurCourant,game.getRound(),game);
-            } else if ( clickedObject instanceof Ville ){
-                Mx = x ;
-                My = y ;
+            if (clickedObject != null) {
+                // Traitement en fonction du type de l'objet cliqué
+                if (clickedObject instanceof Rail) {
+                    tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
+                } else if (clickedObject instanceof Ville) {
+                    Mx = x;
+                    My = y;
+                }
             }
+        } catch ( Exception exception ){
+            // DEBUG : System.out.println("Nope hihi");
         }
     }
 
@@ -72,8 +76,15 @@ public class GameController {
         return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
     }
      
-    public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player, Round round, Game game) {
+    public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
         // Vérifie si le rail a déjà un propriétaire
+
+        if(round.getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return;
+        }
+
         if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
@@ -116,16 +127,16 @@ public class GameController {
         }
     }
 
-    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel , MapScreen mapScreen, Game game){
+    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
         CarteWagon source = playerHandPanel.getDrawPlayerHand().CardClicked( e.getX() , e.getY() );
         if ( source != null ) {
             // Si la source est une carte wagon
             this.carteWagon = source;
             try {
                 Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
-                tenterDePoserUneGare( ville , player );
-                mapScreen.repaintAll(playerHandPanel);
-                game.getRound().endRound(game);
+                if(tenterDePoserUneGare( ville , player, game )){
+                    game.getRound().endRound(game);
+                }
 
             } catch ( Exception exception ){
                 if ( player.getNiveau() == 0 ) {
@@ -138,10 +149,19 @@ public class GameController {
         }
     }
 
-    public void tenterDePoserUneGare(Ville ville , Player player ){
-        player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
+    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
+
+        if(game.getRound().getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return false;
+        }
+
+        boolean didIt = player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
         Mx = -1 ;
         My = -1 ;
+
+        return didIt;
     }
 
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {

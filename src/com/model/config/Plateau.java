@@ -355,13 +355,6 @@ public class Plateau {
                         {
                             route.setCousin(temp);
                             temp.setCousin(route);
-                            // On ajoute longueur si la route est diagonale et double
-                            int angle = getAngle(route.getVille1(), route.getVille2());
-                            if (angle == 1 || angle == 3)
-                            {
-                                route.setLongueur(route.getLongueur() + 1);
-                                temp.setLongueur(temp.getLongueur() + 1);
-                            }
                         }
                     }
                 }
