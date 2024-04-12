@@ -154,10 +154,11 @@ public class Player {
 	}
 
 
+	public void retirerCarteNonLoc(Couleur color ,int carteAEnlever){
+		//Fonction qui enleve les cartes si c'est pas multicolor
 
-    public void retirerLesCartes(Couleur color, int carteAEnlever) {
-    	int i = 0;
-    	setNbrWagon(this.nbrWagon - carteAEnlever);
+		int i = 0;
+		setNbrWagon(this.nbrWagon - carteAEnlever);
 		// Premiere boucle qui enlève juste la couleur color
 		while(i < this.trainList.size() && 0 < carteAEnlever) {
 			if ( trainList.get(i) == color ){
@@ -166,7 +167,7 @@ public class Player {
 			} else {
 				i++ ;
 			}
-    	}
+		}
 		// Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
 		// si les carte de la couleur color est insuffissant
 		int j = 0 ;
@@ -177,6 +178,34 @@ public class Player {
 			} else{
 				j++ ;
 			}
+		}
+	}
+
+	public void retirerCarteLoc(int carteAEnlever){
+		//Fonction qui enleve les cartes si c'est une route multicolor
+		int i = 0;
+		setNbrWagon(this.nbrWagon - carteAEnlever);
+		// Premiere boucle qui enlève juste la couleur color
+		while(i < this.trainList.size() && 0 < carteAEnlever) {
+			this.trainList.remove(i);
+			carteAEnlever--;
+
+		}
+
+	}
+
+
+
+    public void retirerLesCartes(Couleur color, int carteAEnlever) {
+
+		//Si la route n'est pas une route multicolor
+		if(color != Couleur.LOC){
+
+			retirerCarteNonLoc(color,carteAEnlever);
+
+		}else{
+			//Sinon on enleve avec une autre fonction
+			retirerCarteLoc(carteAEnlever);
 		}
     }
 
