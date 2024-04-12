@@ -1,17 +1,15 @@
 package com.model;
+import com.model.ai.LongestFinder;
 import com.model.config.Plateau;
 import com.model.config.Rail;
-import com.model.config.Rail.Content;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 import com.model.config.carte.CarteWagon.Couleur;
-import com.view.graphics.VilleGraphics;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Player {
@@ -217,7 +215,7 @@ public class Player {
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
 				this.score += r.getNombrePoint();
 				playerRoutes.add(r);
-				score += aCompleterUneMission(r); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
+				score += aCompleterUneMission(); // on vérifie si on a completer une mission et on rajoute les points le cas échéant
 				return true;
             }
     	}
@@ -225,12 +223,13 @@ public class Player {
     	return false;
     }
 
-	private int aCompleterUneMission(Route r) {
+	private int aCompleterUneMission() {
 		if(destinationsList.size() == 0) return 0;
 		int cumulPoints=0;
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
-			if(completerChemin(c.getPremiereVille(),c.getDeuxiemeVille(),null)){
+			ArrayList<Route> longestWay = LongestFinder.findLongestWay(c.getPremiereVille(), c.getDeuxiemeVille(), this);
+			if(!longestWay.isEmpty()){
 				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
 				c.setComplete();
 			} 
@@ -238,21 +237,6 @@ public class Player {
 		return cumulPoints;
 	}
 
-
-	private boolean completerChemin(Ville ville1, Ville ville2,Route routePrec) {
-		for(Route r : playerRoutes){
-			if(r == routePrec) continue; // éviter de revenir en arrière(boucle infini)
-			String rV1 = r.getVille1().getNom(),rV2 = r.getVille2().getNom();
-			if(rV1.equals(ville1.getNom()) && rV2.equals(ville2.getNom()) || rV1.equals(ville2.getNom()) && rV2.equals(ville1.getNom()) ) return true; //le cas de la dernière route.
-			
-			if(rV1.equals(ville1.getNom()) && completerChemin(r.getVille2(), ville2,r)) return true;
-			if(rV1.equals(ville2.getNom()) && completerChemin(r.getVille2(), ville1,r)) return true;
-
-			if(rV2.equals(ville1.getNom()) && completerChemin(r.getVille1(), ville2,r)) return true;
-			if(rV2.equals(ville2.getNom()) && completerChemin(r.getVille1(), ville1,r)) return true;	
-		}
-		return false;
-	}
 
 
 	/**
