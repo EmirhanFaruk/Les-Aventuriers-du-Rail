@@ -107,8 +107,7 @@ public class WeakBot implements BotAction{
 
         //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
 
-
-        if( game.getVilles().get(wichStation).getIsOccuped() == null &&  player.getTrainList().size() > player.nombreDeCartePourPoserUneGare() ){
+        if( game.getVilles().get(wichStation).getIsOccuped() == null &&  player.getTrainList().size() > player.nombreDeCartePourPoserUneGare() && player.getNbrGare() > 0 ){
 
             int card = random.nextInt( player.getTrainList().size() ) ;
 
