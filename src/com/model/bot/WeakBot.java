@@ -67,17 +67,17 @@ public class WeakBot implements BotAction{
         boolean toSetDownWagon = false;
 
         //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().size(); i++){
+        for(int i = 0; i< game.getRoutes().size(); i++){
 
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
-                ArrayList<Rail> listeRail =   game.getRoutes().get(i).getRailsRoute() ;
-                int tailleRoute =  game.getRoutes().get(i).getLongueur();
+                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
+                int tailleRoute =  listeRail.size();
                 Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
 
-                for(int j = 0 ; j  < tailleRoute ; j++) {
+                for(int j = 0 ; j  < tailleRoute  ; j++) {
                     listeRail.get( j ).setOccuperPar( bot );
                 }
                 game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel().getMapScreen().repaint();

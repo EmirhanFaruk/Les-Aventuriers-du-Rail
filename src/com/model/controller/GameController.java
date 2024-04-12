@@ -42,7 +42,7 @@ public class GameController {
             if (clickedObject != null) {
                 // Traitement en fonction du type de l'objet cliqué
                 if (clickedObject instanceof Rail) {
-                    tenterAcquisitionRoute((Rail) clickedObject, game.getPlateau(), joueurCourant, game.getRound(), game);
+                    tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
                 } else if (clickedObject instanceof Ville) {
                     Mx = x;
                     My = y;
@@ -76,7 +76,7 @@ public class GameController {
         return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
     }
      
-    public void tenterAcquisitionRoute(Rail r, Plateau plateau, Player player, Round round, Game game) {
+    public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
         // Vérifie si le rail a déjà un propriétaire
         if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
