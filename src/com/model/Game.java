@@ -67,17 +67,7 @@ public class Game
 
     private void initBoard(){
         //Fonction qui initialise le jeu
-
-
-        //Initialisation des cartes wagon sur le board
-        for(int i = 0; i< cm.getTrainCards().length; i++){
-            cm.getTrainCards()[i] = cm.drawCard();
-        }
         cm.initPileCarteDestination(this);
-        //Initialisation des cartes destination du premier tour du board que le joueur choisit
-        for(int y = 0; y < cm.getDestinationsCards().length;y++){
-            cm.getDestinationsCards()[y] = cm.getDestination(this);
-        }
 
         // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
         for (int i = 0; i < listPlayer.size(); i++)

@@ -132,7 +132,7 @@ public class WeakBot implements BotAction{
         }
 
         //Je stock les cartes destinations dans une liste
-        return carteManager.takeDestination(tabNombre,game);
+        return carteManager.takeDestination(tabNombre);
 
 
     }
