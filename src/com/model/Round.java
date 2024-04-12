@@ -48,6 +48,7 @@ public class Round {
     }
 
     public void endRound(Game game) {
+
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         whosNext(game);
@@ -58,7 +59,13 @@ public class Round {
         //Variable pour avoir acces au gameMapPanel
         GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
 
+        //Variable pour avoir acces au PlayerHandPanel
+        PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
+
         gameMapPanel.setPlayerCourant(joueur);
+
+        gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
+
 
         // DEBUG :System.out.println(whoIsPlaying);
     }
@@ -85,15 +92,6 @@ public class Round {
     {
 
 
-        //Variable pour avoir acces au gameMapPanel
-        GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
-
-        if (gameMapPanel != null){
-            //Variable pour avoir acces au PlayerHandPanel
-            PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
-            gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
-
-        }
 
 
         if (betweenRoundTimer <= 0)
