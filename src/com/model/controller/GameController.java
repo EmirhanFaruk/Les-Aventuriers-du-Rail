@@ -114,9 +114,9 @@ public class GameController {
             this.carteWagon = source;
             try {
                 Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
-                tenterDePoserUneGare( ville , player );
-                mapScreen.repaintAll(playerHandPanel);
-                game.getRound().endRound(game);
+                if(tenterDePoserUneGare( ville , player )){
+                    game.getRound().endRound(game);
+                }
 
             } catch ( Exception exception ){
                 JOptionPane.showMessageDialog( game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
@@ -127,10 +127,12 @@ public class GameController {
         }
     }
 
-    public void tenterDePoserUneGare(Ville ville , Player player ){
-        player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
+    public boolean tenterDePoserUneGare(Ville ville , Player player ){
+        boolean didIt = player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
         Mx = -1 ;
         My = -1 ;
+
+        return didIt;
     }
 
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
