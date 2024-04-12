@@ -121,7 +121,7 @@ public class PlayerHandPanel extends JPanel {
             this.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this , mapScreen,game );
+                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this ,game );
                     repaint();
                 }
             });

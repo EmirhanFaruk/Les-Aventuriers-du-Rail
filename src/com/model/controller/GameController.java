@@ -78,6 +78,13 @@ public class GameController {
      
     public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
         // Vérifie si le rail a déjà un propriétaire
+
+        if(round.getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return;
+        }
+
         if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
@@ -120,14 +127,14 @@ public class GameController {
         }
     }
 
-    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel , MapScreen mapScreen, Game game){
+    public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
         CarteWagon source = playerHandPanel.getDrawPlayerHand().CardClicked( e.getX() , e.getY() );
         if ( source != null ) {
             // Si la source est une carte wagon
             this.carteWagon = source;
             try {
                 Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
-                if(tenterDePoserUneGare( ville , player )){
+                if(tenterDePoserUneGare( ville , player, game )){
                     game.getRound().endRound(game);
                 }
 
@@ -142,7 +149,14 @@ public class GameController {
         }
     }
 
-    public boolean tenterDePoserUneGare(Ville ville , Player player ){
+    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
+
+        if(game.getRound().getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return false;
+        }
+
         boolean didIt = player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
         Mx = -1 ;
         My = -1 ;
