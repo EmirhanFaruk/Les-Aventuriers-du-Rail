@@ -23,7 +23,20 @@ public class GarePosFinder
     {
         ArrayList<Ville> gareTry = Node.findClosestPath(start, end, player, wannaBeGare);
 
+
+
         ArrayList<Route> neededRoutes = getNeededRoutes(gareTry, player);
+
+        System.out.println("===================================================");
+        System.out.println(start.getNom() + " - " + end.getNom() + "; with " + wannaBeGare.getNom());
+        System.out.println("Ville count: " + gareTry.size());
+        for (Route route : neededRoutes)
+        {
+            System.out.println(route);
+        }
+
+
+
         int newLength = neededRoutes.size();
         if (!byRail)
         {
@@ -198,7 +211,8 @@ public class GarePosFinder
             Ville current = way.get(i);
             Ville next = way.get(i + 1);
             // Si un de villes est deja occupé par le joueur, on saute ces villes
-            if (!(current.getIsOccuped() == player || next.getIsOccuped() == player)) {
+            if (!(current.getIsOccuped() == player || next.getIsOccuped() == player))
+            {
                 // Sinon on parcour les routes pour trouver une route qui les lie
                 Route routeNeeded = null;
                 for (Route route : current.getRoutes())
@@ -209,12 +223,11 @@ public class GarePosFinder
                         // Si cette route est occupé par le joueur, on saute sans ajouter
                         if (route.getProprietaire() == player)
                         {
-                            routeNeeded = null;
                             break;
                         }
                         else
                         {
-                            if (route.getProprietaire() != null)
+                            if (route.getProprietaire() == null)
                             {
                                 // Sinon on trouve la meilleur route a ajouter(pour le cost)
                                 boolean shouldReplace = true;

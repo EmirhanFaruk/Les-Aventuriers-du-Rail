@@ -131,7 +131,7 @@ public class Route {
 
     /**
      * Setter for cousin
-     * @param cousin
+     * @param cousin cousin to set
      */
     public void setCousin(Route cousin) { this.cousin = cousin; }
 
@@ -146,7 +146,8 @@ public class Route {
 
     public String toString()
     {
-        String res = "Route: \nVille1: " + ville1.getNom() + "\nVille2: " + ville2.getNom() + "\nLongueur: " + longueur + "\nCouleur: " + getCouleur();
+        String res = "\n=================\n";
+        res += "Route: \nVille1: " + ville1.getNom() + "\nVille2: " + ville2.getNom() + "\nLongueur: " + longueur + "\nCouleur: " + getCouleur();
         if (proprietaire != null)
         {
             res += "\nProp: " + proprietaire.getName();
@@ -173,11 +174,4 @@ public class Route {
 
         return possibility1 || possibility2;
     }
-
-
-
-
-
-
-
 }

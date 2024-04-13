@@ -49,11 +49,14 @@ public class Round {
     }
 
     public void endRound(Game game) {
+        if (whoIsPlaying == 0)
+        {
+            //GarePosFinder.printForAll(game.getVilles(), 2, true, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAll(game.getVilles(), 1, false, game.getListPlayer().get(whoIsPlaying));
+            GarePosFinder.printForAllDiff(game.getVilles(), 6, true, game.getListPlayer().get(whoIsPlaying));
+            GarePosFinder.printForAllDiff(game.getVilles(), 2, false, game.getListPlayer().get(whoIsPlaying));
+        }
 
-        GarePosFinder.printForAll(game.getVilles(), 6, true, game.getListPlayer().get(whoIsPlaying));
-        GarePosFinder.printForAll(game.getVilles(), 2, false, game.getListPlayer().get(whoIsPlaying));
-        GarePosFinder.printForAllDiff(game.getVilles(), 999, true, game.getListPlayer().get(whoIsPlaying));
-        GarePosFinder.printForAllDiff(game.getVilles(), 999, false, game.getListPlayer().get(whoIsPlaying));
 
 
         //Fonction qui finit le tour du bot
