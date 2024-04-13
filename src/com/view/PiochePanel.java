@@ -105,11 +105,13 @@ public class PiochePanel extends JPanel {
         // Dessin des cartes visibles
         for (int i = 0; i < piocheVisibleBounds.length; i++) {
             Rectangle rect = piocheVisibleBounds[i];
+            if(imagePiocheVisible.getTrainCards()[i] != null){
             BufferedImage carteVisible = CardGraphics.getImageFromColor(imagePiocheVisible.getTrainCards()[i]);
             
             if (carteVisible != null) {
                 g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);
             }
+        }
         }
     }
 

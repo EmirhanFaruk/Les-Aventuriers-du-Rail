@@ -74,4 +74,12 @@ public class GameMapPanel extends JPanel {
     public void setPlayerInformationBarPanel(PlayerInformationBarPanel playerInformationBarPanel) {
         this.playerInformationBarPanel = playerInformationBarPanel;
     }
+
+    public MapScreen getMapScreen() {
+        return mapScreen;
+    }
+
+    public PlayerHandPanel getPlayerHandPanel() {
+        return playerHandPanel;
+    }
 }

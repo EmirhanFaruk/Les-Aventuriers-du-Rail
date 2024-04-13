@@ -21,7 +21,7 @@ public class LongestFinder
         ArrayList<Route> currentWay = new ArrayList<>();
         ArrayList<Ville> visited = new ArrayList<>();
 
-        System.out.println("Start of finding longest between " + v1.getNom() + " - " + v2.getNom());
+        //System.out.println("Start of finding longest between " + v1.getNom() + " - " + v2.getNom());
         deepFirstSearch(v1, v2, visited, currentWay, res, player);
 
 
@@ -40,7 +40,7 @@ public class LongestFinder
      */
     private static void deepFirstSearch(Ville currentVille, Ville end, ArrayList<Ville> visited, ArrayList<Route> currentWay, ArrayList<Route> longestWay, Player player)
     {
-        printWay(currentWay, currentVille, end);
+        //printWay(currentWay, currentVille, end);
 
         addDistinct(currentVille, visited);
 
@@ -50,8 +50,8 @@ public class LongestFinder
             {
                 longestWay.clear();
                 longestWay.addAll(currentWay);
-                System.out.println("Put the most recent longest way: ");
-                printWay(longestWay, currentVille, end);
+                //System.out.println("Put the most recent longest way: ");
+                //printWay(longestWay, currentVille, end);
             }
         }
         else

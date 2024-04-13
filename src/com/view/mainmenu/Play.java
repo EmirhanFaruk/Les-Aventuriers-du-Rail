@@ -178,32 +178,41 @@ public class Play extends JPanel
         button.setForeground(Color.GRAY);
         button.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        button.addActionListener(e -> {
-            switch (player_type_list_tag[i].getText()) {
-                case PLAYER:
-                    player_type_list_tag[i].setText(WEAKBOT);
-                    button.setText(WEAKBOT);
-                    break;
-                case WEAKBOT:
-                    player_type_list_tag[i].setText(NORMALBOT);
-                    button.setText(NORMALBOT);
-                    break;
-                case NORMALBOT:
-                    player_type_list_tag[i].setText(STRONGBOT);
-                    button.setText(STRONGBOT);
-                    break;
-                case STRONGBOT:
-                    player_type_list_tag[i].setText(NONE);
-                    button.setText(NONE);
-                    break;
-                case NONE:
-                    player_type_list_tag[i].setText(PLAYER);
-                    button.setText(PLAYER);
-                    break;
-                default:
-                    break;
-            }
-        });
+        //On rend le bouton du joueur 1 intouchable
+        if (isPlayerOne(i)) {
+            button.setEnabled(false);
+
+        }else{
+            button.addActionListener(e -> {
+                switch (player_type_list_tag[i].getText()) {
+                    case PLAYER:
+                        player_type_list_tag[i].setText(WEAKBOT);
+                        button.setText(WEAKBOT);
+                        break;
+                    case WEAKBOT:
+                        player_type_list_tag[i].setText(NORMALBOT);
+                        button.setText(NORMALBOT);
+                        break;
+                    case NORMALBOT:
+                        player_type_list_tag[i].setText(STRONGBOT);
+                        button.setText(STRONGBOT);
+                        break;
+                    case STRONGBOT:
+                        player_type_list_tag[i].setText(NONE);
+                        button.setText(NONE);
+                        break;
+                    case NONE:
+                        player_type_list_tag[i].setText(PLAYER);
+                        button.setText(PLAYER);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
+
+
         return makeCenteringPanel(button);
     }
 
@@ -498,7 +507,7 @@ public class Play extends JPanel
                             JOptionPane.showMessageDialog(this,"Veuillez choisir des couleurs différentes !","Warning",JOptionPane.WARNING_MESSAGE);
                         }
                         else if(verifSupTwoPlayer(player_type_list)){
-                            JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Manque de Joueur",JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Robocop",JOptionPane.WARNING_MESSAGE);
 
                         }
                         else{
@@ -534,6 +543,7 @@ public class Play extends JPanel
     }
 
 
+    //Fonction qui vérifie qu'il y a au moins 2 joueurs
     private boolean verifSupTwoPlayer(String[] listeJoueur){
         int compteur = 0;
         for(int i = 0; i< listeJoueur.length;i++){
@@ -543,5 +553,11 @@ public class Play extends JPanel
         }
         return compteur > 2;
     }
+
+    // Déclarez une variable pour vérifier si le joueur est le joueur 1
+    private boolean isPlayerOne(int i) {
+        return i == 0;
+    }
+
 
 }

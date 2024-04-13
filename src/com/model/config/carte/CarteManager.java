@@ -40,6 +40,10 @@ public class CarteManager {
             PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
         }
         Collections.shuffle(PileCarteWagon); // Mélange de cartes.
+        for(int i=0; i<trainCards.length;i++){
+            trainCards[i] = PileCarteWagon.remove(0).getInitialCouleur();
+        }
+        verifAllDifferent();
     }
 
     public void initPileCarteDestination(Game g) {
@@ -106,72 +110,55 @@ public class CarteManager {
         CarteWagon.Couleur renvoie = trainCards[position]; //On renvoie l'ancienne carte
         trainCards[position] = drawCard(); //On met une nouvelle carte qui remplace l'ancienne
         
-        while((trainCards[0] == trainCards[1] && trainCards[0] == trainCards[2]) && 
-        trainCards[0] == CarteWagon.Couleur.LOC) {
-        	trainCards[0] = drawCard();
-        	trainCards[1] = drawCard();
-        	trainCards[2] = drawCard();
-        }
+        verifAllDifferent();
 
         return renvoie;
+    }
+
+    private void verifAllDifferent() {
+        while((trainCards[0] == trainCards[1] && trainCards[0] == trainCards[2]) &&
+                trainCards[0] == CarteWagon.Couleur.LOC) {
+            trainCards[0] = drawCard();
+            trainCards[1] = drawCard();
+            trainCards[2] = drawCard();
+        }
     }
 
     public CarteWagon.Couleur showWagon(int position){
         return trainCards[position];
     }
 
-    public CarteDestination[] takeDestination(int[] position,Game game){
-        CarteDestination [] renvoie = new CarteDestination[position.length];
+    
+    public CarteDestination[] takeDestination(int[] position){    
         //Fonction qui prends prends une carte destination
-
+        CarteDestination [] renvoie = new CarteDestination[position.length];
         for(int i = 0; i<position.length;i++){
-
-
             renvoie[i] = destinationsCards[position[i]];
+            destinationsCards[position[i]] = null;
         }
-        rerollDestination(game);
+        rerollDestination();
 
         return renvoie;
     }
 
-    public void rerollDestination(Game game){
-
+    public void rerollDestination(){
         //Fonction qui remets de nouvelles mission
-
-        //On va remplacer chaque élément par une nouvelle destination
         for(int i = 0; i<destinationsCards.length;i++){
-
-            destinationsCards[i] = getDestination(game);
-
+            if(destinationsCards[i]!= null){
+                PileCarteDestination.add(destinationsCards[i]);
+            }
+            destinationsCards[i] = getDestination();
         }
     }
 
     public CarteWagon.Couleur drawCard(){
+        if(!PileCarteWagon.isEmpty())
         return PileCarteWagon.remove(0).getInitialCouleur();
-
+        return null;
     }
 
-    public CarteDestination getDestination(Game game){
-        //Fonction qui choisit au hasard les déstinations
-
-        //On prend un Random qui donne un nombre qui représente la position dans le tableau des villes
-        Random villeRANDOM = new Random();
-
-        //Si on a la meme ville en alors on relance ville2 jusqu'a en avoir un différent
-
-
-        Ville v1 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
-        Ville v2 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
-
-        while (v1 == v2){
-            v2 = game.getVilles().get(villeRANDOM.nextInt(game.getVilles().size()));
-
-        }
-
-        //On initialise la premiere ville et la deuxieme ville et le nombre de point
-        return new CarteDestination(new Route(v1,v2,nombrePointDistance(v1,v2)));
-
-
+    public CarteDestination getDestination(){
+        return PileCarteDestination.remove(0);
     }
 
 
@@ -218,5 +205,12 @@ public class CarteManager {
         int longueur = cheminLongueur(chemin);
 
         return longueur;
+    }
+
+    public boolean trainCardisEmpty(){
+        for(CarteWagon.Couleur c : trainCards){
+            if(c != null) return false;
+        }
+        return true;
     }
 }
