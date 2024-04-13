@@ -60,6 +60,7 @@ public class GarePosFinder
         }
 
         // If not, if a way can be made then true
+        // TODO: GERER LE CAS OU IL Y A PAS DE SOL/LE CHEMIN EST DEJA COMPLET
         return true;
     }
 
@@ -94,9 +95,12 @@ public class GarePosFinder
 
         for (Ville wannaBeGare : villesToTry)
         {
-            if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength))
+            if (wannaBeGare.getIsOccuped() == null)
             {
-                res.add(wannaBeGare);
+                if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength))
+                {
+                    res.add(wannaBeGare);
+                }
             }
         }
 
@@ -162,11 +166,11 @@ public class GarePosFinder
     }
 
     /**
-     * Gets wanted ville to pose as a gare within the limit of the max route/rail(to put) number difference.
+     * Gets wanted ville to pose as a gare within the limit of the min route/rail(to put) number difference.
      * @param start start ville for the destination
      * @param end end ville for the destination
      * @param villesToTry villes to try as a gare
-     * @param limit max route number difference
+     * @param limit min route number difference
      * @param byRail true if counting rails, route if false
      * @param player player
      * @return the wanted ville

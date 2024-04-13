@@ -1,6 +1,7 @@
 package com.model.ai;
 
 import com.model.Player;
+import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 
@@ -81,6 +82,30 @@ public class Node
         return a.ville.getX() == b.ville.getX() && a.ville.getY() == b.ville.getY();
     }
 
+
+    /**
+     * Check if the given route is available.
+     * @param route the said route
+     * @param player the player
+     * @param wannaBeGare the supposed gare if it exists
+     * @return availability
+     */
+    private static boolean available(Route route, Player player, Ville wannaBeGare)
+    {
+        boolean available = route.getProprietaire() == player || route.getProprietaire() == null;
+        available = available ||
+                (route.getVille1().getIsOccuped() == player || route.getVille2().getIsOccuped() == player);
+        if (wannaBeGare != null)
+        {
+            available = available ||
+            (route.getVille1() == wannaBeGare ||
+            route.getVille2() == wannaBeGare);
+        }
+        return available;
+    }
+
+
+
     /**
      * Gets possible neighbor nodes. Sets wannaBeGare as null
      * @param player if a route is already owned by player, its cost is 0
@@ -101,8 +126,7 @@ public class Node
 
         for (Route route : ville.getRoutes())
         {
-            boolean available = route.getProprietaire() == player || route.getProprietaire() == null;
-            if(available)
+            if(available(route, player, wannaBeGare))
             {
                 Ville[] villes = new Ville[]{route.getVille1(), route.getVille2()};
                 for (Ville routeVille : villes)
