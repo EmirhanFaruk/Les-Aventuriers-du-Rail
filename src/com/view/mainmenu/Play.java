@@ -468,12 +468,20 @@ public class Play extends JPanel
     private JPanel makeLevelPanel()
     {
         JPanel res = makeDefaultPanel();
+
+        boolean flag = true;
+
         int map_count = getMapCount();
         if(map_count > 0)
         {
             res.setLayout(new GridLayout(map_count, 1));
             for (String level_name : getMapNames())
             {
+                if (flag)
+                {
+                    flag = false;
+                    level_name_tag = new JLabel(level_name);
+                }
                 res.add(makeSingleLevelPanel(level_name));
             }
         }
@@ -497,7 +505,6 @@ public class Play extends JPanel
 
         JPanel lnt_capsule = makeDefaultPanel(); // level name tag capsule
 
-        level_name_tag = new JLabel("Map1");
         level_name_tag.setHorizontalTextPosition(SwingConstants.CENTER);
         level_name_tag.setVerticalTextPosition(SwingConstants.CENTER);
         level_name_tag.setBackground(Color.BLACK);
@@ -559,9 +566,13 @@ public class Play extends JPanel
                             JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Robocop",JOptionPane.WARNING_MESSAGE);
 
                         }
-                        else{
-                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
-                    }
+                        else
+                        {
+                            if (!level_name_tag.getText().isEmpty())
+                            {
+                                frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
+                            }
+                        }
                     });
 
         res.add(play_button);
