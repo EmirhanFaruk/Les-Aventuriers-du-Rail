@@ -77,13 +77,12 @@ public class Plateau {
      */
     private static ArrayList<String> delimit(String csvLine, char delimiter)
     {
-        int len = numDelimiter(csvLine, delimiter);
         ArrayList<String> res = new ArrayList<>();
 
         String temp = "";
         for (int i = 0; i < csvLine.length(); i++)
         {
-            if(csvLine.charAt(i) != ';')
+            if(csvLine.charAt(i) != delimiter)
             {
                 temp = temp + csvLine.charAt(i);
             }
@@ -91,26 +90,6 @@ public class Plateau {
             {
                 res.add(temp);
                 temp = "";
-            }
-        }
-
-        return res;
-    }
-
-    /**
-     * Retourne le nombre de delimiteur dans le string.
-     * @param csvLine le string
-     * @param delimiter le delimiteur
-     * @return le nombre de delimiteur dans le string
-     */
-    private static int numDelimiter(String csvLine, char delimiter)
-    {
-        int res = 0;
-        for (int i = 0; i < csvLine.length(); i++)
-        {
-            if (csvLine.charAt(i) == delimiter)
-            {
-                res++;
             }
         }
 
@@ -162,6 +141,7 @@ public class Plateau {
      * Lire le fichier et mettre les donnees dans le tableau donne. Retourne la taille de plateau.
      * @param reader reader of the file
      * @param stville the list of list that the data will be written on
+     * @return la taille de plateau
      */
     private static int[] readFile(BufferedReader reader, ArrayList<ArrayList<String>> stville)
     {
@@ -227,7 +207,7 @@ public class Plateau {
             int x = Integer.parseInt(stville.get(i).get(2));
             int y = Integer.parseInt(stville.get(i).get(3)); //CHECK
             String nom = stville.get(i).get(1);
-            System.out.println(x + ", " + y);
+
             plateau.plateau[x][y] = new Ville(x, y, nom);
             res.add(( Ville ) plateau.plateau[x][y]) ;
         }
@@ -301,7 +281,7 @@ public class Plateau {
     }
 
     /**
-     * Produire et mettre des rails dans le plateau avec les infos données
+     * Produire et mettre des rails dans le plateau avec les infos données.
      * @param v1pos position de ville 1
      * @param v2pos position de ville 2
      * @param longueur nombre des rails a mettre
@@ -352,7 +332,7 @@ public class Plateau {
 
 
     /**
-     * Faire connaitre les doubles(cousins) routes
+     * Faire connaitre les doubles(cousins) routes.
      * @param routes la liste des routes a se faire connaitre
      */
     private static void setRouteCousins(ArrayList<Route> routes)
@@ -382,7 +362,7 @@ public class Plateau {
 
 
     /**
-     * Avoir angle d'une route depuis ses villes
+     * Avoir angle d'une route depuis ses villes.
      * @param ville1 ville 1
      * @param ville2 ville 2
      * @return angle depuis la liste
@@ -416,7 +396,7 @@ public class Plateau {
     }
 
     /**
-     * Verifier si un route existe dans une array(pas avec leur proprietes, directement)
+     * Verifier si un route existe dans une array(pas avec leur proprietes, directement).
      * @param route la route a comparer
      * @param arr la liste des routes
      * @return le resultat
@@ -435,7 +415,7 @@ public class Plateau {
 
 
     /**
-     * Mettre les doubles routes dans plateau
+     * Mettre les doubles routes dans plateau.
      * @param routes la liste des routes
      * @param plateau le plateau a mettre sur
      */
@@ -464,7 +444,7 @@ public class Plateau {
     }
 
     /**
-     * Mettre des doubles rails entre deux villes
+     * Mettre des doubles rails entre deux villes.
      * @param ville1 ville 1
      * @param ville2 ville 2
      * @param route1 route 1
