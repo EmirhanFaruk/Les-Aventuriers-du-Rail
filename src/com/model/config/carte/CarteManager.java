@@ -30,7 +30,6 @@ public class CarteManager {
 
     }
 
-
     private void initPileCarteWagon() {
         for(int i=0;i<8;i++){ //8 couleurs de carteWagon
             for(int j=0;j<12;j++) //12 wagons de chaque couleur

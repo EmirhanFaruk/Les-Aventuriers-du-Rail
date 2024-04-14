@@ -26,11 +26,11 @@ public class PiochePanel extends JPanel {
     private PlayerHandPanel mainDuJoueur;
 
     
-    public PiochePanel(int width, int height, Player player, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
+    public PiochePanel(int width, int height, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension((int) (width * 0.15), height));
-        this.player = player;
         this.mainDuJoueur = playerHandPanel;
+        this.player = playerHandPanel.getPlayer();
         
         // Initialisation des rectangles pour les cartes visibles
         this.imagePiocheVisible = carteManager;
@@ -63,27 +63,32 @@ public class PiochePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (piocheHiddenBounds.contains(e.getPoint())) {
-                    gameController.piocherCarteInvisible(player);
-                    mainDuJoueur.repaint();
-                    mainDuJoueur.getDrawPlayerHand().repaint();
-                    repaint();
-                } else {
-                    for (int i = 0; i < piocheVisibleBounds.length; i++) {
-                        if (piocheVisibleBounds[i].contains(e.getPoint())) {
-                            // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
-                            if(gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))){
-                                imagePiocheVisible.takeWagon(i);
-                            }else{
-                                JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                                        ,"Vous ne pouvez pas choisir cette carte ! ","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
-                            }
-                            mainDuJoueur.repaint();
-                            mainDuJoueur.getDrawPlayerHand().repaint();
-                            repaint();
-                            break; // Quitte la boucle si une correspondance est trouvée
-                        }
-                    }
+            	if(player.getCanPlay()) {
+	                if (piocheHiddenBounds.contains(e.getPoint())) {
+	                    gameController.piocherCarteInvisible(player);
+	                    mainDuJoueur.getParent().revalidate();
+	                    mainDuJoueur.getParent().repaint();
+	                    repaint();
+	                } else {
+	                    for (int i = 0; i < piocheVisibleBounds.length; i++) {
+	                        if (piocheVisibleBounds[i].contains(e.getPoint())) {
+	                            // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
+	                            if(gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))){
+	                            	imagePiocheVisible.takeWagon(i);
+	                                mainDuJoueur.getParent().revalidate();
+	                                mainDuJoueur.getParent().repaint();
+	                                repaint();
+	                            }else{
+	                                JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+	                                        ,"Vous ne pouvez pas choisir cette carte ! ","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+	                            }
+	                            break; // Quitte la boucle si une correspondance est trouvée
+	                        }
+	                    }
+	                }
+            	}else {
+           		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                            ,"Vous devez d'abord piocher 2 cartes destination au minimum !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
                 }
             }
         });

@@ -45,6 +45,10 @@ public class CarteDestination {
         this.nombrePoints = nbpoint;
         this.complete = false;
     }
+	public String getDescription() {
+		return this.premiereVille.getNom() + " - "+ this.deuxiemeVille.getNom() 
+		+ " | " + " nombre de points : " + this.nombrePoints;
+	}
 
 
 

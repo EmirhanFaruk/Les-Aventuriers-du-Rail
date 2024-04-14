@@ -25,11 +25,11 @@ public class CarteDestinationPanel extends JPanel {
     private PlayerHandPanel mainDuJoueur;
 
     
-    public CarteDestinationPanel(int width, int height, Player player, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
+    public CarteDestinationPanel(int width, int height, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension((int) (width * 0.15), height));
-        this.player = player;
         this.mainDuJoueur = playerHandPanel;
+        this.player = playerHandPanel.getPlayer();
         
         // Initialisation des rectangles pour les cartes visibles
         this.carteDestination = carteManager;
@@ -65,14 +65,10 @@ public class CarteDestinationPanel extends JPanel {
                         // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
                         if(gameController.piocherCarteDestination(player, carteDestination, i)){
                         	isCardSelected[i] = true;
-        					mainDuJoueur.repaint();
-        					mainDuJoueur.getDrawPlayerHand2().repaint();
+                            mainDuJoueur.getParent().revalidate();
+                            mainDuJoueur.getParent().repaint();
         					repaint();
-                        }else{
-                            JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                                    ,"Vous avez déjà prises cette carte !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
                         }
-                        
                         break; // Quitte la boucle si une correspondance est trouvée
                     }
                 }
@@ -125,6 +121,11 @@ public class CarteDestinationPanel extends JPanel {
                 }
             }
         }
+    }
+    
+    //Remet tout à false pour mettre la bonne couleur (ça évite que les cartes soient grises)
+    public void setAllDefault() {
+    	for(int i = 0; i < this.isCardSelected.length; i++)this.isCardSelected[i] = false;
     }
 
 

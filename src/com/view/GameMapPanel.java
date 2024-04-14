@@ -16,7 +16,6 @@ public class GameMapPanel extends JPanel {
     private PiochePanel pioche;
     private CarteDestinationPanel cdPanel;
     private static int tile_width , tile_height ;
-    private int width , height ;
     private GameController gameController = new GameController();
 
     /**
@@ -29,16 +28,13 @@ public class GameMapPanel extends JPanel {
     public GameMapPanel (GameFrame frame , String map , int width , int height , Player player , Game game ){
         this.frame = frame ;
         setSize(width , height );
-        this.height = height ;
-        this.width = width ;
         tile_height = (int) (getHeight() * 0.8 / 24);
         tile_width = (int) (getWidth() * 0.85 / 24);
-
         this.playerHandPanel = new PlayerHandPanel() ;
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
-        this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2),mapScreen);
-        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel, frame.getMain().game.getCarteManager());
-        this.cdPanel = new CarteDestinationPanel(width, height, player, this.playerHandPanel, frame.getMain().game.getCarteManager());
+        this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2));
+        this.pioche = new PiochePanel(width, height, this.playerHandPanel, frame.getMain().game.getCarteManager());
+        this.cdPanel = new CarteDestinationPanel(width, height, this.playerHandPanel, frame.getMain().game.getCarteManager());
         this.playerInformationBarPanel = new PlayerInformationBarPanel(  game.getListPlayer() , player  , width , ( int ) ( height * 0.05 )) ;
 
         setLayout(new BorderLayout());
@@ -61,6 +57,9 @@ public class GameMapPanel extends JPanel {
 
 
     public void setPlayerCourant(Player playerCourant) {
+        this.playerHandPanel.setPlayer(playerCourant);
+        this.cdPanel.setPlayer(playerCourant);
+        this.cdPanel.setAllDefault(); //Remet tout à false (pour afficher la bonne couleur)
         this.pioche.setPlayer(playerCourant);
         this.playerInformationBarPanel.setPlayerCourant(playerCourant);
         this.mapScreen.setPlayer( playerCourant );

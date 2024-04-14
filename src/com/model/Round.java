@@ -61,14 +61,20 @@ public class Round {
 
         //Variable pour avoir acces au PlayerHandPanel
         PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
-
+               
+        //Reroll les cartes destinations (pour un autre joueur)
+        game.getCarteManager().rerollDestination();
+        
+        //Change de joueur courant
         gameMapPanel.setPlayerCourant(joueur);
-
+        
+        //Change toutes les images pour le nouveau joueur
         gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
 
 
         // DEBUG :System.out.println(whoIsPlaying);
     }
+    
     public void whosNext(Game game){
         //Passer au prochain joueur
 
