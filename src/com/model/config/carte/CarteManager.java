@@ -24,8 +24,6 @@ public class CarteManager {
     public ArrayList<CarteWagon> PileCarteWagon = new ArrayList<>(110);
     //La pile de cartes Destination
     public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
-    //Liste des cartes missions déjà crée
-    private ArrayList<CarteDestination> createdMissionCard = new ArrayList<>();
 
     public CarteManager(){
         //Pour initialiser les wagons
@@ -217,36 +215,6 @@ public class CarteManager {
         return true;
     }
 
-    public boolean sameMission(CarteDestination carteDestination1, CarteDestination carteDestination2){
-        //Fonction qui compare 2 cartes missions si ce sont les memes
-
-        boolean sameVille1 = carteDestination1.getPremiereVille() == carteDestination2.getPremiereVille();
-        boolean sameVille2 = carteDestination1.getDeuxiemeVille() == carteDestination2.getDeuxiemeVille();
-
-        boolean sameMission1 = sameVille1 && sameVille2;
-
-        boolean sameVille3 = carteDestination1.getPremiereVille() == carteDestination2.getDeuxiemeVille();
-        boolean sameVille4 = carteDestination1.getDeuxiemeVille() == carteDestination2.getPremiereVille();
-
-        boolean sameMission2 = sameVille3 && sameVille4;
-
-        return  sameMission1 || sameMission2;
-
-    }
-
-    public boolean doubleMission(CarteDestination carteDestination){
-        //Fonction qui regarde dans la liste des missions deja créés (prises par les joueur) et dit si la mission existe deja ou non
-
-        for(int i = 0; i< this.createdMissionCard.size();i++){
-
-            if(sameMission(createdMissionCard.get(i),carteDestination)){
-                return true;
-            }
-
-        }
-        return false;
-
-    }
 
 
 }
