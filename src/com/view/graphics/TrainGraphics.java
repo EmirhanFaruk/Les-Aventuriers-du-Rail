@@ -18,7 +18,7 @@ public class TrainGraphics {
     private static final BufferedImage[] TrainDark = createListImage( "TrainNoirCorp.png" ) ;
     private static final BufferedImage[] TrainBlue = createListImage( "TrainBleuCorp.png" ) ;
     private static final BufferedImage[] TrainGreen = createListImage( "TrainVertCorp.png" ) ;
-    private static int[] angle = { 0 , 45 , 90 , 135 } ;
+    private static int[] angle = { 90 , 45 , 0 , 135 } ;
     private static int width , height ;
 
 
