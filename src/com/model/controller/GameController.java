@@ -108,6 +108,9 @@ public class GameController {
                     Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
 
                     round.endRound(game);
+                } else if ( r.getSaRoute().getLongueur() > player.getNbrWagon() ) {
+                    JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous n'avez pas assez de wagon pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
                 } else {
                     JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                             "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
