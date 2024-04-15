@@ -100,7 +100,6 @@ public class Route {
                 nombrePoint = 4;
                 break;
 
-
             //4 wagon = 7 point
             case 4 :
                 nombrePoint = 7;
@@ -110,9 +109,14 @@ public class Route {
                 nombrePoint = 10;
                 break;
 
-            //5 wagon = 15 point
+            //6 wagon = 15 point
             case 6 :
                 nombrePoint = 15;
+                break;
+
+            //7 wagon = 15 point (exeption pour la map longue)
+            case 7 :
+                nombrePoint = 20;
                 break;
 
             default :

@@ -7,6 +7,8 @@ import com.model.controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.util.ArrayList;
 
 public class GameMapPanel extends JPanel {
     GameFrame frame ;
@@ -17,6 +19,7 @@ public class GameMapPanel extends JPanel {
     private static int tile_width , tile_height ;
     private int width , height ;
     private GameController gameController = new GameController();
+
 
     /**
      * Constructeur de la classe GameManagerScreen
@@ -30,8 +33,11 @@ public class GameMapPanel extends JPanel {
         setSize(width , height );
         this.height = height ;
         this.width = width ;
-        tile_height = (int) (getHeight() * 0.8 / 24);
-        tile_width = (int) (getWidth() * 0.85 / 24);
+
+        int[] tileCount = getTileCount(map);
+
+        tile_width = (int) (getWidth() * 0.85 / tileCount[0]);
+        tile_height = (int) (getHeight() * 0.8 / tileCount[1]);
 
         this.playerHandPanel = new PlayerHandPanel() ;
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
@@ -47,6 +53,19 @@ public class GameMapPanel extends JPanel {
         add(playerInformationBarPanel , BorderLayout.NORTH ) ;
 
     }
+
+    private int[] getTileCount(String map) {
+        //Retourne la taille du scale de la map (heigth et weight)
+        BufferedReader reader = Plateau.openFile(map);
+
+        // 0 = heigth, 1 = weight
+        int[] size = Plateau.readFile(reader,new ArrayList<>());
+
+
+        return size;
+
+    }
+
 
     /**
      * Une fonction qui permet de faire la map à partir du plateau
