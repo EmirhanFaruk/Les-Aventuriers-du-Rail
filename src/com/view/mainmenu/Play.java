@@ -47,6 +47,9 @@ public class Play extends JPanel
         makePlay();
     }
 
+    /**
+     * Makes the Play part of the menu by initialising and using the principle panel functions.
+     */
     private void makePlay()
     {
         setLayout(new BorderLayout());
@@ -56,6 +59,9 @@ public class Play extends JPanel
 
     }
 
+    /**
+     * Initialises player_name_list_tag and player_type_list_tag
+     */
     private void initializeTables()
     {
         player_name_list_tag = new JTextArea[4];
@@ -73,7 +79,10 @@ public class Play extends JPanel
         
     }
 
-
+    /**
+     * Makes a JPanel with black background and gray foreground.
+     * @return the said panel
+     */
     private JPanel makeDefaultPanel()
     {
         JPanel res = new JPanel();
@@ -82,6 +91,11 @@ public class Play extends JPanel
         return res;
     }
 
+    /**
+     * Makes a JPanel that centers the given component.
+     * @param comp the given component
+     * @return the said panel
+     */
     private JPanel makeCenteringPanel(JComponent comp)
     {
         JPanel res = makeDefaultPanel();
@@ -103,7 +117,11 @@ public class Play extends JPanel
         return res;
     }
 
-
+    /**
+     * Makes a JPanel that centers the given component vertically.
+     * @param comp the given component to center
+     * @return the said panel
+     */
     private JPanel makeVerticalCenteringPanel(JComponent comp)
     {
         JPanel res = makeDefaultPanel();
@@ -371,6 +389,11 @@ public class Play extends JPanel
      * START OF LEVEL LIST FUNCTIONS
      */
 
+    /**
+     * Finds appropriate slash for the os(/ or \\).
+     * @param p a path sample to see which slash it uses
+     * @return the appropriate slash
+     */
     private String findSlash(String p)
     {
         for(int i = 0; i < p.length(); i++)
@@ -384,6 +407,10 @@ public class Play extends JPanel
         return "/";
     }
 
+    /**
+     * Counts how many files in the ressources/maps folder.
+     * @return the file count
+     */
     private int getMapCount()
     {
         String path = System.getProperty("user.dir");
@@ -398,6 +425,10 @@ public class Play extends JPanel
         return map_count;
     }
 
+    /**
+     * Gets all the map names from the ressources/maps folder.
+     * @return a table of the map names
+     */
     private String[] getMapNames()
     {
         String path = System.getProperty("user.dir");
@@ -416,6 +447,11 @@ public class Play extends JPanel
         return new String[]{};
     }
 
+    /**
+     * Makes a single Level panel, which is a button with map name
+     * @param level_name the map name
+     * @return the button with the level name
+     */
     private JButton makeSingleLevelPanel(String level_name)
     {
         JButton res = new JButton(level_name);
@@ -425,15 +461,27 @@ public class Play extends JPanel
         return res;
     }
 
+    /**
+     * Gets all the available maps' buttons and puts them in a panel.
+     * @return the said panel
+     */
     private JPanel makeLevelPanel()
     {
         JPanel res = makeDefaultPanel();
+
+        boolean flag = true;
+
         int map_count = getMapCount();
         if(map_count > 0)
         {
             res.setLayout(new GridLayout(map_count, 1));
             for (String level_name : getMapNames())
             {
+                if (flag)
+                {
+                    flag = false;
+                    level_name_tag = new JLabel(level_name);
+                }
                 res.add(makeSingleLevelPanel(level_name));
             }
         }
@@ -447,14 +495,16 @@ public class Play extends JPanel
 
 
 
-
+    /**
+     * Initializes level_name_tag, which is used to see the chosen map(also needed to start the game).
+     * @return JPanel capsuling the level_name_tag
+     */
     private JPanel makeShowConfigPanel()
     {
         JPanel res = makeDefaultPanel();
 
         JPanel lnt_capsule = makeDefaultPanel(); // level name tag capsule
 
-        level_name_tag = new JLabel("Map1");
         level_name_tag.setHorizontalTextPosition(SwingConstants.CENTER);
         level_name_tag.setVerticalTextPosition(SwingConstants.CENTER);
         level_name_tag.setBackground(Color.BLACK);
@@ -467,7 +517,10 @@ public class Play extends JPanel
         return res;
     }
 
-
+    /**
+     * Gathers the LevelPanel(buttons that shows the map names) and the config panel(shows the choosen map).
+     * @return the JPanel that gathers the said things above
+     */
     private JPanel makeLevelNConfigPanel()
     {
         JPanel res = makeDefaultPanel();
@@ -481,7 +534,10 @@ public class Play extends JPanel
     }
 
 
-
+    /**
+     * Makes the button that says GO!, which starts the game using the selected parameters in the menu.
+     * @return the said button encapsulated in a JPanel
+     */
     private JPanel makePlayButton()
     {
         JPanel res = makeDefaultPanel();
@@ -510,9 +566,13 @@ public class Play extends JPanel
                             JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Robocop",JOptionPane.WARNING_MESSAGE);
 
                         }
-                        else{
-                        frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
-                    }
+                        else
+                        {
+                            if (!level_name_tag.getText().isEmpty())
+                            {
+                                frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
+                            }
+                        }
                     });
 
         res.add(play_button);
@@ -531,6 +591,10 @@ public class Play extends JPanel
         return true;
     }
 
+    /**
+     * Gathers LevelNConfigPanel and the play button in a JPanel
+     * @return the said panel
+     */
     private JPanel makeMapListPanel()
     {
         JPanel res = new JPanel();
