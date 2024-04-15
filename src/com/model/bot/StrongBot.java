@@ -178,7 +178,7 @@ public class StrongBot implements BotAction {
         //Variable pour avoir round
         Round round = game.getRound();
 
-        //Fonction qui permet de poser prendre des routes, et renvie false si le bot n'a pas assez de carte
+        //Fonction qui permet de prendre des routes, et renvoie false si le bot n'a pas assez de carte
 
         //Variable pour avoir les cartes destination du bot
         ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
