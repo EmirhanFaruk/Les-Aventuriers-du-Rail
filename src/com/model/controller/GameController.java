@@ -76,81 +76,104 @@ public class GameController {
         return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
     }
      
+    // Vérifie si le rail a déjà un propriétaire
     public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
-        // Vérifie si le rail a déjà un propriétaire
-
-        if(round.getAction() < 2){
-            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
-            return;
-        }
-
-        if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
-            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-                    "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
-            return;
-        }
-
-        if ( player.getNiveau() == 0 ){
-            int choixUtilisateur = JOptionPane.showConfirmDialog(
-                    game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-                    "Êtes-vous sûr de vouloir poser votre rail ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
-
-            if (choixUtilisateur == JOptionPane.YES_OPTION) {
-                if (player.mettreRoute(r.getSaRoute())) {
-                    int tailleRoute = r.getSaRoute().getRailsRoute().size();
-                    ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
-
-                    for (int i = 0; i < tailleRoute; i++) {
-                        listeRail.get(i).setOccuperPar(player);
-                    }
-
-                    Player joueur = game.getListPlayer().get(round.getWhoIsPlaying());
-
-                    round.endRound(game);
-                } else {
-                    JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-                            "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
-                }
-            }
-        } else {
-            if (player.mettreRoute(r.getSaRoute())) {
-                int tailleRoute = r.getSaRoute().getRailsRoute().size();
-                ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
-
-                for (int i = 0; i < tailleRoute; i++) {
-                    listeRail.get(i).setOccuperPar(player);
-                }
-
-                round.endRound(game);
-            }
-        }
+        //Empêche le joueur de faire cette action s'il a déjà pris une carte destination
+    	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
+   		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                    ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+    	}else {
+    		//Force le premier tour du joueur a pioché une carte destination
+    		if(player.getCanPlay()) {
+	    		
+	    		if(round.getAction() < 2){
+	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                        "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+	                return;
+	            }
+	
+	            if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
+	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                        "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	                return;
+	            }
+	
+	            if ( player.getNiveau() == 0 ){
+	                int choixUtilisateur = JOptionPane.showConfirmDialog(
+	                        game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                        "Êtes-vous sûr de vouloir poser votre rail ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
+	
+	                if (choixUtilisateur == JOptionPane.YES_OPTION) {
+	                    if (player.mettreRoute(r.getSaRoute())) {
+	                        int tailleRoute = r.getSaRoute().getRailsRoute().size();
+	                        ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
+	
+	                        for (int i = 0; i < tailleRoute; i++) {
+	                            listeRail.get(i).setOccuperPar(player);
+	                        }
+	
+	                        round.endRound(game);
+	                    } else {
+	                        JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                                "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	                    }
+	                }
+	            } else {
+	                if (player.mettreRoute(r.getSaRoute())) {
+	                    int tailleRoute = r.getSaRoute().getRailsRoute().size();
+	                    ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
+	
+	                    for (int i = 0; i < tailleRoute; i++) {
+	                        listeRail.get(i).setOccuperPar(player);
+	                    }
+	
+	                    round.endRound(game);
+	                }
+	            }
+	            
+	    	}else {
+	    		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	    	}  		
+    	}
     }
 
     public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
-        CarteWagon source = playerHandPanel.getDrawPlayerHand().CardClicked( e.getX() , e.getY() );
-        if ( source != null ) {
-            // Si la source est une carte wagon
-            this.carteWagon = source;
-            try {
-                Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
-                if(tenterDePoserUneGare( ville , player, game )){
-                    game.getRound().endRound(game);
-                }
-
-            } catch ( Exception exception ){
-                if ( player.getNiveau() == 0 ) {
-                    JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                            , "Veuillez choisir une ville avant de choisir la carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                    //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
-                }
-            }
-
-        }
+    	//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
+    	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
+      		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                       ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+       	}else {
+    		//Force le premier tour du joueur a pioché une carte destination
+	    	if(player.getCanPlay()) {	    		
+	    		CarteWagon source = playerHandPanel.getDrawPlayerHand(player.getName()).CardClicked( e.getX() , e.getY() );
+	    		
+	            if ( source != null ) {
+	                // Si la source est une carte wagon
+	                this.carteWagon = source;
+	                try {
+	                    Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
+	                    if(tenterDePoserUneGare( ville , player, game )){
+	                        game.getRound().endRound(game);
+	                    }
+	
+	                } catch ( Exception exception ){
+	                    if ( player.getNiveau() == 0 ) {
+	                        JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+	                                , "Veuillez choisir une ville avant de choisir la carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+	                        //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
+	                    }
+	                }
+	            }
+	            
+	    	}else {
+	    		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+	                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	    	}
+    	}
     }
 
-    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
-
+    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){  	
         if(game.getRound().getAction() < 2){
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
@@ -167,9 +190,18 @@ public class GameController {
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
     	return player.piocheCarteVisible(imagePiocheVisible);
 	}
-
+    
+    public boolean piocherCarteDestination(Player player, CarteManager cm, int i) {
+    	return player.piocheCarteDestination(cm, i);
+	}
 
 	public void piocherCarteInvisible(Player player) {
 		player.piocheCarteInvisible();
+	}
+
+
+	public void descriptionCardDestination(CarteDestination carteHover, Game game) {
+		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                carteHover.getDescription(), "Carte Destination", JOptionPane.INFORMATION_MESSAGE );
 	}
 }
