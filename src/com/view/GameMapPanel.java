@@ -33,8 +33,8 @@ public class GameMapPanel extends JPanel {
         this.playerHandPanel = new PlayerHandPanel() ;
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
         this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2));
-        this.pioche = new PiochePanel(width, height, this.playerHandPanel, frame.getMain().game.getCarteManager());
-        this.cdPanel = new CarteDestinationPanel(width, height, this.playerHandPanel, frame.getMain().game.getCarteManager());
+        this.pioche = new PiochePanel(width, height, this.playerHandPanel, game);
+        this.cdPanel = new CarteDestinationPanel(width, height, this.playerHandPanel, game);
         this.playerInformationBarPanel = new PlayerInformationBarPanel(  game.getListPlayer() , player  , width , ( int ) ( height * 0.05 )) ;
 
         setLayout(new BorderLayout());
@@ -60,6 +60,7 @@ public class GameMapPanel extends JPanel {
         this.playerHandPanel.setPlayer(playerCourant);
         this.cdPanel.setPlayer(playerCourant);
         this.cdPanel.setAllDefault(); //Remet tout à false (pour afficher la bonne couleur)
+        this.cdPanel.repaint();
         this.pioche.setPlayer(playerCourant);
         this.playerInformationBarPanel.setPlayerCourant(playerCourant);
         this.mapScreen.setPlayer( playerCourant );

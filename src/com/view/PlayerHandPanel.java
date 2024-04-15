@@ -8,9 +8,10 @@ import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -175,48 +176,69 @@ public class PlayerHandPanel extends JPanel {
         int height;
         int width;
         int hFixe;
-        private HashMap<Rectangle, CarteDestination> cardAreas;
+        HashMap<Rectangle, CarteDestination> cardAreas;
+        Timer hoverTimer;
+        CarteDestination currentHoverCard;
+        GameController gameController;
+        Game game;
 
         DrawPlayerHand2(Player player, int height, GameController g, Game game) {
             this.player = player;
             this.height = height;
             this.width = 0;
             this.hFixe = 30;
-            this.cardAreas = new HashMap<Rectangle, CarteDestination>();
+            this.cardAreas = new HashMap<>();
+            this.gameController = g;
+            this.game = game;
 
-            this.addMouseListener(new MouseAdapter() {
+            this.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
-                    CarteDestination carteClicked = getClickedCard(e.getX(), e.getY());
-                    if (carteClicked != null) {
-                        g.descriptionCardDestination(carteClicked, game);
+                public void mouseMoved(MouseEvent e) {
+                    CarteDestination carteHovered = getHoverCard(e.getX(), e.getY());
+                    if (carteHovered != null) {
+                        if (currentHoverCard != carteHovered) {
+                            if (hoverTimer != null) {
+                                hoverTimer.stop();
+                            }
+                            currentHoverCard = carteHovered;
+                            hoverTimer = new Timer(2000, new ActionListener() {
+                                public void actionPerformed(ActionEvent ae) {
+                                    gameController.descriptionCardDestination(currentHoverCard, game);
+                                }
+                            });
+                            hoverTimer.setRepeats(false);
+                            hoverTimer.start();
+                        }
+                    } else {
+                        if (hoverTimer != null) {
+                            hoverTimer.stop();
+                            hoverTimer = null;
+                            currentHoverCard = null;
+                        }
                     }
+                    repaint();  // Force repaint for color update
                 }
             });
-            
+
             setBackground(Color.orange);
         }
-        
-        private CarteDestination getClickedCard(int x, int y) {
-            // Parcourez toutes les zones de clic
+
+        private CarteDestination getHoverCard(int x, int y) {
             for (Map.Entry<Rectangle, CarteDestination> entry : cardAreas.entrySet()) {
                 Rectangle area = entry.getKey();
-                // Vérifiez si les coordonnées du clic se trouvent dans cette zone
                 if (area.contains(x, y)) {
-                    // Si oui, retournez la carte destination associée
                     return entry.getValue();
                 }
             }
-            // Si aucune carte n'est cliquée, retournez null
             return null;
         }
 
-		@Override
+        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             if (this.player != null) {
-                drawPlayerHand2(g2d); // Appel de la méthode drawPlayerHand2 ici
+                drawPlayerHand2(g2d);
             }
         }
 
@@ -225,25 +247,24 @@ public class PlayerHandPanel extends JPanel {
 
             while (i < this.player.getDestinationsList().size()) {
                 BufferedImage image = CardGraphics.getCardObjectif();
-
                 if (image != null) {
-                	// Créez un rectangle représentant la zone de clic pour cette carte
                     Rectangle cardArea = new Rectangle(x, hFixe, image.getWidth(), image.getHeight());
-                    
-                    //Carte destination du joueur
                     CarteDestination carteJ = this.player.getDestinationsList().get(i);
-                    
-                    // Associez la carte destination à la zone de clic
                     cardAreas.put(cardArea, carteJ);
-                	
+
                     g.drawImage(image, x, hFixe, null);
+
+                    if (carteJ == currentHoverCard) {
+                        // Appliquer une couleur jaune semi-transparente
+                        g.setColor(new Color(255, 255, 0, 128)); // Jaune semi-transparent
+                        g.fillRect(x, hFixe, image.getWidth(), image.getHeight());
+                    }
+
                     x += image.getWidth() + 10;
                     width = x;
-                    // Vous pouvez également initialiser imageWidth et imageHeight ici si nécessaire
                 }
                 i++;
             }
         }
     }
-	
 }

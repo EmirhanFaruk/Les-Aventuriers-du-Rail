@@ -11,127 +11,199 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
+import com.model.Game;
 import com.model.Player;
+import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 
 public class CarteDestinationPanel extends JPanel {
-    private GameController gameController = new GameController();
+    private GameController gameController;
     private Player player;
     private boolean[] isCardSelected;
-    private Rectangle[] piocheVisibleBounds; // Pour gérer plusieurs cartes visibles
+    private int hoveredCardIndex = -1;
+    private Rectangle[] piocheVisibleBounds;
     private CarteManager carteDestination;
     private PlayerHandPanel mainDuJoueur;
+    private Timer hoverTimer; // Timer pour gérer l'affichage des descriptions
+	private Game game;
 
-    
-    public CarteDestinationPanel(int width, int height, PlayerHandPanel playerHandPanel, CarteManager carteManager) {
+    public CarteDestinationPanel(int width, int height, PlayerHandPanel playerHandPanel, Game game) {
         setBackground(Color.CYAN);
         setPreferredSize(new Dimension((int) (width * 0.15), height));
+        this.game = game;
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();
-        
-        // Initialisation des rectangles pour les cartes visibles
-        this.carteDestination = carteManager;
+        this.gameController = new GameController();
+        this.carteDestination = game.getCarteManager();
         this.isCardSelected = new boolean[3];
+        this.piocheVisibleBounds = new Rectangle[3];
+        setupMouseAdapter();
+        setupMouseMotionListener();
+        initHoverTimer();
 
-        // Initialisation des rectangles dans une méthode dédiée pour plus de clarté
-        initRectangles(width, height);
-        setupMouseAdapter(); // Installer l'écouteur de souris
+        // Initialisation des rectangles pour les cartes
+        initRectangles(getWidth(), getHeight());  // Assurez-vous que ceci est appelé avant de définir le bouton
+        
+        // Création du bouton
+        JButton btnPiocherCartes = new JButton("Passer son tour");
+        btnPiocherCartes.addActionListener(e -> activerPioche());
+        
+        //taille et position du bouton
+        if (piocheVisibleBounds.length > 0) {
+            Rectangle firstCardRect = piocheVisibleBounds[0];
+            btnPiocherCartes.setBounds(firstCardRect.x, firstCardRect.y - firstCardRect.height - 10, firstCardRect.width, firstCardRect.height);
+        }
+        
+        
+
+        // Ajout du bouton au panneau
+        this.add(btnPiocherCartes);
     }
 
     
-    private void initRectangles(int width, int height) {
-        // Définition des dimensions et positions des rectangles
-        int rectWidth = width; // Exemple de largeur
-        int rectHeight = height / 5; // Exemple de hauteur
-        int startX = (getWidth() - rectWidth) / 2;
-        int startY = 20; // Marge du haut
-        
-        piocheVisibleBounds = new Rectangle[3]; // Pour 3 cartes visibles
-        
-        for (int i = 0; i < piocheVisibleBounds.length; i++) {
-            startY += rectHeight + 10; // Marge entre les cartes
-            piocheVisibleBounds[i] = new Rectangle(startX, startY, rectWidth, rectHeight);
-        }
+    private void activerPioche() {
+    	if (player.getFirstTurnOver() && carteDestination.alreadyPickedACard()) {
+	        this.game.getRound().endRound(game);   
+	    }	    	
     }
+    
     
     private void setupMouseAdapter() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	for (int i = 0; i < piocheVisibleBounds.length; i++) {
+                for (int i = 0; i < piocheVisibleBounds.length; i++) {
                     if (piocheVisibleBounds[i].contains(e.getPoint())) {
-                        // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
-                        if(gameController.piocherCarteDestination(player, carteDestination, i)){
-                        	isCardSelected[i] = true;
-                            mainDuJoueur.getParent().revalidate();
-                            mainDuJoueur.getParent().repaint();
-        					repaint();
+                        boolean success = gameController.piocherCarteDestination(player, carteDestination, i);
+                        if (success) {
+                            isCardSelected[i] = true;
+                            SwingUtilities.invokeLater(() -> {
+                                repaint();  // Assurez-vous que l'interface utilisateur est mise à jour immédiatement
+                                mainDuJoueur.getParent().revalidate();
+                                mainDuJoueur.getParent().repaint();
+                            });
                         }
-                        break; // Quitte la boucle si une correspondance est trouvée
+                        break;  // Quitte la boucle si une correspondance est trouvée
                     }
                 }
             }
         });
     }
     
-    
-    //Méthode qui rend l'image grise après sélection de la carte
-    public static BufferedImage desaturateImage(BufferedImage image) {
-        BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                Color color = new Color(image.getRGB(x, y));
-                int r = color.getRed();
-                int g = color.getGreen();
-                int b = color.getBlue();
-                int avg = (r + g + b) / 3; // Calcul de la moyenne des composantes RGB
-                int gray = (avg << 16) | (avg << 8) | avg; // Conversion en niveau de gris
-                result.setRGB(x, y, (color.getAlpha() << 24) | gray); // Appliquer le niveau de gris
-            }
-        }
-
-        return result;
+    //Fonction qui fait un timer avant de montrer la carte destination
+    private void initHoverTimer() {
+        hoverTimer = new Timer(2000, e -> showCardDescription());
+        hoverTimer.setRepeats(false);
     }
 
-    
+    //Fonction qui montre la carte destination
+    private void showCardDescription() {
+    	CarteDestination cD =  carteDestination.getDestinationsCards()[this.hoveredCardIndex];
+    	
+        if (hoveredCardIndex >= 0 && cD != null) { // Vérifie l'index et voit si la carte est nulle
+            this.gameController.descriptionCardDestination(cD, game);
+         
+        }
+    }
+
+    private void setupMouseMotionListener() {
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int previousIndex = hoveredCardIndex;
+                hoveredCardIndex = -1;
+                for (int i = 0; i < piocheVisibleBounds.length; i++) {
+                    if (piocheVisibleBounds[i].contains(e.getPoint())) {
+                        hoveredCardIndex = i;
+                        break;
+                    }
+                }
+                if (hoveredCardIndex != previousIndex) {
+                    if (hoveredCardIndex >= 0) {
+                        hoverTimer.restart(); // Redémarre le timer chaque fois que la souris entre sur une nouvelle carte
+                    } else {
+                        hoverTimer.stop(); // Arrête le timer si la souris sort de toutes les cartes
+                    }
+                    repaint();
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hoverTimer.stop(); // Stop le timer si la souris quitte le panneau
+                hoveredCardIndex = -1;
+                repaint();
+            }
+        });
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         initRectangles(getWidth(), getHeight());
 
-        // Dessin des cartes visibles
         for (int i = 0; i < piocheVisibleBounds.length; i++) {
             Rectangle rect = piocheVisibleBounds[i];
             BufferedImage carteVisible = CardGraphics.getCardObjectif();
             
+            //Si la carte est déjà prise elle deviens grisé (plus prenable)
             if (carteVisible != null) {
-                if (isCardSelected[i]) { // Vérifier si la carte est sélectionnée
-                	
-                    // Dessiner la carte en gris en appliquant une désaturation
-                    BufferedImage carteGris = desaturateImage(carteVisible);
-                    g2d.drawImage(carteGris, rect.x, rect.y, rect.width, rect.height, null);
-                    
-                } else {
-                    // Dessiner la carte normalement
-                    g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);
+                if (isCardSelected[i]) {
+                    carteVisible = desaturateImage(carteVisible);
+                }
+                g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);
+                if (i == hoveredCardIndex) {
+                    g2d.setColor(new Color(255, 255, 0, 128)); // Jaune semi-transparent
+                    g2d.fill(rect);
                 }
             }
         }
     }
     
-    //Remet tout à false pour mettre la bonne couleur (ça évite que les cartes soient grises)
-    public void setAllDefault() {
-    	for(int i = 0; i < this.isCardSelected.length; i++)this.isCardSelected[i] = false;
+    private void initRectangles(int width, int height) {
+        int rectWidth = width; 
+        int rectHeight = height / 5;
+        int startX = (getWidth() - rectWidth) / 2;
+        int startY = 20; 
+
+        for (int i = 0; i < piocheVisibleBounds.length; i++) {
+            startY += rectHeight + 10;
+            piocheVisibleBounds[i] = new Rectangle(startX + 2, startY, rectWidth - 4, rectHeight);
+        }
     }
 
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
+	
+	//Méthode qui rend l'image grise après sélection de la carte
+	public static BufferedImage desaturateImage(BufferedImage image) {
+	    BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+	
+	    for (int x = 0; x < image.getWidth(); x++) {
+	        for (int y = 0; y < image.getHeight(); y++) {
+	            Color color = new Color(image.getRGB(x, y));
+	            int r = color.getRed();
+	            int g = color.getGreen();
+	            int b = color.getBlue();
+	            int avg = (r + g + b) / 3; // Calcul de la moyenne des composantes RGB
+	            int gray = (avg << 16) | (avg << 8) | avg; // Conversion en niveau de gris
+	            result.setRGB(x, y, (color.getAlpha() << 24) | gray); // Appliquer le niveau de gris
+	        }
+	    }
+	
+	    return result;
+	}
+	
+	//Remet tout à false pour mettre la bonne couleur (ça évite que les cartes soient grises)
+	public void setAllDefault() {
+		for(int i = 0; i < this.isCardSelected.length; i++)this.isCardSelected[i] = false;
+	}
+	
+	
+	public void setPlayer(Player player) {
+	    this.player = player;
+	}
 }
 
     

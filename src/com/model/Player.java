@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
+    private boolean firstTurnOver;
     private boolean canPlay;
 	private final String playerCouleur ;
 	private int nbrWagon ;
@@ -62,7 +63,7 @@ public class Player {
 				//donne la carte destination et mets à null pour remplacer
 				this.destinationsList.add(cm.getDestinationsCards()[i]);
 				cm.getDestinationsCards()[i] = null;
-				if(this.destinationsList.size() >= 2)this.canPlay = true;
+				if(this.destinationsList.size() >= 1)this.canPlay = true;
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
@@ -501,5 +502,15 @@ public class Player {
 
 	public boolean getCanPlay() {
 		return canPlay;
+	}
+
+
+	public boolean getFirstTurnOver() {
+		return firstTurnOver;
+	}
+
+
+	public void setFirstTurnOver(boolean firstTurnOver) {
+		this.firstTurnOver = firstTurnOver;
 	}
 }

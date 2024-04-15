@@ -126,6 +126,12 @@ public class CarteManager {
     public CarteWagon.Couleur showWagon(int position){
         return trainCards[position];
     }
+    
+    //Vérifie si le joueur a déjà pris une carte destination
+    public boolean alreadyPickedACard() {
+    	for(int i = 0; i < this.destinationsCards.length; i++)if(this.destinationsCards[i] == null)return true;
+    	return false;
+    }
 
     
     public CarteDestination[] takeDestination(int[] position){    
