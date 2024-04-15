@@ -23,7 +23,7 @@ public class Main implements Runnable
     public void lance()
     {
         this.gameFrame = new GameFrame(800, 500, this);
-        this.game =new Game( gameFrame);
+        this.game = new Game(gameFrame);
     }
 
     private void startGame_thread()
