@@ -19,8 +19,8 @@ public class EndGameScreen extends JPanel {
         this.height = height ;
         setSize(width , height );
         this.button_panel = makeButton() ;
-        this.scoreBoardPanel = new ScoreBoardScreen( gameScreen.getFrame().getMain().getGame().getListPlayer()) ;
-        add( this.scoreBoardPanel , BorderLayout.CENTER ) ;
+        this.scoreBoardPanel = new ScoreBoardScreen( gameScreen.getFrame().getMain().getGame().getListPlayer() , width , (int) (height* 0.7)) ;
+        add( this.scoreBoardPanel ) ;
         add( this.button_panel , BorderLayout.SOUTH ) ;
     }
 
