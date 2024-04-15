@@ -52,7 +52,7 @@ public class GarePosFinder
     {
         int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
 
-        System.out.println(ogLength + " - " + newLength + " > " + routeToReduce);
+        //System.out.println(ogLength + " - " + newLength + " > " + routeToReduce);
         // Check if a way exists
         if (ogLength > 0)
         {
@@ -82,7 +82,7 @@ public class GarePosFinder
         ArrayList<Ville> shortestWay = Node.findClosestPath(start, end, player);
         for (Ville ville : shortestWay)
         {
-            System.out.println(ville.getNom());
+            //System.out.println(ville.getNom());
         }
         ArrayList<Route> neededRoutes = getNeededRoutes(shortestWay, player);
         int ogLength = neededRoutes.size();
@@ -91,7 +91,7 @@ public class GarePosFinder
         {
             ogLength = getRailCount(neededRoutes);
         }
-        System.out.println("ogLength: " + ogLength + " bc byRail: " + byRail);
+        //System.out.println("ogLength: " + ogLength + " bc byRail: " + byRail);
 
         for (Ville wannaBeGare : villesToTry)
         {
