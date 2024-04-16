@@ -63,15 +63,6 @@ public class GameMapPanel extends JPanel {
         this.mapScreen.setPlayer( playerCourant );
     }
 
-
-    public PlayerInformationBarPanel getPlayerInformationBarPanel() {
-        return playerInformationBarPanel;
-    }
-
-    public void setPlayerInformationBarPanel(PlayerInformationBarPanel playerInformationBarPanel) {
-        this.playerInformationBarPanel = playerInformationBarPanel;
-    }
-
     public MapScreen getMapScreen() {
         return mapScreen;
     }

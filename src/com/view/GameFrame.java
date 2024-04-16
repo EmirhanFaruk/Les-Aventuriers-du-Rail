@@ -1,15 +1,12 @@
 package com.view;
 
 import com.controller.Main;
-import com.model.Game;
-import com.model.Player;
-import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
-import com.model.config.carte.CarteWagon.Couleur;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame
@@ -29,7 +26,7 @@ public class GameFrame extends JFrame
 
     private GameScreen gameScreen ;
 
-    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , endgame_screen_s = "ENDGALE";
+    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , pause_screen_s = "PAUSE", endgame_screen_s = "ENDGAME";
 
     private Menu menu;
 
@@ -64,6 +61,22 @@ public class GameFrame extends JFrame
 
         pack();
         setLocationRelativeTo(null);
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    try {
+                        main.pause();
+                        // DEBUG : System.err.println(main.getRunning());
+                    } catch ( Exception ignored) { }
+                }
+            }
+
+        });
+
+        setFocusable(true);
+        requestFocusInWindow();
 
         this.setVisible(true);
 
@@ -132,6 +145,9 @@ public class GameFrame extends JFrame
         return endgame_screen_s;
     }
 
+    public String getPause_screen_s() {
+        return pause_screen_s;
+    }
     public Main getMain() {
         return main;
     }

@@ -70,11 +70,23 @@ public class Main implements Runnable
             {
                 end += System.nanoTime() - start;
             }
-            //game.dinumueCarte();
         }
     }
 
+    /**
+     * Une fonction qui affiche le bon panel en fonction de running
+     */
+    public void pause() {
+        if (running) {
+            running = false;
+            gameFrame.getGameScreen().getGameManagerScreen().showPause();
+        } else {
+            running = true;
+            gameFrame.getGameScreen().getGameManagerScreen().removePause();
+        }
+    }
 
+    public boolean getRunning (){ return running ; }
     public void setRunning(boolean b)
     {
         running = b;
@@ -84,5 +96,7 @@ public class Main implements Runnable
         return game;
     }
 
-
+    public Thread getGame_thread() {
+        return game_thread;
+    }
 }

@@ -15,6 +15,7 @@ public class GameManagerScreen extends JPanel {
 
     private final CardLayout cardLayout = new CardLayout() ;
     private EndGameScreen endGameScreen ;
+    private PauseScreen pauseScreen ;
     private int width , height ;
     private GameScreen gameScreen ;
 
@@ -42,7 +43,7 @@ public class GameManagerScreen extends JPanel {
     /**
      * Une fonction qui verfie si la partie est fini et affiche le panel de la fin de jeu
      */
-    public void update(){
+    public void showEndGame(){
         if ( this.game.endGame()){
             this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
             add( frame.getEndgame_screen_s() , endGameScreen ) ;
@@ -54,6 +55,28 @@ public class GameManagerScreen extends JPanel {
         this.gameMapPanel.repaint();
     }
 
+    /**
+     * Une fonction qui affiche le panel pause
+     */
+    public void showPause (){
+        this.pauseScreen = new PauseScreen( gameScreen , width , height ) ;
+        // DEBUG : System.err.println("Un nouveau pause ") ;
+        add( frame.getPause_screen_s() , pauseScreen ) ;
+        cardLayout.show(this , frame.getPause_screen_s() );
+        this.gameMapPanel.repaint();
+    }
+
+    /**
+     * Une fonction qui retire le panneau de pause
+     */
+    public void removePause() {
+        if (pauseScreen != null) {
+            remove(pauseScreen);
+            // DEBUG : System.err.println("Pause effacer");
+            pauseScreen = null;
+        }
+    }
+
     /* getteurs et setteurs */
     public GameFrame getFrame() {
         return frame;
@@ -63,10 +86,9 @@ public class GameManagerScreen extends JPanel {
         return gameMapPanel;
     }
 
-    public EndGameScreen getEndGameScreen() {
-        return endGameScreen;
+    public CardLayout getCardLayout() {
+        return cardLayout;
     }
-
 
 
     /*
