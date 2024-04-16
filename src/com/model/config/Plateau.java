@@ -17,23 +17,23 @@ public class Plateau {
 
 
     /**
-     * Produire un plateau depuis un nom de map
+     * Produire un plateau depuis un nom de map.
      * @param  nomMap de fichier
      * @return le plateau depuis la carte donnee
      */
     public static Plateau makePlateau(String nomMap, Game game)
     {
-        Plateau res = new Plateau(24,24);
-
-        fillTab(res.getPlateau());
-
         // Opening the file
         BufferedReader reader = openFile(nomMap);
         if (reader == null) { return null; }
 
         // Reading from the file
-        String[][] stville = new String[15][];
-        readFile(reader, stville);
+        ArrayList<ArrayList<String>> stville = new ArrayList<>();
+        int[] size = readFile(reader, stville);
+
+        Plateau res = new Plateau(size[0], size[1]);
+
+        fillTab(res.getPlateau());
 
         // Produire les villes
         game.setVilles(produireVilles(stville, res));
@@ -58,36 +58,37 @@ public class Plateau {
      */
     private static void fillTab(Case[][] tab)
     {
-        for (int i = 0; i < tab.length; i++)
+        int j = 0;
+        for (int i = 0; i < tab[j].length; i++)
         {
-            for (int j = 0; j < tab[i].length; j++)
+            while (j < tab.length)
             {
                 tab[j][i] = new Paysage(j, i);
+                j++;
             }
+            j = 0;
         }
     }
 
     /**
-     * Retourne un tableau avec chaque element d'une ligne d'un fichier csv
+     * Retourne un tableau avec chaque element d'une ligne d'un fichier csv.
      * @param csvLine the line readen from the file
      * @return le tableau des villes
      */
-    private static String[] delimit(String csvLine, char delimiter)
+    private static ArrayList<String> delimit(String csvLine, char delimiter)
     {
-        String[] res = new String[numDelimiter(csvLine, delimiter)];
-        int resIndex = 0;
+        ArrayList<String> res = new ArrayList<>();
 
         String temp = "";
         for (int i = 0; i < csvLine.length(); i++)
         {
-            if(csvLine.charAt(i) != ';')
+            if(csvLine.charAt(i) != delimiter)
             {
                 temp = temp + csvLine.charAt(i);
             }
             else
             {
-                res[resIndex] = temp;
-                resIndex++;
+                res.add(temp);
                 temp = "";
             }
         }
@@ -95,29 +96,9 @@ public class Plateau {
         return res;
     }
 
-    /**
-     * Retourne le nombre de delimiteur dans le string.
-     * @param csvLine le string
-     * @param delimiter le delimiteur
-     * @return le nombre de delimiteur dans le string
-     */
-    private static int numDelimiter(String csvLine, char delimiter)
-    {
-        int res = 0;
-        for (int i = 0; i < csvLine.length(); i++)
-        {
-            if (csvLine.charAt(i) == delimiter)
-            {
-                res++;
-            }
-        }
-
-        return res;
-    }
-
 
     /**
-     * Ouvrir un fichier et retourne le reader
+     * Ouvrir un fichier et retourne le reader.
      * @param nomMap nom de fichier
      * @return the reader of the file
      */
@@ -139,7 +120,7 @@ public class Plateau {
     }
 
     /**
-     * Retourne le type de slash de systeme d'exploitation
+     * Retourne le type de slash de systeme d'exploitation.
      * @param p any path that contains a / or \
      * @return the type of slash in String
      */
@@ -157,12 +138,15 @@ public class Plateau {
     }
 
     /**
-     * Lire le fichier et mettre les donnees dans le tableau donne
+     * Lire le fichier et mettre les donnees dans le tableau donne. Retourne la taille de plateau.
      * @param reader reader of the file
      * @param stville the list of list that the data will be written on
+     * @return la taille de plateau
      */
-    private static void readFile(BufferedReader reader, String[][] stville)
+    private static int[] readFile(BufferedReader reader, ArrayList<ArrayList<String>> stville)
     {
+        int[] res = new int[2];
+
         // Checking the file
         String line;
         try
@@ -176,11 +160,24 @@ public class Plateau {
         }
         char delimiter = ';';
 
-        int index = 0;
+        boolean sizeLine = true;
         // Reading from the file and converting it to string tables
         while(line != null)
         {
-            stville[index] = delimit(line, delimiter);
+            if (!sizeLine)
+            {
+                stville.add(delimit(line, delimiter));
+            }
+            else
+            {
+                ArrayList<String> size = delimit(line, delimiter);
+                for (int i = 0; i < 2; i++)
+                {
+                    int l = Integer.parseInt(size.get(i));
+                    res[i] = l;
+                }
+                sizeLine = false;
+            }
 
             try
             {
@@ -191,8 +188,9 @@ public class Plateau {
                 System.out.println("Ended reading the file.");
                 line = null;
             }
-            index++;
         }
+
+        return res;
     }
 
     /**
@@ -200,15 +198,15 @@ public class Plateau {
      * @param stville la liste de la liste a lire
      * @param plateau le plateau a sauvegarder
      */
-    private static ArrayList<Ville> produireVilles(String[][] stville, Plateau plateau)
+    private static ArrayList<Ville> produireVilles(ArrayList<ArrayList<String>> stville, Plateau plateau)
     {
         ArrayList<Ville> res = new ArrayList<>();
-        for (int i = 0; i < stville.length; i++)
+        for (int i = 0; i < stville.size(); i++)
         {
             // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
-            int x = Integer.parseInt(stville[i][2]);
-            int y = Integer.parseInt(stville[i][3]); //CHECK
-            String nom = stville[i][1];
+            int x = Integer.parseInt(stville.get(i).get(2));
+            int y = Integer.parseInt(stville.get(i).get(3)); //CHECK
+            String nom = stville.get(i).get(1);
 
             plateau.plateau[x][y] = new Ville(x, y, nom);
             res.add(( Ville ) plateau.plateau[x][y]) ;
@@ -222,30 +220,30 @@ public class Plateau {
      * @param stville la liste de la liste a lire
      * @return la liste des routes produits depuis stville
      */
-    private static ArrayList<Route> produireRoutes(ArrayList<Ville> villes, String[][] stville)
+    private static ArrayList<Route> produireRoutes(ArrayList<Ville> villes, ArrayList<ArrayList<String>> stville)
     {
         ArrayList<Route> res = new ArrayList<>();
 
-        for (String[] villet : stville)
+        for (ArrayList<String> villet : stville)
         {
             // Faire le taff si la longueur est plus que 4,
             // car jusqu'a 4 il y a que l'info de ville et pas ses connections
-            if(villet.length > 4)
+            if(villet.size() > 4)
             {
                 int i = 4;
                 // Avec des boucles de 4, on lit chaque connection entre les villes
-                while (i + 4 < villet.length && !villet[i].isEmpty())
+                while (i + 4 < villet.size() && !villet.get(i).isEmpty())
                 {
                     // num ville, nom, x, y, (num de ville, type de rail, nombre de rail, angle des railes{90, 45, 0, 135}) * k
                     // Sauvegarder les nums des villes
-                    int nvil1 = Integer.parseInt(villet[0]);
-                    int nvil2 = Integer.parseInt(villet[i]);
+                    int nvil1 = Integer.parseInt(villet.get(0));
+                    int nvil2 = Integer.parseInt(villet.get(i));
                     // Avoir les villes pour sauvegarder dans la route
                     Ville ville1 = villes.get(nvil1 - 1);
                     Ville ville2 = villes.get(nvil2 - 1);
                     // Garder les infos necessaires pour la route
-                    int longueur = Integer.parseInt(villet[i + 2]);
-                    Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet[i + 1])];
+                    int longueur = Integer.parseInt(villet.get(i + 2));
+                    Rail.Content couleur = Rail.Content.values()[Integer.parseInt(villet.get(i + 1))];
 
 
                     // Faire la route
@@ -283,7 +281,7 @@ public class Plateau {
     }
 
     /**
-     * Produire et mettre des rails dans le plateau avec les infos données
+     * Produire et mettre des rails dans le plateau avec les infos données.
      * @param v1pos position de ville 1
      * @param v2pos position de ville 2
      * @param longueur nombre des rails a mettre
@@ -334,7 +332,7 @@ public class Plateau {
 
 
     /**
-     * Faire connaitre les doubles(cousins) routes
+     * Faire connaitre les doubles(cousins) routes.
      * @param routes la liste des routes a se faire connaitre
      */
     private static void setRouteCousins(ArrayList<Route> routes)
@@ -364,7 +362,7 @@ public class Plateau {
 
 
     /**
-     * Avoir angle d'une route depuis ses villes
+     * Avoir angle d'une route depuis ses villes.
      * @param ville1 ville 1
      * @param ville2 ville 2
      * @return angle depuis la liste
@@ -398,7 +396,7 @@ public class Plateau {
     }
 
     /**
-     * Verifier si un route existe dans une array(pas avec leur proprietes, directement)
+     * Verifier si un route existe dans une array(pas avec leur proprietes, directement).
      * @param route la route a comparer
      * @param arr la liste des routes
      * @return le resultat
@@ -417,7 +415,7 @@ public class Plateau {
 
 
     /**
-     * Mettre les doubles routes dans plateau
+     * Mettre les doubles routes dans plateau.
      * @param routes la liste des routes
      * @param plateau le plateau a mettre sur
      */
@@ -446,7 +444,7 @@ public class Plateau {
     }
 
     /**
-     * Mettre des doubles rails entre deux villes
+     * Mettre des doubles rails entre deux villes.
      * @param ville1 ville 1
      * @param ville2 ville 2
      * @param route1 route 1

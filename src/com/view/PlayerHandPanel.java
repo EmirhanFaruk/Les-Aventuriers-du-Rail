@@ -2,185 +2,269 @@ package com.view;
 
 import com.model.Game;
 import com.model.Player;
-import com.model.config.Plateau;
+import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.RescaleOp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerHandPanel extends JPanel {
-    private ArrayList<DrawPlayerHand> drawPlayerHands ;
-    private ArrayList<JScrollPane> scrollPanes;
-    private ArrayList<String> whoSHand;
-    private int imageWidth , imageHeight ;
-    private Game game ;
-    private MapScreen mapScreen ;
-    private int width , height ;
-
+    private HashMap<String, JSplitPane> playerSplitPanes; // Mapping joueur -> JSplitPane
+    private HashMap<String, DrawPlayerHand> drawPlayerHands;
+    private HashMap<String, DrawPlayerHand2> drawPlayerHands2;
+    private int imageWidth, imageHeight;
+    private Game game;
+    private int width, height;
     private CardLayout cardLayout = new CardLayout();
-
-
-    public void setPlayer(Player player) {
-        cardLayout.show(this,player.getName());
+    
+    public Player getPlayer() {
+        return game.getJoueurCourant();
     }
 
-    public void initDrawPlayerHand(Game game, GameController gameController, int height){
-        //Initialise la liste des DrawPlayerHand, pour permettre d'afficher la main du joueur qui joue
-        this.drawPlayerHands = new ArrayList<>();
-        for(int i = 0; i< game.getListPlayer().size();i++){
-            this.drawPlayerHands.add(new DrawPlayerHand(game.getListPlayer().get(i), height, gameController,game));
-        }
-    }
-
-    public void initScrollPane(int width , int height ){
-        //Initilisation d'une liste de JScrollPane pour changer l'affichage de la main courante a chaque fois
-        this.scrollPanes = new ArrayList<>();
-
-
-        for(int i = 0; i< drawPlayerHands.size();i++){
-            JScrollPane scrollPane = new JScrollPane(drawPlayerHands.get(i));
-            scrollPane.setPreferredSize(new Dimension( width , height ));
+    public void initDrawPlayerHands(Game game, GameController gameController, int height) {
+        drawPlayerHands = new HashMap<>();
+        drawPlayerHands2 = new HashMap<>();
+        playerSplitPanes = new HashMap<>();
+        
+        for (Player player : game.getListPlayer()) {
+            DrawPlayerHand drawPlayerHand = new DrawPlayerHand(player, height, gameController, game);
+            DrawPlayerHand2 drawPlayerHand2 = new DrawPlayerHand2(player, height, gameController, game);
+            drawPlayerHands.put(player.getName(), drawPlayerHand);
+            drawPlayerHands2.put(player.getName(), drawPlayerHand2);
+            JSplitPane playerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+            playerSplitPane.setResizeWeight(0.5);
+            playerSplitPane.setLeftComponent(drawPlayerHand2);
+            JScrollPane scrollPane = new JScrollPane(drawPlayerHand);
+            scrollPane.setPreferredSize(new Dimension(width, height));
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.getHorizontalScrollBar().setBackground(Color.ORANGE);
-            this.scrollPanes.add(scrollPane);
+            playerSplitPane.setRightComponent(scrollPane);
+            playerSplitPane.setDividerLocation(width / 2);
+            playerSplitPane.setEnabled(false);
+            playerSplitPanes.put(player.getName(), playerSplitPane);
         }
     }
 
-    public void initWhosHand(Game game){
-        //Initialisation de la liste de String pour le cardLayout (pour se déplacer entre les joueurs)
-        this.whoSHand = new ArrayList<>();
-
-        for (int i = 0; i< game.getListPlayer().size();i++){
-            this.whoSHand.add(game.getListPlayer().get(i).getName());
-        }
-    }
-
-    public void initCardLayout(){
-        //Initialisation du contenu du cardLayout
+    public void initCardLayout() {
         this.setLayout(cardLayout);
-        for(int i = 0; i< this.whoSHand.size();i++){
-            this.add(whoSHand.get(i),scrollPanes.get(i));
+        for (String playerName : drawPlayerHands.keySet()) {
+            JSplitPane playerSplitPane = playerSplitPanes.get(playerName);
+            this.add(playerName, playerSplitPane);
         }
     }
 
-    public void make(GameController gameController, Game game , int width , int height , MapScreen mapScreen){
-
-        this.game = game ;
-        this.mapScreen = mapScreen ;
-        this.width = width ;
-        this.height = height ;
-
-        setBackground(Color.orange);
-        setPreferredSize(new Dimension( this.width, this.height ));
-
-        initDrawPlayerHand(game,gameController, this.height);
-        initScrollPane(this.width, this.height);
-        initWhosHand(game);
-        initCardLayout();
-
-
+    public void setPlayer(Player player) {
+        cardLayout.show(this, player.getName());
     }
 
+    public void make(GameController gameController, Game game, int width, int height) {
+        this.game = game;
+        this.width = width;
+        this.height = height;
+        setBackground(Color.orange);
+        setLayout(new BorderLayout());
+        setPreferredSize(new Dimension(this.width, this.height));
+        initDrawPlayerHands(game, gameController, this.height);
+        initCardLayout();
+        this.setPlayer(game.getJoueurCourant());
+    }
 
+    public DrawPlayerHand getDrawPlayerHand(String playerName) {
+        return drawPlayerHands.get(playerName);
+    }
 
-
-    public DrawPlayerHand getDrawPlayerHand() {
-
-        int whoIsPlaying = game.getRound().getWhoIsPlaying();
-        cardLayout.show(this, whoSHand.get(whoIsPlaying));
-        return this.drawPlayerHands.get(whoIsPlaying);
+    public DrawPlayerHand2 getDrawPlayerHand2(String playerName) {
+        return drawPlayerHands2.get(playerName);
     }
 
     public Game getGame() {
         return game;
     }
+    
 
     public class DrawPlayerHand extends JPanel {
-        Player player ;
-        int height ;
-        int width ;
-        int hFixe ;
-        private ArrayList< CarteWagon > listCardWagon ;
-        GameController gameController ;
+    	Player player ;
+    	int height ;
+    	int width ;
+    	int hFixe ;
+    	private ArrayList< CarteWagon > listCardWagon ;
+    	GameController gameController ;
+    
+    	DrawPlayerHand (Player player  , int height , GameController gameController, Game game) {
+	        this.player = player;
+	        this.height = height;
+	        this.width = 0;
+	        this.hFixe = 30 ;
+	        this.gameController = gameController ;
+	        this.listCardWagon = new ArrayList<>() ;
+	        setBackground(Color.orange);
+	        this.addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent e) {
+	            	gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this ,game );
+	            }
+	        });
+    	}
+	
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        Graphics2D g2d = (Graphics2D) g;
+	        if (this.player != null) {
+	            this.drawPlayerHand(g2d);
+	        }
+	    }
+	
+	    private void drawPlayerHand(Graphics2D g) {
+	        int x = 30, i = 0;
+	        listCardWagon = new ArrayList<>();
+	        while (i < this.player.getTrainList().size()) {
+	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
+	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
+	            listCardWagon.add(carteWagon);
+	            BufferedImage image = CardGraphics.getImage(carteWagon);
+	
+	            if (image != null) {
+	                g.drawImage(image, x, hFixe, null);
+	                x += image.getWidth() + 10;
+	                width = x;
+	                imageWidth = image.getWidth();
+	                imageHeight = image.getHeight();
+	            }
+	            i++;
+	        }
+	        // Mettre à jour les dimensions du panneau
+	        setPreferredSize(new Dimension(width, height));
+	        revalidate(); // Mettre à jour la mise en page
+	    }
+	
+	    /**
+	     * Une fonction qui renvoie la couleur de la carte clicker par le joueur
+	     * @param x width
+	     * @param y height
+	     * @return la carte clicker
+	     */
+	    public CarteWagon CardClicked (int x , int y ){
+	        for ( CarteWagon c : listCardWagon ){
+	            int widthEndCard = c.getWidthInPanel() + imageWidth ;
+	            int heightEndCard = c.getHeightInPanel() + imageHeight ;
+	            if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard ){
+	                //DEBUG : System.err.println("La carte est de la couleur " + c.getInitialCouleur() );
+	                return c ;
+	            }
+	        }
+	        return null ;
+	    }
+	    
+	    public Player getPlayer() {
+	        return this.player;
+	    }
+    }
 
-        DrawPlayerHand (Player player  , int height , GameController gameController, Game game) {
+    
+    public class DrawPlayerHand2 extends JPanel {
+        Player player;
+        int height;
+        int width;
+        int hFixe;
+        HashMap<Rectangle, CarteDestination> cardAreas;
+        Timer hoverTimer;
+        CarteDestination currentHoverCard;
+        GameController gameController;
+        Game game;
+
+        DrawPlayerHand2(Player player, int height, GameController g, Game game) {
             this.player = player;
             this.height = height;
             this.width = 0;
-            this.hFixe = 30 ;
-            this.gameController = gameController ;
-            this.listCardWagon = new ArrayList<>() ;
-            setBackground(Color.orange);
-            this.addMouseListener(new MouseAdapter() {
+            this.hFixe = 30;
+            this.cardAreas = new HashMap<>();
+            this.gameController = g;
+            this.game = game;
+
+            this.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
-                    gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this ,game );
-                    repaint();
+                public void mouseMoved(MouseEvent e) {
+                    CarteDestination carteHovered = getHoverCard(e.getX(), e.getY());
+                    if (carteHovered != null) {
+                        if (currentHoverCard != carteHovered) {
+                            if (hoverTimer != null) {
+                                hoverTimer.stop();
+                            }
+                            currentHoverCard = carteHovered;
+                            hoverTimer = new Timer(2000, new ActionListener() {
+                                public void actionPerformed(ActionEvent ae) {
+                                    gameController.descriptionCardDestination(currentHoverCard, game);
+                                }
+                            });
+                            hoverTimer.setRepeats(false);
+                            hoverTimer.start();
+                        }
+                    } else {
+                        if (hoverTimer != null) {
+                            hoverTimer.stop();
+                            hoverTimer = null;
+                            currentHoverCard = null;
+                        }
+                    }
+                    repaint();  // Force repaint for color update
                 }
             });
+
+            setBackground(Color.orange);
         }
 
+        private CarteDestination getHoverCard(int x, int y) {
+            for (Map.Entry<Rectangle, CarteDestination> entry : cardAreas.entrySet()) {
+                Rectangle area = entry.getKey();
+                if (area.contains(x, y)) {
+                    return entry.getValue();
+                }
+            }
+            return null;
+        }
+
+        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             if (this.player != null) {
-                this.drawPlayerHand(g2d);
-                setPreferredSize(new Dimension(width, height));
-                getParent().revalidate(); // Appel à revalidate() sur le parent (JScrollPane)
+                drawPlayerHand2(g2d);
             }
-            repaint();
         }
 
-        private void drawPlayerHand(Graphics2D g) {
+        private void drawPlayerHand2(Graphics2D g) {
             int x = 30, i = 0;
-            listCardWagon = new ArrayList<>();
-            while (i < this.player.getTrainList().size()) {
-                CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
-                CarteWagon carteWagon = new CarteWagon( couleur , x , hFixe );
-                listCardWagon.add( carteWagon ) ;
-                BufferedImage image = CardGraphics.getImage(carteWagon);
 
+            while (i < this.player.getDestinationsList().size()) {
+                BufferedImage image = CardGraphics.getCardObjectif();
                 if (image != null) {
-                    g.drawImage(image, x , hFixe , null);
+                    Rectangle cardArea = new Rectangle(x, hFixe, image.getWidth(), image.getHeight());
+                    CarteDestination carteJ = this.player.getDestinationsList().get(i);
+                    cardAreas.put(cardArea, carteJ);
+
+                    g.drawImage(image, x, hFixe, null);
+
+                    if (carteJ == currentHoverCard) {
+                        // Appliquer une couleur jaune semi-transparente
+                        g.setColor(new Color(255, 255, 0, 128)); // Jaune semi-transparent
+                        g.fillRect(x, hFixe, image.getWidth(), image.getHeight());
+                    }
+
                     x += image.getWidth() + 10;
                     width = x;
-                    imageWidth = image.getWidth() ;
-                    imageHeight = image.getHeight() ;
                 }
                 i++;
             }
         }
-
-        /**
-         * Une fonction qui renvoie la couleur de la carte clicker par le joueur
-         * @param x width
-         * @param y height
-         * @return la carte clicker
-         */
-        public CarteWagon CardClicked (int x , int y ){
-            for ( CarteWagon c : listCardWagon ){
-                int widthEndCard = c.getWidthInPanel() + imageWidth ;
-                int heightEndCard = c.getHeightInPanel() + imageHeight ;
-                if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard ){
-                    //DEBUG : System.err.println("La carte est de la couleur " + c.getInitialCouleur() );
-                    return c ;
-                }
-            }
-            return null ;
-        }
-
-        public void setPlayer(Player player) {
-            this.player = player;
-            repaint();
-        }
-
     }
-
 }

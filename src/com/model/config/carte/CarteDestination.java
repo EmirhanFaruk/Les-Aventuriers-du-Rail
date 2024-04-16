@@ -1,12 +1,11 @@
 package com.model.config.carte;
 
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 
 import javax.swing.*;
 
-public class CarteDestination extends JPanel {
+public class CarteDestination {
 
     private Ville premiereVille;
     private Ville deuxiemeVille;
@@ -46,6 +45,10 @@ public class CarteDestination extends JPanel {
         this.nombrePoints = nbpoint;
         this.complete = false;
     }
+	public String getDescription() {
+		return this.premiereVille.getNom() + " - "+ this.deuxiemeVille.getNom() 
+		+ " | " + " nombre de points : " + this.nombrePoints;
+	}
 
 
 

@@ -148,4 +148,9 @@ public class CardGraphics {
         width = w;
         height = h;
     }
+
+
+	public static BufferedImage getCardObjectif() {
+		return CardObjectif;
+	}
 }

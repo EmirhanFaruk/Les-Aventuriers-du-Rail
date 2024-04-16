@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.GarePosFinder;
 import com.model.bot.NormalBot;
 import com.model.bot.StrongBot;
 import com.model.bot.WeakBot;
@@ -48,27 +49,45 @@ public class Round {
     }
 
     public void endRound(Game game) {
+        if (whoIsPlaying == 0)
+        {
+            //GarePosFinder.printForAll(game.getVilles(), 2, true, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAll(game.getVilles(), 1, false, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAllDiff(game.getVilles(), 6, true, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAllDiff(game.getVilles(), 2, false, game.getListPlayer().get(whoIsPlaying));
+        }
+
+
 
         //Fonction qui finit le tour du bot
         setEndTurn(true);
+        
+        //Piocher une carte destination comptera comme une action maintenant
+        game.getListPlayer().get(whoIsPlaying).setFirstTurnOver(true);
+        
+        //Variable pour avoir le prochain Player
         whosNext(game);
-
-        //Variable pour avoir Player
         Player joueur = game.getListPlayer().get(whoIsPlaying);
 
         //Variable pour avoir acces au gameMapPanel
-        GameMapPanel gameMapPanel = game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel();
+        GameMapPanel gameMapPanel = game.getGameMapPanel();
 
         //Variable pour avoir acces au PlayerHandPanel
         PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
-
+               
+        //Reroll les cartes destinations (pour un autre joueur)
+        game.getCarteManager().rerollDestination();
+        
+        //Change de joueur courant
         gameMapPanel.setPlayerCourant(joueur);
-
+        
+        //Change toutes les images pour le nouveau joueur
         gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
 
 
         // DEBUG :System.out.println(whoIsPlaying);
     }
+    
     public void whosNext(Game game){
         //Passer au prochain joueur
 
