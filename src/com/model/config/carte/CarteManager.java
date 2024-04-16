@@ -163,6 +163,10 @@ public class CarteManager {
     }
 
     public CarteDestination getDestination(){
+    	for(int i=0; i<destinationsCards.length; i++) {
+    		//S'il y a encore des cartes remettre à la fin de la pile
+    		if(destinationsCards[i] != null)PileCarteDestination.add(PileCarteDestination.size(), destinationsCards[i]);
+    	}
         return PileCarteDestination.remove(0);
     }
 
