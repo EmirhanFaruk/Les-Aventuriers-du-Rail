@@ -70,15 +70,17 @@ public class GarePosFinder
     {
         int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
 
+        boolean gareWayExists = trySingleVilleExists(start, end, wannaBeGare, byRail, player);
+
         System.out.println(ogLength + " - " + newLength + " > " + routeToReduce);
         // Check if a way exists
-        if (ogLength > 0)
+        if (aWayExists && gareWayExists)
         {
             return ogLength - newLength >= routeToReduce;
         }
 
         // If not, if a way can be made then true
-        return !aWayExists && trySingleVilleExists(start, end, wannaBeGare, byRail, player);
+        return !aWayExists && gareWayExists;
     }
 
 

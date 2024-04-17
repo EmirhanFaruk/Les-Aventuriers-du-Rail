@@ -53,8 +53,8 @@ public class Round {
         {
             //GarePosFinder.printForAll(game.getVilles(), 2, true, game.getListPlayer().get(whoIsPlaying));
             //GarePosFinder.printForAll(game.getVilles(), 1, false, game.getListPlayer().get(whoIsPlaying));
-            GarePosFinder.printForAllDiff(game.getVilles(), 1, true, game.getListPlayer().get(whoIsPlaying));
-            GarePosFinder.printForAllDiff(game.getVilles(), 0, false, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAllDiff(game.getVilles(), 1, true, game.getListPlayer().get(whoIsPlaying));
+            //GarePosFinder.printForAllDiff(game.getVilles(), 0, false, game.getListPlayer().get(whoIsPlaying));
         }
 
 
