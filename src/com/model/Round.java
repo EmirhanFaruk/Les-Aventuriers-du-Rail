@@ -105,7 +105,6 @@ public class Round {
         Player joueur = game.getListPlayer().get(whoIsPlaying);
         if (betweenRoundTimer <= 0)
         {
-            System.out.println("in da <= 0, action = " + action);
             switch (joueur.getNiveau()) {
 
                 case(1):
