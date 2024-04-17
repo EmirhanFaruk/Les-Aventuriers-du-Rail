@@ -54,9 +54,12 @@ public class Round {
 
         //Fonction qui finit le tour du bot
         setEndTurn(true);
+        
+        //Piocher une carte destination comptera comme une action maintenant
+        game.getListPlayer().get(whoIsPlaying).setFirstTurnOver(true);
+        
+        //Variable pour avoir le prochain Player
         whosNext(game);
-
-        //Variable pour avoir Player
         Player joueur = game.getListPlayer().get(whoIsPlaying);
 
         //Variable pour avoir acces au gameMapPanel
@@ -64,14 +67,20 @@ public class Round {
 
         //Variable pour avoir acces au PlayerHandPanel
         PlayerHandPanel playerHandPanel = gameMapPanel.getPlayerHandPanel();
-
+               
+        //Reroll les cartes destinations (pour un autre joueur)
+        game.getCarteManager().rerollDestination();
+        
+        //Change de joueur courant
         gameMapPanel.setPlayerCourant(joueur);
-
+        
+        //Change toutes les images pour le nouveau joueur
         gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
 
         betweenRoundTimer = betweenRoundTimerMax;
         // DEBUG :System.out.println(whoIsPlaying);
     }
+    
     public void whosNext(Game game){
         //Passer au prochain joueur
 
