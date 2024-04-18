@@ -19,6 +19,8 @@ import java.util.List;
 public class Play extends JPanel
 {
     private JLabel level_name_tag;
+    private JButton mode_button;
+    private final String[] possible_modes = {"NORMAL", "NUKE"};
     private JTextArea[] player_name_list_tag;
     private JLabel[] player_type_list_tag;
     private Color[] player_colors = {Color.red,Color.blue,Color.green,Color.yellow};
@@ -493,6 +495,58 @@ public class Play extends JPanel
      * END OF LEVEL LIST FUNCTIONS
      */
 
+    /**
+     * Makes a JPanel containing a JButton that switches the game mode.
+     * @return the said panel
+     */
+    private JPanel makeModePanel()
+    {
+        JPanel res = makeDefaultPanel();
+
+        mode_button = new JButton("NORMAL");
+        mode_button.setBackground(Color.BLACK);
+        mode_button.setForeground(Color.GRAY);
+        mode_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String mode = mode_button.getText();
+                for (int i = 0; i < possible_modes.length; i++)
+                {
+                    if (possible_modes[i].equals(mode))
+                    {
+                        if (i < possible_modes.length - 1)
+                        {
+                            mode_button.setText(possible_modes[i+1]);
+                        }
+                        else
+                        {
+                            mode_button.setText(possible_modes[0]);
+                        }
+                    }
+                }
+            }
+        });
+
+        res.add(mode_button);
+
+        return res;
+    }
+
+    /**
+     * Gathers level panel and mode panel(it's just a panel with a button) in a JPanel
+     * @return the said JPanel
+     */
+    private JPanel makeLevelNModePanel()
+    {
+        JPanel res = makeDefaultPanel();
+
+        res.setLayout(new BorderLayout());
+        res.add(makeLevelPanel(), BorderLayout.CENTER);
+        res.add(makeModePanel(), BorderLayout.SOUTH);
+
+        return res;
+    }
 
 
     /**
@@ -527,7 +581,7 @@ public class Play extends JPanel
 
         res.setLayout(new BorderLayout());
 
-        res.add(makeLevelPanel(), BorderLayout.CENTER);
+        res.add(makeLevelNModePanel(), BorderLayout.CENTER);
         res.add(makeShowConfigPanel(), BorderLayout.SOUTH);
 
         return res;
@@ -570,7 +624,7 @@ public class Play extends JPanel
                         {
                             if (!level_name_tag.getText().isEmpty())
                             {
-                                frame.startGame(level_name_tag.getText(), player_name_list, player_type_list ,player_colors);
+                                frame.startGame(level_name_tag.getText(), mode_button.getText(), player_name_list, player_type_list, player_colors);
                             }
                         }
                     });
