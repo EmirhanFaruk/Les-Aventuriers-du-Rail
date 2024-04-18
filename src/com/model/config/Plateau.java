@@ -102,7 +102,7 @@ public class Plateau {
      * @param nomMap nom de fichier
      * @return the reader of the file
      */
-    private static BufferedReader openFile(String nomMap)
+    public static BufferedReader openFile(String nomMap)
     {
         BufferedReader reader;
         String path = System.getProperty("user.dir");
@@ -143,7 +143,7 @@ public class Plateau {
      * @param stville the list of list that the data will be written on
      * @return la taille de plateau
      */
-    private static int[] readFile(BufferedReader reader, ArrayList<ArrayList<String>> stville)
+    public static int[] readFile(BufferedReader reader, ArrayList<ArrayList<String>> stville)
     {
         int[] res = new int[2];
 
