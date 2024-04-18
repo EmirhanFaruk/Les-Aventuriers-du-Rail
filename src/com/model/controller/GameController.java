@@ -42,7 +42,7 @@ public class GameController {
             if (clickedObject != null) {
                 // Traitement en fonction du type de l'objet cliqué
                 if (clickedObject instanceof Rail) {
-                    tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
+                    tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game);
                 } else if (clickedObject instanceof Ville) {
                     Mx = x;
                     My = y;
@@ -77,7 +77,11 @@ public class GameController {
     }
      
     // Vérifie si le rail a déjà un propriétaire
-    public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
+    public void tenterAcquisitionRoute(Rail r, Player player,  Game game) {
+
+		//Variable pour avoir acces au round
+		Round round = game.getRound();
+
         //Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
    		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()

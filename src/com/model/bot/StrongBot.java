@@ -15,62 +15,48 @@ import com.model.config.carte.CarteWagon;
 import java.util.ArrayList;
 
 public class StrongBot implements BotAction {
-/*
-    private void MissWichCard(Route route) {
-        int i = 0;
-        setNbrWagon(this.nbrWagon - carteAEnlever);
-        // Premiere boucle qui enlève juste la couleur color
-        while(i < this.trainList.size() && 0 < carteAEnlever) {
-            if ( trainList.get(i) == color ){
-                this.trainList.remove(i);
-                carteAEnlever--;
-            } else {
-                i++ ;
-            }
+
+
+    public boolean missOneCardOnly(Route route, Game game){
+
+        //Variable pour avoir le joueur courent
+        Player player= game.getJoueurCourant();
+        //Varibale de la liste de carte du bot
+        ArrayList<CarteWagon.Couleur> playerTrainList =  player.getTrainList();
+        //Nombre de carte de la couleur de la route
+        int count = 0;
+
+        for(int i = 0; i < playerTrainList.size(); i++) {
+            if(player.compatibleColor(route, playerTrainList.get(i)))count++;
         }
-        // Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
-        // si les carte de la couleur color est insuffissant
-        int j = 0 ;
-        while ( j < this.trainList.size() && 0 < carteAEnlever ){
-            if ( trainList.get(j) == CarteWagon.Couleur.LOC) {
-                this.trainList.remove(j);
-                carteAEnlever--;
-            } else{
-                j++ ;
-            }
-        }
+
+        return count+1 == route.getLongueur();
     }
-
-    public CarteWagon.Couleur canCompletePathWithWagonListCard(Route route){
-
-        return CarteWagon.Couleur.LOC;
-    }
-
-    public CarteWagon.Couleur canCompletePathMissingOneCard(Game game) {
+    public Rail.Content canCompletePathMissingOneCard(Game game) {
 
         //Fonction qui si il manque une carte pour completer une route dans la liste de carte
 
-        //Variable pour avoir round
-        Round round = game.getRound();
         //Variable pour avoir Player du bot
-        Player player= game.getListPlayer().get(round.getWhoIsPlaying());
+        Player player= game.getJoueurCourant();
         //Variable pour avoir les cartes destination du bot
         ArrayList<CarteDestination> destination = player.getDestinationsList();
 
 
-        //On cherche la route la meilleure route possible
-        for (int i = 0; i < destination.size(); i++) {
+        //On regarde toute les routes qu'on doit completer pour finir une mission
+        for(int i =0; i<destination.size();i++){
 
-            //On stock la liste de ville dans une variable (ce qui forme une route)
-            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(), destination.get(i).getDeuxiemeVille());
+            //Liste de ville qu'on a besoin
+            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
+            //Liste des routes que le bot doit completer pour finir sa missions
+            ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
-            //On regarde la
-            Route toComplete = takeRailAux(ville);
+            for(int z = 1; z < routesPossible.size();z++){
 
-            if(toComplete.getLongueur() <= player.getTrainCard().size() && toComplete.getProprietaire() == null){
+                // On regarde si il manque juste 1 carte max
+                if(missOneCardOnly(routesPossible.get(i),game)){
 
-
-
+                    return routesPossible.get(i).getCouleur();
+                }
             }
 
 
@@ -78,7 +64,6 @@ public class StrongBot implements BotAction {
         }
         return null;
     }
-    */
 
     @Override
     public void drawCardWagon(Game game) {
@@ -86,7 +71,7 @@ public class StrongBot implements BotAction {
         Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
         //Variable qui va déterminer si oui ou non on peut prendre
-        CarteWagon.Couleur color = null ;// canCompletePathMissingOneCard(game);
+        Rail.Content color = canCompletePathMissingOneCard(game);
         //-Si il manque une carte:
         if (color != null) {
 
@@ -94,7 +79,7 @@ public class StrongBot implements BotAction {
 
             //On cherche la couleur correspondante
             for(int i = 0; i< game.getCarteManager().getTrainCards().length;i++){
-                if(game.getCarteManager().getTrainCards()[i] == color){
+                if(game.getCarteManager().getTrainCards()[i].ordinal() == color.ordinal()){
                     position = i;
                 }
             }
