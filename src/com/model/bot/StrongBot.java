@@ -53,9 +53,9 @@ public class StrongBot implements BotAction {
             for(int z = 1; z < routesPossible.size();z++){
 
                 // On regarde si il manque juste 1 carte max
-                if(missOneCardOnly(routesPossible.get(i),game)){
+                if(missOneCardOnly(routesPossible.get(z),game)){
 
-                    return routesPossible.get(i).getCouleur();
+                    return routesPossible.get(z).getCouleur();
                 }
             }
 
@@ -151,6 +151,9 @@ public class StrongBot implements BotAction {
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
+
+                    System.out.println("takeRail True");
+
                     return true ;
 
                 }
@@ -158,6 +161,7 @@ public class StrongBot implements BotAction {
 
 
         }
+        System.out.println("takeRail False");
 
         return false;
     }
@@ -187,6 +191,9 @@ public class StrongBot implements BotAction {
                 if(toTransformInGare != null &&  !(cd.getComplete())){
 
                     joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
+
+                    System.out.println("takeGare true 1");
+
                     return true;
 
                 }
@@ -202,6 +209,7 @@ public class StrongBot implements BotAction {
 
 
         }
+        System.out.println("takeGare true 2");
 
         return true;
 
@@ -210,55 +218,38 @@ public class StrongBot implements BotAction {
 
     @Override
     public CarteDestination[] takeMissionsCard(int max, Game game) {
-        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre en fonction de la variable max
+        // (le maximum de points cumulés dans les cartes missions que le bot prends)
 
-        //Pour savoir si il y a au moins une carte destination
-        boolean added = false;
+        //Variable pour avoir acces a la liste de carte destination
+        CarteDestination[] carteDestinations = game.getCarteManager().getDestinationsCards();
 
-        //Variable pour appeler cardDestination
-        CarteManager carteManager = game.getCarteManager();
+        //On va garder dans cette liste les positions des cartes destinations qu'on ajoute par la suite
+        ArrayList<Integer> aPiocher = new ArrayList<>();
 
+        //Cette variable sert savoit si on dépasse max
+        int total = 0;
 
-        int[] tmp = new int[3];
-        //Premiere bouble qui va prendre la carte la plus petite
-        for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
-            if (carteManager.getDestinationsCards()[i].getNombrePoints()
-                    < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
-                tmp[0] = i;
-                added = true;
+        for(int i = 0; i< carteDestinations.length;i++ ){
+
+            if(carteDestinations[i].getNombrePoints() + total <= max){
+
+                aPiocher.add(i);
+                total += carteDestinations[i].getNombrePoints();
+
             }
+
+
         }
 
-        if(!added){
-            //On prends la premiere carte si il n'y a pas de carte < 6
-            return carteManager.takeDestination( new int [1]);
-        }
+        int[] renvoie = new int[aPiocher.size()];
 
-        //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
-        for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
-        if ((carteManager.getDestinationsCards()[y].getNombrePoints() +
-                (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
-                <= max && y != tmp[0])) {
-
-                tmp[1] = y;
-            }
-        }
-
-        //Troisieme bouble qui regarde si la derniere carte + les cartes deja prisent soit < max
-        for (int z = 0; z < carteManager.getDestinationsCards().length; z++) {
-            if ((carteManager.getDestinationsCards()[z].getNombrePoints() +
-                    (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
-                    <= max && z != tmp[0] && z != tmp[1])) {
-
-                tmp[2] = z;
-            }
+        for(int y = 0; y < renvoie.length;y++){
+            renvoie[y] = aPiocher.get(y);
         }
 
 
-
-        return carteManager.takeDestination(tmp);
-
-
+        return game.getCarteManager().takeDestination(renvoie);
     }
 
 
@@ -278,6 +269,7 @@ public class StrongBot implements BotAction {
 
 
     private boolean canCompletePath(Game game){
+
         //Fonction qui regarde si on peut completer une route pour une mission
 
         //Variable qui donne la liste de destination
@@ -291,9 +283,15 @@ public class StrongBot implements BotAction {
 
             //Si il y a une mission ou on peut remplir alors on la fait
             if(game.getRoutes().get(l).getProprietaire() == null && !chemin.isEmpty()) {
+
+                System.out.println("canComplete true");
+
                 return true;
             }
         }
+
+        System.out.println("canComplete false");
+
         //Si il n'y a pas de mission qui peut etre remplis
         return false;
 
@@ -308,34 +306,53 @@ public class StrongBot implements BotAction {
     public void play(Game game) {
         //Fonction principale du bot fort
 
+        System.out.println();
+        System.out.println(game.getJoueurCourant().getName());
+
+
         //1- On regarde si il a complété toute ses missions ou pas :
         if (allMissionIsCompleted(game)) {
+
+            System.out.println("Toute les missions sont complétés");
 
             //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
             CarteDestination[] addCard = takeMissionsCard(6, game);
             for (int j = 0; j < addCard.length; j++) {
-                game.getListPlayer().get(game.getRound().getAction()).getDestinationsList().add(addCard[j]);
+
+                System.out.println(addCard[j].getDescription());
+
+                game.getJoueurCourant().getDestinationsList().add(addCard[j]);
             }
+
+            System.out.println();
+            game.getRound().endRound(game);
 
             //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
         } else {
+            System.out.println("On regarde si on peut compléter les missions");
 
                 //Si non:
                 if (! (canCompletePath(game) ) &&  takeGare(game,0)) {
+
+                    System.out.println("Gare prise");
+
 
                     game.getRound().endRound(game);
 
                     //Si oui
                 } else {
+                    System.out.println("Gare non prise");
 
                     //6- On pose les wagons
                     if (takeRail(game)) {
+                        System.out.println("rail pris");
 
                         game.getRound().endRound(game);
 
 
                         //Sinon :  7- On pioche :
                     } else {
+                        System.out.println("On pioche");
 
                         drawCardWagon(game);
 

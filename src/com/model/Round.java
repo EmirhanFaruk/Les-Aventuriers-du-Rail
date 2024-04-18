@@ -77,6 +77,10 @@ public class Round {
         //Change toutes les images pour le nouveau joueur
         gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
 
+        //On repaint a chaque fois
+        game.getMapScreen().repaint();
+
+
         betweenRoundTimer = betweenRoundTimerMax;
         // DEBUG :System.out.println(whoIsPlaying);
     }
