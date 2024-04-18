@@ -85,35 +85,38 @@ public class GameController {
     	}else {
     		//Force le premier tour du joueur a pioché une carte destination
     		if(player.getCanPlay()) {
-	    		
+
 	    		if(round.getAction() < 2){
 	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                        "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
 	                return;
 	            }
-	
+
 	            if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
 	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                        "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 	                return;
 	            }
-	
+
 	            if ( player.getNiveau() == 0 ){
 	                int choixUtilisateur = JOptionPane.showConfirmDialog(
 	                        game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                        "Êtes-vous sûr de vouloir poser votre rail ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
-	
+
 	                if (choixUtilisateur == JOptionPane.YES_OPTION) {
 	                    if (player.mettreRoute(r.getSaRoute())) {
 	                        int tailleRoute = r.getSaRoute().getRailsRoute().size();
 	                        ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
-	
+
 	                        for (int i = 0; i < tailleRoute; i++) {
 	                            listeRail.get(i).setOccuperPar(player);
 	                        }
-	
+
 	                        round.endRound(game);
-	                    } else {
+	                    } else if ( r.getSaRoute().getLongueur() > player.getNbrWagon() ) {
+                            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                                    "Vous n'avez pas assez de wagon pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+                        } else {
 	                        JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                                "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 	                    }
@@ -122,19 +125,19 @@ public class GameController {
 	                if (player.mettreRoute(r.getSaRoute())) {
 	                    int tailleRoute = r.getSaRoute().getRailsRoute().size();
 	                    ArrayList<Rail> listeRail = r.getSaRoute().getRailsRoute();
-	
+
 	                    for (int i = 0; i < tailleRoute; i++) {
 	                        listeRail.get(i).setOccuperPar(player);
 	                    }
-	
+
 	                    round.endRound(game);
 	                }
 	            }
-	            
+
 	    	}else {
 	    		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
-	    	}  		
+	    	}
     	}
     }
 
@@ -145,9 +148,9 @@ public class GameController {
                        ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
        	}else {
     		//Force le premier tour du joueur a pioché une carte destination
-	    	if(player.getCanPlay()) {	    		
+	    	if(player.getCanPlay()) {
 	    		CarteWagon source = playerHandPanel.getDrawPlayerHand(player.getName()).CardClicked( e.getX() , e.getY() );
-	    		
+
 	            if ( source != null ) {
 	                // Si la source est une carte wagon
 	                this.carteWagon = source;
@@ -156,7 +159,7 @@ public class GameController {
 	                    if(tenterDePoserUneGare( ville , player, game )){
 	                        game.getRound().endRound(game);
 	                    }
-	
+
 	                } catch ( Exception exception ){
 	                    if ( player.getNiveau() == 0 ) {
 	                        JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
@@ -165,7 +168,7 @@ public class GameController {
 	                    }
 	                }
 	            }
-	            
+
 	    	}else {
 	    		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
@@ -173,7 +176,7 @@ public class GameController {
     	}
     }
 
-    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){  	
+    public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
         if(game.getRound().getAction() < 2){
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
@@ -190,7 +193,7 @@ public class GameController {
     public boolean piocherCarteVisible(Player player, Couleur imagePiocheVisible) {
     	return player.piocheCarteVisible(imagePiocheVisible);
 	}
-    
+
     public boolean piocherCarteDestination(Player player, CarteManager cm, int i) {
     	return player.piocheCarteDestination(cm, i);
 	}

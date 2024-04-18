@@ -14,9 +14,10 @@ public class ScoreBoardScreen extends JPanel{
      * Le constructeur de scoreboardScreen
      * @param players une liste de joueur
      */
-    public ScoreBoardScreen( ArrayList<Player> players ){
+    public ScoreBoardScreen( ArrayList<Player> players , int width , int height ){
         this.players = players ;
         setLayout(new GridLayout(players.size() + 1, 5 )); // +1 pour l'en-tête
+        setPreferredSize( new Dimension( width , height ));
         createEnTete();
         listePlayerTrier();
         afficheScoreBoard();
@@ -51,7 +52,7 @@ public class ScoreBoardScreen extends JPanel{
      * Une fonction qui trie la liste des joueurs
      */
     public void listePlayerTrier(){
-        players.sort(Comparator.comparingInt(Player::getScore).reversed());
+        players.sort(Comparator.comparingInt(Player::scoreFinal).reversed());
     }
 
     /**

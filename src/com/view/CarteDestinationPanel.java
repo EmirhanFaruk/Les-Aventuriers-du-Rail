@@ -48,8 +48,15 @@ public class CarteDestinationPanel extends JPanel {
         
         // Création du bouton
         JButton btnPiocherCartes = new JButton("Passer son tour");
-        btnPiocherCartes.addActionListener(e -> activerPioche());
-        
+
+        // Après l'ajout du bouton au panneau
+        btnPiocherCartes.addActionListener(e -> {
+            activerPioche();
+            // Rendre le focus au panel du game frame après avoir cliqué sur le bouton
+            game.getGameFrame().requestFocusInWindow() ;
+        });
+
+
         //taille et position du bouton
         if (piocheVisibleBounds.length > 0) {
             Rectangle firstCardRect = piocheVisibleBounds[0];
