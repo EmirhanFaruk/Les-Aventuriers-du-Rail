@@ -8,6 +8,7 @@ import com.model.config.Ville;
 import com.view.GameMapPanel;
 import com.view.MapScreen;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 import java.awt.*;
 
@@ -161,7 +162,6 @@ public class Game
     public void updateGame( double deltaTime ) {
         //game loop
         if (!round.roundFinished()) {
-
             round.round(this, deltaTime);
         }
 

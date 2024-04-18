@@ -10,6 +10,8 @@ import com.view.GameMapPanel;
 import com.view.MapScreen;
 import com.view.PlayerHandPanel;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 public class Round {
 
     private boolean playing = true; //Le jeu en pose ou pas
@@ -39,8 +41,8 @@ public class Round {
 
 
 
+    private final double betweenRoundTimerMax = 0.5; // Valeur max de timer
     private double betweenRoundTimer = 0; // Comme ça on peut voir pour 1 seconde ce qui ce passe quand les bots jouent
-    private final double betweenRoundTimerMax = 1; // Valeur max de timer
 
 
     public boolean roundFinished(){
@@ -49,15 +51,6 @@ public class Round {
     }
 
     public void endRound(Game game) {
-        if (whoIsPlaying == 0)
-        {
-            //GarePosFinder.printForAll(game.getVilles(), 2, true, game.getListPlayer().get(whoIsPlaying));
-            //GarePosFinder.printForAll(game.getVilles(), 1, false, game.getListPlayer().get(whoIsPlaying));
-            //GarePosFinder.printForAllDiff(game.getVilles(), 6, true, game.getListPlayer().get(whoIsPlaying));
-            //GarePosFinder.printForAllDiff(game.getVilles(), 2, false, game.getListPlayer().get(whoIsPlaying));
-        }
-
-
 
         //Fonction qui finit le tour du bot
         setEndTurn(true);
@@ -84,7 +77,7 @@ public class Round {
         //Change toutes les images pour le nouveau joueur
         gameMapPanel.getMapScreen().repaintAll(playerHandPanel);
 
-
+        betweenRoundTimer = betweenRoundTimerMax;
         // DEBUG :System.out.println(whoIsPlaying);
     }
     
@@ -109,13 +102,10 @@ public class Round {
 
     public void round(Game game, double deltaTime)
     {
-
-
-
-
+        Player joueur = game.getListPlayer().get(whoIsPlaying);
         if (betweenRoundTimer <= 0)
         {
-            switch (game.getListPlayer().get(whoIsPlaying).getNiveau()) {
+            switch (joueur.getNiveau()) {
 
                 case(1):
                     weakBotPlay.play(game);
@@ -133,18 +123,17 @@ public class Round {
                 default:
                     break;
             }
-
-            // Soit le joueur, soit les bots doivent rendre action 0 pour que leur tour finissent
-
-            if (action == 0)
-            {
-                whosNext(game);
-                betweenRoundTimer = betweenRoundTimerMax;
-            }
         }
         else
         {
-            betweenRoundTimer -= deltaTime;
+            if (joueur.getNiveau() != 0)
+            {
+                betweenRoundTimer -= deltaTime;
+            }
+            else
+            {
+                betweenRoundTimer = betweenRoundTimerMax;
+            }
         }
 
 
