@@ -8,6 +8,7 @@ import com.model.config.Ville;
 import com.view.GameMapPanel;
 import com.view.MapScreen;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 import java.awt.*;
 
@@ -161,13 +162,12 @@ public class Game
     public void updateGame( double deltaTime ) {
         //game loop
         if (!round.roundFinished()) {
-
             round.round(this, deltaTime);
         }
 
         if (endGame() && this.gameFrame.getGameScreen() != null) {
             // DEBUG : System.err.println("la partie est terminée");
-            this.gameFrame.getGameScreen().getGameManagerScreen().update();
+            this.gameFrame.getGameScreen().getGameManagerScreen().showEndGame();
         }
     }
     

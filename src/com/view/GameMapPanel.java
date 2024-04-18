@@ -11,13 +11,14 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 public class GameMapPanel extends JPanel {
+    private final int height, width;
     GameFrame frame ;
     private MapScreen mapScreen ;
     private PlayerHandPanel playerHandPanel ;
     private PlayerInformationBarPanel playerInformationBarPanel ;
     private PiochePanel pioche;
+    private CarteDestinationPanel cdPanel;
     private static int tile_width , tile_height ;
-    private int width , height ;
     private GameController gameController = new GameController();
 
 
@@ -39,16 +40,19 @@ public class GameMapPanel extends JPanel {
         tile_width = (int) (getWidth() * 0.85 / tileCount[0]);
         tile_height = (int) (getHeight() * 0.8 / tileCount[1]);
 
+
         this.playerHandPanel = new PlayerHandPanel() ;
         this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
-        this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2),mapScreen);
-        this.pioche = new PiochePanel(width, height, player, this.playerHandPanel, frame.getMain().game.getCarteManager());
+        this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2));
+        this.pioche = new PiochePanel(width, height, this.playerHandPanel, game);
+        this.cdPanel = new CarteDestinationPanel(width, height, this.playerHandPanel, game);
         this.playerInformationBarPanel = new PlayerInformationBarPanel(  game.getListPlayer() , player  , width , ( int ) ( height * 0.05 )) ;
 
         setLayout(new BorderLayout());
 
         add( mapScreen , BorderLayout.CENTER ) ;
         add(pioche, BorderLayout.EAST);
+        add(cdPanel, BorderLayout.WEST);
         add( playerHandPanel , BorderLayout.SOUTH ) ;
         add(playerInformationBarPanel , BorderLayout.NORTH ) ;
 
@@ -77,18 +81,13 @@ public class GameMapPanel extends JPanel {
 
 
     public void setPlayerCourant(Player playerCourant) {
+        this.playerHandPanel.setPlayer(playerCourant);
+        this.cdPanel.setPlayer(playerCourant);
+        this.cdPanel.setAllDefault(); //Remet tout à false (pour afficher la bonne couleur)
+        this.cdPanel.repaint();
         this.pioche.setPlayer(playerCourant);
         this.playerInformationBarPanel.setPlayerCourant(playerCourant);
         this.mapScreen.setPlayer( playerCourant );
-    }
-
-
-    public PlayerInformationBarPanel getPlayerInformationBarPanel() {
-        return playerInformationBarPanel;
-    }
-
-    public void setPlayerInformationBarPanel(PlayerInformationBarPanel playerInformationBarPanel) {
-        this.playerInformationBarPanel = playerInformationBarPanel;
     }
 
     public MapScreen getMapScreen() {

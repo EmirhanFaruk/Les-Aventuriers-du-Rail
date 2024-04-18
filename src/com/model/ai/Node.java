@@ -415,48 +415,4 @@ public class Node
 
         return res;
     }
-
-
-    public static void printWay(ArrayList<Ville> villes)
-    {
-        if(!villes.isEmpty())
-        {
-            System.out.println("\n\n===========================================================\n\n");
-            System.out.println("The way from " + villes.get(0).getNom() + " to " + villes.get(villes.size() - 1).getNom() + ":");
-            for (int i = 0; i < villes.size(); i++)
-            {
-                System.out.print(villes.get(i).getNom());
-                if(i + 1 != villes.size())
-                {
-                    for (Route route : villes.get(i).getRoutes())
-                    {
-                        if(route.getVille1() == villes.get(i + 1) || route.getVille2() == villes.get(i + 1))
-                        {
-                            System.out.print(" to " + villes.get(i + 1).getNom() + " using " + route.getLongueur() + " " + route.getCouleur() + " rail(s).");
-                            break;
-                        }
-                    }
-                }
-                System.out.println();
-            }
-        }
-    }
-    
-    public static void printWays(ArrayList<Ville> villes, Player player)
-    {
-        for (int i = 0; i < villes.size(); i++)
-        {
-            for (int j = 0; j < villes.size(); j++)
-            {
-                if (i != j)
-                {
-                    Ville v1 = villes.get(i);
-                    Ville v2 = villes.get(j);
-                    ArrayList<Ville> way = Node.findClosestPath(v1, v2, player);
-                    Node.printWay(way);
-                }
-            }
-        }
-    }
-
 }

@@ -11,6 +11,23 @@ public class GarePosFinder
 {
 
     /**
+     * Checks if there's a new possible way of the wannabeGare.
+     * @param start start ville for the destination
+     * @param end end ville for the destination
+     * @param wannaBeGare the ville to try as a gare
+     * @param player player for the A* algorithm
+     * @return the number wanted
+     */
+    private static boolean trySingleVilleExists(Ville start, Ville end, Ville wannaBeGare, Player player)
+    {
+        ArrayList<Ville> gareTry = Node.findClosestPath(start, end, player, wannaBeGare);
+
+        return !gareTry.isEmpty();
+    }
+
+
+
+    /**
      * Gets the length of the new possible way of the wannabeGare.
      * @param start start ville for the destination
      * @param end end ville for the destination
@@ -48,20 +65,20 @@ public class GarePosFinder
      * @param player player for the A* algorithm
      * @return if the difference is less or equal than routeToReduce
      */
-    private static boolean tryVilleDiff(Ville start, Ville end, Ville wannaBeGare, int routeToReduce, boolean byRail, Player player, int ogLength)
+    private static boolean tryVilleDiff(Ville start, Ville end, Ville wannaBeGare, int routeToReduce, boolean byRail, Player player, int ogLength, boolean aWayExists)
     {
         int newLength = trySingleVille(start, end, wannaBeGare, byRail, player);
 
-        //System.out.println(ogLength + " - " + newLength + " > " + routeToReduce);
+        boolean gareWayExists = trySingleVilleExists(start, end, wannaBeGare, player);
+
         // Check if a way exists
-        if (ogLength > 0)
+        if (aWayExists && gareWayExists)
         {
-            return ogLength - newLength > routeToReduce;
+            return ogLength - newLength >= routeToReduce;
         }
 
         // If not, if a way can be made then true
-        // TODO: GERER LE CAS OU IL Y A PAS DE SOL/LE CHEMIN EST DEJA COMPLET
-        return true;
+        return !aWayExists && gareWayExists;
     }
 
 
@@ -80,10 +97,10 @@ public class GarePosFinder
         ArrayList<Ville> res = new ArrayList<>();
 
         ArrayList<Ville> shortestWay = Node.findClosestPath(start, end, player);
-        for (Ville ville : shortestWay)
-        {
-            //System.out.println(ville.getNom());
-        }
+
+        boolean aWayExists = !shortestWay.isEmpty();
+
+
         ArrayList<Route> neededRoutes = getNeededRoutes(shortestWay, player);
         int ogLength = neededRoutes.size();
 
@@ -91,13 +108,12 @@ public class GarePosFinder
         {
             ogLength = getRailCount(neededRoutes);
         }
-        //System.out.println("ogLength: " + ogLength + " bc byRail: " + byRail);
 
         for (Ville wannaBeGare : villesToTry)
         {
             if (wannaBeGare.getIsOccuped() == null)
             {
-                if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength))
+                if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength, aWayExists))
                 {
                     res.add(wannaBeGare);
                 }
@@ -283,52 +299,5 @@ public class GarePosFinder
         }
 
         return res;
-    }
-
-
-    public static void printForAll(ArrayList<Ville> villes, int limit, boolean byRail, Player player)
-    {
-        System.out.println("-\n-\n-\n-\nStart of printForAll with limit = " + limit + ", byRail = " + byRail + ", Player = " + player.getName());
-        for (int i = 0; i < villes.size() - 1; i++)
-        {
-            for (int j = i + 1; j < villes.size(); j++)
-            {
-                Ville ville1 = villes.get(i);
-                Ville ville2 = villes.get(j);
-                Ville wantedVille = getWantedVille(ville1, ville2, villes, limit, byRail, player);
-                System.out.print("========\nStart: " + ville1.getNom() + "\nEnd: " + ville2.getNom() + "\nGareVille: ");
-                if (wantedVille != null)
-                {
-                    System.out.println(wantedVille.getNom());
-                }
-                else
-                {
-                    System.out.println("null");
-                }
-            }
-        }
-    }
-
-    public static void printForAllDiff(ArrayList<Ville> villes, int limit, boolean byRail, Player player)
-    {
-        System.out.println("-\n-\n-\n-\nStart of printForAll with limit = " + limit + ", byRail = " + byRail + ", Player = " + player.getName());
-        for (int i = 0; i < villes.size() - 1; i++)
-        {
-            for (int j = i + 1; j < villes.size(); j++)
-            {
-                Ville ville1 = villes.get(i);
-                Ville ville2 = villes.get(j);
-                Ville wantedVille = getWantedVilleDiff(ville1, ville2, villes, limit, byRail, player);
-                System.out.print("========\nStart: " + ville1.getNom() + "\nEnd: " + ville2.getNom() + "\nGareVille: ");
-                if (wantedVille != null)
-                {
-                    System.out.println(wantedVille.getNom());
-                }
-                else
-                {
-                    System.out.println("null");
-                }
-            }
-        }
     }
 }

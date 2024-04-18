@@ -15,7 +15,8 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
-
+    private boolean firstTurnOver;
+    private boolean canPlay;
 	private final String playerCouleur ;
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
@@ -53,12 +54,33 @@ public class Player {
 
 		return count;
 	}
+	
+	public boolean piocheCarteDestination(CarteManager cm, int i) {
+		//vérifie s'il a le max de carte destination possible pour un joueur
+		if(this.destinationsList.size() < 3) {
+			//vérifie s'il ne possède pas déjà la carte destination
+			if(cm.getDestinationsCards()[i] != null) {
+				//donne la carte destination et mets à null pour remplacer
+				this.destinationsList.add(cm.getDestinationsCards()[i]);
+				cm.getDestinationsCards()[i] = null;
+				if(this.destinationsList.size() >= 1)this.canPlay = true;
+				return true;
+			}else {
+				JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
+			}	
+			
+		}else {
+			JOptionPane.showMessageDialog(new JFrame(),"Vous avez le maximum de carte destination ! (max 3)","Instructions",JOptionPane.WARNING_MESSAGE);
+		}
+		
+		return false;
+	}
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = game.getCarteManager();
 		if(cm.PileCarteWagon.isEmpty()){
 			if(cm.trainCardisEmpty()){
-			JOptionPane.showMessageDialog(new JFrame(),"Il y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(),"Il n'y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
 		}else{
 			JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
@@ -178,6 +200,7 @@ public class Player {
 			}
 		}
 	}
+	
 
 	public void retirerCarteLoc(int carteAEnlever){
 		//Fonction qui enleve les cartes si c'est une route multicolor
@@ -191,7 +214,6 @@ public class Player {
 		}
 
 	}
-
 
 
     public void retirerLesCartes(Couleur color, int carteAEnlever) {
@@ -209,7 +231,7 @@ public class Player {
 
     public boolean mettreRoute(Route r) {
     	if(r != null) {
-    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null) {
+    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
@@ -258,7 +280,7 @@ public class Player {
 						"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
 
 				if (choixUtilisateur == JOptionPane.YES_OPTION) {
-					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null ) {
 						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 						ville.setIsOccuped(this);
 						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
@@ -477,4 +499,18 @@ public class Player {
         return trainList;
     }
 
+
+	public boolean getCanPlay() {
+		return canPlay;
+	}
+
+
+	public boolean getFirstTurnOver() {
+		return firstTurnOver;
+	}
+
+
+	public void setFirstTurnOver(boolean firstTurnOver) {
+		this.firstTurnOver = firstTurnOver;
+	}
 }

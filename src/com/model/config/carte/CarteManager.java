@@ -31,7 +31,6 @@ public class CarteManager {
 
     }
 
-
     private void initPileCarteWagon() {
         for(int i=0;i<8;i++){ //8 couleurs de carteWagon
             for(int j=0;j<12;j++) //12 wagons de chaque couleur
@@ -128,6 +127,12 @@ public class CarteManager {
     public CarteWagon.Couleur showWagon(int position){
         return trainCards[position];
     }
+    
+    //Vérifie si le joueur a déjà pris une carte destination
+    public boolean alreadyPickedACard() {
+    	for(int i = 0; i < this.destinationsCards.length; i++)if(this.destinationsCards[i] == null)return true;
+    	return false;
+    }
 
     
     public CarteDestination[] takeDestination(int[] position){    
@@ -146,7 +151,7 @@ public class CarteManager {
         //Fonction qui remets de nouvelles mission
         for(int i = 0; i<destinationsCards.length;i++){
             if(destinationsCards[i]!= null){
-                PileCarteDestination.add(destinationsCards[i]);
+            	PileCarteDestination.add(PileCarteDestination.size(), destinationsCards[i]);
             }
             destinationsCards[i] = getDestination();
         }
