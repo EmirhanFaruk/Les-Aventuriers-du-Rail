@@ -231,7 +231,7 @@ public class Player {
 
     public boolean mettreRoute(Route r) {
     	if(r != null) {
-    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null) {
+    		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
@@ -280,7 +280,7 @@ public class Player {
 						"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
 
 				if (choixUtilisateur == JOptionPane.YES_OPTION) {
-					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null) {
+					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null ) {
 						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 						ville.setIsOccuped(this);
 						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
