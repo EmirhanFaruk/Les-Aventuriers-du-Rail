@@ -147,59 +147,29 @@ public class StrongBot implements BotAction {
 
     }
 
-    public Route takeRailAux(ArrayList<Ville> villes){
-        //Fonction qui retourne la premiere route que le joueur peut completer dans la liste
-        for(int i = 1; i< villes.size() ;i++){
 
-            //Variable qui represente les villes
-            Ville ville1 = villes.get(i);
-            Ville ville2 = villes.get(i-1);
-
-            //On parcours la liste de route de la ville1 pour trouver celle qui relie a la ville2
-            for(int y = 0; i< ville1.getRoutes().size();y++){
-
-                //Variable qui represente la route obtenu dans la liste de route de ville1
-                Route route = ville1.getRoutes().get(y);
-
-                //On verifie que c'est bien la route demandé
-                if(route.links(ville1,ville2)){
-
-                   return route;
-
-                }
-
-            }
-
-        }
-        return null;
-
-    }
     @Override
     public boolean takeRail(Game game) {
-        //Variable pour avoir round
-        Round round = game.getRound();
-
         //Fonction qui permet de prendre des routes, et renvoie false si le bot n'a pas assez de carte
 
         //Variable pour avoir les cartes destination du bot
-        ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
+        ArrayList<CarteDestination>destination =  game.getJoueurCourant().getDestinationsList();
+
         for(int i =0; i<destination.size();i++){
-            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-            for(int z = 1; z < ville.size();z++){
+            //Liste de ville qu'on a besoin
+            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
+            //Liste des routes que le bot doit completer pour finir sa missions
+            ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
-                //TODO cela ne prend que 1 route et non toute les possibilités dans la route
-                Route toAdd = takeRailAux(ville);
-
+            for(int z = 1; z < routesPossible.size();z++){
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
-                if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
+                if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
                     return true ;
 
                 }
             }
-
-
 
 
         }
