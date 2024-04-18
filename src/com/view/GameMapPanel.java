@@ -37,12 +37,12 @@ public class GameMapPanel extends JPanel {
 
         int[] tileCount = getTileCount(map);
 
-        tile_width = (int) (getWidth() * 0.85 / tileCount[0]);
-        tile_height = (int) (getHeight() * 0.8 / tileCount[1]);
+        tile_width = (int) (getWidth() * 0.7 / tileCount[0]);
+        tile_height = (int) (getHeight() * 0.7 / tileCount[1]);
 
 
         this.playerHandPanel = new PlayerHandPanel() ;
-        this.mapScreen = new MapScreen( map , (int) (width*0.85), (int) (height*0.8),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
+        this.mapScreen = new MapScreen( map , (int) (width*0.7), (int) (height*0.7),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
         this.playerHandPanel.make(gameController,game,width,(int) (height * 0.2));
         this.pioche = new PiochePanel(width, height, this.playerHandPanel, game);
         this.cdPanel = new CarteDestinationPanel(width, height, this.playerHandPanel, game);
