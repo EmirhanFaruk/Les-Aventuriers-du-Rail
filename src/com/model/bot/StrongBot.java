@@ -3,6 +3,7 @@ package com.model.bot;
 import com.model.Game;
 import com.model.Player;
 import com.model.Round;
+import com.model.ai.GarePosFinder;
 import com.model.ai.Node;
 import com.model.config.Rail;
 import com.model.config.Route;
@@ -209,26 +210,75 @@ public class StrongBot implements BotAction {
     @Override
     public boolean takeGare(Game game, int wichStation) {
 
+        //Variable pour avoir les cartes destinations du joueur
+        ArrayList<CarteDestination> carteDestinations = game.getJoueurCourant().getDestinationsList();
+
+        //Variable joueur
+        Player joueur = game.getJoueurCourant();
+
+        //4- On cherche l'endroit le plus optimale pour poser une gare (et si on a toujours des gares):
+        if(joueur.getNbrGare() > 0 ){
+
+            for(CarteDestination cd: carteDestinations){
+
+                //Ville 1 de la carte
+                Ville ville1 = cd.getPremiereVille();
+                //Ville 2 de la gare
+                Ville ville2 = cd.getDeuxiemeVille();
+
+                Ville toTransformInGare = GarePosFinder.getWantedVilleDiff(ville1,ville2,game.getVilles(),1,false, joueur);
+
+                //On regarde pour toute les missions
+                if(toTransformInGare != null &&  !(cd.getComplete())){
+
+                    joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
+                    return true;
+
+                }
+
+            }
+
+
+        }else{
+            //5- Si il y a plus de chemin possible :
+
+            // Alors prendre une nouvelle carte mission on fait l'étape 2
+            takeMissionsCard(6,game);
+
+
+        }
+
         return true;
+
+
     }
 
     @Override
     public CarteDestination[] takeMissionsCard(int max, Game game) {
         //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
 
+        //Pour savoir si il y a au moins une carte destination
+        boolean added = false;
+
         //Variable pour appeler cardDestination
         CarteManager carteManager = game.getCarteManager();
 
-        //On regarde lequel des cartes mission a la plus petite route,
-        ArrayList<CarteDestination> tab = new ArrayList<>();
+
         int[] tmp = new int[3];
         //Premiere bouble qui va prendre la carte la plus petite
         for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
             if (carteManager.getDestinationsCards()[i].getNombrePoints()
                     < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
                 tmp[0] = i;
+                added = true;
             }
         }
+
+        if(!added){
+            //On prends la premiere carte si il n'y a pas de carte < 6
+            return carteManager.takeDestination( new int [1]);
+        }
+
         //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
         for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
         if ((carteManager.getDestinationsCards()[y].getNombrePoints() +
@@ -248,6 +298,8 @@ public class StrongBot implements BotAction {
                 tmp[2] = z;
             }
         }
+
+
 
         return carteManager.takeDestination(tmp);
 
@@ -301,9 +353,6 @@ public class StrongBot implements BotAction {
     public void play(Game game) {
         //Fonction principale du bot fort
 
-        //Variable du joueur
-        Player joueur = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
-
         //1- On regarde si il a complété toute ses missions ou pas :
         if (allMissionIsCompleted(game)) {
 
@@ -317,21 +366,9 @@ public class StrongBot implements BotAction {
         } else {
 
                 //Si non:
-                if (! canCompletePath(game)) {
+                if (! (canCompletePath(game) ) &&  takeGare(game,0)) {
 
-                            /*
-
-                    4- On cherche l'endroit le plus optimale pour poser une gare :
-
-                        5- Si il y a plus de chemin possible :
-                         alors on regarde si les autres missions sont complété
-
-                                 Si oui :
-                                    Alors prendre une nouvelle carte mission on fait l'étape 2
-
-                                Sinon :
-                                    Completer les autres missions
-             */
+                    game.getRound().endRound(game);
 
                     //Si oui
                 } else {
