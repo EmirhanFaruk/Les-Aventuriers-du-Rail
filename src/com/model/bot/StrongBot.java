@@ -152,7 +152,13 @@ public class StrongBot implements BotAction {
                 //On regarde si la route est null ou pas, si non alors on prends la route
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
 
-                    System.out.println("takeRail True");
+                    ArrayList<Rail> listeRail = routesPossible.get(z).getRailsRoute() ;
+                    Player bot = game.getListPlayer().get( game.getRound().getWhoIsPlaying());
+
+                    for (Rail rail : listeRail) {
+                        rail.setOccuperPar(bot);
+                    }
+                    System.err.println("takeRail True");
 
                     return true ;
 
@@ -161,7 +167,7 @@ public class StrongBot implements BotAction {
 
 
         }
-        System.out.println("takeRail False");
+        // DEBUG : System.out.println("takeRail False");
 
         return false;
     }
@@ -192,7 +198,7 @@ public class StrongBot implements BotAction {
 
                     joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
 
-                    System.out.println("takeGare true 1");
+                    System.err.println("takeGare true 1");
 
                     return true;
 
@@ -209,7 +215,7 @@ public class StrongBot implements BotAction {
 
 
         }
-        System.out.println("takeGare true 2");
+        System.err.println("takeGare true 2");
 
         return true;
 

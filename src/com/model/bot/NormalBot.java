@@ -1,7 +1,9 @@
 package com.model.bot;
 
 import com.model.Game;
+import com.model.Player;
 import com.model.Round;
+import com.model.config.Rail;
 import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteManager;
 
@@ -34,6 +36,12 @@ public class NormalBot implements BotAction{
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
+
+                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
+                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
+                for (Rail rail : listeRail) {
+                    rail.setOccuperPar(bot);
+                }
 
                 return true;
             }
