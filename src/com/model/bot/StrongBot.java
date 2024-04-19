@@ -302,7 +302,51 @@ public class StrongBot implements BotAction {
 
 
 
+    private void firstTurn(Game game) {
 
+        takeMissionsCard(6,game);
+
+        game.getJoueurCourant().setFirstTurnOver(true);
+
+        optimalCompleteMission(game);
+
+    }
+
+    private void optimalCompleteMission(Game game) {
+        //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions,sinon poser une gare ou piocher
+
+        //Si on peut pas pas completer de route avec les rails
+        if (!(canCompletePath(game)) && takeGare(game, 0)) {
+
+            System.out.println("Gare prise");
+
+
+            game.getRound().endRound(game);
+
+            //Si oui
+        } else {
+            System.out.println("Gare non prise");
+
+            //6- On pose les wagons
+            if (takeRail(game)) {
+                System.out.println("rail pris");
+
+                game.getRound().endRound(game);
+
+
+                //Sinon :  7- On pioche :
+            } else {
+                System.out.println("On pioche");
+
+                drawCardWagon(game);
+
+                game.getRound().endRound(game);
+
+            }
+
+
+        }
+    }
 
 
     @Override
@@ -312,66 +356,52 @@ public class StrongBot implements BotAction {
         System.out.println();
         System.out.println(game.getJoueurCourant().getName());
 
+        if(!game.getJoueurCourant().getFirstTurnOver()){
 
-        //1- On regarde si il a complété toute ses missions ou pas :
-        if (allMissionIsCompleted(game)) {
-
-            System.out.println("Toute les missions sont complétés");
-
-            //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
-            CarteDestination[] addCard = takeMissionsCard(6, game);
-            for (int j = 0; j < addCard.length; j++) {
-
-                System.out.println(addCard[j].getDescription());
-
-                game.getJoueurCourant().getDestinationsList().add(addCard[j]);
-            }
-
-            System.out.println();
+            firstTurn(game);
             game.getRound().endRound(game);
 
-            //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
-        } else {
-            System.out.println("On regarde si on peut compléter les missions");
+        }else {
+
+            //1- On regarde si il a complété toute ses missions ou pas :
+            if (allMissionIsCompleted(game)) {
+
+                System.out.println("Toute les missions sont complétés");
+
+                //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
+                CarteDestination[] addCard = takeMissionsCard(6, game);
+                for (int j = 0; j < addCard.length; j++) {
+
+                    System.out.println(addCard[j].getDescription());
+
+                    game.getJoueurCourant().getDestinationsList().add(addCard[j]);
+                }
+
+                System.out.println();
+                game.getRound().endRound(game);
+
+                //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
+            } else {
+                System.out.println("On regarde si on peut compléter les missions");
 
                 //Si non:
-                if (! (canCompletePath(game) ) &&  takeGare(game,0)) {
-
-                    System.out.println("Gare prise");
-
-
-                    game.getRound().endRound(game);
-
-                    //Si oui
-                } else {
-                    System.out.println("Gare non prise");
-
-                    //6- On pose les wagons
-                    if (takeRail(game)) {
-                        System.out.println("rail pris");
-
-                        game.getRound().endRound(game);
-
-
-                        //Sinon :  7- On pioche :
-                    } else {
-                        System.out.println("On pioche");
-
-                        drawCardWagon(game);
-
-                        game.getRound().endRound(game);
-
-                        }
-
-
-                    }
-
+               optimalCompleteMission(game);
 
                 }
 
 
-            }
+
+
+        }
 
 
     }
+
+
+
+
+
+
+
+}
 
