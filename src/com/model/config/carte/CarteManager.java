@@ -1,6 +1,7 @@
 package com.model.config.carte;
 
 import com.model.Game;
+import com.model.Player;
 import com.model.ai.Node;
 import com.model.config.Plateau;
 import com.model.config.Route;
@@ -218,4 +219,7 @@ public class CarteManager {
         }
         return true;
     }
+
+
+
 }
