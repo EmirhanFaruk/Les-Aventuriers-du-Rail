@@ -503,6 +503,8 @@ public class Play extends JPanel
     {
         JPanel res = makeDefaultPanel();
 
+        res.setLayout(new GridLayout(1, 2));
+
         mode_button = new JButton("NORMAL");
         mode_button.setBackground(Color.BLACK);
         mode_button.setForeground(Color.GRAY);
@@ -528,6 +530,12 @@ public class Play extends JPanel
             }
         });
 
+        mode_button.setPreferredSize(new Dimension(frame.getWidth()/8, frame.getHeight()/10));
+
+        JLabel modeString = new JLabel("Mode: ");
+        modeString.setForeground(Color.GRAY);
+        JPanel modeStringCapsule = makeCenteringPanel(modeString);
+        res.add(modeStringCapsule);
         res.add(mode_button);
 
         return res;
