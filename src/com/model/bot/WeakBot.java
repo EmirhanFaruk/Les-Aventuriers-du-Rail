@@ -155,7 +155,6 @@ public class WeakBot implements BotAction{
         //On regarde si c'est le premier tour du bot, si oui alors il doit d'abord piocher des cartes destinations avant de faire autre chose
         if(!game.getJoueurCourant().getFirstTurnOver()){
 
-            System.out.println(game.getJoueurCourant().getName() + " " + game.getJoueurCourant().getDestinationsList().size());
 
             //Il prends une mission au moins
             CarteDestination[] carteDestination = takeMissionsCard(0,game);
@@ -166,7 +165,6 @@ public class WeakBot implements BotAction{
                 game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
 
             }
-            System.out.println(game.getJoueurCourant().getName() + " " + game.getJoueurCourant().getDestinationsList().size());
 
 
             //Puis il pioche

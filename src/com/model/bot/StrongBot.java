@@ -199,19 +199,22 @@ public class StrongBot implements BotAction {
                 }
 
             }
-
+            return false;
 
         }else{
             //5- Si il y a plus de chemin possible :
 
             // Alors prendre une nouvelle carte mission on fait l'étape 2
-            takeMissionsCard(6,game);
+            CarteDestination[] toAdd  = takeMissionsCard(6,game);
 
+            for(int i = 0; i< toAdd.length;i++){
+
+                game.getJoueurCourant().getDestinationsList().add(toAdd[i]);
+
+            }
+            return true;
 
         }
-        System.out.println("takeGare true 2");
-
-        return true;
 
 
     }
