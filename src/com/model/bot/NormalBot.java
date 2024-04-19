@@ -91,6 +91,11 @@ public class NormalBot implements BotAction{
     public void play(Game game) {
         //Fonction principale du bot normal
 
+        if(true){
+
+        }else{
+
+        }
         Random random = new Random();
         int whatToDo = random.nextInt(4);
 

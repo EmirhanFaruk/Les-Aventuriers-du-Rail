@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
-    private boolean firstTurnOver;
+    private boolean firstTurnOver = false;
     private boolean canPlay;
 	private final String playerCouleur ;
 	private int nbrWagon ;
@@ -29,6 +29,7 @@ public class Player {
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 	private Game game;
+
 
 
 	public Player ( String playerCouleur , String name , int niveau, Game game){
@@ -513,4 +514,6 @@ public class Player {
 	public void setFirstTurnOver(boolean firstTurnOver) {
 		this.firstTurnOver = firstTurnOver;
 	}
+
+
 }
