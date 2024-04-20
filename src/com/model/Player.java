@@ -451,10 +451,6 @@ public class Player {
 		return game;
 	}
 
-	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
-        this.trainList = trainList;
-    }
-
     public int getScore() {
         return this.score;
     }

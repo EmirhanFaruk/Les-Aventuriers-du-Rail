@@ -156,7 +156,6 @@ public class StrongBot implements BotAction {
                 //On regarde si la route est null ou pas, si non alors on prends la route
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
 
-                    System.out.println("takeRail True");
 
                     return true ;
 
@@ -165,7 +164,6 @@ public class StrongBot implements BotAction {
 
 
         }
-        System.out.println("takeRail False");
 
         return false;
     }
@@ -290,10 +288,10 @@ public class StrongBot implements BotAction {
         for (int l = 0; l <destination.size(); l++) {
 
             //Variable qui donne un chemins possible grace a une liste de ville
-            ArrayList<Ville> chemin = Node.findClosestPath(destination.get(l).getPremiereVille(),destination.get(l).getDeuxiemeVille());
+            ArrayList<Ville> chemin = Node.findClosestPath(destination.get(l).getPremiereVille(),destination.get(l).getDeuxiemeVille(),game.getJoueurCourant());
 
             //Si il y a une mission ou on peut remplir alors on la fait
-            if(game.getRoutes().get(l).getProprietaire() == null && !chemin.isEmpty()) {
+            if(!chemin.isEmpty()) {
 
                 System.out.println("canComplete true");
 
@@ -332,7 +330,7 @@ public class StrongBot implements BotAction {
     private void optimalCompleteMission(Game game) {
         //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions,sinon poser une gare ou piocher
 
-        //Si on peut pas pas completer de route avec les rails
+        //Si on peut pas pas completer de route avec les rails et si on a toujours des gare
         if (!(canCompletePath(game)) && takeGare(game, 0)) {
 
             System.out.println("Gare prise");
@@ -346,7 +344,6 @@ public class StrongBot implements BotAction {
 
             //6- On pose les wagons
             if (takeRail(game)) {
-                System.out.println("rail pris");
 
                 game.getRound().endRound(game);
 

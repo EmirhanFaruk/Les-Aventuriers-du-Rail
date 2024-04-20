@@ -51,38 +51,38 @@ public class NormalBot implements BotAction{
 
     @Override
     public CarteDestination[] takeMissionsCard(int max,Game game) {
-        //Variable pour avoir carteManager
-        CarteManager carteManager = game.getCarteManager();
+        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre en fonction de la variable max
+        // (le maximum de points cumulés dans les cartes missions que le bot prends)
 
-        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+        //Variable pour avoir acces a la liste de carte destination
+        CarteDestination[] carteDestinations = game.getCarteManager().getDestinationsCards();
 
-        //On regarde lequel des cartes mission a la plus petite route,
-        ArrayList<CarteDestination> tab = new ArrayList<>();
-        int[] tmp = new int[2];
-        //Premiere bouble qui va prendre la carte la plus petite
-        for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
-            if (carteManager.getDestinationsCards()[i].getNombrePoints() < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
-                tmp[0] = i;
+        //On va garder dans cette liste les positions des cartes destinations qu'on ajoute par la suite
+        ArrayList<Integer> aPiocher = new ArrayList<>();
+
+        //Cette variable sert savoit si on dépasse max
+        int total = 0;
+
+        for(int i = 0; i< carteDestinations.length;i++ ){
+
+            if(carteDestinations[i].getNombrePoints() + total <= max){
+
+                aPiocher.add(i);
+                total += carteDestinations[i].getNombrePoints();
+
             }
-        }
-        //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
-        for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
-            if ((carteManager.getDestinationsCards()[y].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && y != tmp[0])) {
 
-                tmp[1] = y;
-            }
-        }
 
-        //Troisieme bouble qui regarde si la derniere carte + les cartes deja prisent soit < max
-        for (int z = 0; z < carteManager.getDestinationsCards().length; z++) {
-            if ((carteManager.getDestinationsCards()[z].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && z != tmp[0] && z != tmp[1])) {
-
-                tmp[2] = z;
-            }
         }
 
-        return carteManager.takeDestination(tmp);
+        int[] renvoie = new int[aPiocher.size()];
 
+        for(int y = 0; y < renvoie.length;y++){
+            renvoie[y] = aPiocher.get(y);
+        }
+
+
+        return game.getCarteManager().takeDestination(renvoie);
 
     }
 
