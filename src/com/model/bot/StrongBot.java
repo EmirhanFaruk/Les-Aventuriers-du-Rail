@@ -147,7 +147,11 @@ public class StrongBot implements BotAction {
             //Liste des routes que le bot doit completer pour finir sa missions
             ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
+
             for(int z = 1; z < routesPossible.size();z++){
+
+                System.out.println(routesPossible.get(z).toString());
+
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
@@ -260,9 +264,13 @@ public class StrongBot implements BotAction {
 
     private boolean allMissionIsCompleted(Game game){
         //Fonction qui regarde si toute les missions sont complétés
-        for (int i = 0; i < game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().size(); i++) {
 
-            if (!game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
+        System.out.println("Affichage allMissionIsCompleted");
+        for (int i = 0; i < game.getJoueurCourant().getDestinationsList().size(); i++) {
+
+            System.out.println(game.getJoueurCourant().getDestinationsList().get(i).getDescription());
+
+            if (!game.getJoueurCourant().getDestinationsList().get(i).getComplete()) {
                 return false;
             }
 
@@ -303,8 +311,17 @@ public class StrongBot implements BotAction {
 
 
     private void firstTurn(Game game) {
+        //Fonction qui fait le premuier tour des bots fort
 
-        takeMissionsCard(6,game);
+        //On rajoute les missions
+        CarteDestination[] carteDestination = takeMissionsCard(6,game);
+
+
+        for(int z = 0; z<carteDestination.length;z++){
+
+            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+
+        }
 
         game.getJoueurCourant().setFirstTurnOver(true);
 
@@ -356,10 +373,10 @@ public class StrongBot implements BotAction {
         System.out.println();
         System.out.println(game.getJoueurCourant().getName());
 
+        //On regarde si c'est le premier tour
         if(!game.getJoueurCourant().getFirstTurnOver()){
 
             firstTurn(game);
-            game.getRound().endRound(game);
 
         }else {
 

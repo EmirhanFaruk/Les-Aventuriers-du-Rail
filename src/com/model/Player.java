@@ -252,6 +252,13 @@ public class Player {
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
 			ArrayList<Route> longestWay = LongestFinder.findLongestWay(c.getPremiereVille(), c.getDeuxiemeVille(), this);
+
+			System.out.println(c.getDescription());
+
+			for(Route route: longestWay){
+				System.out.println(route.toString());
+			}
+
 			if(!longestWay.isEmpty()){
 				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
 				c.setComplete();
