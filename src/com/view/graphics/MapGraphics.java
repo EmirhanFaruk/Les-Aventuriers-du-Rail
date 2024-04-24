@@ -81,7 +81,6 @@ public class MapGraphics {
     	if(aCase != null) {
     		if (aCase instanceof Ville ) {
     			VilleGraphics.paint( g , ( Ville ) aCase ) ;
-                putsNameVille( g , ( Ville) aCase );
     		} else if (aCase instanceof Rail ) {
     			if(((Rail) aCase).getOccuper()) {
     				TrainGraphics.paint(g, (Rail) aCase);
@@ -92,9 +91,23 @@ public class MapGraphics {
     	}
     }
 
+
+    public void drawVilleNames(Graphics2D g)
+    {
+        if(aCase != null)
+        {
+            if (aCase instanceof Ville)
+            {
+                putsNameVille(g, (Ville) aCase);
+            }
+        }
+    }
+
     public void putsNameVille( Graphics2D g , Ville ville){
         int x = ville.getX() ;
         int y = ville.getY() ;
+        g.drawString( ville.getNom() , x * tileWidth , (y - 2) * tileHeight );
+        /*
         for ( int i = 0  ; i < listx.length ; i++ ){
             if ( x - listx[i] > -1  && y - listy[i] > -1 ){
                 x = x  - listx[i] ;
@@ -105,6 +118,7 @@ public class MapGraphics {
                 }
             }
         }
+         */
     }
 
     /*

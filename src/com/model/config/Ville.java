@@ -55,6 +55,11 @@ public class Ville extends Case {
     }
 
     /**
+     * Met isOccupied en null.
+     */
+    public void resetOccuped() { this.isOccuped = null; }
+
+    /**
      * Obtient le nom de la ville.
      * @return Le nom de la ville.
      */
