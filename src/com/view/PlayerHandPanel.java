@@ -10,8 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,16 +129,19 @@ public class PlayerHandPanel extends JPanel {
 	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
 	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
 	            listCardWagon.add(carteWagon);
-	            BufferedImage image = CardGraphics.getImage(carteWagon);
-	
-	            if (image != null) {
-	                g.drawImage(image, x, hFixe, null);
-	                x += image.getWidth() + 10;
-	                width = x;
-	                imageWidth = image.getWidth();
-	                imageHeight = image.getHeight();
-	            }
-	            i++;
+                try {
+                    BufferedImage image = CardGraphics.getImage(carteWagon);
+
+                    if (image != null) {
+                        g.drawImage(image, x, hFixe, null);
+                        x += image.getWidth() + 10;
+                        width = x;
+                        imageWidth = image.getWidth();
+                        imageHeight = image.getHeight();
+                    }
+                    i++;
+                } catch ( Exception ignored){ }
+
 	        }
 	        // Mettre à jour les dimensions du panneau
 	        setPreferredSize(new Dimension(width, height));

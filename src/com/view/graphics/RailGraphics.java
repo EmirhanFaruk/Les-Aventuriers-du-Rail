@@ -39,8 +39,7 @@ public class RailGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Rail" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
             return null;
         }
     }
@@ -68,11 +67,20 @@ public class RailGraphics {
      * @return bufferedImage
      */
     public static BufferedImage putRotation ( BufferedImage image , int angle ) {
-        AffineTransform transform = new AffineTransform() ;
-        transform.rotate( Math.toRadians(angle) , (double) image.getWidth() / 2, (double) image.getHeight() / 2 );
-        AffineTransformOp transformOp = new AffineTransformOp(transform , AffineTransformOp.TYPE_BILINEAR) ;
-        image = transformOp.filter( image , null ) ;
-        return image ;
+        double radians = Math.toRadians(angle);
+        double sin = Math.abs(Math.sin(radians));
+        double cos = Math.abs(Math.cos(radians));
+        int newWidth = (int) Math.floor(image.getWidth() * cos + image.getHeight() * sin);
+        int newHeight = (int) Math.floor(image.getHeight() * cos + image.getWidth() * sin);
+
+        BufferedImage rotatedImage = new BufferedImage(newWidth, newHeight, image.getType());
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.translate((newWidth - image.getWidth()) / 2, (newHeight - image.getHeight()) / 2);
+        g2d.rotate(radians, (double) image.getWidth() / 2, (double) image.getHeight() / 2);
+        g2d.drawRenderedImage(image, null);
+        g2d.dispose();
+
+        return rotatedImage;
     }
 
     /**
@@ -80,7 +88,7 @@ public class RailGraphics {
      * @param s string
      * @return BufferedImage[]
      */
-    public static BufferedImage[] createListImage(String s) {
+    public static BufferedImage[] createListImage(String s)  {
         if (angle == null) {
             angle = new int[]{0, 45, 90, 135};
         }
@@ -90,9 +98,7 @@ public class RailGraphics {
             list[0] = image;
             for (int i = 1 ; i < list.length; i++) {
                 BufferedImage rotatedImage = putRotation(image, angle[i]);
-                if (rotatedImage != null) {
-                    list[i] = rotatedImage;
-                }
+                list[i] = rotatedImage;
             }
         }
         return list;
