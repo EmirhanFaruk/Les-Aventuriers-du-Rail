@@ -250,8 +250,9 @@ public class Player {
 		int cumulPoints=0;
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
-			ArrayList<Route> longestWay = LongestFinder.findLongestWay(c.getPremiereVille(), c.getDeuxiemeVille(), this);
-			if(!longestWay.isEmpty()){
+			Ville ville1 = c.getPremiereVille();
+			Ville ville2 = c.getDeuxiemeVille();
+			if (LongestFinder.wayExists(ville1, ville2, this)){
 				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
 				c.setComplete();
 			} 
@@ -283,6 +284,7 @@ public class Player {
 					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null ) {
 						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 						ville.setIsOccuped(this);
+						aCompleterUneMission();
 						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
 						return true;
 
@@ -308,6 +310,7 @@ public class Player {
 
 				retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 				ville.setIsOccuped(this);
+				aCompleterUneMission();
 				return true;
 
 			}
