@@ -1,6 +1,7 @@
 package com.view;
 
 import com.controller.Main;
+import com.model.Sound;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
@@ -31,6 +32,8 @@ public class GameFrame extends JFrame
     private Menu menu;
 
     private Main main;
+    
+    private Sound sound;
 
 
 
@@ -45,6 +48,7 @@ public class GameFrame extends JFrame
         this.setPreferredSize(new Dimension(width, height));
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.sound = new Sound();
 
 
         this.main = main;
@@ -58,7 +62,7 @@ public class GameFrame extends JFrame
         cardLayout.show(main_panel, ingame_screen_s);
 
         this.add(main_panel);
-
+        
         pack();
         setLocationRelativeTo(null);
 
@@ -74,7 +78,7 @@ public class GameFrame extends JFrame
             }
 
         });
-
+        sound.playMusic();
         setFocusable(true);
         requestFocusInWindow();
 
