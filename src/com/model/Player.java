@@ -61,6 +61,7 @@ public class Player {
 			//vérifie s'il ne possède pas déjà la carte destination
 			if(cm.getDestinationsCards()[i] != null) {
 				//donne la carte destination et mets à null pour remplacer
+				game.getGameFrame().getSound().playSound(2);
 				this.destinationsList.add(cm.getDestinationsCards()[i]);
 				cm.getDestinationsCards()[i] = null;
 				if(this.destinationsList.size() >= 1)this.canPlay = true;
@@ -232,6 +233,7 @@ public class Player {
     public boolean mettreRoute(Route r) {
     	if(r != null) {
     		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
+				game.getGameFrame().getSound().playSound(1);
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
