@@ -9,6 +9,20 @@ import java.util.ArrayList;
 public class LongestFinder
 {
     /**
+     * Verifier s'il existe une chemin entre deux villes.
+     * @param v1 Ville 1
+     * @param v2 Ville 2
+     * @param player Joueur
+     * @return le resultat
+     */
+    public static boolean wayExists(Ville v1, Ville v2, Player player)
+    {
+        ArrayList<Route> longestWay = LongestFinder.findLongestWay(v1, v2, player);
+        return !longestWay.isEmpty();
+    }
+
+
+    /**
      * Trouver le chemin le plus long entre deux villes sur les routes pris par le joueur.
      * @param v1 Ville 1
      * @param v2 Ville 2
