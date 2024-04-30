@@ -48,6 +48,8 @@ public class Rail extends Case {
 		this.saRoute = r;
 	}
 
+    /* getteurs et setteurs */
+
 	/**
      * Obtient la couleur initiale du rail.
      * @return La couleur initiale du rail.
@@ -83,19 +85,11 @@ public class Rail extends Case {
 	public void setSaRoute(Route r) {
 		this.saRoute = r;
 	}
-	
-	/**
-     * Renvoie quelle joueur a cette rail
-     * @return Player
-     */
+
     public Player getOccuperPar() {
         return occuperPar;
     }
 
-    /**
-     * Definir le joueur a quui appartient cette rail
-     * @param occuperPar Player
-     */
     public void setOccuperPar(Player occuperPar) {
         if ( ! this.occuper ) {
             this.occuperPar = occuperPar;

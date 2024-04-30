@@ -93,8 +93,8 @@ public class Game
 
 
     /**
-     * Verifie s'il y a un joueur qui a moins de 3 wagons
-     * @return true si nbrWagon est inferieur à 3
+     * Vérifie s'il y a un joueur qui a moins de 3 wagons.
+     * @return true si nbrWagon est inférieur à 3.
      */
     public boolean endGame( ){
         for (Player p : listPlayer){

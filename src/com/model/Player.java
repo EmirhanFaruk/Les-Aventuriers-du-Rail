@@ -82,7 +82,7 @@ public class Player {
 				//donne la carte destination et mets à null pour remplacer
 				this.destinationsList.add(cm.getDestinationsCards()[i]);
 				cm.getDestinationsCards()[i] = null;
-				if(this.destinationsList.size() >= 1)this.canPlay = true;
+				if( !this.destinationsList.isEmpty() )this.canPlay = true;
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
