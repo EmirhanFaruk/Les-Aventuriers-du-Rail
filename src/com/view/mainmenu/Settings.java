@@ -67,6 +67,11 @@ public class Settings extends JPanel
         }
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
+        res.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                main.getFrame().getSound().playSound(4);
+            }
+        });
         return res;
     }
 
@@ -79,6 +84,7 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                main.getFrame().getSound().playSound(4);
                 int index = res_box.getSelectedIndex();
                 int[] res = resolutions[index];
                 main.setAllSize(res[0], res[1]);
@@ -101,6 +107,12 @@ public class Settings extends JPanel
         fullscreen_panel.setLayout(new GridLayout(1, 3));
 
         fs_cb = makeFSCheckBox();
+        fs_cb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                main.getFrame().getSound().playSound(4);
+            }
+        });
 
         fullscreen_panel.add(fs_cb);
         fullscreen_panel.add(makeBlackBox());
@@ -126,6 +138,7 @@ public class Settings extends JPanel
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
+                        main.getFrame().getSound().playSound(4);
                         if(fs_cb.isSelected())
                         {
                             main.getDevice().setFullScreenWindow(main.getFrame());

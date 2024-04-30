@@ -46,6 +46,13 @@ public class Sound {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        af = new java.io.File(prepath()+"click.wav");
+        try {
+            soundURL[4]=af.toURI().toURL();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static String findSlash(String p) {

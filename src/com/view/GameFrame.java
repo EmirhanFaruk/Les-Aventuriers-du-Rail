@@ -35,13 +35,6 @@ public class GameFrame extends JFrame
     
     private Sound sound;
 
-
-
-    public Sound getSound() {
-        return sound;
-    }
-
-
     /**
      * Constructeur de GameView, assigner les attributs
      */
@@ -179,5 +172,8 @@ public class GameFrame extends JFrame
     }
     public Main getMain() {
         return main;
+    }
+    public Sound getSound() {
+        return sound;
     }
 }
