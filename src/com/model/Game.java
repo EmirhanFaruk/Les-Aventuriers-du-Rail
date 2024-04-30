@@ -155,7 +155,7 @@ public class Game
                 return true ;
             }
         }
-        return false ;
+        return cm.trainCardisEmpty() && cm.PileCarteWagon.isEmpty();
     }
     
 
