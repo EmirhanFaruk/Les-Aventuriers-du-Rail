@@ -67,26 +67,16 @@ public class RailGraphics {
      * @return bufferedImage
      */
     public static BufferedImage putRotation ( BufferedImage image , int angle ) {
-        int newNewWidth = image.getWidth();
-        int newNewHeight = image.getHeight();
+        int newWidth = image.getHeight() ;
+        int newHeight = image.getWidth() ;
         double radians = Math.toRadians(angle);
-        double sin = Math.abs(Math.sin(radians));
-        double cos = Math.abs(Math.cos(radians));
-        int newWidth = (int) Math.floor(image.getWidth() * cos + image.getHeight() * sin);
-        int newHeight = (int) Math.floor(image.getHeight() * cos + image.getWidth() * sin);
-        Image scaledImage ;
-        if (angle != 90) {
-            newNewWidth = (int) (newWidth * 1.3);
-            newNewHeight = (int) (newHeight * 1.3);
-            scaledImage = image.getScaledInstance(newNewWidth, newNewHeight, Image.SCALE_SMOOTH);
-        } else  {
-            scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        }
 
+        Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         BufferedImage rotatedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+
         Graphics2D g2d = rotatedImage.createGraphics();
         g2d.translate((newWidth - image.getWidth()) / 2, (newHeight - image.getHeight()) / 2);
-        g2d.rotate(radians, (double) newNewWidth / 2, (double) newNewHeight / 2);
+        g2d.rotate(radians, (double) newWidth / 2, (double) newHeight / 2);
         g2d.drawImage(scaledImage, 0, 0, null);
         g2d.dispose();
 
@@ -176,7 +166,8 @@ public class RailGraphics {
     public static void paint(Graphics2D g, Rail rail) {
         BufferedImage image = getImage(rail);
         try {
-            g.drawImage(image, rail.getX() * width, rail.getY() * height, image.getWidth(), image.getHeight(), null);
+            assert image != null;
+            g.drawImage(image, rail.getX() * width, rail.getY() * height , width , height , null);
             if (rail.getOccuper()) {
                 TrainGraphics.paint(g, rail);
             }
