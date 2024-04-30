@@ -33,14 +33,14 @@ public class Sound {
             e.printStackTrace();
         }
 
-        af = new java.io.File(prepath()+"carte-dest.mp3");
+        af = new java.io.File(prepath()+"carte-dest.wav");
         try {
             soundURL[2]=af.toURI().toURL();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        af = new java.io.File(prepath()+"carte-wagon.mp3");
+        af = new java.io.File(prepath()+"carte-wagon.wav");
         try {
             soundURL[3]=af.toURI().toURL();
         } catch (Exception e) {

@@ -97,6 +97,7 @@ public class Player {
 			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
+		game.getGameFrame().getSound().playSound(3);
 	}
 
 	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
@@ -107,12 +108,14 @@ public class Player {
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
@@ -127,6 +130,7 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;

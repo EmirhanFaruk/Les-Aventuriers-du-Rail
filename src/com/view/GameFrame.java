@@ -83,7 +83,7 @@ public class GameFrame extends JFrame
             }
 
         });
-        sound.playMusic();
+        //sound.playMusic();
         setFocusable(true);
         requestFocusInWindow();
 
