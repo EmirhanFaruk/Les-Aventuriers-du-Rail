@@ -12,6 +12,7 @@ public class Sound {
     URL soundURL[] = new URL[6];
     static String path = System.getProperty("user.dir");
     static String s = findSlash(path);
+    private boolean music = false;
 
 
     public Sound(){
@@ -100,6 +101,12 @@ public class Sound {
         c.start();
     }
 
+    public void setMusic(boolean music) {
+        this.music = music;
+    }
 
+    public boolean getMusic() {
+        return music;
+    }
 
 }

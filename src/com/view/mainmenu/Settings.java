@@ -16,6 +16,7 @@ public class Settings extends JPanel
 
     // Fullscreen
     private JCheckBox fs_cb;
+    private JCheckBox music_cb;
 
 
     public Settings(Menu main)
@@ -113,9 +114,15 @@ public class Settings extends JPanel
                 main.getFrame().getSound().playSound(4);
             }
         });
-
+        music_cb = makeMusicCheckBox();
+        music_cb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                main.getFrame().getSound().playSound(4);
+            }
+        });
         fullscreen_panel.add(fs_cb);
-        fullscreen_panel.add(makeBlackBox());
+        fullscreen_panel.add(music_cb);
         fullscreen_panel.add(makeFSButton());
 
         return fullscreen_panel;
@@ -131,7 +138,7 @@ public class Settings extends JPanel
 
     private JButton makeFSButton()
     {
-        JButton res = new JButton("Choisir cette option de fullscreen.");
+        JButton res = new JButton("Choisir fullscreen / musique");
         res.addActionListener(
                 new ActionListener()
                 {
@@ -152,6 +159,14 @@ public class Settings extends JPanel
                             int[] res = resolutions[res_box.getSelectedIndex()];
                             main.setAllSize(res[0], res[1]);
                         }
+                        if(music_cb.isSelected())
+                        {
+                            main.getFrame().getSound().setMusic(true);
+                        }else
+                        {
+                            main.getFrame().getSound().stop();
+                        }
+
                     }
                 });
 
@@ -159,6 +174,14 @@ public class Settings extends JPanel
         res.setForeground(Color.GRAY);
 
 
+        return res;
+    }
+
+    private JCheckBox makeMusicCheckBox()
+    {
+        JCheckBox res = new JCheckBox("Music");
+        res.setBackground(Color.BLACK);
+        res.setForeground(Color.GRAY);
         return res;
     }
 
