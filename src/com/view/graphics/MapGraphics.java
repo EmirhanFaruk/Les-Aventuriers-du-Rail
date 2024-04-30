@@ -4,6 +4,7 @@ import com.model.config.* ;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -106,7 +107,14 @@ public class MapGraphics {
     public void putsNameVille( Graphics2D g , Ville ville){
         int x = ville.getX() ;
         int y = ville.getY() ;
-        g.drawString( ville.getNom() , x * tileWidth , (y - 2) * tileHeight );
+        String nom = ville.getNom() ;
+        Rectangle2D r = g.getFontMetrics().getStringBounds(nom, g);
+
+        System.out.println(r.getWidth() + " - " + r.getHeight());
+
+
+        g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+        g.drawString( ville.getNom() , x * tileWidth , (y - 1) * tileHeight );
         /*
         for ( int i = 0  ; i < listx.length ; i++ ){
             if ( x - listx[i] > -1  && y - listy[i] > -1 ){
@@ -119,6 +127,13 @@ public class MapGraphics {
             }
         }
          */
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        // draw the rectangle here
+        g.drawRect(RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT);
     }
 
     /*

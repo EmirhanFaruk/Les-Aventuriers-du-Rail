@@ -95,6 +95,10 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
+        for (MapGraphics m : map)
+        {
+            m.drawVilleNames( g2 );
+        }
         g2.dispose();
     }
 
