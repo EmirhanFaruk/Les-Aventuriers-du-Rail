@@ -6,12 +6,11 @@ import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,18 +77,6 @@ public class PlayerHandPanel extends JPanel {
         this.setPlayer(game.getJoueurCourant());
     }
 
-    public DrawPlayerHand getDrawPlayerHand(String playerName) {
-        return drawPlayerHands.get(playerName);
-    }
-
-    public DrawPlayerHand2 getDrawPlayerHand2(String playerName) {
-        return drawPlayerHands2.get(playerName);
-    }
-
-    public Game getGame() {
-        return game;
-    }
-    
 
     public class DrawPlayerHand extends JPanel {
     	Player player ;
@@ -164,7 +151,7 @@ public class PlayerHandPanel extends JPanel {
 	        }
 	        return null ;
 	    }
-	    
+
 	    public Player getPlayer() {
 	        return this.player;
 	    }
@@ -266,5 +253,16 @@ public class PlayerHandPanel extends JPanel {
                 i++;
             }
         }
+    }
+
+
+    /* getters et setters */
+
+    public DrawPlayerHand getDrawPlayerHand(String playerName) {
+        return drawPlayerHands.get(playerName);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
