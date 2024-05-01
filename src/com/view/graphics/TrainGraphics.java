@@ -31,8 +31,8 @@ public class TrainGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Train" + s + findColor(fileName) + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -67,6 +67,11 @@ public class TrainGraphics {
         return "/";
     }
 
+    /**
+     * Une fonction qui permet de faire la rotation de l'image
+     * @param image image
+     * @return bufferedImage
+     */
     public static BufferedImage putRotation ( BufferedImage image , int angle ) {
         AffineTransform transform = new AffineTransform() ;
         transform.rotate( Math.toRadians(angle) , (double) image.getWidth() / 2, (double) image.getHeight() / 2 );
@@ -98,6 +103,11 @@ public class TrainGraphics {
         return list;
     }
 
+    /**
+     * UNe fonction qui me donne l'index de l'élément de ma liste angle
+     * @param a Integer qui est un angle
+     * @return index
+     */
     public static int indexOf ( int a ){
         for ( int i = 0 ; i < angle.length ; i++){
             if ( angle[i] == a ) return i ;
@@ -105,6 +115,11 @@ public class TrainGraphics {
         return 0 ;
     }
 
+    /**
+     * Renvoie la bonne image
+     * @param rail Rail
+     * @return bufferedImage
+     */
     public static BufferedImage getImage( Rail rail ){
         switch ( rail.getOccuperPar().getPlayerCouleur()){
             case "BLEU" : return TrainBlue[indexOf(rail.getAngle())] ;
@@ -116,16 +131,19 @@ public class TrainGraphics {
         return null ;
     }
 
+    /**
+     * Affiche l'image du train
+     * @param g Graphics
+     * @param rail Rail
+     */
     public static void paint (Graphics2D g , Rail rail ){
         BufferedImage image = getImage(rail) ;
         g.drawImage( image , rail.getX() * width , rail.getY() * height , width , height , null ) ;
     }
 
-    /*
-    getters et setters
-     */
-    public static void setWH(int w, int h)
-    {
+    /*    getters et setters     */
+
+    public static void setWH(int w, int h) {
         width = w;
         height = h;
     }

@@ -14,7 +14,6 @@ import javax.swing.*;
 import com.model.Game;
 import com.model.Player;
 import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 
@@ -171,6 +170,8 @@ public class PiochePanel extends JPanel {
         }
     }
 
+
+    /* getters et setters */
     public void setPlayer(Player player) {
         this.player = player;
     }

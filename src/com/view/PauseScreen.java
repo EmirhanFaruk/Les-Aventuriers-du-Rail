@@ -13,6 +13,12 @@ public class PauseScreen extends JPanel {
     private JPanel button_panel;
     private JPanel scoreBoardPanel ;
 
+    /**
+     * Constructeur de PauseScreen
+     * @param gameScreen l'écran de jeu
+     * @param width width
+     * @param height height
+     */
     public PauseScreen( GameScreen gameScreen , int width , int height ){
         this.gameScreen = gameScreen ;
         setSize(width , height );
