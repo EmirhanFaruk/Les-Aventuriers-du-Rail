@@ -4,11 +4,8 @@ import com.model.config.Rail;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class RailGraphics {
     private static final String path = System.getProperty("user.dir");
@@ -69,8 +66,8 @@ public class RailGraphics {
         int newHeight = image.getWidth() ;
         double radians = Math.toRadians(angle);
 
-        Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        BufferedImage rotatedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        Image scaledImage = image.getScaledInstance( newWidth , newHeight, Image.SCALE_SMOOTH);
+        BufferedImage rotatedImage = new BufferedImage( newWidth , newHeight, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = rotatedImage.createGraphics();
         g2d.translate((newWidth - image.getWidth()) / 2, (newHeight - image.getHeight()) / 2);
@@ -94,7 +91,7 @@ public class RailGraphics {
         BufferedImage image = loadImage(s);
         if (image != null) {
             list[0] = image;
-            for (int i = 1 ; i < list.length; i++) {
+            for (int i = 0 ; i < list.length; i++) {
                 BufferedImage rotatedImage = putRotation(image, angle[i]);
                 list[i] = rotatedImage;
             }
@@ -169,7 +166,9 @@ public class RailGraphics {
             if (rail.getOccuper()) {
                 TrainGraphics.paint(g, rail);
             }
-        } catch ( Exception ignored ) {System.err.println("Hav fun debugging lmao");}
+        } catch ( Exception ignored ) {
+            // System.err.println("Hav fun debugging lmao");
+        }
     }
 
     /* getters et setters */
