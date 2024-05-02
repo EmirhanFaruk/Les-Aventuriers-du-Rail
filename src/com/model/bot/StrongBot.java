@@ -2,14 +2,12 @@ package com.model.bot;
 
 import com.model.Game;
 import com.model.Player;
-import com.model.Round;
 import com.model.ai.GarePosFinder;
 import com.model.ai.Node;
 import com.model.config.Rail;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
@@ -135,6 +133,7 @@ public class StrongBot implements BotAction {
 
     @Override
     public boolean takeRail(Game game) {
+
         //Fonction qui permet de prendre des routes, et renvoie false si le bot n'a pas assez de carte
 
         //Variable pour avoir les cartes destination du bot
@@ -193,8 +192,6 @@ public class StrongBot implements BotAction {
                 if(toTransformInGare != null &&  !(cd.getComplete())){
 
                     joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
-
-                    System.out.println("takeGare true 1");
 
                     return true;
 
@@ -292,7 +289,6 @@ public class StrongBot implements BotAction {
 
             //Si il y a une mission ou on peut remplir alors on la fait
             if(!chemin.isEmpty()) {
-
                 System.out.println("canComplete true");
 
                 return true;
@@ -328,23 +324,22 @@ public class StrongBot implements BotAction {
     }
 
     private void optimalCompleteMission(Game game) {
-        //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions,sinon poser une gare ou piocher
+        //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions, sinon poser une gare ou piocher
 
-        //Si on peut pas pas completer de route avec les rails et si on a toujours des gare
-        if (!(canCompletePath(game)) && takeGare(game, 0)) {
+        //Si on peut completer une
+        if ( canCompletePath(game) ) {
 
-            System.out.println("Gare prise");
-
+            System.out.println("Route prise");
 
             game.getRound().endRound(game);
 
-            //Si oui
+            //Si non cherche l'endroit le plus optimal pour poser une gare
         } else {
-            System.out.println("Gare non prise");
+            System.out.println("Route non prise");
 
-            //6- On pose les wagons
-            if (takeRail(game)) {
-
+            //6- On verifie qu'on peut poser une gare (de facon optimal)
+            if ( takeGare(game,0)) {
+                System.out.println("Poser gare");
                 game.getRound().endRound(game);
 
 
@@ -396,7 +391,6 @@ public class StrongBot implements BotAction {
 
                 //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
             } else {
-                System.out.println("On regarde si on peut compléter les missions");
 
                 //Si non:
                optimalCompleteMission(game);
