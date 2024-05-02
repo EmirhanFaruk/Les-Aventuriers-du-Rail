@@ -15,6 +15,8 @@ public class MapGraphics {
     private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+    private static RectangleGraphics rectangle;
+
     private final int[] listx = { -1 , 0 , 1 , 0 } ;
     private final int[] listy = { 0 , 1 , 0 , -1 } ;
 
@@ -104,27 +106,33 @@ public class MapGraphics {
     }
 
     public void putsNameVille( Graphics2D g , Ville ville){
+
+        int x = ville.getX() * tileWidth ;
+        int y = ville.getY() * tileHeight ;
+
+        Rectangle2D r = getNameSize(g, ville);
+
+        // Calcul des coordonnées de texte
+        x = ( x + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
+        y = y - ( (int) (r.getHeight() / 2) );
+
+        g.setColor(Color.BLACK);
+        // Affichage de texte
+        g.drawString(ville.getNom(), x, y);
+
+    }
+
+
+    public Rectangle2D getNameSize(Graphics2D g, Ville ville)
+    {
         int fontSize = tileHeight/2; // Calculating the size of the font
         Font f = new Font(Font.SERIF, Font.BOLD, fontSize);
         g.setFont(f);
 
-        int x = ville.getX() * tileWidth ;
-        int y = ville.getY() * tileHeight ;
         String nom = ville.getNom() ;
-        Rectangle2D r = g.getFontMetrics().getStringBounds(nom, g); // Calcul de size de texte au total
+        Rectangle2D rectangle = g.getFontMetrics().getStringBounds(nom, g); // Calcul de size de texte au total
 
-        // Calcul des coordonnées de texte
-        x = ( x + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
-        y = y - ( (int) (r.getHeight() / 2) ); ;
-
-        // Mettre le teste une blanche font-arriere(ça marche pas)
-        g.setBackground(Color.WHITE);
-        g.setColor(Color.BLACK);
-        g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
-
-        // Affichage de texte
-        g.drawString( ville.getNom() , x , y );
-
+        return rectangle;
     }
 
     /* getteurs et setteurs */
@@ -136,4 +144,8 @@ public class MapGraphics {
     public int getWidth() {
         return tileWidth;
     }
+
+    public boolean isVille() { return aCase instanceof Ville; }
+
+    public Case getaCase() { return aCase; }
 }

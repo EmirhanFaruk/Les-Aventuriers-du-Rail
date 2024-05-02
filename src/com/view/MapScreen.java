@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
@@ -93,11 +94,25 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
+
+        // Draw ville names
         for (MapGraphics m : map)
         {
-            m.drawVilleNames( g2 );
+            drawVilleNames(g2, m);
         }
         g2.dispose();
+    }
+
+    private void drawVilleNames(Graphics2D g2, MapGraphics m)
+    {
+        if (m.isVille())
+        {
+            RectangleGraphics rectangleGraphics;
+            Rectangle2D rectangle = m.getNameSize(g2, (Ville) m.getaCase());
+            rectangleGraphics = new RectangleGraphics(rectangle);
+            rectangleGraphics.paint(g2);
+            m.drawVilleNames(g2);
+        }
     }
 
     /* getters et setters */
