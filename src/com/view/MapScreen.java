@@ -4,6 +4,7 @@ import com.model.Game;
 import com.model.Player;
 import com.model.config.Case;
 import com.model.config.Plateau;
+import com.model.config.Ville;
 import com.model.controller.GameController;
 import com.view.graphics.* ;
 
@@ -98,6 +99,11 @@ public class MapScreen extends JPanel {
             m.drawVilleNames( g2 );
         }
         g2.dispose();
+    }
+
+    private void drawVilleNames(Graphics2D g2, Ville ville)
+    {
+
     }
 
     /* getters et setters */

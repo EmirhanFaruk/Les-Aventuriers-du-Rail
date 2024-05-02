@@ -104,16 +104,23 @@ public class MapGraphics {
     }
 
     public void putsNameVille( Graphics2D g , Ville ville){
-        int x = ville.getX() ;
-        int y = ville.getY() ;
+        int fontSize = tileHeight/2; //( tileWidth * 2 ) / (ville.getNom().length()/2); // Trying to find the best size of font(?)
+        Font f = new Font(Font.SERIF, Font.BOLD, fontSize);
+        g.setFont(f);
+
+
         String nom = ville.getNom() ;
         Rectangle2D r = g.getFontMetrics().getStringBounds(nom, g);
 
         System.out.println(r.getWidth() + " - " + r.getHeight());
 
+        int x = ( ville.getX() + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
+        int y = ville.getY() - ( (int) (r.getHeight() / 2) ); ;
+
 
         g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
-        g.drawString( ville.getNom() , x * tileWidth , (y - 1) * tileHeight );
+        g.drawString( ville.getNom() , x , y );
+
         /*
         for ( int i = 0  ; i < listx.length ; i++ ){
             if ( x - listx[i] > -1  && y - listy[i] > -1 ){
@@ -134,6 +141,15 @@ public class MapGraphics {
         super.paintComponent(g);
         // draw the rectangle here
         g.drawRect(RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT);
+    }
+
+
+    public void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        int fontSize = 20;
+        Font f = new Font("Comic Sans MS", Font.BOLD, fontSize);
+        g2.setFont(f);
+        g2.drawString("Hello World", 300, 300);
     }
      */
 
