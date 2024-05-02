@@ -223,7 +223,7 @@ public class GarePosFinder
      * @param player the player to see if the route/ville is already owned
      * @return the routes needed to pose
      */
-    private static ArrayList<Route> getNeededRoutes(ArrayList<Ville> way, Player player)
+    public static ArrayList<Route> getNeededRoutes(ArrayList<Ville> way, Player player)
     {
         ArrayList<Route> res = new ArrayList<>();
 
