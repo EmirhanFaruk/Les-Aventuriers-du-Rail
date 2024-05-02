@@ -20,31 +20,18 @@ public class CarteManager {
     private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[3];
     //Le tableau des cartes Destination du jeu
     private CarteDestination[] destinationsCards = new CarteDestination[3];
-    //La pile de cartes Wagon
-    public ArrayList<CarteWagon> PileCarteWagon = new ArrayList<>(110);
     //La pile de cartes Destination
     public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
 
     public CarteManager(){
         //Pour initialiser les wagons
-        initPileCarteWagon();
+        for(int i = 0; i< trainCards.length;i++) {
+            trainCards[i] = drawCard();
+        }
 
-    }
-
-    private void initPileCarteWagon() {
-        for(int i=0;i<8;i++){ //8 couleurs de carteWagon
-            for(int j=0;j<12;j++) //12 wagons de chaque couleur
-            PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
-        }
-        for(int i =0;i<14;i++){
-            PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
-        }
-        Collections.shuffle(PileCarteWagon); // Mélange de cartes.
-        for(int i=0; i<trainCards.length;i++){
-            trainCards[i] = PileCarteWagon.remove(0).getInitialCouleur();
-        }
         verifAllDifferent();
     }
+
 
     public void initPileCarteDestination(Game g) {
         ArrayList<Route> gameRoutes = g.getRoutes();
@@ -158,9 +145,40 @@ public class CarteManager {
     }
 
     public CarteWagon.Couleur drawCard(){
-        if(!PileCarteWagon.isEmpty())
-        return PileCarteWagon.remove(0).getInitialCouleur();
-        return null;
+            //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
+
+            Random carte = new Random(110);
+            int pioche = carte.nextInt();
+
+            //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
+            if(pioche >= 0 && pioche <= 11){
+                return BLEU;
+            }
+            if(pioche >= 12 && pioche <= 23){
+                return VIOLET;
+            }
+            if(pioche >= 24 && pioche <= 35){
+                return MARRON;
+            }
+            if(pioche >= 36 && pioche <= 47){
+                return NOIRE;
+            }
+            if(pioche >= 48 && pioche <= 59){
+                return VERT;
+            }
+            if(pioche >= 60 && pioche <= 71){
+                return JAUNE;
+            }
+            if(pioche >= 72 && pioche <= 83){
+                return BLANC;
+            }
+            if(pioche >= 84 && pioche <= 95){
+                return ROUGE;
+            }
+
+            return LOC;
+
+
     }
 
     public CarteDestination getDestination(){
@@ -211,13 +229,6 @@ public class CarteManager {
         int longueur = cheminLongueur(chemin);
 
         return longueur;
-    }
-
-    public boolean trainCardisEmpty(){
-        for(CarteWagon.Couleur c : trainCards){
-            if(c != null) return false;
-        }
-        return true;
     }
 
 

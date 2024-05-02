@@ -38,7 +38,7 @@ public class Player {
 		this.niveau = niveau;
 		this.score = 0 ;
 		this.missionComplete = 0 ;
-		this.nbrWagon = 15 ;
+		this.nbrWagon = 5 ;
 		this.nbrGare = 3 ;
 		this.nbrGareInstance = this.nbrGare ;
 		this.nbrWagonInstance = this.nbrWagon ;
@@ -79,14 +79,7 @@ public class Player {
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = game.getCarteManager();
-		if(cm.PileCarteWagon.isEmpty()){
-			if(cm.trainCardisEmpty()){
-			JOptionPane.showMessageDialog(new JFrame(),"Il n'y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
-		}else{
-			JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
-		}
-			return;
-		}
+
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
 			insertCarte(cm.drawCard());
