@@ -1,9 +1,7 @@
 package com.model.config.carte;
 
 import com.model.Game;
-import com.model.Player;
 import com.model.ai.Node;
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteWagon.Couleur;
@@ -33,8 +31,9 @@ public class CarteManager {
 
     private void initPileCarteWagon() {
         for(int i=0;i<8;i++){ //8 couleurs de carteWagon
-            for(int j=0;j<12;j++) //12 wagons de chaque couleur
-            PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+            for(int j=0;j<12;j++) { //12 wagons de chaque couleur
+                PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+            }
         }
         for(int i =0;i<14;i++){
             PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
@@ -87,15 +86,6 @@ public class CarteManager {
     }
 
 
-    public CarteDestination[] getDestinationsCards() {
-        return destinationsCards;
-    }
-
-    public CarteWagon.Couleur[] getTrainCards() {
-        return trainCards;
-    }
-
-
     public boolean possibleTakeWagon(int action, int position){
         if(trainCards[position] == LOC){
             return action == 2;
@@ -130,7 +120,7 @@ public class CarteManager {
     
     //Vérifie si le joueur a déjà pris une carte destination
     public boolean alreadyPickedACard() {
-    	for(int i = 0; i < this.destinationsCards.length; i++)if(this.destinationsCards[i] == null)return true;
+        for (CarteDestination destinationsCard : this.destinationsCards) if (destinationsCard == null) return true;
     	return false;
     }
 
@@ -158,8 +148,9 @@ public class CarteManager {
     }
 
     public CarteWagon.Couleur drawCard(){
-        if(!PileCarteWagon.isEmpty())
-        return PileCarteWagon.remove(0).getInitialCouleur();
+        if(!PileCarteWagon.isEmpty()) {
+            return PileCarteWagon.remove(0).getInitialCouleur();
+        }
         return null;
     }
 
@@ -218,6 +209,15 @@ public class CarteManager {
             if(c != null) return false;
         }
         return true;
+    }
+
+    /* getteurs et setteurs */
+    public CarteDestination[] getDestinationsCards() {
+        return destinationsCards;
+    }
+
+    public CarteWagon.Couleur[] getTrainCards() {
+        return trainCards;
     }
 
 
