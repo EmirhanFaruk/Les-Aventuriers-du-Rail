@@ -61,7 +61,7 @@ public class Player {
 	 * Une fonction qui initialise le nombre de wagons en fonction de la taille de la map
 	 * @return le nombre de wagons
 	 */
-	private int initNbragon (){
+	public int initNbragon (){
 		String map  = game.getGameFrame().getMain().getMap() ;
 		if ( map.equals("LongMap") ) {
 			return 30 ;
@@ -348,9 +348,10 @@ public class Player {
 	 * @return le nombre de cartes à échanger
 	 */
 	public int nombreDeCartePourPoserUneGare(){
-		if ( nbrGare == 3 )  return 1 ;
-		if ( nbrGare == 2 ) return 2 ;
-		if ( nbrGare == 1 ) return 3 ;
+		if ( nbrGare == 4 ) return 1 ;
+		if ( nbrGare == 3 )  return 2 ;
+		if ( nbrGare == 2 ) return 3 ;
+		if ( nbrGare == 1 ) return 4 ;
 		return 0 ;
 	}
 
