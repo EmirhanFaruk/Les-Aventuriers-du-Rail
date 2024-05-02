@@ -135,7 +135,6 @@ public class PlayerInformationBarPanel extends JPanel {
         repaint();
     }
 
-
     /**
      * Une fonction qui change le joueur courant et met à jour
      * @param playerCourant le nouveau joueur courant

@@ -26,9 +26,6 @@ public class RailGraphics {
     private static int[] angle = { 90 , 45 , 0 , 135 } ;
     private static int width , height ;
 
-    public RailGraphics( ) {
-    }
-
 
     /**
      * Une fonction qui renvoie une image
@@ -39,8 +36,8 @@ public class RailGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Rail" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -165,11 +162,9 @@ public class RailGraphics {
         }
     }
 
-    /*
-    getters et setters
-     */
-    public static void setWH(int w, int h)
-    {
+    /* getters et setters */
+
+    public static void setWH(int w, int h) {
         width = w;
         height = h;
     }

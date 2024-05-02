@@ -15,7 +15,6 @@ public class MapGraphics {
     private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-
     private final int[] listx = { -1 , 0 , 1 , 0 } ;
     private final int[] listy = { 0 , 1 , 0 , -1 } ;
 
@@ -42,8 +41,8 @@ public class MapGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Map" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -67,8 +66,8 @@ public class MapGraphics {
 
     /**
      * Unr focntion qui permet de savoir sur quoi on joue
-     * @param mapName
-     * @return
+     * @param mapName nom de la map
+     * @return l'image de fond
      */
     public static BufferedImage backgroundImage ( String mapName ){
         return loadImage(mapName ) ;
@@ -129,19 +128,16 @@ public class MapGraphics {
          */
     }
 
+    /*
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         // draw the rectangle here
         g.drawRect(RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT);
     }
+     */
 
-    /*
-   getteurs et setteurs
-    */
-    public Case getaCase() {
-        return aCase;
-    }
+    /* getteurs et setteurs */
 
     public int getHeight() {
         return tileHeight;

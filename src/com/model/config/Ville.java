@@ -37,11 +37,13 @@ public class Ville extends Case {
         routes = new ArrayList<>();
     }
 
+
+    /* getteurs et setteurs */
+
     /**
      * Indicateur de présence d'une gare pour cette ville.
      * @return affiche un joueur si elle est occupé par un joueur, sinon false;
      */
-
     public Player getIsOccuped() {
         return isOccuped;
     }
@@ -65,14 +67,6 @@ public class Ville extends Case {
      */
     public String getNom() {
         return nom;
-    }
-
-    /**
-     * Définit le nom de la ville.
-     * @param nom Le nom à attribuer à la ville.
-     */
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     /**
