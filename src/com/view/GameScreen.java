@@ -2,9 +2,6 @@ package com.view;
 
 import com.model.Player;
 import com.model.Game;
-import com.model.config.Plateau;
-import com.view.graphics.*;
-import com.view.mainmenu.Play;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +26,9 @@ public class GameScreen extends JPanel {
         setLayout(new BorderLayout());
         add( gameManagerScreen ) ;
     }
+
+
+    /* getters et setters */
 
     public GameManagerScreen getGameManagerScreen() {
         return gameManagerScreen;
@@ -57,8 +57,5 @@ public class GameScreen extends JPanel {
     public GameFrame getFrame() {
         return frame;
     }
-    
-    public GameManagerScreen getGMScreen() {
-    	return this.gameManagerScreen;
-    }
+
 }

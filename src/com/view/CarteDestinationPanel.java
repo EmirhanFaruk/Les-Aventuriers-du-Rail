@@ -201,16 +201,17 @@ public class CarteDestinationPanel extends JPanel {
 	
 	    return result;
 	}
-	
+
+    /* getters et setters */
 	//Remet tout à false pour mettre la bonne couleur (ça évite que les cartes soient grises)
 	public void setAllDefault() {
 		for(int i = 0; i < this.isCardSelected.length; i++)this.isCardSelected[i] = false;
 	}
-	
-	
+
 	public void setPlayer(Player player) {
 	    this.player = player;
 	}
+
 }
 
     

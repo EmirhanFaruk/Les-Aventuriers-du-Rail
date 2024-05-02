@@ -19,6 +19,17 @@ public class GameManagerScreen extends JPanel {
     private int width , height ;
     private GameScreen gameScreen ;
 
+
+    /**
+     * Constructeur de GameManagerScreen
+     * @param frame gameframe
+     * @param gameScreen l'ecran
+     * @param map le nom de la map
+     * @param width width
+     * @param height height
+     * @param player le joueur
+     * @param game le jeu
+     */
     public GameManagerScreen ( GameFrame frame , GameScreen gameScreen ,  String map , int width , int height , Player player , Game game ){
         this.frame = frame ;
         this.gameScreen = gameScreen ;
@@ -78,9 +89,6 @@ public class GameManagerScreen extends JPanel {
     }
 
     /* getteurs et setteurs */
-    public GameFrame getFrame() {
-        return frame;
-    }
 
     public GameMapPanel getGameMapPanel() {
         return gameMapPanel;
@@ -96,17 +104,8 @@ public class GameManagerScreen extends JPanel {
         return null;
     }
 
-    public EndGameScreen getEndGameScreen() {
-        return endGameScreen;
-    }
     public CardLayout getCardLayout() {
         return cardLayout;
     }
 
-
-    /*
-    public void setPlayerCourant(Player playerCourant) {
-		this.playerHandPanel.setPlayer(playerCourant);
-	}
-	*/
 }

@@ -1,4 +1,5 @@
 package com.model.controller;
+
 import com.model.Game;
 import com.model.Round;
 import com.model.config.carte.*;
@@ -13,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GameController {
-    private String detailsCarte; // Variable pour sauvegarder les détails de la carte
     private CarteWagon carteWagon ;
     private int Mx , My  ;
 
@@ -25,20 +25,6 @@ public class GameController {
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
         try {
             Object clickedObject = game.getPlateau().getPlateau()[x][y];
-            Rail r = null;
-            if (clickedObject instanceof Rail) r = (Rail) clickedObject;
-
-            //DEBUG : POSITION
-        /*
-        System.out.println("x = " + x + " y = " + y);
-        if(r!=null) {
-        	System.out.println(clickedObject + " " + r.getInitialContent() + " " + r.getSaRoute());
-        }else {
-        	System.out.println(clickedObject);
-        }
-        }*/
-
-
             if (clickedObject != null) {
                 // Traitement en fonction du type de l'objet cliqué
                 if (clickedObject instanceof Rail) {
@@ -48,35 +34,22 @@ public class GameController {
                     My = y;
                 }
             }
-        } catch ( Exception exception ){
+        } catch ( Exception ignored ){
             // DEBUG : System.out.println("Nope hihi");
         }
     }
 
-
-	public String obtenirDetailsCarte(MouseEvent e) {
-        Object source = e.getSource(); // Obtenir la source de l'événement
-        if (source instanceof CarteDestination) { // Si la source est une carte destination
-            CarteDestination carteDestination = (CarteDestination) source;
-            detailsCarte = "Destination: " + carteDestination.getPremiereVille() + " - " + carteDestination.getDeuxiemeVille();
-        } else if (source instanceof CarteWagon) { // Si la source est une carte wagon
-            CarteWagon carteWagon = (CarteWagon) source;
-            detailsCarte = "Couleur du wagon: " + carteWagon.getInitialCouleur();
-        }
-        return detailsCarte;
-    }
-
-
 	public boolean isEntreeAppuye(KeyEvent e) {
 		return e.getKeyCode() == KeyEvent.VK_ENTER;
 	}
-	
-	
-    public boolean isEspaceAppuye(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
-    }
-     
-    // Vérifie si le rail a déjà un propriétaire
+
+	/**
+	 * Ue fonction qui tente s'il est possible d'occuper route qu'on a choisi
+	 * @param r la rail
+	 * @param player le joueur
+	 * @param round le tour
+	 * @param game le jeu
+	 */
     public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
         //Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
@@ -141,6 +114,13 @@ public class GameController {
     	}
     }
 
+	/**
+	 * Une fonction qui permet de choisir quelle carte on veut utiliser pour transformer une ville en gare
+	 * @param e le lectrue de souris
+	 * @param player le joueur
+	 * @param playerHandPanel la main du joueur
+	 * @param game le jeu
+	 */
     public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
     	//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
@@ -176,6 +156,13 @@ public class GameController {
     	}
     }
 
+	/**
+	 * Une fonction qui tente de poser une gare
+	 * @param ville la ville que l'in veut transformer en gare
+	 * @param player le joueur
+	 * @param game le jeu
+	 * @return renvoie true si la gare est posé
+	 */
     public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
         if(game.getRound().getAction() < 2){
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),

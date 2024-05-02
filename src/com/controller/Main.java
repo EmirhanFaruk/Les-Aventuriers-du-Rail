@@ -2,9 +2,7 @@ package com.controller;
 
 import com.model.Game;
 import com.view.GameFrame;
-import com.view.GameManagerScreen;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class Main implements Runnable
@@ -12,7 +10,6 @@ public class Main implements Runnable
     public GameFrame gameFrame;
     public Game game ;
     private Thread game_thread;
-
     private String map ;
     private String mode ;
     private String[] player_names  ;
@@ -33,10 +30,14 @@ public class Main implements Runnable
         game_thread.start();
     }
 
+    /**
+     * Une fonction qui permet de relacer le jeu
+     */
     public void restart (){
         gameFrame.startGame( this.map , this.mode , this.player_names , this.player_types , this.player_colors );
-        System.err.println("Une nouvelle game");
+        // DEBUG : System.err.println("Une nouvelle game");
     }
+
     public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_colors)
     {
         running = true;
@@ -47,6 +48,19 @@ public class Main implements Runnable
         this.player_colors = player_colors ;
         game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
+    }
+
+    /**
+     * Une fonction qui affiche le bon panel en fonction de running
+     */
+    public void pause() {
+        if (running) {
+            running = false;
+            gameFrame.getGameScreen().getGameManagerScreen().showPause();
+        } else {
+            running = true;
+            gameFrame.getGameScreen().getGameManagerScreen().removePause();
+        }
     }
 
     /**
@@ -75,30 +89,16 @@ public class Main implements Runnable
         }
     }
 
-    /**
-     * Une fonction qui affiche le bon panel en fonction de running
-     */
-    public void pause() {
-        if (running) {
-            running = false;
-            gameFrame.getGameScreen().getGameManagerScreen().showPause();
-        } else {
-            running = true;
-            gameFrame.getGameScreen().getGameManagerScreen().removePause();
-        }
-    }
-
-    public boolean getRunning (){ return running ; }
+    /* getters et setters */
     public void setRunning(boolean b)
     {
         running = b;
     }
-
     public Game getGame() {
         return game;
     }
-
-    public Thread getGame_thread() {
-        return game_thread;
+    public String getMap() {
+        return map;
     }
+
 }
