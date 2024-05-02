@@ -122,6 +122,7 @@ public class GameFrame extends JFrame
         cardLayout.show(main_panel, main_menu_screen_s);
         menu.showMenu();
         main.setRunning(false);
+        sound.stop();
     }
 
     public void quitGame()

@@ -27,13 +27,15 @@ public class Settings extends JPanel
 
     private void makeSettings()
     {
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new GridLayout(3, 1));
         // Maybe add only rows and put everything seperate each row?
 
         // Resolution setting
         add(makeResolutionSetting());
         // Fullscreen setting
         add(makeFullscreenSetting());
+        // Sound management
+        add(makeSoundSetting());
 
     }
 
@@ -68,13 +70,15 @@ public class Settings extends JPanel
         }
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
-        res.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        res.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 main.getFrame().getSound().playSound(4);
             }
         });
         return res;
     }
+    
 
     private JButton makeResChooseButton()
     {
@@ -114,6 +118,18 @@ public class Settings extends JPanel
                 main.getFrame().getSound().playSound(4);
             }
         });
+        fullscreen_panel.add(fs_cb);
+        fullscreen_panel.add(makeBlackBox());
+        fullscreen_panel.add(makeFSButton());
+
+        return fullscreen_panel;
+    }
+
+    private JPanel makeSoundSetting()
+    {
+        JPanel sound_panel = new JPanel();
+        sound_panel.setLayout(new GridLayout(1, 3));
+
         music_cb = makeMusicCheckBox();
         music_cb.addActionListener(new ActionListener() {
             @Override
@@ -121,11 +137,11 @@ public class Settings extends JPanel
                 main.getFrame().getSound().playSound(4);
             }
         });
-        fullscreen_panel.add(fs_cb);
-        fullscreen_panel.add(music_cb);
-        fullscreen_panel.add(makeFSButton());
+        sound_panel.add(music_cb);
+        sound_panel.add(makeBlackBox());
+        sound_panel.add(makeSButton());
 
-        return fullscreen_panel;
+        return sound_panel;
     }
 
     private JCheckBox makeFSCheckBox()
@@ -138,7 +154,7 @@ public class Settings extends JPanel
 
     private JButton makeFSButton()
     {
-        JButton res = new JButton("Choisir fullscreen / musique");
+        JButton res = new JButton("Choisir cet option de fullscreen");
         res.addActionListener(
                 new ActionListener()
                 {
@@ -173,6 +189,31 @@ public class Settings extends JPanel
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
 
+
+        return res;
+    }
+    private JButton makeSButton()
+    {
+        JButton res = new JButton("Choisir ses options de son");
+        res.addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        if(music_cb.isSelected())
+                        {
+                            main.getFrame().getSound().setMusic(true);
+                        }else
+                        {
+                            main.getFrame().getSound().stop();
+                        }
+
+                    }
+                });
+
+        res.setBackground(Color.BLACK);
+        res.setForeground(Color.GRAY);
 
         return res;
     }
