@@ -148,8 +148,6 @@ public class StrongBot implements BotAction {
 
             for(int z = 0; z < routesPossible.size();z++){
 
-                System.out.println("rChemiiiin : " + routesPossible.get(z).toString());
-
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
@@ -160,7 +158,6 @@ public class StrongBot implements BotAction {
                 }
             }
 
-            System.out.println("Taille routePossibles" + routesPossible.size());
 
 
         }
@@ -261,10 +258,8 @@ public class StrongBot implements BotAction {
     private boolean allMissionIsCompleted(Game game){
         //Fonction qui regarde si toute les missions sont complétés
 
-        System.out.println("Affichage allMissionIsCompleted");
         for (int i = 0; i < game.getJoueurCourant().getDestinationsList().size(); i++) {
 
-            System.out.println(game.getJoueurCourant().getDestinationsList().get(i).getDescription());
 
             if (!game.getJoueurCourant().getDestinationsList().get(i).getComplete()) {
                 return false;
@@ -302,23 +297,19 @@ public class StrongBot implements BotAction {
         //Si on peut completer une route
         if (takeRail(game) ) {
 
-            System.out.println("Route prise");
 
             game.getRound().endRound(game);
 
             //Si non cherche l'endroit le plus optimal pour poser une gare
         } else {
-            System.out.println("Route non prise");
 
             //6- On verifie qu'on peut poser une gare (de facon optimal)
             if ( takeGare(game,0)) {
-                System.out.println("Poser gare");
                 game.getRound().endRound(game);
 
 
                 //Sinon :  7- On pioche :
             } else {
-                System.out.println("On pioche");
 
                 drawCardWagon(game);
 
@@ -335,8 +326,7 @@ public class StrongBot implements BotAction {
     public void play(Game game) {
         //Fonction principale du bot fort
 
-        System.out.println();
-        System.out.println(game.getJoueurCourant().getName());
+
 
         //On regarde si c'est le premier tour
         if(!game.getJoueurCourant().getFirstTurnOver()){
@@ -348,18 +338,15 @@ public class StrongBot implements BotAction {
             //1- On regarde si il a complété toute ses missions ou pas :
             if (allMissionIsCompleted(game)) {
 
-                System.out.println("Toute les missions sont complétés");
 
                 //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
                 CarteDestination[] addCard = takeMissionsCard(6, game);
                 for (int j = 0; j < addCard.length; j++) {
 
-                    System.out.println(addCard[j].getDescription());
 
                     game.getJoueurCourant().getDestinationsList().add(addCard[j]);
                 }
 
-                System.out.println();
                 game.getRound().endRound(game);
 
                 //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
