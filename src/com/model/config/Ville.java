@@ -57,9 +57,16 @@ public class Ville extends Case {
     }
 
     /**
-     * Met isOccupied en null.
+     * Met isOccupied en null. Sera utilisé pour le mode nuke.
      */
-    public void resetOccuped() { this.isOccuped = null; }
+    public void resetOccuped()
+    {
+        this.isOccuped = null;
+        for (Route route : routes)
+        {
+            route.resetProprietaire();
+        }
+    }
 
     /**
      * Obtient le nom de la ville.
