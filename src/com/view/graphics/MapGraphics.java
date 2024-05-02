@@ -104,54 +104,28 @@ public class MapGraphics {
     }
 
     public void putsNameVille( Graphics2D g , Ville ville){
-        int fontSize = tileHeight/2; //( tileWidth * 2 ) / (ville.getNom().length()/2); // Trying to find the best size of font(?)
+        int fontSize = tileHeight/2; // Calculating the size of the font
         Font f = new Font(Font.SERIF, Font.BOLD, fontSize);
         g.setFont(f);
 
-
+        int x = ville.getX() * tileWidth ;
+        int y = ville.getY() * tileHeight ;
         String nom = ville.getNom() ;
-        Rectangle2D r = g.getFontMetrics().getStringBounds(nom, g);
+        Rectangle2D r = g.getFontMetrics().getStringBounds(nom, g); // Calcul de size de texte au total
 
-        System.out.println(r.getWidth() + " - " + r.getHeight());
+        // Calcul des coordonnées de texte
+        x = ( x + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
+        y = y - ( (int) (r.getHeight() / 2) ); ;
 
-        int x = ( ville.getX() + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
-        int y = ville.getY() - ( (int) (r.getHeight() / 2) ); ;
-
-
+        // Mettre le teste une blanche font-arriere(ça marche pas)
+        g.setBackground(Color.WHITE);
+        g.setColor(Color.BLACK);
         g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+
+        // Affichage de texte
         g.drawString( ville.getNom() , x , y );
 
-        /*
-        for ( int i = 0  ; i < listx.length ; i++ ){
-            if ( x - listx[i] > -1  && y - listy[i] > -1 ){
-                x = x  - listx[i] ;
-                y = y  - listy[i] ;
-                if ( ! (this.plateau.getPlateau() [ x ][ y ] instanceof Rail ) ){
-                    g.drawString( ville.getNom() , x * tileWidth , y * tileHeight );
-                    break;
-                }
-            }
-        }
-         */
     }
-
-    /*
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // draw the rectangle here
-        g.drawRect(RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT);
-    }
-
-
-    public void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        int fontSize = 20;
-        Font f = new Font("Comic Sans MS", Font.BOLD, fontSize);
-        g2.setFont(f);
-        g2.drawString("Hello World", 300, 300);
-    }
-     */
 
     /* getteurs et setteurs */
 

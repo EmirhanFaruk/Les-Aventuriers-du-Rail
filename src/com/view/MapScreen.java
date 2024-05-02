@@ -75,7 +75,6 @@ public class MapScreen extends JPanel {
     }
 
     public void repaintAll(PlayerHandPanel php) {
-        //php.getDrawPlayerHand().repaint();
     	php.repaint();
     	this.repaint();
     }
@@ -99,11 +98,6 @@ public class MapScreen extends JPanel {
             m.drawVilleNames( g2 );
         }
         g2.dispose();
-    }
-
-    private void drawVilleNames(Graphics2D g2, Ville ville)
-    {
-
     }
 
     /* getters et setters */
