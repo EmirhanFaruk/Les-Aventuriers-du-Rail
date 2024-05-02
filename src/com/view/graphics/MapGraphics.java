@@ -100,7 +100,11 @@ public class MapGraphics {
         {
             if (aCase instanceof Ville)
             {
-                putsNameVille(g, (Ville) aCase);
+                Ville ville = (Ville) aCase;
+                Rectangle2D r = getNameSize(g, ville);
+                RectangleGraphics rectangle = new RectangleGraphics(r);
+                rectangle.paint(g);
+                putsNameVille(g, ville);
             }
         }
     }
@@ -132,7 +136,15 @@ public class MapGraphics {
         String nom = ville.getNom() ;
         Rectangle2D rectangle = g.getFontMetrics().getStringBounds(nom, g); // Calcul de size de texte au total
 
-        return rectangle;
+        int x = ville.getX() * tileWidth ;
+        int y = ville.getY() * tileHeight ;
+        // Calcul des coordonnées de texte
+        x = ( x + (tileWidth / 2) ) - ( (int) (rectangle.getWidth() / 2) );
+        y = y - ( (int) (rectangle.getHeight()) );
+
+        Rectangle2D res = new Rectangle2D.Double(x , y , rectangle.getWidth() , rectangle.getHeight());
+
+        return res;
     }
 
     /* getteurs et setteurs */

@@ -107,10 +107,6 @@ public class MapScreen extends JPanel {
     {
         if (m.isVille())
         {
-            RectangleGraphics rectangleGraphics;
-            Rectangle2D rectangle = m.getNameSize(g2, (Ville) m.getaCase());
-            rectangleGraphics = new RectangleGraphics(rectangle);
-            rectangleGraphics.paint(g2);
             m.drawVilleNames(g2);
         }
     }

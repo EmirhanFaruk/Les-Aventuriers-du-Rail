@@ -22,6 +22,7 @@ public class RectangleGraphics
         this.y = (int) r.getY();
         this.width = (int) r.getWidth();
         this.height = (int) r.getHeight();
+        System.out.println("RectangleGraphics x=" + x + ", y=" + y + ", width=" + width + ", height=" + height);
     }
 
     public void paint(Graphics g)
