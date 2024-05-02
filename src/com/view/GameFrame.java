@@ -13,11 +13,6 @@ public class GameFrame extends JFrame
 {
     public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
-
-    private boolean in_main_menu = true;
-
-    private boolean in_game = false;
-
     private double scale;
 
     // Pour changer le mode
@@ -83,9 +78,9 @@ public class GameFrame extends JFrame
     }
 
 
-    public void startGame(String map, String[] player_names, String[] player_types,Color[] player_Colors)
+    public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_Colors)
     {
-        main.startGame(map, player_names, player_types,player_Colors);
+        main.startGame(map, mode, player_names, player_types,player_Colors);
 
         gameScreen = null ;
         
@@ -127,6 +122,8 @@ public class GameFrame extends JFrame
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
+
+    /* getters et setters */
     public GraphicsDevice getDevice()
     {
         return device;
@@ -156,7 +153,6 @@ public class GameFrame extends JFrame
         return null;
     }
 
-
     public String getIngame_screen_s() {
         return ingame_screen_s;
     }
@@ -168,6 +164,7 @@ public class GameFrame extends JFrame
     public String getPause_screen_s() {
         return pause_screen_s;
     }
+
     public Main getMain() {
         return main;
     }

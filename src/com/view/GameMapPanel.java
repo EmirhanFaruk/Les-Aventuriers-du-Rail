@@ -24,10 +24,10 @@ public class GameMapPanel extends JPanel {
 
     /**
      * Constructeur de la classe GameManagerScreen
-     * @param frame
-     * @param map
-     * @param width
-     * @param height
+     * @param frame gameframe
+     * @param map le nom de la map
+     * @param width width
+     * @param height height
      */
     public GameMapPanel (GameFrame frame , String map , int width , int height , Player player , Game game ){
         this.frame = frame ;
@@ -70,7 +70,6 @@ public class GameMapPanel extends JPanel {
 
     }
 
-
     /**
      * Une fonction qui permet de faire la map à partir du plateau
      * @param plateau Plateau
@@ -79,6 +78,8 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
 
+
+    /* getters et setters */
 
     public void setPlayerCourant(Player playerCourant) {
         this.playerHandPanel.setPlayer(playerCourant);

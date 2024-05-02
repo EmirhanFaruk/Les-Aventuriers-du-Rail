@@ -1,7 +1,6 @@
 package com.view.endgame;
 
 import com.view.GameScreen;
-import com.view.endgame.ScoreBoardScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +20,10 @@ public class EndGameScreen extends JPanel {
         add( this.button_panel , BorderLayout.SOUTH ) ;
     }
 
+    /**
+     * Une fonction qui crée les buttons
+     * @return tout les buttons que l'in veut
+     */
     private JPanel makeButton (){
         JPanel resultat = new JPanel() ;
         resultat.setLayout(new GridLayout( 3 , 1 ));

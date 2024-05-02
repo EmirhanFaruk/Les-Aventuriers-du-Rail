@@ -1,13 +1,11 @@
 package com.view.graphics;
 
-import com.model.Player;
 import com.model.config.Ville;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 
 public class VilleGraphics {
@@ -21,9 +19,6 @@ public class VilleGraphics {
     private static int width , height ;
 
 
-    public VilleGraphics(){
-    }
-
     /**
      * Une fonction qui renvoie une image
      * @param fileName String
@@ -31,15 +26,15 @@ public class VilleGraphics {
      */
     private static BufferedImage loadImage(String fileName) {
         try {
-            String imagePath =null ;
+            String imagePath ;
             if (findColor(fileName)) {
                 imagePath = path + s + "ressources" + s + "Batiment" + s + "Gare" +  s+ fileName;
             } else {
                 imagePath = path + s + "ressources" + s + "Batiment" + s + fileName;
             }
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -99,9 +94,8 @@ public class VilleGraphics {
         g.drawImage( image , ville.getX() * width , ville.getY() * height ,  width , height , null) ;
     }
 
-    /*
-    getters et setters
-     */
+    /*    getters et setters     */
+
     public static void setWH(int w, int h)
     {
         width = w;

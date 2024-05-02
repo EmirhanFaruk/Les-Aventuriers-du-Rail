@@ -21,27 +21,29 @@ public class Player {
 	private int nbrWagon ;
 	private int nbrGare ;//Le nombre de gare que le joueur peut poser
 	private ArrayList<Route> playerRoutes = new ArrayList<>();
-	private int nbrWagonInstance ;
-	private int nbrGareInstance ;
-	private int missionComplete ;
+	private int nbMissionComplete ;
 	private int niveau; //Si niveau = 0, alors c'est un joueur, si niveau = 1 = bot facile, si niveau = 2 bot moyen, si niveau = 3 bot difficile
     private ArrayList<CarteDestination> destinationsList = new ArrayList<>();//La liste de carte mission du jouer
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 	private Game game;
 
-
+	/**
+	 * Constructeur de Player
+	 * @param playerCouleur la couleur du joueur
+	 * @param name le nom du joueur
+	 * @param niveau le type du joueur (personne ou bot de différent niveau)
+	 * @param game le jeu
+	 */
 	public Player ( String playerCouleur , String name , int niveau, Game game){
 		this.playerCouleur = playerCouleur ;
 		this.name = name;
 		this.niveau = niveau;
-		this.score = 0 ;
-		this.missionComplete = 0 ;
-		this.nbrWagon = 15 ;
-		this.nbrGare = 3 ;
-		this.nbrGareInstance = this.nbrGare ;
-		this.nbrWagonInstance = this.nbrWagon ;
 		this.game = game;
+		this.score = 0 ;
+		this.nbMissionComplete = 0 ;
+		this.nbrWagon = initNbragon() ;
+		this.nbrGare = 4 ;
 	}
 
 
@@ -54,6 +56,23 @@ public class Player {
 
 		return count;
 	}
+
+	/**
+	 * Une fonction qui initialise le nombre de wagons en fonction de la taille de la map
+	 * @return le nombre de wagons
+	 */
+	private int initNbragon (){
+		String map  = game.getGameFrame().getMain().getMap() ;
+		if ( map.equals("LongMap") ) {
+			return 30 ;
+		} else if ( map.equals("NormalMap") ) {
+			return 20 ;
+		} else if ( map.equals("QuickMap") ) {
+			return 15 ;
+		}
+		//DEBUG : System.out.println("Pas le bon nom de map");
+		return 0 ;
+	}
 	
 	public boolean piocheCarteDestination(CarteManager cm, int i) {
 		//vérifie s'il a le max de carte destination possible pour un joueur
@@ -63,7 +82,7 @@ public class Player {
 				//donne la carte destination et mets à null pour remplacer
 				this.destinationsList.add(cm.getDestinationsCards()[i]);
 				cm.getDestinationsCards()[i] = null;
-				if(this.destinationsList.size() >= 1)this.canPlay = true;
+				if( !this.destinationsList.isEmpty() )this.canPlay = true;
 				return true;
 			}else {
 				JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
@@ -246,14 +265,16 @@ public class Player {
     }
 
 	private int aCompleterUneMission() {
-		if(destinationsList.size() == 0) return 0;
+		if( destinationsList.isEmpty() ) return 0;
 		int cumulPoints=0;
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
-			ArrayList<Route> longestWay = LongestFinder.findLongestWay(c.getPremiereVille(), c.getDeuxiemeVille(), this);
-			if(!longestWay.isEmpty()){
+			Ville ville1 = c.getPremiereVille();
+			Ville ville2 = c.getDeuxiemeVille();
+			if (LongestFinder.wayExists(ville1, ville2, this)){
 				cumulPoints += c.getNombrePoints();  // si il a completer une ou plusieurs missions on cumule les points
 				c.setComplete();
+				this.setMissionComplete( this.nbMissionComplete + 1 );
 			} 
 		}
 		return cumulPoints;
@@ -283,6 +304,7 @@ public class Player {
 					if (nbrCarteRetirer <= peutChangerAvecCetteCarte(couleurCarteChoisit) && ville.getIsOccuped() == null ) {
 						retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 						ville.setIsOccuped(this);
+						aCompleterUneMission();
 						// DEBUG : System.out.println("LE SUIS LE NOUVEAU MAIRE DE LA VILLE ");
 						return true;
 
@@ -303,18 +325,14 @@ public class Player {
 
 				}
 
-			}
-			else{
+			} else {
 
 				retirerCartePourGare(couleurCarteChoisit, nbrCarteRetirer);
 				ville.setIsOccuped(this);
+				aCompleterUneMission();
 				return true;
 
 			}
-
-
-
-
 
 		} else {
 			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
@@ -399,8 +417,10 @@ public class Player {
 		insertCarte(cm.drawCard());
 	}
 
-
-
+	/**
+	 * Une fonction qui renvoie le score final avec le nombre de gares restant
+	 * @return le score final
+	 */
 	public int scoreFinal(){
 		return this.score + nbrGare*4 ;
 	}
@@ -414,38 +434,22 @@ public class Player {
 	}
 
 
+	/* getters et setters */
 	public String getPlayerCouleur() {
 		return playerCouleur;
 	}
 
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int getNiveau() {
 		return niveau;
 	}
 
-	public void setDestinationsList(ArrayList<CarteDestination> destinationsList) {
-        this.destinationsList = destinationsList;
-    }
-
 	public Game getGame() {
 		return game;
 	}
-
-	public void setTrainCard(ArrayList<CarteWagon.Couleur> trainList) {
-        this.trainList = trainList;
-    }
 
     public int getScore() {
         return this.score;
@@ -468,47 +472,27 @@ public class Player {
     }
 
 	public int getMissionComplete() {
-		return missionComplete;
-	}
-
-	public int getNbrGareInstance() {
-		return nbrGareInstance;
-	}
-
-	public void setNbrGareInstance(int nbrGareInstance) {
-		this.nbrGareInstance = nbrGareInstance;
-	}
-
-	public int getNbrWagonInstance() {
-		return nbrWagonInstance;
-	}
-
-	public void setNbrWagonInstance(int nbrWagonInstance) {
-		this.nbrWagonInstance = nbrWagonInstance;
+		return nbMissionComplete;
 	}
 
 	public void setMissionComplete(int missionComplete) {
-		this.missionComplete = missionComplete;
+		this.nbMissionComplete = missionComplete;
 	}
 
 	public ArrayList<CarteDestination> getDestinationsList() {
         return destinationsList;
     }
-
     public ArrayList<Couleur> getTrainList() {
         return trainList;
     }
-
 
 	public boolean getCanPlay() {
 		return canPlay;
 	}
 
-
 	public boolean getFirstTurnOver() {
 		return firstTurnOver;
 	}
-
 
 	public void setFirstTurnOver(boolean firstTurnOver) {
 		this.firstTurnOver = firstTurnOver;
