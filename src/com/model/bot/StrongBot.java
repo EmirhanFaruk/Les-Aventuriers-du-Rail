@@ -133,7 +133,6 @@ public class StrongBot implements BotAction {
 
     @Override
     public boolean takeRail(Game game) {
-
         //Fonction qui permet de prendre des routes, et renvoie false si le bot n'a pas assez de carte
 
         //Variable pour avoir les cartes destination du bot
@@ -147,9 +146,9 @@ public class StrongBot implements BotAction {
             ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
 
-            for(int z = 1; z < routesPossible.size();z++){
+            for(int z = 0; z < routesPossible.size();z++){
 
-                System.out.println(routesPossible.get(z).toString());
+                System.out.println("rChemiiiin : " + routesPossible.get(z).toString());
 
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
@@ -160,6 +159,8 @@ public class StrongBot implements BotAction {
 
                 }
             }
+
+            System.out.println("Taille routePossibles" + routesPossible.size());
 
 
         }
@@ -274,34 +275,6 @@ public class StrongBot implements BotAction {
     }
 
 
-    private boolean canCompletePath(Game game){
-
-        //Fonction qui regarde si on peut completer une route pour une mission
-
-        //Variable qui donne la liste de destination
-        ArrayList<CarteDestination> destination =  game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList();
-
-        //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
-        for (int l = 0; l <destination.size(); l++) {
-
-            //Variable qui donne un chemins possible grace a une liste de ville
-            ArrayList<Ville> chemin = Node.findClosestPath(destination.get(l).getPremiereVille(),destination.get(l).getDeuxiemeVille(),game.getJoueurCourant());
-
-            //Si il y a une mission ou on peut remplir alors on la fait
-            if(!chemin.isEmpty()) {
-                System.out.println("canComplete true");
-
-                return true;
-            }
-        }
-
-        System.out.println("canComplete false");
-
-        //Si il n'y a pas de mission qui peut etre remplis
-        return false;
-
-    }
-
 
 
     private void firstTurn(Game game) {
@@ -326,8 +299,8 @@ public class StrongBot implements BotAction {
     private void optimalCompleteMission(Game game) {
         //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions, sinon poser une gare ou piocher
 
-        //Si on peut completer une
-        if ( canCompletePath(game) ) {
+        //Si on peut completer une route
+        if (takeRail(game) ) {
 
             System.out.println("Route prise");
 
