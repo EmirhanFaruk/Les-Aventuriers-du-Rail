@@ -20,7 +20,7 @@ public class Main implements Runnable
 
     public void lance()
     {
-        this.gameFrame = new GameFrame(800, 500, this);
+        this.gameFrame = new GameFrame(1280, 720 , this);
         this.game = new Game(gameFrame);
     }
 

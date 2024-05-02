@@ -89,8 +89,10 @@ public class CardGraphics {
 
             case ROUGE:
                 return CardRed;
+
+            default:
+                return null ;
         }
-        return null ;
     }
     
     public static BufferedImage getImageFromColor(CarteWagon.Couleur couleur){

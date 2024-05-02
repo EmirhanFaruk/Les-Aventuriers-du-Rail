@@ -86,7 +86,6 @@ public class WeakBot implements BotAction{
                 for(int j = 0 ; j  < tailleRoute  ; j++) {
                     listeRail.get( j ).setOccuperPar( bot );
                 }
-                game.getMapScreen().repaint();
                 // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
@@ -114,7 +113,6 @@ public class WeakBot implements BotAction{
             player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainList().get( card ) );
             //DEBUG System.err.println( "Le botW " + player.getName() +" a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
 
-            game.getMapScreen().repaint();
 
             return true;
         }
