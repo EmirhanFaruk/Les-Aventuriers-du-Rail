@@ -126,6 +126,21 @@ public class Route {
     }
 
 
+
+    public void resetProprietaire() {
+        this.proprietaire = null;
+        resetRails();
+    }
+
+    private void resetRails()
+    {
+        for (Rail rail : railsRoute)
+        {
+            rail.setOccuperPar(null);
+        }
+    }
+
+
     /* getteurs et setteurs */
 
     public Ville getVille1() {
@@ -154,8 +169,6 @@ public class Route {
     public int getNombrePoint() {
         return nombrePoint;
     }
-
-    public void resetProprietaire() { this.proprietaire = null; }
 
     /**
      * Getter for cousin

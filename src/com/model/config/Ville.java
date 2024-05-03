@@ -38,6 +38,27 @@ public class Ville extends Case {
     }
 
 
+    /**
+     * Met isOccupied en null, aussi appelle resetRoutes(). Sera utilisé pour le mode nuke.
+     */
+    public void resetOccuped()
+    {
+        this.isOccuped = null;
+        resetRoutes();
+    }
+
+    /**
+     * Met proprietaire de ses routes en null. Sera utilisé pour le mode nuke.
+     */
+    private void resetRoutes()
+    {
+        for (Route route : routes)
+        {
+            route.resetProprietaire();
+        }
+    }
+
+
     /* getteurs et setteurs */
 
     /**
@@ -56,17 +77,6 @@ public class Ville extends Case {
         this.isOccuped = isOccuped;
     }
 
-    /**
-     * Met isOccupied en null. Sera utilisé pour le mode nuke.
-     */
-    public void resetOccuped()
-    {
-        this.isOccuped = null;
-        for (Route route : routes)
-        {
-            route.resetProprietaire();
-        }
-    }
 
     /**
      * Obtient le nom de la ville.

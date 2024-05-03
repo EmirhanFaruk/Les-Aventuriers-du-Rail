@@ -11,10 +11,10 @@ import java.awt.geom.Rectangle2D;
  */
 public class RectangleGraphics
 {
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
 
     public RectangleGraphics(Rectangle2D r)
     {
@@ -22,7 +22,6 @@ public class RectangleGraphics
         this.y = (int) r.getY();
         this.width = (int) r.getWidth();
         this.height = (int) r.getHeight();
-        System.out.println("RectangleGraphics x=" + x + ", y=" + y + ", width=" + width + ", height=" + height);
     }
 
     public void paint(Graphics g)
