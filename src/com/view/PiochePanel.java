@@ -29,8 +29,8 @@ public class PiochePanel extends JPanel {
 
     
     public PiochePanel(int width, int height, PlayerHandPanel playerHandPanel, Game game){
-        setBackground(Color.CYAN);
-        setPreferredSize(new Dimension((int) (width * 0.15), height));
+        setBackground(Color.orange);
+        setPreferredSize(new Dimension((int) (width * 0.10), height));
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();
         this.game = game;
