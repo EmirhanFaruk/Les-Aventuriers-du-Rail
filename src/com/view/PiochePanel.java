@@ -100,8 +100,16 @@ public class PiochePanel extends JPanel {
                                     , "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
-            	}            
+            	}
             }
+             @Override
+             public void mouseExited(MouseEvent e) {
+                 if (hoveredCardIndex != -1) {
+                     hoveredCardIndex = -1;
+                     repaint();
+                 }
+             }
+
         });
     }
     
@@ -124,14 +132,6 @@ public class PiochePanel extends JPanel {
                 }
                 
                 if (hoveredCardIndex != previousIndex) {
-                    repaint();
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (hoveredCardIndex != -1) {
-                    hoveredCardIndex = -1;
                     repaint();
                 }
             }
