@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class MapGraphics {
     private Case aCase ;
@@ -15,10 +14,6 @@ public class MapGraphics {
     private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-    private static RectangleGraphics rectangle;
-
-    private final int[] listx = { -1 , 0 , 1 , 0 } ;
-    private final int[] listy = { 0 , 1 , 0 , -1 } ;
 
     /**
      * Constructeur de la classe MapGraphics
@@ -159,5 +154,4 @@ public class MapGraphics {
 
     public boolean isVille() { return aCase instanceof Ville; }
 
-    public Case getaCase() { return aCase; }
 }
