@@ -96,6 +96,15 @@ public class CarteDestinationPanel extends JPanel {
                     }
                 }
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (hoveredCardIndex != -1) {
+                    hoveredCardIndex = -1;
+                    repaint();
+                }
+            }
+
         });
     }
     
@@ -137,12 +146,6 @@ public class CarteDestinationPanel extends JPanel {
                 }
             }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                hoverTimer.stop(); // Stop le timer si la souris quitte le panneau
-                hoveredCardIndex = -1;
-                repaint();
-            }
         });
     }
 
