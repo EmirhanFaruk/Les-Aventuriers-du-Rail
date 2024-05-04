@@ -30,8 +30,8 @@ public class CarteDestinationPanel extends JPanel {
 	private Game game;
 
     public CarteDestinationPanel(int width, int height, PlayerHandPanel playerHandPanel, Game game) {
-        setBackground(Color.CYAN);
-        setPreferredSize(new Dimension((int) (width * 0.15), height));
+        setBackground(Color.orange);
+        setPreferredSize(new Dimension((int) (width * 0.10), height));
         this.game = game;
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();

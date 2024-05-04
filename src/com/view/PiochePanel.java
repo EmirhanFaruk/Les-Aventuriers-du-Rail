@@ -29,8 +29,8 @@ public class PiochePanel extends JPanel {
 
     
     public PiochePanel(int width, int height, PlayerHandPanel playerHandPanel, Game game){
-        setBackground(Color.CYAN);
-        setPreferredSize(new Dimension((int) (width * 0.15), height));
+        setBackground(Color.orange);
+        setPreferredSize(new Dimension((int) (width * 0.10), height));
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();
         this.game = game;
@@ -71,7 +71,7 @@ public class PiochePanel extends JPanel {
             		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
                              ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
             	}else {
-            		if(player.getCanPlay()) {
+            		if(player.getCanPlay() ) {
     	                if (piocheHiddenBounds.contains(e.getPoint())) {
     	                    gameController.piocherCarteInvisible(player);
     	                    mainDuJoueur.getParent().revalidate();
@@ -95,8 +95,10 @@ public class PiochePanel extends JPanel {
     	                    }
     	                }
                 	}else {
-               		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                                ,"Vous devez d'abord piocher 1 carte destination au minimum !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
+                        if (player.getNiveau() == 0) { // le message s'affiche si seulement si c'est un vrai joueur
+                            JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                                    , "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
             	}
             }
