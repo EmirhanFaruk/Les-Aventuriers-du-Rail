@@ -59,7 +59,7 @@ public class MapScreen extends JPanel {
         this.playerHandPanel = playerHandPanel ;
         this.baseWidth = width;
         this.baseHeight = height;
-        this.zoomSpeedMax = zoomSpeedMax() ;
+        this.zoomSpeedMax = zoomMax() ;
         mouseListener();
         mouseMotionListener();
         mouseWheelListener() ;
@@ -67,7 +67,7 @@ public class MapScreen extends JPanel {
 
     /**
      * Une fonction qui crée la map
-     * @param plateau
+     * @param plateau Plateau
      */
     public void makeMap ( Plateau plateau ){
         map( plateau );
@@ -77,7 +77,7 @@ public class MapScreen extends JPanel {
     }
 
     /**
-     * Une fonction qui ajoute dans l'attribut map les Mapgraphics de chaque case
+     * Une fonction qui ajoute dans l'attribut map les Map graphics de chaque case
      * @param plateau Plateau
      */
     private void map( Plateau plateau ) {
@@ -117,7 +117,7 @@ public class MapScreen extends JPanel {
     }
 
     /**
-     * Une fonction qui permet au panel d'avoir un zoom et un dézoom
+     * Une fonction qui permet au panel d'avoir un zoom et un dézoome
      */
     private void mouseWheelListener( ) {
         addMouseWheelListener(new MouseWheelListener() {
@@ -143,6 +143,9 @@ public class MapScreen extends JPanel {
         });
     }
 
+    /**
+     * Une fonction qui ajoute une motion au panel
+     */
     private void mouseMotionListener () {
         addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -174,13 +177,15 @@ public class MapScreen extends JPanel {
             mapOffsetY += (int) (zoomY / scale - zoomY / (scale - zoomSpeed));
             zoomed = true;
         } else {
+            mouseX = zoomX ;
+            mouseY = zoomY ;
             JOptionPane.showMessageDialog(new JFrame(),
                     "Le zoom est maximal.","Instructions",JOptionPane.WARNING_MESSAGE);
         }
-        }
+    }
 
     /**
-     * Une fonction dézoom
+     * Une fonction dézoome
      */
     private void zoomOut() {
         if ( zoomed ) {
@@ -195,7 +200,11 @@ public class MapScreen extends JPanel {
         }
     }
 
-    private int zoomSpeedMax (){
+    /**
+     * Une fonction qui donne le zoom max de chaque map
+     * @return zoom max
+     */
+    private int zoomMax (){
         String map  = game.getGameFrame().getMain().getMap() ;
         if ( map.equals("LongMap") ) {
             return 6 ;
