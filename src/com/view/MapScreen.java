@@ -26,8 +26,14 @@ public class MapScreen extends JPanel {
     private Game game ;
     private PlayerHandPanel playerHandPanel ;
     private double scale = 1.0;
-    private double zoomSpeed = 0.1;
+    private double zoomSpeed = 0.5 ;
+    private double zoomSpeedMax ;
     private int mouseX, mouseY;
+    private int mapOffsetX = 0;
+    private int mapOffsetY = 0;
+    private int lastMouseX, lastMouseY;
+    private boolean zoomed = false;
+    private boolean isDragging = false;
     private int baseWidth, baseHeight;
 
 
@@ -53,8 +59,9 @@ public class MapScreen extends JPanel {
         this.playerHandPanel = playerHandPanel ;
         this.baseWidth = width;
         this.baseHeight = height;
-
+        this.zoomSpeedMax = zoomSpeedMax() ;
         mouseListener();
+        mouseMotionListener();
         mouseWheelListener() ;
     }
 
@@ -89,8 +96,22 @@ public class MapScreen extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                gameController.mouseClicked(e, tileWidth, tileHeight, game, player);
+                gameController.mouseClicked(e, tileWidth, tileHeight, game, player , zoomed );
                 repaintAll(playerHandPanel);
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mouseX = e.getX();
+                mouseY = e.getY();
+                isDragging = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                isDragging = false;
+                // Enregistrer la dernière position de la souris lorsque le bouton est relâché
+                lastMouseX = mouseX;
+                lastMouseY = mouseY;
             }
         });
     }
@@ -106,7 +127,7 @@ public class MapScreen extends JPanel {
                 mouseY = e.getY();
 
                 int notches = e.getWheelRotation();
-                if (notches < 0) {
+                if (notches < 0 ) {
                     zoomIn();
                 } else {
                     if (getWidth() * scale > baseWidth && getHeight() * scale > baseHeight) {
@@ -114,7 +135,30 @@ public class MapScreen extends JPanel {
                     }
                 }
 
+                mapOffsetX += (int) (mouseX / scale - mouseX / (scale - zoomSpeed));
+                mapOffsetY += (int) (mouseY / scale - mouseY / (scale - zoomSpeed));
                 repaint();
+            }
+        });
+    }
+
+    private void mouseMotionListener () {
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (isDragging) {
+                    int newMouseX = e.getX();
+                    int newMouseY = e.getY();
+                    int deltaX = newMouseX + mouseX;
+                    int deltaY = newMouseY + mouseY;
+                    mouseX = newMouseX;
+                    mouseY = newMouseY;
+
+                    // Déplacer la carte horizontalement et verticalement en fonction du mouvement de la souris
+                    mapOffsetX -= deltaX;
+                    mapOffsetY -= deltaY;
+                    repaint();
+                }
             }
         });
     }
@@ -123,15 +167,38 @@ public class MapScreen extends JPanel {
      * Une fonction zoom
      */
     private void zoomIn() {
-        scale += zoomSpeed;
+        if ( scale < zoomSpeedMax ) {
+            scale += zoomSpeed;
+            zoomed = true;
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Le zoom est maximal.","Instructions",JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /**
      * Une fonction dézoom
      */
     private void zoomOut() {
-        scale -= zoomSpeed;
-        scale = Math.max(0.1, scale);
+        if ( zoomed ) {
+            scale -= zoomSpeed;
+            scale = Math.max(0.1, scale);
+            if (scale <= 1.0) {
+                zoomed = false;
+            }
+        }
+    }
+
+    private int zoomSpeedMax (){
+        String map  = game.getGameFrame().getMain().getMap() ;
+        if ( map.equals("LongMap") ) {
+            return 6 ;
+        } else if ( map.equals("NormalMap") ) {
+            return 4 ;
+        } else if ( map.equals("QuickMap") ) {
+            return 2 ;
+        }
+        return 0 ;
     }
 
     /**

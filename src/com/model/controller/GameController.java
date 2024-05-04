@@ -16,7 +16,7 @@ public class GameController {
     private CarteWagon carteWagon ;
     private int Mx , My  ;
 
-    public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Game game, Player joueurCourant) {
+    public void mouseClicked(MouseEvent e, int tileWidth, int tileHeight, Game game, Player joueurCourant , boolean zommed ) {
         // Obtention des coordonnées du clic de souris
     	int x = e.getX() / tileWidth;
     	int y = e.getY() / tileHeight;
@@ -26,12 +26,17 @@ public class GameController {
             Object clickedObject = game.getPlateau().getPlateau()[x][y];
             if (clickedObject != null) {
                 // Traitement en fonction du type de l'objet cliqué
-                if (clickedObject instanceof Rail) {
-                    tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
-                } else if (clickedObject instanceof Ville) {
-                    Mx = x;
-                    My = y;
-                }
+				if ( ! zommed ) {
+					if (clickedObject instanceof Rail) {
+						tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
+					} else if (clickedObject instanceof Ville) {
+						Mx = x;
+						My = y;
+					}
+				} else {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Veuillez dézoomer la map pour pouvoir poser vos wagons ou une gare.","Instructions",JOptionPane.WARNING_MESSAGE);
+				}
             }
         } catch ( Exception ignored ){
             // DEBUG : System.out.println("Nope hihi");
