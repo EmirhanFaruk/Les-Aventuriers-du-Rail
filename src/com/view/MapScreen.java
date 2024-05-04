@@ -123,20 +123,21 @@ public class MapScreen extends JPanel {
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
+                int previousMouseX = mouseX;
+                int previousMouseY = mouseY;
+
                 mouseX = e.getX();
                 mouseY = e.getY();
 
                 int notches = e.getWheelRotation();
                 if (notches < 0 ) {
-                    zoomIn();
+                    zoomIn(previousMouseX, previousMouseY); // Passer les anciennes coordonnées de la souris
                 } else {
                     if (getWidth() * scale > baseWidth && getHeight() * scale > baseHeight) {
                         zoomOut();
                     }
                 }
 
-                mapOffsetX += (int) (mouseX / scale - mouseX / (scale - zoomSpeed));
-                mapOffsetY += (int) (mouseY / scale - mouseY / (scale - zoomSpeed));
                 repaint();
             }
         });
@@ -166,15 +167,17 @@ public class MapScreen extends JPanel {
     /**
      * Une fonction zoom
      */
-    private void zoomIn() {
+    private void zoomIn(int zoomX, int zoomY) { // Prendre les coordonnées de la souris pour zoomer
         if ( scale < zoomSpeedMax ) {
             scale += zoomSpeed;
+            mapOffsetX += (int) (zoomX / scale - zoomX / (scale - zoomSpeed));
+            mapOffsetY += (int) (zoomY / scale - zoomY / (scale - zoomSpeed));
             zoomed = true;
         } else {
             JOptionPane.showMessageDialog(new JFrame(),
                     "Le zoom est maximal.","Instructions",JOptionPane.WARNING_MESSAGE);
         }
-    }
+        }
 
     /**
      * Une fonction dézoom
@@ -184,6 +187,9 @@ public class MapScreen extends JPanel {
             scale -= zoomSpeed;
             scale = Math.max(0.1, scale);
             if (scale <= 1.0) {
+                scale = 1.0;
+                mapOffsetX = 0;
+                mapOffsetY = 0;
                 zoomed = false;
             }
         }
