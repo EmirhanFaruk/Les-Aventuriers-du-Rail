@@ -47,6 +47,9 @@ public class Route {
         return Couleur.LOC;
     }
 
+
+
+
     public void nombrePointsDestination(){
         //Fonction qui dit le nombre de point pour la destination entre 2 villes
 
@@ -120,6 +123,21 @@ public class Route {
             res += "\nCousin: null";
         }
         return res;
+    }
+
+
+
+    public void resetProprietaire() {
+        this.proprietaire = null;
+        resetRails();
+    }
+
+    private void resetRails()
+    {
+        for (Rail rail : railsRoute)
+        {
+            rail.setOccuperPar(null);
+        }
     }
 
 

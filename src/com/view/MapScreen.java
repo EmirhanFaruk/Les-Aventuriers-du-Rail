@@ -4,6 +4,7 @@ import com.model.Game;
 import com.model.Player;
 import com.model.config.Case;
 import com.model.config.Plateau;
+import com.model.config.Ville;
 import com.model.controller.GameController;
 import com.view.graphics.* ;
 
@@ -11,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
@@ -74,7 +76,6 @@ public class MapScreen extends JPanel {
     }
 
     public void repaintAll(PlayerHandPanel php) {
-        //php.getDrawPlayerHand().repaint();
     	php.repaint();
     	this.repaint();
     }
@@ -93,7 +94,21 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
+
+        // Draw ville names
+        for (MapGraphics m : map)
+        {
+            drawVilleNames(g2, m);
+        }
         g2.dispose();
+    }
+
+    private void drawVilleNames(Graphics2D g2, MapGraphics m)
+    {
+        if (m.isVille())
+        {
+            m.drawVilleNames(g2);
+        }
     }
 
     /* getters et setters */

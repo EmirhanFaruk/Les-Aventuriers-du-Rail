@@ -21,9 +21,6 @@ public class Rail extends Case {
     
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private Player occuperPar;
-
-    /** Un indicateur indiquant si le rail est occupé ou non. */
-    private boolean occuper;
     
     private Route saRoute;
 
@@ -63,7 +60,7 @@ public class Rail extends Case {
      * @return true si le rail est occupé, sinon false.
      */
     public boolean getOccuper() {
-        return occuper;
+        return occuperPar != null;
     }
     
     /**
@@ -91,9 +88,8 @@ public class Rail extends Case {
     }
 
     public void setOccuperPar(Player occuperPar) {
-        if ( ! this.occuper ) {
+        if ( ! getOccuper() ) {
             this.occuperPar = occuperPar;
-            this.occuper = true;
         }
     }
 }
