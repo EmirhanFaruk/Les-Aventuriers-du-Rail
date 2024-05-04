@@ -99,10 +99,10 @@ public class Player {
 		CarteManager cm = game.getCarteManager();
 		if(cm.PileCarteWagon.isEmpty()){
 			if(cm.trainCardisEmpty()){
-			JOptionPane.showMessageDialog(new JFrame(),"Il n'y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
-		}else{
-			JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
-		}
+				JOptionPane.showMessageDialog(new JFrame(),"Il n'y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
+			}
 			return;
 		}
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
