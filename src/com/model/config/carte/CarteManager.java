@@ -136,8 +136,8 @@ public class CarteManager {
     public CarteWagon.Couleur drawCard(){
             //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
 
-            Random carte = new Random(110);
-            int pioche = carte.nextInt();
+            Random carte = new Random();
+            int pioche = carte.nextInt(110);
 
             //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
             if(pioche >= 0 && pioche <= 11){
