@@ -37,11 +37,34 @@ public class Ville extends Case {
         routes = new ArrayList<>();
     }
 
+
+    /**
+     * Met isOccupied en null, aussi appelle resetRoutes(). Sera utilisé pour le mode nuke.
+     */
+    public void resetOccuped()
+    {
+        this.isOccuped = null;
+        resetRoutes();
+    }
+
+    /**
+     * Met proprietaire de ses routes en null. Sera utilisé pour le mode nuke.
+     */
+    private void resetRoutes()
+    {
+        for (Route route : routes)
+        {
+            route.resetProprietaire();
+        }
+    }
+
+
+    /* getteurs et setteurs */
+
     /**
      * Indicateur de présence d'une gare pour cette ville.
      * @return affiche un joueur si elle est occupé par un joueur, sinon false;
      */
-
     public Player getIsOccuped() {
         return isOccuped;
     }
@@ -54,20 +77,13 @@ public class Ville extends Case {
         this.isOccuped = isOccuped;
     }
 
+
     /**
      * Obtient le nom de la ville.
      * @return Le nom de la ville.
      */
     public String getNom() {
         return nom;
-    }
-
-    /**
-     * Définit le nom de la ville.
-     * @param nom Le nom à attribuer à la ville.
-     */
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     /**

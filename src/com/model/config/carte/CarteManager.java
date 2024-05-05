@@ -1,9 +1,7 @@
 package com.model.config.carte;
 
 import com.model.Game;
-import com.model.Player;
 import com.model.ai.Node;
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteWagon.Couleur;
@@ -74,15 +72,6 @@ public class CarteManager {
     }
 
 
-    public CarteDestination[] getDestinationsCards() {
-        return destinationsCards;
-    }
-
-    public CarteWagon.Couleur[] getTrainCards() {
-        return trainCards;
-    }
-
-
     public boolean possibleTakeWagon(int action, int position){
         if(trainCards[position] == LOC){
             return action == 2;
@@ -117,7 +106,7 @@ public class CarteManager {
     
     //Vérifie si le joueur a déjà pris une carte destination
     public boolean alreadyPickedACard() {
-    	for(int i = 0; i < this.destinationsCards.length; i++)if(this.destinationsCards[i] == null)return true;
+        for (CarteDestination destinationsCard : this.destinationsCards) if (destinationsCard == null) return true;
     	return false;
     }
 
@@ -179,6 +168,7 @@ public class CarteManager {
             return LOC;
 
 
+
     }
 
     public CarteDestination getDestination(){
@@ -229,6 +219,22 @@ public class CarteManager {
         int longueur = cheminLongueur(chemin);
 
         return longueur;
+    }
+
+    public boolean trainCardisEmpty(){
+        for(CarteWagon.Couleur c : trainCards){
+            if(c != null) return false;
+        }
+        return true;
+    }
+
+    /* getteurs et setteurs */
+    public CarteDestination[] getDestinationsCards() {
+        return destinationsCards;
+    }
+
+    public CarteWagon.Couleur[] getTrainCards() {
+        return trainCards;
     }
 
 

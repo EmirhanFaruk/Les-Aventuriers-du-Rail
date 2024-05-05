@@ -4,11 +4,8 @@ import com.model.config.Rail;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 public class RailGraphics {
     private static final String path = System.getProperty("user.dir");
@@ -26,9 +23,6 @@ public class RailGraphics {
     private static int[] angle = { 90 , 45 , 0 , 135 } ;
     private static int width , height ;
 
-    public RailGraphics( ) {
-    }
-
 
     /**
      * Une fonction qui renvoie une image
@@ -39,8 +33,8 @@ public class RailGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Rail" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -68,11 +62,20 @@ public class RailGraphics {
      * @return bufferedImage
      */
     public static BufferedImage putRotation ( BufferedImage image , int angle ) {
-        AffineTransform transform = new AffineTransform() ;
-        transform.rotate( Math.toRadians(angle) , (double) image.getWidth() / 2, (double) image.getHeight() / 2 );
-        AffineTransformOp transformOp = new AffineTransformOp(transform , AffineTransformOp.TYPE_BILINEAR) ;
-        image = transformOp.filter( image , null ) ;
-        return image ;
+        int newWidth = image.getHeight() ;
+        int newHeight = image.getWidth() ;
+        double radians = Math.toRadians(angle);
+
+        Image scaledImage = image.getScaledInstance( newWidth , newHeight, Image.SCALE_SMOOTH);
+        BufferedImage rotatedImage = new BufferedImage( newWidth , newHeight, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.translate((newWidth - image.getWidth()) / 2, (newHeight - image.getHeight()) / 2);
+        g2d.rotate(radians, (double) newWidth / 2, (double) newHeight / 2);
+        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.dispose();
+
+        return rotatedImage;
     }
 
     /**
@@ -88,11 +91,9 @@ public class RailGraphics {
         BufferedImage image = loadImage(s);
         if (image != null) {
             list[0] = image;
-            for (int i = 1 ; i < list.length; i++) {
+            for (int i = 0 ; i < list.length; i++) {
                 BufferedImage rotatedImage = putRotation(image, angle[i]);
-                if (rotatedImage != null) {
-                    list[i] = rotatedImage;
-                }
+                list[i] = rotatedImage;
             }
         }
         return list;
@@ -159,17 +160,20 @@ public class RailGraphics {
      */
     public static void paint(Graphics2D g, Rail rail) {
         BufferedImage image = getImage(rail);
-        g.drawImage(image, rail.getX() * width, rail.getY() * height, width, height, null);
-        if (rail.getOccuper()) {
-            TrainGraphics.paint(g, rail);
+        try {
+            assert image != null;
+            g.drawImage(image, rail.getX() * width, rail.getY() * height , width , height , null);
+            if (rail.getOccuper()) {
+                TrainGraphics.paint(g, rail);
+            }
+        } catch ( Exception ignored ) {
+            // System.err.println("Hav fun debugging lmao");
         }
     }
 
-    /*
-    getters et setters
-     */
-    public static void setWH(int w, int h)
-    {
+    /* getters et setters */
+
+    public static void setWH(int w, int h) {
         width = w;
         height = h;
     }

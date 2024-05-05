@@ -30,8 +30,8 @@ public class CarteDestinationPanel extends JPanel {
 	private Game game;
 
     public CarteDestinationPanel(int width, int height, PlayerHandPanel playerHandPanel, Game game) {
-        setBackground(Color.CYAN);
-        setPreferredSize(new Dimension((int) (width * 0.15), height));
+        setBackground(Color.orange);
+        setPreferredSize(new Dimension((int) (width * 0.10), height));
         this.game = game;
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();
@@ -96,6 +96,15 @@ public class CarteDestinationPanel extends JPanel {
                     }
                 }
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (hoveredCardIndex != -1) {
+                    hoveredCardIndex = -1;
+                    repaint();
+                }
+            }
+
         });
     }
     
@@ -137,12 +146,6 @@ public class CarteDestinationPanel extends JPanel {
                 }
             }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                hoverTimer.stop(); // Stop le timer si la souris quitte le panneau
-                hoveredCardIndex = -1;
-                repaint();
-            }
         });
     }
 
@@ -201,16 +204,17 @@ public class CarteDestinationPanel extends JPanel {
 	
 	    return result;
 	}
-	
+
+    /* getters et setters */
 	//Remet tout à false pour mettre la bonne couleur (ça évite que les cartes soient grises)
 	public void setAllDefault() {
 		for(int i = 0; i < this.isCardSelected.length; i++)this.isCardSelected[i] = false;
 	}
-	
-	
+
 	public void setPlayer(Player player) {
 	    this.player = player;
 	}
+
 }
 
     

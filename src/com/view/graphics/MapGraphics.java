@@ -4,6 +4,7 @@ import com.model.config.* ;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class MapGraphics {
     private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+    private static RectangleGraphics rectangle;
 
     private final int[] listx = { -1 , 0 , 1 , 0 } ;
     private final int[] listy = { 0 , 1 , 0 , -1 } ;
@@ -41,8 +43,8 @@ public class MapGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Map" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -66,8 +68,8 @@ public class MapGraphics {
 
     /**
      * Unr focntion qui permet de savoir sur quoi on joue
-     * @param mapName
-     * @return
+     * @param mapName nom de la map
+     * @return l'image de fond
      */
     public static BufferedImage backgroundImage ( String mapName ){
         return loadImage(mapName ) ;
@@ -81,7 +83,6 @@ public class MapGraphics {
     	if(aCase != null) {
     		if (aCase instanceof Ville ) {
     			VilleGraphics.paint( g , ( Ville ) aCase ) ;
-                putsNameVille( g , ( Ville) aCase );
     		} else if (aCase instanceof Rail ) {
     			if(((Rail) aCase).getOccuper()) {
     				TrainGraphics.paint(g, (Rail) aCase);
@@ -92,27 +93,61 @@ public class MapGraphics {
     	}
     }
 
-    public void putsNameVille( Graphics2D g , Ville ville){
-        int x = ville.getX() ;
-        int y = ville.getY() ;
-        for ( int i = 0  ; i < listx.length ; i++ ){
-            if ( x - listx[i] > -1  && y - listy[i] > -1 ){
-                x = x  - listx[i] ;
-                y = y  - listy[i] ;
-                if ( ! (this.plateau.getPlateau() [ x ][ y ] instanceof Rail ) ){
-                    g.drawString( ville.getNom() , x * tileWidth , y * tileHeight );
-                    break;
-                }
+
+    public void drawVilleNames(Graphics2D g)
+    {
+        if(aCase != null)
+        {
+            if (aCase instanceof Ville)
+            {
+                Ville ville = (Ville) aCase;
+                Rectangle2D r = getNameSize(g, ville);
+                RectangleGraphics rectangle = new RectangleGraphics(r);
+                rectangle.paint(g);
+                putsNameVille(g, ville);
             }
         }
     }
 
-    /*
-   getteurs et setteurs
-    */
-    public Case getaCase() {
-        return aCase;
+    public void putsNameVille( Graphics2D g , Ville ville){
+
+        int x = ville.getX() * tileWidth ;
+        int y = ville.getY() * tileHeight ;
+
+        Rectangle2D r = getNameSize(g, ville);
+
+        // Calcul des coordonnées de texte
+        x = ( x + (tileWidth / 2) ) - ( (int) (r.getWidth() / 2) );
+        y = y - ( (int) (r.getHeight() / 2) );
+
+        g.setColor(Color.BLACK);
+        // Affichage de texte
+        g.drawString(ville.getNom(), x, y);
+
     }
+
+
+    public Rectangle2D getNameSize(Graphics2D g, Ville ville)
+    {
+        int fontSize = tileHeight/2; // Calculating the size of the font
+        Font f = new Font(Font.SERIF, Font.BOLD, fontSize);
+        g.setFont(f);
+
+        String nom = ville.getNom() ;
+        Rectangle2D rectangle = g.getFontMetrics().getStringBounds(nom, g); // Calcul de size de texte au total
+
+        int x = ville.getX() * tileWidth ;
+        int y = ville.getY() * tileHeight ;
+        // Calcul des coordonnées de texte
+        x = ( x + (tileWidth / 2) ) - ( (int) (rectangle.getWidth() / 2) );
+        y = y - ( (int) (rectangle.getHeight()) );
+
+        Rectangle2D res = new Rectangle2D.Double(x , y , rectangle.getWidth() , rectangle.getHeight());
+
+        return res;
+    }
+
+    /* getteurs et setteurs */
 
     public int getHeight() {
         return tileHeight;
@@ -121,4 +156,8 @@ public class MapGraphics {
     public int getWidth() {
         return tileWidth;
     }
+
+    public boolean isVille() { return aCase instanceof Ville; }
+
+    public Case getaCase() { return aCase; }
 }

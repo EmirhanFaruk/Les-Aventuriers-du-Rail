@@ -13,11 +13,6 @@ public class GameFrame extends JFrame
 {
     public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
-
-    private boolean in_main_menu = true;
-
-    private boolean in_game = false;
-
     private double scale;
 
     // Pour changer le mode
@@ -98,7 +93,6 @@ public class GameFrame extends JFrame
 
         main_panel.add(ingame_screen_s , gameScreen ) ;
         setMinimumSize(getSize());
-        pack();
         setMinimumSize(null);
         gameScreen.getGameManagerScreen().make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
@@ -127,6 +121,8 @@ public class GameFrame extends JFrame
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
+
+    /* getters et setters */
     public GraphicsDevice getDevice()
     {
         return device;
@@ -156,7 +152,6 @@ public class GameFrame extends JFrame
         return null;
     }
 
-
     public String getIngame_screen_s() {
         return ingame_screen_s;
     }
@@ -168,6 +163,7 @@ public class GameFrame extends JFrame
     public String getPause_screen_s() {
         return pause_screen_s;
     }
+
     public Main getMain() {
         return main;
     }

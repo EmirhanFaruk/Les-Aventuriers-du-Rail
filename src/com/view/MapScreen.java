@@ -2,9 +2,9 @@ package com.view;
 
 import com.model.Game;
 import com.model.Player;
-import com.model.Round;
 import com.model.config.Case;
 import com.model.config.Plateau;
+import com.model.config.Ville;
 import com.model.controller.GameController;
 import com.view.graphics.* ;
 
@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
@@ -20,7 +21,6 @@ public class MapScreen extends JPanel {
     final int width , height ;
     final int tileWidth , tileHeight ;
     private Player player ;
-    private Plateau plateau ;
     GameController gameController ;
 
     /**
@@ -30,7 +30,7 @@ public class MapScreen extends JPanel {
      * @param height height du panel
      * @param tileWidth width de l'image
      * @param tileHeight height de l'image
-     * @param playerHandPanel 
+     * @param playerHandPanel la main du joueur
      */
     public MapScreen(String mapName , int width , int height , int tileWidth , int tileHeight,
                      Player joueur, Game game, PlayerHandPanel playerHandPanel , GameController gameController){
@@ -52,7 +52,7 @@ public class MapScreen extends JPanel {
     }
 
     /**
-     * Une fonciton qui crée la map
+     * Une fonction qui crée la map
      * @param plateau
      */
     public void makeMap ( Plateau plateau ){
@@ -74,15 +74,14 @@ public class MapScreen extends JPanel {
             }
         }
     }
-    
+
     public void repaintAll(PlayerHandPanel php) {
-        //php.getDrawPlayerHand().repaint();
     	php.repaint();
     	this.repaint();
     }
 
     /**
-     * Une fonction affcihe les element de case
+     * Une fonction affiche les element de case
      * @param g the <code>Graphics</code> object to protect
      */
     protected void paintComponent (Graphics g ){
@@ -95,9 +94,24 @@ public class MapScreen extends JPanel {
         {
             m.draw( g2 );
         }
+
+        // Draw ville names
+        for (MapGraphics m : map)
+        {
+            drawVilleNames(g2, m);
+        }
         g2.dispose();
     }
 
+    private void drawVilleNames(Graphics2D g2, MapGraphics m)
+    {
+        if (m.isVille())
+        {
+            m.drawVilleNames(g2);
+        }
+    }
+
+    /* getters et setters */
     public void setPlayer(Player player) {
         this.player = player;
     }

@@ -8,8 +8,8 @@ import com.model.ai.Node;
 import com.model.config.Rail;
 import com.model.config.Route;
 import com.model.config.Ville;
+
 import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
@@ -146,6 +146,12 @@ public class NormalBot implements BotAction{
 
             //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
             if(toSetDownWagon){
+
+                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
+                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
+                for (Rail rail : listeRail) {
+                    rail.setOccuperPar(bot);
+                }
 
                 return true;
             }

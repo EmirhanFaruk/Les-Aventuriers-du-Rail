@@ -1,11 +1,9 @@
 package com.model.config;
 
-
 import java.util.ArrayList;
 import com.model.Player;
 import com.model.config.carte.CarteWagon.Couleur;
 import com.model.config.Rail.Content;
-
 
 public class Route {
     private Ville ville1;
@@ -14,7 +12,6 @@ public class Route {
     private Rail.Content couleur; //couleur de la route
     private Player proprietaire; //joueur qui a construit la route
     private Route cousin; // null si cette route n'est pas un de double route, l'autre route sinon
-
     private int nombrePoint; //nombre de point que raporte la route
     private ArrayList<Rail> railsRoute; //rails qui forme la route
 
@@ -36,23 +33,6 @@ public class Route {
         nombrePointsDestination(); //initialise le nombre de point que donne cette route
     }
 
-
-	public Ville getVille1() {
-        return ville1;
-    }
-
-    public Ville getVille2() {
-        return ville2;
-    }
-
-    public int getLongueur() {
-        return longueur;
-    }
-
-    public Rail.Content getCouleur() {
-        return couleur;
-    }
-
     public Couleur traducteurCouleur(){
         //Pour Carte : BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, LOC
         if(this.getCouleur() == Content.BLEU)return Couleur.BLEU;
@@ -67,19 +47,8 @@ public class Route {
         return Couleur.LOC;
     }
 
-    public Player getProprietaire() {
-        return proprietaire;
-    }
 
-    public void setProprietaire(Player proprietaire) {
-        this.proprietaire = proprietaire;
-    }
 
-    public void setLongueur(int longueur) { this.longueur = longueur; }
-
-    public int getNombrePoint() {
-        return nombrePoint;
-    }
 
     public void nombrePointsDestination(){
         //Fonction qui dit le nombre de point pour la destination entre 2 villes
@@ -122,31 +91,16 @@ public class Route {
             default :
                 nombrePoint = 0;
                 break;
-            }
+        }
 
     }
 
-    /**
-     * Getter for cousin
-     * @return cousin
-     */
-    public Route getCousin() { return cousin; }
+    public boolean links(Ville ville1, Ville ville2){
+        boolean possibility1 = ville1 == this.getVille1() && ville2 == this.getVille2();
+        boolean possibility2 = ville1 == this.getVille2() && ville2 == this.getVille1();
 
-
-    /**
-     * Setter for cousin
-     * @param cousin cousin to set
-     */
-    public void setCousin(Route cousin) { this.cousin = cousin; }
-
-	public ArrayList<Rail> getRailsRoute() {
-		return railsRoute;
-	}
-
-
-	public void setRailsRoute(ArrayList<Rail> railsRoute) {
-		this.railsRoute = railsRoute;
-	}
+        return possibility1 || possibility2;
+    }
 
     public String toString()
     {
@@ -172,10 +126,64 @@ public class Route {
     }
 
 
-    public boolean links(Ville ville1, Ville ville2){
-        boolean possibility1 = ville1 == this.getVille1() && ville2 == this.getVille2();
-        boolean possibility2 = ville1 == this.getVille2() && ville2 == this.getVille1();
 
-        return possibility1 || possibility2;
+    public void resetProprietaire() {
+        this.proprietaire = null;
+        resetRails();
     }
+
+    private void resetRails()
+    {
+        for (Rail rail : railsRoute)
+        {
+            rail.setOccuperPar(null);
+        }
+    }
+
+
+    /* getteurs et setteurs */
+
+    public Ville getVille1() {
+        return ville1;
+    }
+
+    public Ville getVille2() {
+        return ville2;
+    }
+
+    public int getLongueur() {
+        return longueur;
+    }
+
+    public Rail.Content getCouleur() {
+        return couleur;
+    }
+    public Player getProprietaire() {
+        return proprietaire;
+    }
+
+    public void setProprietaire(Player proprietaire) {
+        this.proprietaire = proprietaire;
+    }
+
+    public int getNombrePoint() {
+        return nombrePoint;
+    }
+
+    /**
+     * Getter for cousin
+     * @return cousin
+     */
+    public Route getCousin() { return cousin; }
+
+    /**
+     * Setter for cousin
+     * @param cousin cousin to set
+     */
+    public void setCousin(Route cousin) { this.cousin = cousin; }
+
+    public ArrayList<Rail> getRailsRoute() {
+        return railsRoute;
+    }
+
 }

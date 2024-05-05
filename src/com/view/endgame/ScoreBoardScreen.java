@@ -73,7 +73,7 @@ public class ScoreBoardScreen extends JPanel{
         for (Player player : players) {
             add(createCenteredLabel(player.getName()));
             add(createCenteredLabel(String.valueOf(player.scoreFinal()))) ;
-            add(createCenteredLabel(String.valueOf(15 - player.getNbrWagon()))) ;
+            add(createCenteredLabel(String.valueOf( player.initNbragon() - player.getNbrWagon()))) ;
             add(createCenteredLabel(String.valueOf(player.getNbrGare()))) ;
             add(createCenteredLabel(String.valueOf(player.getMissionComplete()))) ;
         }

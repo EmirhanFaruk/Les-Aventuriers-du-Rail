@@ -8,7 +8,6 @@ import com.model.config.Ville;
 import com.view.GameMapPanel;
 import com.view.MapScreen;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.ArrayList;
 import java.awt.*;
 
@@ -20,7 +19,6 @@ public class Game
     private ArrayList<Route> routes;
     private CarteManager cm;
     private Round round;
-
     private GameFrame gameFrame ;
 
     public Game(GameFrame gameFrame) {
@@ -34,57 +32,6 @@ public class Game
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
-    }
-
-    /*
-    getteurs et setteurs
-     */
-    public Plateau getPlateau() {
-        return plateau;
-    }
-
-    public ArrayList<Ville> getVilles() {
-        return villes;
-    }
-
-    public void setVilles(ArrayList<Ville> villes) { this.villes = villes; }
-
-    public ArrayList<Route> getRoutes() {
-        return routes;
-    }
-
-    public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
-
-    public ArrayList<Player> getListPlayer() {
-        return listPlayer;
-    }
-
-    public GameFrame getGameFrame() {
-        return gameFrame;
-    }
-
-    public MapScreen getMapScreen()
-    {
-        if (gameFrame != null)
-        {
-            return gameFrame.getMapScreen();
-        }
-
-        return null;
-    }
-
-    public GameMapPanel getGameMapPanel()
-    {
-        if (gameFrame != null)
-        {
-            return gameFrame.getGameMapPanel();
-        }
-
-        return null;
-    }
-
-    public void setListPlayer(ArrayList<Player> listPlayer) {
-        this.listPlayer = listPlayer;
     }
 
     private void initBoard(){
@@ -146,8 +93,8 @@ public class Game
 
 
     /**
-     * Verifie s'il y a un joueur qui a moins de 3 wagons
-     * @return true si nbrWagon est inferieur a 3
+     * Vérifie s'il y a un joueur qui a moins de 3 wagons.
+     * @return true si nbrWagon est inférieur à 3.
      */
     public boolean endGame( ){
         for (Player p : listPlayer){
@@ -155,10 +102,13 @@ public class Game
                 return true ;
             }
         }
-        return false ;
+        return cm.trainCardisEmpty();
     }
-    
 
+    /**
+     * Une fonction qui met a jour le jeu
+     * @param deltaTime le temps
+     */
     public void updateGame( double deltaTime ) {
         //game loop
         if (!round.roundFinished()) {
@@ -170,7 +120,53 @@ public class Game
             this.gameFrame.getGameScreen().getGameManagerScreen().showEndGame();
         }
     }
-    
+
+
+    /* getteurs et setteurs */
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
+    public ArrayList<Ville> getVilles() {
+        return villes;
+    }
+
+    public void setVilles(ArrayList<Ville> villes) { this.villes = villes; }
+
+    public ArrayList<Route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
+
+    public ArrayList<Player> getListPlayer() {
+        return listPlayer;
+    }
+
+    public GameFrame getGameFrame() {
+        return gameFrame;
+    }
+
+    public MapScreen getMapScreen()
+    {
+        if (gameFrame != null)
+        {
+            return gameFrame.getMapScreen();
+        }
+
+        return null;
+    }
+
+    public GameMapPanel getGameMapPanel()
+    {
+        if (gameFrame != null)
+        {
+            return gameFrame.getGameMapPanel();
+        }
+
+        return null;
+    }
+
     public CarteManager getCarteManager() {
     	return this.cm;
     }

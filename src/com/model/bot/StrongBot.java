@@ -153,6 +153,14 @@ public class StrongBot implements BotAction {
                 if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
 
 
+                    ArrayList<Rail> listeRail = routesPossible.get(z).getRailsRoute() ;
+                    Player bot = game.getListPlayer().get( game.getRound().getWhoIsPlaying());
+
+                    for (Rail rail : listeRail) {
+                        rail.setOccuperPar(bot);
+                    }
+                    System.err.println("takeRail True");
+
                     return true ;
 
                 }
@@ -161,6 +169,8 @@ public class StrongBot implements BotAction {
 
 
         }
+
+        // DEBUG : System.out.println("takeRail False");
 
         return false;
     }
@@ -190,6 +200,9 @@ public class StrongBot implements BotAction {
                 if(toTransformInGare != null &&  !(cd.getComplete())){
 
                     joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
+
+
+                    System.err.println("takeGare true 1");
 
                     return true;
 

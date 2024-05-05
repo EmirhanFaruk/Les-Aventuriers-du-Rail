@@ -6,12 +6,11 @@ import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.RescaleOp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,18 +77,6 @@ public class PlayerHandPanel extends JPanel {
         this.setPlayer(game.getJoueurCourant());
     }
 
-    public DrawPlayerHand getDrawPlayerHand(String playerName) {
-        return drawPlayerHands.get(playerName);
-    }
-
-    public DrawPlayerHand2 getDrawPlayerHand2(String playerName) {
-        return drawPlayerHands2.get(playerName);
-    }
-
-    public Game getGame() {
-        return game;
-    }
-    
 
     public class DrawPlayerHand extends JPanel {
     	Player player ;
@@ -131,16 +118,19 @@ public class PlayerHandPanel extends JPanel {
 	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
 	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
 	            listCardWagon.add(carteWagon);
-	            BufferedImage image = CardGraphics.getImage(carteWagon);
-	
-	            if (image != null) {
-	                g.drawImage(image, x, hFixe, null);
-	                x += image.getWidth() + 10;
-	                width = x;
-	                imageWidth = image.getWidth();
-	                imageHeight = image.getHeight();
-	            }
-	            i++;
+                try {
+                    BufferedImage image = CardGraphics.getImage(carteWagon);
+
+                    if (image != null) {
+                        g.drawImage(image, x, hFixe, null);
+                        x += image.getWidth() + 10;
+                        width = x;
+                        imageWidth = image.getWidth();
+                        imageHeight = image.getHeight();
+                    }
+                    i++;
+                } catch ( Exception ignored){ }
+
 	        }
 	        // Mettre à jour les dimensions du panneau
 	        setPreferredSize(new Dimension(width, height));
@@ -164,7 +154,7 @@ public class PlayerHandPanel extends JPanel {
 	        }
 	        return null ;
 	    }
-	    
+
 	    public Player getPlayer() {
 	        return this.player;
 	    }
@@ -266,5 +256,16 @@ public class PlayerHandPanel extends JPanel {
                 i++;
             }
         }
+    }
+
+
+    /* getters et setters */
+
+    public DrawPlayerHand getDrawPlayerHand(String playerName) {
+        return drawPlayerHands.get(playerName);
+    }
+
+    public Game getGame() {
+        return game;
     }
 }
