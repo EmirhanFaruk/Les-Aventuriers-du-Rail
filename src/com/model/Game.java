@@ -41,7 +41,7 @@ public class Game
         // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
         for (int i = 0; i < listPlayer.size(); i++)
         {
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 10; j++)
             {
                 listPlayer.get(i).piocher(cm);
             }
@@ -102,7 +102,7 @@ public class Game
                 return true ;
             }
         }
-        return cm.trainCardisEmpty() && cm.PileCarteWagon.isEmpty();
+        return cm.trainCardisEmpty();
     }
 
     /**

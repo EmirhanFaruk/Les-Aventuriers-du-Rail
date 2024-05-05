@@ -14,7 +14,6 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
 public class Round {
 
-    private boolean playing = true; //Le jeu en pose ou pas
     private int whoIsPlaying = 0; //Quel joueur est entrain de jouer
     private boolean endTurn = false; //Si le tour est finis ou non
     private int action = 2; //Le nombre d'action qu'il reste pour piocher une carte wagon
@@ -56,11 +55,11 @@ public class Round {
         setEndTurn(true);
         
         //Piocher une carte destination comptera comme une action maintenant
-        game.getListPlayer().get(whoIsPlaying).setFirstTurnOver(true);
+        game.getJoueurCourant().setFirstTurnOver(true);
         
         //Variable pour avoir le prochain Player
         whosNext(game);
-        Player joueur = game.getListPlayer().get(whoIsPlaying);
+        Player joueur = game.getJoueurCourant();
 
         //Variable pour avoir acces au gameMapPanel
         GameMapPanel gameMapPanel = game.getGameMapPanel();
@@ -70,7 +69,7 @@ public class Round {
                
         //Reroll les cartes destinations (pour un autre joueur)
         game.getCarteManager().rerollDestination();
-        
+
         //Change de joueur courant
         gameMapPanel.setPlayerCourant(joueur);
         
@@ -83,6 +82,8 @@ public class Round {
 
         betweenRoundTimer = betweenRoundTimerMax;
         // DEBUG :System.out.println(whoIsPlaying);
+
+
     }
     
     public void whosNext(Game game){

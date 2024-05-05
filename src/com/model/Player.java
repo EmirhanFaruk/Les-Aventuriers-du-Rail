@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Player {
 	private String name;
     private int score;
-    private boolean firstTurnOver;
+    private boolean firstTurnOver = false;
     private boolean canPlay;
 	private final String playerCouleur ;
 	private int nbrWagon ;
@@ -27,6 +27,7 @@ public class Player {
     private ArrayList<CarteWagon.Couleur> trainList = new ArrayList<>(); //La liste de carte wagon du joueur
 	public Couleur couleur;
 	private Game game;
+
 
 	/**
 	 * Constructeur de Player
@@ -97,14 +98,7 @@ public class Player {
 
 	public void piocheCarteInvisible() {
 		CarteManager cm = game.getCarteManager();
-		if(cm.PileCarteWagon.isEmpty()){
-			if(cm.trainCardisEmpty()){
-				JOptionPane.showMessageDialog(new JFrame(),"Il n'y a plus de carte wagon ! veuillez choisir une autre action.","Instructions",JOptionPane.WARNING_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(new JFrame(),"La pile est vide ! veuillez prendre de ce qui reste ou choisir une autre action","Instructions",JOptionPane.WARNING_MESSAGE);
-			}
-			return;
-		}
+
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
 			insertCarte(cm.drawCard());
@@ -269,6 +263,7 @@ public class Player {
 		int cumulPoints=0;
 		for(CarteDestination c : destinationsList){
 			if(c.getComplete()) continue; // éviter les cartes dèja comptlétées.
+
 			Ville ville1 = c.getPremiereVille();
 			Ville ville2 = c.getDeuxiemeVille();
 			if (LongestFinder.wayExists(ville1, ville2, this)){
@@ -498,4 +493,6 @@ public class Player {
 	public void setFirstTurnOver(boolean firstTurnOver) {
 		this.firstTurnOver = firstTurnOver;
 	}
+
+
 }
