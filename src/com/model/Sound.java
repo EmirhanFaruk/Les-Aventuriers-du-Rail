@@ -13,6 +13,7 @@ public class Sound {
     static String path = System.getProperty("user.dir");
     static String s = findSlash(path);
     private boolean music = false;
+    private boolean click = false;
 
 
     public Sound(){
@@ -114,6 +115,14 @@ public class Sound {
 
     public boolean getMusic() {
         return music;
+    }
+
+    public void setClick(boolean click) {
+        this.click = click;
+    }
+
+    public boolean getclick() {
+        return click;
     }
 
 }

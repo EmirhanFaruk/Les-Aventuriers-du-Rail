@@ -18,7 +18,8 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {   
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             cardLayout.show(main_panel, home_mode);
         }
     }
@@ -31,7 +32,8 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             cardLayout.show(main_panel, play_mode);
         }
     }
@@ -44,7 +46,8 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             cardLayout.show(main_panel, settings_mode);
         }
     }
@@ -56,8 +59,9 @@ public class Menu extends JPanel
     {
         @Override
         public void actionPerformed(ActionEvent e)
-        {
-            frame.getSound().playSound(4);
+        {   
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             cardLayout.show(main_panel, rules_mode);
         }
     }
@@ -153,7 +157,8 @@ public class Menu extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.getSound().playSound(4);
+                if(frame.getSound().getclick())
+                    frame.getSound().playSound(4);
                 frame.quitGame();
             }
         });

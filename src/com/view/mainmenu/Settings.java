@@ -17,6 +17,7 @@ public class Settings extends JPanel
     // Fullscreen
     private JCheckBox fs_cb;
     private JCheckBox music_cb;
+    private JCheckBox click_cb;
 
 
     public Settings(Menu main)
@@ -73,7 +74,8 @@ public class Settings extends JPanel
         res.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound(4);
             }
         });
         return res;
@@ -89,7 +91,8 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound(4);
                 int index = res_box.getSelectedIndex();
                 int[] res = resolutions[index];
                 main.setAllSize(res[0], res[1]);
@@ -115,7 +118,8 @@ public class Settings extends JPanel
         fs_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound(4);
             }
         });
         fullscreen_panel.add(fs_cb);
@@ -130,14 +134,29 @@ public class Settings extends JPanel
         JPanel sound_panel = new JPanel();
         sound_panel.setLayout(new GridLayout(1, 3));
 
+        JPanel sound_buttons = makeBlackBox();
+        sound_buttons.setLayout(new GridLayout(2, 1));
+
         music_cb = makeMusicCheckBox();
         music_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound(4);
             }
         });
-        sound_panel.add(music_cb);
+        click_cb = makeClickSoundCheckBox();
+        click_cb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound(4);
+            }
+        });
+
+        sound_buttons.add(music_cb);
+        sound_buttons.add(click_cb);
+        sound_panel.add(sound_buttons);
         sound_panel.add(makeBlackBox());
         sound_panel.add(makeSButton());
 
@@ -161,7 +180,8 @@ public class Settings extends JPanel
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        main.getFrame().getSound().playSound(4);
+                        if(main.getFrame().getSound().getclick())
+                            main.getFrame().getSound().playSound(4);
                         if(fs_cb.isSelected())
                         {
                             main.getDevice().setFullScreenWindow(main.getFrame());
@@ -201,14 +221,19 @@ public class Settings extends JPanel
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        if(music_cb.isSelected())
-                        {
+                        if(music_cb.isSelected()){
                             main.getFrame().getSound().setMusic(true);
-                        }else
-                        {
-                            main.getFrame().getSound().stop();
+                        }else{
+                            main.getFrame().getSound().setMusic(false);
+                        }
+                        if(click_cb.isSelected()){
+                            main.getFrame().getSound().setClick(true);
+                        }else{
+                            main.getFrame().getSound().setClick(false);
                         }
 
+                        if(main.getFrame().getSound().getclick())
+                            main.getFrame().getSound().playSound(4);
                     }
                 });
 
@@ -221,6 +246,14 @@ public class Settings extends JPanel
     private JCheckBox makeMusicCheckBox()
     {
         JCheckBox res = new JCheckBox("Music");
+        res.setBackground(Color.BLACK);
+        res.setForeground(Color.GRAY);
+        return res;
+    }
+
+    private JCheckBox makeClickSoundCheckBox()
+    {
+        JCheckBox res = new JCheckBox("Click Sound");
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
