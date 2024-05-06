@@ -15,7 +15,7 @@ import java.util.Random;
 
 /**
  * Le bot "NormalBot" est une implémentation de l'interface BotAction.
- * Il représente un bot basique qui joue de manière semi-aléatoire en utilisant différentes stratégies de jeu.
+ * Il représente un bot de la difficulté normale qui joue de manière semi-aléatoire en utilisant différentes stratégies de jeu.
  */
 public class NormalBot implements BotAction {
 
@@ -115,7 +115,7 @@ public class NormalBot implements BotAction {
     }
 
     /**
-     * Permet au bot de prendre des rails sur le plateau de jeu.
+     * Permet au bot de prendre des rails (poser des wagons) sur le plateau de jeu.
      *
      * @param game Le jeu actuel.
      * @return {@code true} si le bot a réussi à poser des wagons sur une route, {@code false} sinon.
@@ -123,7 +123,6 @@ public class NormalBot implements BotAction {
     @Override
     public boolean takeRail(Game game) {
         Player player = game.getJoueurCourant();
-        Round round = game.getRound();
 
         for (Route route : game.getRoutes()) {
             if (player.mettreRoute(route)) {
@@ -141,7 +140,7 @@ public class NormalBot implements BotAction {
      * Permet au bot de poser une gare sur le plateau de jeu.
      *
      * @param game        Le jeu actuel.
-     * @param wichStation L'index de la gare à poser.
+     * @param wichStation L'index de la gare à poser, qu'il ne sera pas utilisé ici.
      * @return {@code true} si le bot a réussi à poser une gare, {@code false} sinon.
      */
     @Override
@@ -173,9 +172,9 @@ public class NormalBot implements BotAction {
     }
 
     /**
-     * Permet au bot de prendre des cartes missions.
+     * Permet au bot de prendre une ou des cartes missions.
      *
-     * @param max  Le nombre maximum de points de cartes missions à prendre.
+     * @param max  Le nombre maximal de points d'une carte destination/l'accumulation des cartes destination que le bot peut prendre.
      * @param game Le jeu actuel.
      * @return Un tableau de cartes missions prises par le bot.
      */
