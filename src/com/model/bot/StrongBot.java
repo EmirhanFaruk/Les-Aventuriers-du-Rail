@@ -142,7 +142,7 @@ public class StrongBot implements BotAction {
      * Permet au bot de poser une gare de manière stratégique.
      *
      * @param game Le jeu en cours.
-     * @param wichStation L'identifiant de la gare à poser.
+     * @param wichStation Pas utilisé dans la fonction.
      * @return true si la gare a été posée avec succès, sinon false.
      */
     @Override
