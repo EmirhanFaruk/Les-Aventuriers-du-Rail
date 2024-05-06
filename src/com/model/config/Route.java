@@ -190,8 +190,7 @@ public class Route {
     	this.proprietaire = null;
 
     	for(int i = 0; i < this.railsRoute.size(); i++) {
-    		this.railsRoute.get(i).setOccuperPar(null);
-    		this.railsRoute.get(i).setOccuper(false);
+    		this.railsRoute.get(i).setOccuperPar2(null);
     	}    	
     }
 

@@ -83,8 +83,8 @@ public class Rail extends Case {
 		this.saRoute = r;
 	}
 	
-	public void setOccuper(boolean o) {
-        this.occuper = o;
+	public void setOccuperPar2(Player o) {
+        this.occuperPar = o;
     }
 
     public Player getOccuperPar() {

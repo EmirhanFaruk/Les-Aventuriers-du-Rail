@@ -27,41 +27,12 @@ public class CarteManager {
     	//Change nuke en True si le mode choisis est nuke
     	if(string.equals("NUKE"))nuke = true;
     	
-        //Pour initialiser les wagons
-        initPileCarteWagon();
-    }
+    	 for(int i = 0; i< trainCards.length;i++) {
+             trainCards[i] = drawCard();
+         }
 
-    private void initPileCarteWagon() {
-    	if(!nuke) {
-    		
-            for(int i=0;i<8;i++){ //8 couleurs de carteWagon
-                for(int j=0;j<12;j++) { //12 wagons de chaque couleur
-                    PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
-                }
-            }
-            
-    	}else {
-    		
-    		for(int i=0;i<9;i++){ //8 couleurs de carteWagon
-                for(int j=0;j<12;j++) { //13 wagons de chaque couleur
-                    PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
-                }
-            }
-    		
-    	}
-        
-        for(int i =0;i<14;i++){
-            PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
-        }
-        
-        Collections.shuffle(PileCarteWagon); // Mélange de cartes.
-        for(int i=0; i<trainCards.length;i++){
-            trainCards[i] = PileCarteWagon.remove(0).getInitialCouleur();
-        }
-        
-        verifAllDifferent();
+         verifAllDifferent();
     }
-
 
     public void initPileCarteDestination(Game g) {
         ArrayList<Route> gameRoutes = g.getRoutes();
@@ -169,7 +140,7 @@ public class CarteManager {
             //Comme il y a 110 cartes au total, on fait un random qui va nous donner un chiffre entre 0 et 109
 
             Random carte = new Random();
-            int pioche = carte.nextInt(110);
+            int pioche = carte.nextInt(120);
 
             //En fonction du chiffre qu'on a obtenu, on renvoit une Couleur
             if(pioche >= 0 && pioche <= 11){
@@ -195,6 +166,9 @@ public class CarteManager {
             }
             if(pioche >= 84 && pioche <= 95){
                 return ROUGE;
+            }         
+            if((pioche >= 96 && pioche <= 107) && nuke){
+                return NUKE;
             }
 
             return LOC;
