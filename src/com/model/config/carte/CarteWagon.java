@@ -1,11 +1,9 @@
 package com.model.config.carte;
 
-import static com.model.config.carte.CarteWagon.Couleur.*;
-
 import javax.swing.*;
 
 public class CarteWagon extends JPanel {
-    public enum Couleur {BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, LOC, JOKERETOILEE}
+    public enum Couleur {BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, NUKE, LOC, JOKERETOILEE}
     private Couleur initialCouleur ;
     private int widthInPanel  , heightInPanel ;
 
@@ -19,7 +17,6 @@ public class CarteWagon extends JPanel {
     {
         this.initialCouleur = couleur;
     }
-
 
     /* getteurs et setteurs */
 	public Couleur getInitialCouleur() {

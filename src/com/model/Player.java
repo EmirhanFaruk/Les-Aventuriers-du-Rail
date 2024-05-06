@@ -75,21 +75,15 @@ public class Player {
 	}
 	
 	public boolean piocheCarteDestination(CarteManager cm, int i) {
-		//vérifie s'il a le max de carte destination possible pour un joueur
-		if(this.destinationsList.size() < 3) {
-			//vérifie s'il ne possède pas déjà la carte destination
-			if(cm.getDestinationsCards()[i] != null) {
-				//donne la carte destination et mets à null pour remplacer
-				this.destinationsList.add(cm.getDestinationsCards()[i]);
-				cm.getDestinationsCards()[i] = null;
-				if( !this.destinationsList.isEmpty() )this.canPlay = true;
-				return true;
-			}else {
-				JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
-			}	
-			
+		//vérifie s'il ne possède pas déjà la carte destination
+		if(cm.getDestinationsCards()[i] != null) {
+			//donne la carte destination et mets à null pour remplacer
+			this.destinationsList.add(cm.getDestinationsCards()[i]);
+			cm.getDestinationsCards()[i] = null;
+			if( !this.destinationsList.isEmpty() )this.canPlay = true;
+			return true;
 		}else {
-			JOptionPane.showMessageDialog(new JFrame(),"Vous avez le maximum de carte destination ! (max 3)","Instructions",JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
 		
 		return false;
@@ -233,6 +227,59 @@ public class Player {
 		}
 
 	}
+	
+	//Méthode pour retirer la route d'un autre joueur
+	public boolean retirerRouteAutreJoueur(Rail r, Player p) {
+		
+		//Si le joueur n'est pas null
+		if(this != null) {			
+			for(int i = 0; i < this.getPlayerRoutes().size(); i++) {	
+				//Si la Route correspond dans l'inventaire du joueur
+				if(r.getSaRoute() == this.getPlayerRoutes().get(i)) {
+					
+					//Debug : System.out.print("SA PASSE");
+					
+					p.retirerCarteNuke(); //Retire la carte nuke de son inventaire
+					r.getSaRoute().enleverProprio(); //Enlève le proprio de la route et des rails
+					this.getPlayerRoutes().remove(i); //Enlève la route de l'inventaire du joueur
+					
+					//Debug : System.out.println(r.getSaRoute().getProprietaire());
+					
+					return true;
+				}				
+			}			
+		}
+		
+		return false;
+	}
+	
+	//Méthode pour retirer la gare d'un autre joueur
+	public void retirerGareAutrePlayer(Ville ville, Player player) {
+		ville.setIsOccuped(null); //Enlève le proprio de la ville
+		player.retirerCarteNuke(); //Retire la carte nuke de l'inventaire
+		this.nbrGare += 1;  //Rajoute une Gare dispo
+	}
+
+
+	public boolean checkACarteNuke() {
+		for(int i = 0; i < this.trainList.size(); i++) {
+			if(this.trainList.get(i) == Couleur.NUKE) {
+				return true;
+			}
+		}
+		
+		return false;	
+	}
+	
+	//Méthode pour retirer la carte nuke de l'inventaire d'un joueur
+	private void retirerCarteNuke() {
+		for(int i = 0; i < this.trainList.size(); i++) {
+			if(this.trainList.get(i) == Couleur.NUKE) {
+				this.trainList.remove(i);
+				return;
+			}
+		}
+	}
 
 
     public void retirerLesCartes(Couleur color, int carteAEnlever) {
@@ -289,7 +336,7 @@ public class Player {
 	 */
 	public boolean transformerEnGare( Ville ville , Couleur couleurCarteChoisit ){
 
-		if ( assezDeGare() ){
+		if ( assezDeGare() && ville.getIsOccuped() == null){
 			int nbrCarteRetirer = nombreDeCartePourPoserUneGare() ;
 
 
@@ -431,6 +478,10 @@ public class Player {
 	 */
 	public boolean assezDeGare(){
 		return this.nbrGare > 0 ;
+	}
+	
+	public ArrayList<Route> getPlayerRoutes(){
+		return this.playerRoutes;
 	}
 
 

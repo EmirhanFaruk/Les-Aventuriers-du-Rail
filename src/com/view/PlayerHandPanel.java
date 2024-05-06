@@ -97,7 +97,7 @@ public class PlayerHandPanel extends JPanel {
 	        this.addMouseListener(new MouseAdapter() {
 	            @Override
 	            public void mouseClicked(MouseEvent e) {
-	            	gameController.couleurCarteAChoisir( e ,  player , PlayerHandPanel.this ,game );
+	            	gameController.couleurCarteAChoisir(e, player, PlayerHandPanel.this, game);
 	            }
 	        });
     	}
@@ -119,9 +119,10 @@ public class PlayerHandPanel extends JPanel {
 	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
 	            listCardWagon.add(carteWagon);
 	            BufferedImage image = CardGraphics.getImage(carteWagon);
+	          
 	
 	            if (image != null) {
-	                g.drawImage(image, x, hFixe, null);
+	            	g.drawImage(image, x, hFixe, null);
 	                x += image.getWidth() + 10;
 	                width = x;
 	                imageWidth = image.getWidth();
@@ -129,6 +130,7 @@ public class PlayerHandPanel extends JPanel {
 	            }
 	            i++;
 	        }
+	        
 	        // Mettre à jour les dimensions du panneau
 	        setPreferredSize(new Dimension(width, height));
 	        revalidate(); // Mettre à jour la mise en page
@@ -144,7 +146,7 @@ public class PlayerHandPanel extends JPanel {
 	        for ( CarteWagon c : listCardWagon ){
 	            int widthEndCard = c.getWidthInPanel() + imageWidth ;
 	            int heightEndCard = c.getHeightInPanel() + imageHeight ;
-	            if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard ){
+	            if ( x > c.getWidthInPanel() && x < widthEndCard && y > c.getHeightInPanel() && y < heightEndCard){
 	                //DEBUG : System.err.println("La carte est de la couleur " + c.getInitialCouleur() );
 	                return c ;
 	            }

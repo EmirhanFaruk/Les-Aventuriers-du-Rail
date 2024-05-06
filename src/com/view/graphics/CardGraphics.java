@@ -12,6 +12,7 @@ import java.io.IOException;
 public class CardGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
+    private static final BufferedImage CardNuke = loadImage( "CardNuke.png" ) ;
     private static final BufferedImage CardObjectif = loadImage( "OjectifCard.png" ) ;
     private static final BufferedImage CardInvisible = loadImage( "CardWagonBack.png" ) ;
     private static final BufferedImage CardLocomotive = loadImage( "CardLocomotive.png" ) ;
@@ -23,7 +24,6 @@ public class CardGraphics {
     private static final BufferedImage CardViolet = loadImage( "CardWagonViolet.png" ) ;
     private static final BufferedImage CardWhite = loadImage( "CardWagonWhite.png" ) ;
     private static final BufferedImage CardYellow = loadImage( "CardWagonYellow.png" ) ;
-    private static int width , height ;
 
     /**
      * Une fonction qui renvoie une image
@@ -89,7 +89,11 @@ public class CardGraphics {
 
             case ROUGE:
                 return CardRed;
+                
+            case NUKE: 
+            	return CardNuke;
         }
+        
         return null ;
     }
     
@@ -114,13 +118,14 @@ public class CardGraphics {
                 return CardBlue;
             case ROUGE:
                 return CardRed;
+            case NUKE: 
+            	return CardNuke;
             default:
                 return null; // Ajoutez une gestion d'erreur ou une valeur par défaut si nécessaire
         }
     }
 
     /* getters et setters */
-
     public static BufferedImage getCardCache() {
     	return CardInvisible;
     }
