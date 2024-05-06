@@ -196,6 +196,44 @@ public class NormalBot implements BotAction {
         return game.getCarteManager().takeDestination(indices);
     }
 
+
+    /**
+     * Procède au premier tour du bot en ajoutant des missions et en choisissant les actions de manière optimale.
+     *
+     * @param game Le jeu en cours.
+     */
+    private void firstTurn(Game game) {
+        CarteDestination[] carteDestination = takeMissionsCard(6, game);
+
+        for (int z = 0; z < carteDestination.length; z++) {
+            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+        }
+
+        game.getJoueurCourant().setFirstTurnOver(true);
+        optimalCompleteMission(game);
+    }
+
+    /**
+     * Procède de manière optimale à compléter les missions du bot en prenant des rails, en posant des gares,
+     * ou en piochant des cartes wagons.
+     *
+     * @param game Le jeu en cours.
+     */
+    private void optimalCompleteMission(Game game) {
+        if (takeRail(game)) {
+            game.getRound().endRound(game);
+        } else {
+            if (takeGare(game, 0)) {
+                game.getRound().endRound(game);
+            } else {
+                drawCardWagon(game);
+                game.getRound().endRound(game);
+            }
+        }
+    }
+
+
+
     /**
      * La fonction principale du bot pour jouer son tour.
      *
@@ -206,34 +244,41 @@ public class NormalBot implements BotAction {
         Random random = new Random();
         int action = random.nextInt(4);
 
-        switch (action) {
-            case 0:
-                // Piocher des cartes wagons
-                drawCardWagon(game);
-                break;
-            case 1:
-                // Piocher des cartes missions
-                CarteDestination[] newMissions = takeMissionsCard(8, game);
-                Player currentPlayer = game.getJoueurCourant();
-                for (CarteDestination mission : newMissions) {
-                    currentPlayer.getDestinationsList().add(mission);
-                }
-                break;
-            case 2:
-                // Poser des wagons
-                if (!takeRail(game)) {
-                    play(game);
-                }
-                break;
-            default:
-                // Poser une gare
-                if (!takeGare(game, 0)) {
-                    play(game);
-                }
-                break;
+        if (!game.getJoueurCourant().getFirstTurnOver()) {
+            firstTurn(game);
+        } else {
+            switch (action) {
+                case 0:
+                    // Piocher des cartes wagons
+                    drawCardWagon(game);
+                    break;
+                case 1:
+                    // Piocher des cartes missions
+                    CarteDestination[] newMissions = takeMissionsCard(8, game);
+                    Player currentPlayer = game.getJoueurCourant();
+                    for (CarteDestination mission : newMissions) {
+                        currentPlayer.getDestinationsList().add(mission);
+                    }
+                    break;
+                case 2:
+                    // Poser des wagons
+                    if (!takeRail(game)) {
+                        play(game);
+                    }
+                    break;
+                default:
+                    // Poser une gare
+                    if (!takeGare(game, 0)) {
+                        play(game);
+                    }
+                    break;
+            }
+
+            // Fin du tour
+            game.getRound().endRound(game);
         }
 
-        // Fin du tour
-        game.getRound().endRound(game);
+
+
     }
 }
