@@ -20,13 +20,45 @@ public class CarteManager {
     private CarteDestination[] destinationsCards = new CarteDestination[3];
     //La pile de cartes Destination
     public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
+    //Vérification du mode de Jeu
+    private boolean nuke;
 
-    public CarteManager(){
+    public CarteManager(String string){
+    	//Change nuke en True si le mode choisis est nuke
+    	if(string.equals("NUKE"))nuke = true;
+    	
         //Pour initialiser les wagons
-        for(int i = 0; i< trainCards.length;i++) {
-            trainCards[i] = drawCard();
-        }
+        initPileCarteWagon();
+    }
 
+    private void initPileCarteWagon() {
+    	if(!nuke) {
+    		
+            for(int i=0;i<8;i++){ //8 couleurs de carteWagon
+                for(int j=0;j<12;j++) { //12 wagons de chaque couleur
+                    PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+                }
+            }
+            
+    	}else {
+    		
+    		for(int i=0;i<9;i++){ //8 couleurs de carteWagon
+                for(int j=0;j<12;j++) { //13 wagons de chaque couleur
+                    PileCarteWagon.add(new CarteWagon(Couleur.values()[i]));
+                }
+            }
+    		
+    	}
+        
+        for(int i =0;i<14;i++){
+            PileCarteWagon.add(new CarteWagon(LOC)); // 14 Locomotive
+        }
+        
+        Collections.shuffle(PileCarteWagon); // Mélange de cartes.
+        for(int i=0; i<trainCards.length;i++){
+            trainCards[i] = PileCarteWagon.remove(0).getInitialCouleur();
+        }
+        
         verifAllDifferent();
     }
 

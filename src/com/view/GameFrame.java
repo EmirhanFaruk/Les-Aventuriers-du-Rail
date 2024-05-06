@@ -72,9 +72,7 @@ public class GameFrame extends JFrame
 
         setFocusable(true);
         requestFocusInWindow();
-
         this.setVisible(true);
-
     }
 
 
@@ -166,5 +164,9 @@ public class GameFrame extends JFrame
 
     public Main getMain() {
         return main;
+    }
+    
+    public String getMode() {
+        return main.getMode();
     }
 }

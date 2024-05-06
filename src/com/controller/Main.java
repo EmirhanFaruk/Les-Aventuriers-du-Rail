@@ -97,6 +97,10 @@ public class Main implements Runnable
     public Game getGame() {
         return game;
     }
+    
+    public String getMode() {
+        return mode;
+    }
     public String getMap() {
         return map;
     }

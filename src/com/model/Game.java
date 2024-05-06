@@ -27,7 +27,7 @@ public class Game
 
     public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors )
     {
-        this.cm = new CarteManager();
+        this.cm = new CarteManager(gameFrame.getMode());
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
