@@ -1,6 +1,11 @@
 package com.view.mainmenu;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +21,13 @@ public class Settings extends JPanel
 
     // Fullscreen
     private JCheckBox fs_cb;
+
+    // Sound
     private JCheckBox music_cb;
     private JCheckBox click_cb;
+    private SliderWithValueLabel volume_slider;
+    private JLabel valueLabel;
+    private int valeur_slider = 50;
 
 
     public Settings(Menu main)
@@ -157,7 +167,7 @@ public class Settings extends JPanel
         sound_buttons.add(music_cb);
         sound_buttons.add(click_cb);
         sound_panel.add(sound_buttons);
-        sound_panel.add(makeBlackBox());
+        sound_panel.add(makeVolumeSlider());
         sound_panel.add(makeSButton());
 
         return sound_panel;
@@ -257,6 +267,68 @@ public class Settings extends JPanel
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
+    }
+
+    private JPanel makeVolumeSlider()
+    {   
+        JPanel volume_panel = new JPanel();
+        volume_panel.setLayout(new BorderLayout(0,0));
+        volume_panel.setBackground(Color.BLACK);
+        volume_panel.setForeground(Color.GRAY);
+
+        volume_slider = new SliderWithValueLabel(0, 100, valeur_slider);
+        volume_slider.setBackground(Color.BLACK);
+        volume_slider.setForeground(Color.GRAY);
+        valueLabel.setForeground(Color.GRAY);
+        volume_slider.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        
+        JLabel text = new JLabel("Volume");
+        text.setBackground(Color.BLACK);
+        text.setForeground(Color.GRAY);
+        text.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
+
+        volume_panel.add(text, BorderLayout.WEST);
+        volume_panel.add(volume_slider,BorderLayout.EAST);
+        volume_panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        volume_panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        return volume_panel;
+    }
+
+    public class SliderWithValueLabel extends JSlider {
+        public SliderWithValueLabel(int min, int max, int value) {
+            super(min, max, value);
+            setLayout(new BorderLayout());
+            valueLabel = new JLabel(Integer.toString(value), SwingConstants.CENTER);
+            valueLabel.setPreferredSize(new Dimension(40, 20));
+            add(valueLabel, BorderLayout.NORTH);
+            
+            addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    int val = getValue();
+                    valueLabel.setText(Integer.toString(val));
+                    Rectangle thumbBounds = getThumbBounds();
+                    valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
+                                           thumbBounds.y - valueLabel.getHeight());
+                            //main.getFrame().getSound().setVolume(valeur_slider);
+                }
+            });
+        }
+    
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Rectangle thumbBounds = getThumbBounds();
+            valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
+                                   thumbBounds.y - valueLabel.getHeight());
+        }
+    
+        private Rectangle getThumbBounds() {
+            int valuePosition = (int) ((double) (getValue() - getMinimum()) / (getMaximum() - getMinimum()) * (getWidth() - 16));
+            int trackY = (getHeight() - getPreferredSize().height) / 2;
+            return new Rectangle(valuePosition, trackY, 16, 16);
+        }
+    
     }
 
 }
