@@ -6,6 +6,7 @@ import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 public class Sound {
     static Clip c;
@@ -14,6 +15,7 @@ public class Sound {
     static String s = findSlash(path);
     private boolean music = false;
     private boolean click = false;
+    static float volume = 0.5f;
 
 
     public Sound(){
@@ -100,12 +102,14 @@ public class Sound {
 
     public void playMusic(){
         setFile(0);
+        setVolume(volume);
         c.start();
         c.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void playSound(int i){
         setFile(i);
+        setVolume(volume);
         c.start();
     }
 
@@ -125,4 +129,11 @@ public class Sound {
         return click;
     }
 
+    public void setVolume(float volume) {
+        if (volume < 0f || volume > 1f)
+            throw new IllegalArgumentException("Volume not valid: " + volume);
+        Sound.volume = volume;
+        FloatControl gainControl = (FloatControl) c.getControl(FloatControl.Type.MASTER_GAIN);        
+        gainControl.setValue(20f * (float) Math.log10(volume));
+    }
 }

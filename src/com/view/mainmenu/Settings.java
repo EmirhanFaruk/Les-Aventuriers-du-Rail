@@ -169,6 +169,7 @@ public class Settings extends JPanel
         sound_panel.add(sound_buttons);
         sound_panel.add(makeVolumeSlider());
         sound_panel.add(makeSButton());
+        volume_slider.setSize((int)(volume_slider.getSize().getWidth()*0.8),(int)(volume_slider.getSize().getHeight()*0.8));
 
         return sound_panel;
     }
@@ -210,7 +211,7 @@ public class Settings extends JPanel
                             main.getFrame().getSound().setMusic(true);
                         }else
                         {
-                            main.getFrame().getSound().stop();
+                            main.getFrame().getSound().setMusic(false);
                         }
 
                     }
@@ -244,6 +245,8 @@ public class Settings extends JPanel
 
                         if(main.getFrame().getSound().getclick())
                             main.getFrame().getSound().playSound(4);
+
+                        main.getFrame().getSound().setVolume((float)volume_slider.getValue()/100.0f);
                     }
                 });
 
@@ -271,26 +274,32 @@ public class Settings extends JPanel
 
     private JPanel makeVolumeSlider()
     {   
-        JPanel volume_panel = new JPanel();
+        JPanel volume_panel = makeBlackBox();
         volume_panel.setLayout(new BorderLayout(0,0));
-        volume_panel.setBackground(Color.BLACK);
-        volume_panel.setForeground(Color.GRAY);
 
         volume_slider = new SliderWithValueLabel(0, 100, valeur_slider);
         volume_slider.setBackground(Color.BLACK);
         volume_slider.setForeground(Color.GRAY);
+        JPanel volume_slider_panel = makeBlackBox();
+        volume_slider_panel.setLayout(new BorderLayout());
+
+        volume_slider_panel.add(volume_slider, BorderLayout.CENTER);
+
         valueLabel.setForeground(Color.GRAY);
-        volume_slider.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        // volume_slider.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         
-        JLabel text = new JLabel("Volume");
+        JLabel text = new JLabel("Volume  ");
         text.setBackground(Color.BLACK);
         text.setForeground(Color.GRAY);
         text.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
+        //text.setSize(12,12);
 
         volume_panel.add(text, BorderLayout.WEST);
-        volume_panel.add(volume_slider,BorderLayout.EAST);
+        volume_panel.add(makeBlackBox(), BorderLayout.EAST);
+        volume_panel.add(volume_slider_panel,BorderLayout.CENTER);
+        
         volume_panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        volume_panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        // volume_panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         return volume_panel;
     }
 
@@ -300,6 +309,7 @@ public class Settings extends JPanel
             setLayout(new BorderLayout());
             valueLabel = new JLabel(Integer.toString(value), SwingConstants.CENTER);
             valueLabel.setPreferredSize(new Dimension(40, 20));
+            valueLabel.setVisible(true);
             add(valueLabel, BorderLayout.NORTH);
             
             addChangeListener(new ChangeListener() {
@@ -310,7 +320,6 @@ public class Settings extends JPanel
                     Rectangle thumbBounds = getThumbBounds();
                     valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
                                            thumbBounds.y - valueLabel.getHeight());
-                            //main.getFrame().getSound().setVolume(valeur_slider);
                 }
             });
         }
@@ -319,8 +328,12 @@ public class Settings extends JPanel
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             Rectangle thumbBounds = getThumbBounds();
+            if(Integer.valueOf(valueLabel.getText())!= 100){
             valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
                                    thumbBounds.y - valueLabel.getHeight());
+            }else{
+                valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2 - 3,
+                thumbBounds.y - valueLabel.getHeight());}
         }
     
         private Rectangle getThumbBounds() {
