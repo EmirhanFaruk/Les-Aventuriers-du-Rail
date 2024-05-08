@@ -25,7 +25,7 @@ public class Settings extends JPanel
     // Sound
     private JCheckBox music_cb;
     private JCheckBox click_cb;
-    private SliderWithValueLabel volume_slider;
+    private static SliderWithValueLabel volume_slider;
     private JLabel valueLabel;
     private int valeur_slider = 50;
 
@@ -342,6 +342,9 @@ public class Settings extends JPanel
             return new Rectangle(valuePosition, trackY, 16, 16);
         }
     
+    }
+    public static SliderWithValueLabel getVolume_slider() {
+        return volume_slider;
     }
 
 }

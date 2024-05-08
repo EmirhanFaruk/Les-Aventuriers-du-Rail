@@ -131,9 +131,13 @@ public class Sound {
 
     public void setVolume(float volume) {
         if (volume < 0f || volume > 1f)
-            throw new IllegalArgumentException("Volume not valid: " + volume);
+            return;
         Sound.volume = volume;
         FloatControl gainControl = (FloatControl) c.getControl(FloatControl.Type.MASTER_GAIN);        
         gainControl.setValue(20f * (float) Math.log10(volume));
+    }
+
+    public int getVolume() {
+    return (int)volume;
     }
 }
