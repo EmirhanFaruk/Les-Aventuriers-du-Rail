@@ -82,6 +82,8 @@ public class Player {
 			this.destinationsList.add(cm.getDestinationsCards()[i]);
 			cm.getDestinationsCards()[i] = null;
 			if( !this.destinationsList.isEmpty() )this.canPlay = true;
+			if(game.getGameFrame().getSound().getclick())
+				game.getGameFrame().getSound().playSound(2);
 			return true;
 		}else {
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
@@ -103,6 +105,7 @@ public class Player {
 			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
+		game.getGameFrame().getSound().playSound(3);
 	}
 
 	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
@@ -113,12 +116,14 @@ public class Player {
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
@@ -133,6 +138,7 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
+				game.getGameFrame().getSound().playSound(3);
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
@@ -292,6 +298,7 @@ public class Player {
     public boolean mettreRoute(Route r) {
     	if(r != null) {
     		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
+				game.getGameFrame().getSound().playSound(1);
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
