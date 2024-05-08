@@ -82,6 +82,8 @@ public class Player {
 			this.destinationsList.add(cm.getDestinationsCards()[i]);
 			cm.getDestinationsCards()[i] = null;
 			if( !this.destinationsList.isEmpty() )this.canPlay = true;
+			if(game.getGameFrame().getSound().getclick())
+				game.getGameFrame().getSound().playSound(2);
 			return true;
 		}else {
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
