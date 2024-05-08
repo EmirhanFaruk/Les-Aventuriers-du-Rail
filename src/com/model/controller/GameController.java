@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GameController {
-    private String detailsCarte; // Variable pour sauvegarder les détails de la carte
     private CarteWagon carteWagon ;
     private int Mx , My  ;
 
@@ -25,58 +24,33 @@ public class GameController {
         // Utilisation des coordonnées x et y pour déterminer l'objet sur lequel l'utilisateur a cliqué
         try {
             Object clickedObject = game.getPlateau().getPlateau()[x][y];
-            Rail r = null;
-            if (clickedObject instanceof Rail) r = (Rail) clickedObject;
-
-            //DEBUG : POSITION
-        /*
-        System.out.println("x = " + x + " y = " + y);
-        if(r!=null) {
-        	System.out.println(clickedObject + " " + r.getInitialContent() + " " + r.getSaRoute());
-        }else {
-        	System.out.println(clickedObject);
-        }
-        }*/
-
-
             if (clickedObject != null) {
                 // Traitement en fonction du type de l'objet cliqué
                 if (clickedObject instanceof Rail) {
                     tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
+                    Mx = x;
+                    My = y;
                 } else if (clickedObject instanceof Ville) {
                     Mx = x;
                     My = y;
                 }
             }
-        } catch ( Exception exception ){
+        } catch ( Exception ignored ){
             // DEBUG : System.out.println("Nope hihi");
         }
     }
 
-
-	public String obtenirDetailsCarte(MouseEvent e) {
-        Object source = e.getSource(); // Obtenir la source de l'événement
-        if (source instanceof CarteDestination) { // Si la source est une carte destination
-            CarteDestination carteDestination = (CarteDestination) source;
-            detailsCarte = "Destination: " + carteDestination.getPremiereVille() + " - " + carteDestination.getDeuxiemeVille();
-        } else if (source instanceof CarteWagon) { // Si la source est une carte wagon
-            CarteWagon carteWagon = (CarteWagon) source;
-            detailsCarte = "Couleur du wagon: " + carteWagon.getInitialCouleur();
-        }
-        return detailsCarte;
-    }
-
-
 	public boolean isEntreeAppuye(KeyEvent e) {
 		return e.getKeyCode() == KeyEvent.VK_ENTER;
 	}
-	
-	
-    public boolean isEspaceAppuye(KeyEvent e) {
-        return e.getKeyCode() == KeyEvent.VK_SPACE; // Renvoie true si la touche "Espace" est appuyée
-    }
-     
-    // Vérifie si le rail a déjà un propriétaire
+
+	/**
+	 * Ue fonction qui tente s'il est possible d'occuper route qu'on a choisi
+	 * @param r la rail
+	 * @param player le joueur
+	 * @param round le tour
+	 * @param game le jeu
+	 */
     public void tenterAcquisitionRoute(Rail r, Player player, Round round, Game game) {
         //Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
@@ -92,9 +66,11 @@ public class GameController {
 	                return;
 	            }
 
-	            if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0 ) {
-	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-	                        "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	            if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0) {
+	            	if(!player.checkACarteNuke()) {
+		                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+		                        "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
+	            	}
 	                return;
 	            }
 
@@ -141,6 +117,13 @@ public class GameController {
     	}
     }
 
+	/**
+	 * Une fonction qui permet de choisir quelle carte on veut utiliser pour transformer une ville en gare
+	 * @param e le lectrue de souris
+	 * @param player le joueur
+	 * @param playerHandPanel la main du joueur
+	 * @param game le jeu
+	 */
     public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
     	//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
@@ -150,16 +133,34 @@ public class GameController {
     		//Force le premier tour du joueur a pioché une carte destination
 	    	if(player.getCanPlay()) {
 	    		CarteWagon source = playerHandPanel.getDrawPlayerHand(player.getName()).CardClicked( e.getX() , e.getY() );
-
-	            if ( source != null ) {
+	    		
+	    		if ( source != null ) {
 	                // Si la source est une carte wagon
 	                this.carteWagon = source;
-	                try {
-	                    Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
-	                    if(tenterDePoserUneGare( ville , player, game )){
-	                        game.getRound().endRound(game);
+	                    
+	                try {	                
+	                    if(source.getInitialCouleur() != Couleur.NUKE){
+		                    Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
+	                    	
+	                    	if(tenterDePoserUneGare(ville, player, game)) {
+		                        game.getRound().endRound(game);
+	                    	}
+	                    }else {
+	                    	
+	                    	 try {
+	                    		 if(source.getInitialCouleur() == Couleur.NUKE) {
+	     	                    	actionDeNuke(e, playerHandPanel, player, game);
+	     	                    	game.getRound().endRound(game);
+	     	                	}
+	                    	}catch ( Exception exception ){
+	    	                    if ( player.getNiveau() == 0 ) {
+	    	                        JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+	    	                                , "Veuillez choisir une ville ou une rail avant la NUKE !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+	    	                        //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
+	    	                    }
+	                    	}
 	                    }
-
+	                    
 	                } catch ( Exception exception ){
 	                    if ( player.getNiveau() == 0 ) {
 	                        JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
@@ -167,6 +168,8 @@ public class GameController {
 	                        //DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
 	                    }
 	                }
+
+	                    
 	            }
 
 	    	}else {
@@ -175,7 +178,82 @@ public class GameController {
 	    	}
     	}
     }
+    
+    //Action de la Nuke pour voir ce qu'elle doit faire
+	private boolean actionDeNuke(MouseEvent e, PlayerHandPanel playerHandPanel, Player player, Game game) {	
+		
+		//Element inconnu auquel on a cliqué dessus
+		Object CestQuoi = playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
+		
+        if(CestQuoi instanceof Ville){
+        	
+        	Ville ville = (Ville) CestQuoi;
+        	
+        	//Si c'est une ville on tente de détruire la Gare
+        	if(tenterDeDetruireGare(ville, player, game)){
+                return true;
+        	}
+        	
+        }else if(CestQuoi instanceof Rail) {
+        	
+        	Rail rail = (Rail) CestQuoi;
+          	
+        	//Si c'est une rail on tente de détruire la Route
+       	 	if(tenterDeDetruireRoute(rail, player, game)) {
+       	 		return true;
+       	 	}
+        }
+		
+        //Dans aucun des deux cas on ne fait rien
+		return false;
+	}
+	
+	//Méthode pour détruire une Route
+	private boolean tenterDeDetruireRoute(Rail rail, Player player, Game game) {
+		//On check si son action est supérieur à 2 autrement on refuse l'action
+        if(game.getRound().getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return false;
+        }
+        
+        Player autrePlayer = rail.getSaRoute().getProprietaire();
+        
+        //On vérifie si le joueur à une carte Nuke, si oui on retire finalement la route
+        if(player.checkACarteNuke()) {
+        	return autrePlayer.retirerRouteAutreJoueur(rail, player);
+        }
+        
+		return false;
+	}
+	
+	//Méthode pour détruire une Gare
+	private boolean tenterDeDetruireGare(Ville ville, Player player, Game game) {
+		//On check si son action est supérieur à 2 autrement on refuse l'action
+        if(game.getRound().getAction() < 2){
+            JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                    "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
+            return false;
+        }
+        
+        Player autrePlayer = ville.getIsOccuped();
+        
+        //On vérifie si le joueur à une carte Nuke, si oui on retire finalement la gare de la Ville
+        if(player.checkACarteNuke() && autrePlayer != null){ 
+        	autrePlayer.retirerGareAutrePlayer(ville, player);
+        	return true;
+        }
+        
+		return false;
+	}
 
+	/**
+	 * Une fonction qui tente de poser une gare
+	 * @param ville la ville que l'in veut transformer en gare
+	 * @param player le joueur
+	 * @param game le jeu
+	 * @return renvoie true si la gare est posé
+	 */
     public boolean tenterDePoserUneGare(Ville ville , Player player, Game game ){
         if(game.getRound().getAction() < 2){
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
@@ -184,8 +262,8 @@ public class GameController {
         }
 
         boolean didIt = player.transformerEnGare( ville , carteWagon.getInitialCouleur() ) ;
-        Mx = -1 ;
-        My = -1 ;
+        Mx = -1;
+        My = -1;
 
         return didIt;
     }

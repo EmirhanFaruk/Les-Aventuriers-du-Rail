@@ -2,75 +2,59 @@ package com.model.bot;
 
 import com.model.Game;
 import com.model.Player;
-import com.model.Round;
 import com.model.ai.GarePosFinder;
 import com.model.ai.Node;
 import com.model.config.Rail;
 import com.model.config.Route;
 import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteManager;
 import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
 
 public class StrongBot implements BotAction {
-/*
-    private void MissWichCard(Route route) {
-        int i = 0;
-        setNbrWagon(this.nbrWagon - carteAEnlever);
-        // Premiere boucle qui enlève juste la couleur color
-        while(i < this.trainList.size() && 0 < carteAEnlever) {
-            if ( trainList.get(i) == color ){
-                this.trainList.remove(i);
-                carteAEnlever--;
-            } else {
-                i++ ;
-            }
+
+
+    public boolean missOneCardOnly(Route route, Game game){
+
+        //Variable pour avoir le joueur courent
+        Player player= game.getJoueurCourant();
+        //Varibale de la liste de carte du bot
+        ArrayList<CarteWagon.Couleur> playerTrainList =  player.getTrainList();
+        //Nombre de carte de la couleur de la route
+        int count = 0;
+
+        for(int i = 0; i < playerTrainList.size(); i++) {
+            if(player.compatibleColor(route, playerTrainList.get(i)))count++;
         }
-        // Deuxième boucle qui enlève les cartes de couleur loc pour complèter les carte à enlèver
-        // si les carte de la couleur color est insuffissant
-        int j = 0 ;
-        while ( j < this.trainList.size() && 0 < carteAEnlever ){
-            if ( trainList.get(j) == CarteWagon.Couleur.LOC) {
-                this.trainList.remove(j);
-                carteAEnlever--;
-            } else{
-                j++ ;
-            }
-        }
+
+        return count+1 == route.getLongueur();
     }
-
-    public CarteWagon.Couleur canCompletePathWithWagonListCard(Route route){
-
-        return CarteWagon.Couleur.LOC;
-    }
-
-    public CarteWagon.Couleur canCompletePathMissingOneCard(Game game) {
+    public Rail.Content canCompletePathMissingOneCard(Game game) {
 
         //Fonction qui si il manque une carte pour completer une route dans la liste de carte
 
-        //Variable pour avoir round
-        Round round = game.getRound();
         //Variable pour avoir Player du bot
-        Player player= game.getListPlayer().get(round.getWhoIsPlaying());
+        Player player= game.getJoueurCourant();
         //Variable pour avoir les cartes destination du bot
         ArrayList<CarteDestination> destination = player.getDestinationsList();
 
 
-        //On cherche la route la meilleure route possible
-        for (int i = 0; i < destination.size(); i++) {
+        //On regarde toute les routes qu'on doit completer pour finir une mission
+        for(int i =0; i<destination.size();i++){
 
-            //On stock la liste de ville dans une variable (ce qui forme une route)
-            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(), destination.get(i).getDeuxiemeVille());
+            //Liste de ville qu'on a besoin
+            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
+            //Liste des routes que le bot doit completer pour finir sa missions
+            ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
-            //On regarde la
-            Route toComplete = takeRailAux(ville);
+            for(int z = 1; z < routesPossible.size();z++){
 
-            if(toComplete.getLongueur() <= player.getTrainCard().size() && toComplete.getProprietaire() == null){
+                // On regarde si il manque juste 1 carte max
+                if(missOneCardOnly(routesPossible.get(z),game)){
 
-
-
+                    return routesPossible.get(z).getCouleur();
+                }
             }
 
 
@@ -78,7 +62,6 @@ public class StrongBot implements BotAction {
         }
         return null;
     }
-    */
 
     @Override
     public void drawCardWagon(Game game) {
@@ -86,7 +69,7 @@ public class StrongBot implements BotAction {
         Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
         //Variable qui va déterminer si oui ou non on peut prendre
-        CarteWagon.Couleur color = null ;// canCompletePathMissingOneCard(game);
+        Rail.Content color = canCompletePathMissingOneCard(game);
         //-Si il manque une carte:
         if (color != null) {
 
@@ -94,7 +77,7 @@ public class StrongBot implements BotAction {
 
             //On cherche la couleur correspondante
             for(int i = 0; i< game.getCarteManager().getTrainCards().length;i++){
-                if(game.getCarteManager().getTrainCards()[i] == color){
+                if(game.getCarteManager().getTrainCards()[i].ordinal() == color.ordinal()){
                     position = i;
                 }
             }
@@ -147,53 +130,37 @@ public class StrongBot implements BotAction {
 
     }
 
-    public Route takeRailAux(ArrayList<Ville> villes){
-        //Fonction qui retourne la premiere route que le joueur peut completer dans la liste
-        for(int i = 1; i< villes.size() ;i++){
 
-            //Variable qui represente les villes
-            Ville ville1 = villes.get(i);
-            Ville ville2 = villes.get(i-1);
-
-            //On parcours la liste de route de la ville1 pour trouver celle qui relie a la ville2
-            for(int y = 0; i< ville1.getRoutes().size();y++){
-
-                //Variable qui represente la route obtenu dans la liste de route de ville1
-                Route route = ville1.getRoutes().get(y);
-
-                //On verifie que c'est bien la route demandé
-                if(route.links(ville1,ville2)){
-
-                   return route;
-
-                }
-
-            }
-
-        }
-        return null;
-
-    }
     @Override
     public boolean takeRail(Game game) {
-        //Variable pour avoir round
-        Round round = game.getRound();
-
         //Fonction qui permet de prendre des routes, et renvoie false si le bot n'a pas assez de carte
 
         //Variable pour avoir les cartes destination du bot
-        ArrayList<CarteDestination>destination =  game.getListPlayer().get(round.getWhoIsPlaying()).getDestinationsList();
+        ArrayList<CarteDestination>destination =  game.getJoueurCourant().getDestinationsList();
+
         for(int i =0; i<destination.size();i++){
-            ArrayList<Ville> ville = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
 
-            for(int z = 1; z < ville.size();z++){
+            //Liste de ville qu'on a besoin
+            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(),destination.get(i).getDeuxiemeVille());
+            //Liste des routes que le bot doit completer pour finir sa missions
+            ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes,game.getJoueurCourant());
 
-                //TODO cela ne prend que 1 route et non toute les possibilités dans la route
-                Route toAdd = takeRailAux(ville);
+
+            for(int z = 0; z < routesPossible.size();z++){
 
 
                 //On regarde si la route est null ou pas, si non alors on prends la route
-                if(game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(toAdd)){
+                if(game.getJoueurCourant().mettreRoute(routesPossible.get(z))){
+
+
+                    ArrayList<Rail> listeRail = routesPossible.get(z).getRailsRoute() ;
+                    Player bot = game.getListPlayer().get( game.getRound().getWhoIsPlaying());
+
+                    for (Rail rail : listeRail) {
+                        rail.setOccuperPar(bot);
+                    }
+                    System.err.println("takeRail True");
+
                     return true ;
 
                 }
@@ -201,8 +168,9 @@ public class StrongBot implements BotAction {
 
 
 
-
         }
+
+        // DEBUG : System.out.println("takeRail False");
 
         return false;
     }
@@ -232,78 +200,69 @@ public class StrongBot implements BotAction {
                 if(toTransformInGare != null &&  !(cd.getComplete())){
 
                     joueur.transformerEnGare( toTransformInGare , joueur.getTrainList().get(0) );
+
+
+                    System.err.println("takeGare true 1");
+
                     return true;
 
                 }
 
             }
-
+            return false;
 
         }else{
             //5- Si il y a plus de chemin possible :
 
             // Alors prendre une nouvelle carte mission on fait l'étape 2
-            takeMissionsCard(6,game);
+            CarteDestination[] toAdd  = takeMissionsCard(6,game);
 
+            for(int i = 0; i< toAdd.length;i++){
+
+                game.getJoueurCourant().getDestinationsList().add(toAdd[i]);
+
+            }
+            return true;
 
         }
-
-        return true;
 
 
     }
 
     @Override
     public CarteDestination[] takeMissionsCard(int max, Game game) {
-        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre en fonction de la variable max
+        // (le maximum de points cumulés dans les cartes missions que le bot prends)
 
-        //Pour savoir si il y a au moins une carte destination
-        boolean added = false;
+        //Variable pour avoir acces a la liste de carte destination
+        CarteDestination[] carteDestinations = game.getCarteManager().getDestinationsCards();
 
-        //Variable pour appeler cardDestination
-        CarteManager carteManager = game.getCarteManager();
+        //On va garder dans cette liste les positions des cartes destinations qu'on ajoute par la suite
+        ArrayList<Integer> aPiocher = new ArrayList<>();
 
+        //Cette variable sert savoit si on dépasse max
+        int total = 0;
 
-        int[] tmp = new int[3];
-        //Premiere bouble qui va prendre la carte la plus petite
-        for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
-            if (carteManager.getDestinationsCards()[i].getNombrePoints()
-                    < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
-                tmp[0] = i;
-                added = true;
+        for(int i = 0; i< carteDestinations.length;i++ ){
+
+            if(carteDestinations[i].getNombrePoints() + total <= max){
+
+                aPiocher.add(i);
+                total += carteDestinations[i].getNombrePoints();
+
             }
+
+
         }
 
-        if(!added){
-            //On prends la premiere carte si il n'y a pas de carte < 6
-            return carteManager.takeDestination( new int [1]);
-        }
+        int[] renvoie = new int[aPiocher.size()];
 
-        //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
-        for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
-        if ((carteManager.getDestinationsCards()[y].getNombrePoints() +
-                (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
-                <= max && y != tmp[0])) {
-
-                tmp[1] = y;
-            }
-        }
-
-        //Troisieme bouble qui regarde si la derniere carte + les cartes deja prisent soit < max
-        for (int z = 0; z < carteManager.getDestinationsCards().length; z++) {
-            if ((carteManager.getDestinationsCards()[z].getNombrePoints() +
-                    (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints())
-                    <= max && z != tmp[0] && z != tmp[1])) {
-
-                tmp[2] = z;
-            }
+        for(int y = 0; y < renvoie.length;y++){
+            renvoie[y] = aPiocher.get(y);
         }
 
 
-
-        return carteManager.takeDestination(tmp);
-
-
+        return game.getCarteManager().takeDestination(renvoie);
     }
 
 
@@ -311,9 +270,11 @@ public class StrongBot implements BotAction {
 
     private boolean allMissionIsCompleted(Game game){
         //Fonction qui regarde si toute les missions sont complétés
-        for (int i = 0; i < game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().size(); i++) {
 
-            if (!game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().get(i).getComplete()) {
+        for (int i = 0; i < game.getJoueurCourant().getDestinationsList().size(); i++) {
+
+
+            if (!game.getJoueurCourant().getDestinationsList().get(i).getComplete()) {
                 return false;
             }
 
@@ -322,81 +283,106 @@ public class StrongBot implements BotAction {
     }
 
 
-    private boolean canCompletePath(Game game){
-        //Fonction qui regarde si on peut completer une route pour une mission
 
-        //Variable qui donne la liste de destination
-        ArrayList<CarteDestination> destination =  game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList();
 
-        //On regarde si les routes pour completer toute les missions du joueurs ne sont pas bloqués
-        for (int l = 0; l <destination.size(); l++) {
+    private void firstTurn(Game game) {
+        //Fonction qui fait le premuier tour des bots fort
 
-            //Variable qui donne un chemins possible grace a une liste de ville
-            ArrayList<Ville> chemin = Node.findClosestPath(destination.get(l).getPremiereVille(),destination.get(l).getDeuxiemeVille());
+        //On rajoute les missions
+        CarteDestination[] carteDestination = takeMissionsCard(6,game);
 
-            //Si il y a une mission ou on peut remplir alors on la fait
-            if(game.getRoutes().get(l).getProprietaire() == null && !chemin.isEmpty()) {
-                return true;
-            }
+
+        for(int z = 0; z<carteDestination.length;z++){
+
+            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+
         }
-        //Si il n'y a pas de mission qui peut etre remplis
-        return false;
+
+        game.getJoueurCourant().setFirstTurnOver(true);
+
+        optimalCompleteMission(game);
 
     }
 
+    private void optimalCompleteMission(Game game) {
+        //Fonction procede de facon optimal si on peut ou non poser des rails pour completer les missions, sinon poser une gare ou piocher
+
+        //Si on peut completer une route
+        if (takeRail(game) ) {
 
 
+            game.getRound().endRound(game);
 
+            //Si non cherche l'endroit le plus optimal pour poser une gare
+        } else {
+
+            //6- On verifie qu'on peut poser une gare (de facon optimal)
+            if ( takeGare(game,0)) {
+                game.getRound().endRound(game);
+
+
+                //Sinon :  7- On pioche :
+            } else {
+
+                drawCardWagon(game);
+
+                game.getRound().endRound(game);
+
+            }
+
+
+        }
+    }
 
 
     @Override
     public void play(Game game) {
         //Fonction principale du bot fort
 
-        //1- On regarde si il a complété toute ses missions ou pas :
-        if (allMissionIsCompleted(game)) {
 
-            //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
-            CarteDestination[] addCard = takeMissionsCard(6, game);
-            for (int j = 0; j < addCard.length; j++) {
-                game.getListPlayer().get(game.getRound().getAction()).getDestinationsList().add(addCard[j]);
-            }
 
-            //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
-        } else {
+        //On regarde si c'est le premier tour
+        if(!game.getJoueurCourant().getFirstTurnOver()){
+
+            firstTurn(game);
+
+        }else {
+
+            //1- On regarde si il a complété toute ses missions ou pas :
+            if (allMissionIsCompleted(game)) {
+
+
+                //2- On prends une a deux nouvelles mission, en fonction de la longueur des routes, au total il ne doit pas dépasser 5 comme longueur des routes total puis les prends
+                CarteDestination[] addCard = takeMissionsCard(6, game);
+                for (int j = 0; j < addCard.length; j++) {
+
+
+                    game.getJoueurCourant().getDestinationsList().add(addCard[j]);
+                }
+
+                game.getRound().endRound(game);
+
+                //3- On regarde si il peut faire finir sa mission avec les routes non prise qu'il lui manque
+            } else {
 
                 //Si non:
-                if (! (canCompletePath(game) ) &&  takeGare(game,0)) {
-
-                    game.getRound().endRound(game);
-
-                    //Si oui
-                } else {
-
-                    //6- On pose les wagons
-                    if (takeRail(game)) {
-
-                        game.getRound().endRound(game);
-
-
-                        //Sinon :  7- On pioche :
-                    } else {
-
-                        drawCardWagon(game);
-
-                        game.getRound().endRound(game);
-
-                        }
-
-
-                    }
-
+               optimalCompleteMission(game);
 
                 }
 
 
-            }
+
+
+        }
 
 
     }
+
+
+
+
+
+
+
+}
 

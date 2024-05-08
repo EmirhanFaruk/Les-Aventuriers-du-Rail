@@ -1,0 +1,32 @@
+package com.view.graphics;
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+
+/**
+ * Had to make a whole new class lmaoooo
+ * Didn't do a subclass because it looks messy
+ */
+public class RectangleGraphics
+{
+    private final int x;
+    private final int y;
+    private final int width;
+    private final int height;
+
+    public RectangleGraphics(Rectangle2D r)
+    {
+        this.x = (int) r.getX();
+        this.y = (int) r.getY();
+        this.width = (int) r.getWidth();
+        this.height = (int) r.getHeight();
+    }
+
+    public void paint(Graphics g)
+    {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, width, height);
+    }
+}

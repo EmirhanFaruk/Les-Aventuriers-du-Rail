@@ -86,7 +86,6 @@ public class WeakBot implements BotAction{
                 for(int j = 0 ; j  < tailleRoute  ; j++) {
                     listeRail.get( j ).setOccuperPar( bot );
                 }
-                game.getMapScreen().repaint();
                 // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
@@ -114,7 +113,6 @@ public class WeakBot implements BotAction{
             player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainList().get( card ) );
             //DEBUG System.err.println( "Le botW " + player.getName() +" a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
 
-            game.getMapScreen().repaint();
 
             return true;
         }
@@ -125,17 +123,19 @@ public class WeakBot implements BotAction{
 
     @Override
     public CarteDestination[] takeMissionsCard(int max, Game game){
+
         //Variable pour avoir carteManager
         CarteManager carteManager = game.getCarteManager();
 
         Random random = new Random();
 
         //On choisit un nombre aleatoire et le joueur prends au hasard soit 1/2/3 cartes qu'on met dans un tableau
-        int nombreDeCartePris = random.nextInt(carteManager.getDestinationsCards().length -1);
+        int nombreDeCartePris = random.nextInt(carteManager.getDestinationsCards().length );
+        nombreDeCartePris ++;
         int[] tabNombre = new int[nombreDeCartePris];
 
         //Le bot prends les "nombreDeCartePris"
-        for(int y = 0; y< nombreDeCartePris; y++){
+        for(int y = 0; y< tabNombre.length; y++){
 
             tabNombre[y] = y;
 
@@ -152,74 +152,101 @@ public class WeakBot implements BotAction{
     public void play(Game game) {
         //Fonction principale du bot faible
 
-        Random random = new Random();
-        int whatToDo = random.nextInt(4);
-
-        switch (whatToDo){
+        //On regarde si c'est le premier tour du bot, si oui alors il doit d'abord piocher des cartes destinations avant de faire autre chose
+        if(!game.getJoueurCourant().getFirstTurnOver()){
 
 
-            case(0):
-                /*        CARTES WAGONS        */
-                drawCardWagon(game);
+            //Il prends une mission au moins
+            CarteDestination[] carteDestination = takeMissionsCard(0,game);
 
-                game.getRound().endRound(game);
+            //Pour ensuite les ajouter dans la liste des missions du bot
+            for(int z = 0; z<carteDestination.length;z++){
 
-                break;
+                game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
 
-
-            case(1):
-                /*        CARTES MISSIONS        */
-
-                CarteDestination[] carteDestination = takeMissionsCard(0,game);
-
-                //Pour ensuite les ajouter dans la liste des missions du bot
-                for(int z = 0; z<carteDestination.length;z++){
-
-                    game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
-                }
-
-                game.getRound().endRound(game);
-
-                break;
+            }
 
 
+            //Puis il pioche
+            drawCardWagon(game);
 
-            case(2):
-                /*        POSER DES WAGONS       */
+            game.getRound().endRound(game);
 
-                //On regarde si les rails ont bien était posés
-                if(takeRail(game)){
+
+        }else{
+
+            //Sinon il procede normalement
+
+            Random random = new Random();
+            int whatToDo = random.nextInt(4);
+
+            switch (whatToDo){
+
+
+                case(0):
+                    /*        CARTES WAGONS        */
+                    drawCardWagon(game);
 
                     game.getRound().endRound(game);
 
-                }
-                else{
-                    play(game);
-
-                }
-
-                break;
+                    break;
 
 
-            default :
-                /*        POSER UNE GARE       */
+                case(1):
+                    /*        CARTES MISSIONS        */
 
-                int wichStation = random.nextInt(game.getVilles().size());
+                    CarteDestination[] carteDestination = takeMissionsCard(0,game);
 
-                if(takeGare(game,wichStation)){
-                  game.getRound().endRound(game);
+                    //Pour ensuite les ajouter dans la liste des missions du bot
+                    for(int z = 0; z<carteDestination.length;z++){
 
-                }
-                else{
-                    play(game);
-                }
+                        game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
+                    }
 
+                    game.getRound().endRound(game);
 
-                break;
+                    break;
 
 
 
+                case(2):
+                    /*        POSER DES WAGONS       */
+
+                    //On regarde si les rails ont bien était posés
+                    if(takeRail(game)){
+
+                        game.getRound().endRound(game);
+
+                    }
+                    else{
+                        play(game);
+
+                    }
+
+                    break;
+
+
+                default :
+                    /*        POSER UNE GARE       */
+
+                    int wichStation = random.nextInt(game.getVilles().size());
+
+                    if(takeGare(game,wichStation)){
+                        game.getRound().endRound(game);
+
+                    }
+                    else{
+                        play(game);
+                    }
+
+
+                    break;
+
+
+
+            }
         }
+
 
 
     }

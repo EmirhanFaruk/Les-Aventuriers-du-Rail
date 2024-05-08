@@ -21,9 +21,6 @@ public class Rail extends Case {
     
     /** Un indicateur indiquant si le rail est occupé ou non. */
     private Player occuperPar;
-
-    /** Un indicateur indiquant si le rail est occupé ou non. */
-    private boolean occuper;
     
     private Route saRoute;
 
@@ -48,6 +45,8 @@ public class Rail extends Case {
 		this.saRoute = r;
 	}
 
+    /* getteurs et setteurs */
+
 	/**
      * Obtient la couleur initiale du rail.
      * @return La couleur initiale du rail.
@@ -61,7 +60,7 @@ public class Rail extends Case {
      * @return true si le rail est occupé, sinon false.
      */
     public boolean getOccuper() {
-        return occuper;
+        return occuperPar != null;
     }
     
     /**
@@ -84,22 +83,17 @@ public class Rail extends Case {
 		this.saRoute = r;
 	}
 	
-	/**
-     * Renvoie quelle joueur a cette rail
-     * @return Player
-     */
+	public void setOccuperPar2(Player o) {
+        this.occuperPar = o;
+    }
+
     public Player getOccuperPar() {
         return occuperPar;
     }
 
-    /**
-     * Definir le joueur a quui appartient cette rail
-     * @param occuperPar Player
-     */
     public void setOccuperPar(Player occuperPar) {
-        if ( ! this.occuper ) {
+        if ( ! getOccuper() ) {
             this.occuperPar = occuperPar;
-            this.occuper = true;
         }
     }
 }

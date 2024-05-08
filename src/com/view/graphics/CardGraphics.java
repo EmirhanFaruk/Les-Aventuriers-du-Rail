@@ -12,10 +12,9 @@ import java.io.IOException;
 public class CardGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
-    private static final BufferedImage CardInvisible = loadImage("CardCache.png");
+    private static final BufferedImage CardNuke = loadImage( "CardNuke.png" ) ;
     private static final BufferedImage CardObjectif = loadImage( "OjectifCard.png" ) ;
-    private static final BufferedImage CardBack= loadImage( "CardWagonBack.png" ) ;
-    private static final BufferedImage CardCache = loadImage( "CardCache.png" ) ;
+    private static final BufferedImage CardInvisible = loadImage( "CardWagonBack.png" ) ;
     private static final BufferedImage CardLocomotive = loadImage( "CardLocomotive.png" ) ;
     private static final BufferedImage CardBlue = loadImage( "CardWagonBlue.png" ) ;
     private static final BufferedImage CardBrown = loadImage( "CardWagonBrown.png" ) ;
@@ -26,12 +25,6 @@ public class CardGraphics {
     private static final BufferedImage CardWhite = loadImage( "CardWagonWhite.png" ) ;
     private static final BufferedImage CardYellow = loadImage( "CardWagonYellow.png" ) ;
 
-    private static int width , height ;
-
-    public CardGraphics( ) {
-    }
-
-
     /**
      * Une fonction qui renvoie une image
      * @param fileName String
@@ -41,8 +34,8 @@ public class CardGraphics {
         try {
             String imagePath = path + s + "ressources" + s + "Card" + s + fileName;
             return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // DEBUG : System.out.println( "Pas d'image.  ° _ ° " );
             return null;
         }
     }
@@ -96,7 +89,11 @@ public class CardGraphics {
 
             case ROUGE:
                 return CardRed;
+                
+            case NUKE: 
+            	return CardNuke;
         }
+        
         return null ;
     }
     
@@ -121,34 +118,17 @@ public class CardGraphics {
                 return CardBlue;
             case ROUGE:
                 return CardRed;
+            case NUKE: 
+            	return CardNuke;
             default:
                 return null; // Ajoutez une gestion d'erreur ou une valeur par défaut si nécessaire
         }
     }
 
-    /**
-     * Affiche l'image
-     * @param g graphics2D
-     * @param carteWagon CarteWagon
-     */
-    public static void paint (Graphics2D g  , CarteWagon carteWagon){
-        BufferedImage image = getImage( carteWagon ) ;
-        g.drawImage( image , width , height , null) ;
-    }
-    
+    /* getters et setters */
     public static BufferedImage getCardCache() {
     	return CardInvisible;
     }
-
-    /*
-    getters et setters
-     */
-    public static void setWH(int w, int h)
-    {
-        width = w;
-        height = h;
-    }
-
 
 	public static BufferedImage getCardObjectif() {
 		return CardObjectif;
