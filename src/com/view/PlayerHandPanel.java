@@ -23,6 +23,7 @@ public class PlayerHandPanel extends JPanel {
     private Game game;
     private int width, height;
     private CardLayout cardLayout = new CardLayout();
+    JScrollPane scrollPane;
     
     public Player getPlayer() {
         return game.getJoueurCourant();
@@ -41,7 +42,7 @@ public class PlayerHandPanel extends JPanel {
             JSplitPane playerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
             playerSplitPane.setResizeWeight(0.5);
             playerSplitPane.setLeftComponent(drawPlayerHand2);
-            JScrollPane scrollPane = new JScrollPane(drawPlayerHand);
+            scrollPane = new JScrollPane(drawPlayerHand);
             scrollPane.setPreferredSize(new Dimension(width, height));
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -90,7 +91,7 @@ public class PlayerHandPanel extends JPanel {
 	        this.player = player;
 	        this.height = height;
 	        this.width = 0;
-	        this.hFixe = 30 ;
+	        this.hFixe = 10 ;
 	        this.gameController = gameController ;
 	        this.listCardWagon = new ArrayList<>() ;
 	        setBackground(Color.orange);
@@ -112,18 +113,18 @@ public class PlayerHandPanel extends JPanel {
 	    }
 	
 	    private void drawPlayerHand(Graphics2D g) {
-	        int x = 30, i = 0;
+	        int x = 15, i = 0;
+            int cardheight = this.getHeight()-scrollPane.getHorizontalScrollBar().getHeight()-5-2*hFixe; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
+            int cardwidth = (this.getHeight()-scrollPane.getHorizontalScrollBar().getHeight()-5-2*hFixe)*2; //l'aspect ratio des cartes est de 2
 	        listCardWagon = new ArrayList<>();
 	        while (i < this.player.getTrainList().size()) {
 	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
 	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
 	            listCardWagon.add(carteWagon);
 	            BufferedImage image = CardGraphics.getImage(carteWagon);
-	          
-	
 	            if (image != null) {
-	            	g.drawImage(image, x, hFixe, null);
-	                x += image.getWidth() + 10;
+	            	g.drawImage(image, x,hFixe,cardwidth,cardheight,null);
+	                x += cardwidth + 15;
 	                width = x;
 	                imageWidth = image.getWidth();
 	                imageHeight = image.getHeight();
@@ -175,7 +176,7 @@ public class PlayerHandPanel extends JPanel {
             this.player = player;
             this.height = height;
             this.width = 0;
-            this.hFixe = 30;
+            this.hFixe = 10;
             this.cardAreas = new HashMap<>();
             this.gameController = g;
             this.game = game;
@@ -232,16 +233,14 @@ public class PlayerHandPanel extends JPanel {
         }
 
         private void drawPlayerHand2(Graphics2D g) {
-            int x = 30, i = 0;
-
+            int x = 25, i = 0;
+            int cardheight = this.getHeight()-2*hFixe+2; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
+            int cardwidth = (this.getHeight()-2*hFixe+2)*2; //l'aspect ratio des cartes est de 2
             while (i < this.player.getDestinationsList().size()) {
                 BufferedImage image = CardGraphics.getCardObjectif();
                 if (image != null) {
-                    Rectangle cardArea = new Rectangle(x, hFixe, image.getWidth(), image.getHeight());
                     CarteDestination carteJ = this.player.getDestinationsList().get(i);
-                    cardAreas.put(cardArea, carteJ);
-
-                    g.drawImage(image, x, hFixe, null);
+                    g.drawImage(image, x, hFixe,cardwidth,cardheight,null);
 
                     if (carteJ == currentHoverCard) {
                         // Appliquer une couleur jaune semi-transparente
@@ -249,7 +248,7 @@ public class PlayerHandPanel extends JPanel {
                         g.fillRect(x, hFixe, image.getWidth(), image.getHeight());
                     }
 
-                    x += image.getWidth() + 10;
+                    x += cardwidth + 30;
                     width = x;
                 }
                 i++;
@@ -267,4 +266,5 @@ public class PlayerHandPanel extends JPanel {
     public Game getGame() {
         return game;
     }
+
 }
