@@ -171,7 +171,7 @@ public class GameFrame extends JFrame
     
     public Sound getSound() {
         return sound;
-
+    }
     public String getMode() {
         return main.getMode();
     }
