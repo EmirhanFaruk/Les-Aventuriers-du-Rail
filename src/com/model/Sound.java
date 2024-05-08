@@ -133,6 +133,8 @@ public class Sound {
         if (volume < 0f || volume > 1f)
             return;
         Sound.volume = volume;
+        if(c == null)
+            return;
         FloatControl gainControl = (FloatControl) c.getControl(FloatControl.Type.MASTER_GAIN);        
         gainControl.setValue(20f * (float) Math.log10(volume));
     }

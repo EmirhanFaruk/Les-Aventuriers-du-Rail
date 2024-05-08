@@ -180,7 +180,8 @@ public class Play extends JPanel
         playerName.setForeground(Color.BLACK);
         playerName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                frame.getSound().playSound(4);
+                if(frame.getSound().getclick())
+                    frame.getSound().playSound(4);
             }
         });
 
@@ -210,7 +211,8 @@ public class Play extends JPanel
 
         }else{
             button.addActionListener(e -> {
-                frame.getSound().playSound(4);
+                if(frame.getSound().getclick())
+                    frame.getSound().playSound(4);
                 switch (player_type_list_tag[i].getText()) {
                     case PLAYER:
                         player_type_list_tag[i].setText(WEAKBOT);
@@ -271,7 +273,8 @@ public class Play extends JPanel
         red.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             if(selected_color[i] != red){
             if(selected_color[i] != null)
             selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
@@ -296,7 +299,8 @@ public class Play extends JPanel
         blue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            frame.getSound().playSound(4);    
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);    
             if(selected_color[i] != blue){
             if(selected_color[i] != null)
             selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
@@ -320,7 +324,8 @@ public class Play extends JPanel
         green.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             if(selected_color[i] != green) {
             if(selected_color[i] != null)
             selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
@@ -344,7 +349,8 @@ public class Play extends JPanel
         yellow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            frame.getSound().playSound(4);
+            if(frame.getSound().getclick())
+                frame.getSound().playSound(4);
             if(selected_color[i] != yellow){
             if(selected_color[i] != null)
             selected_color[i].setBorder(new EmptyBorder(5,5,5,5));
@@ -470,7 +476,7 @@ public class Play extends JPanel
         JButton res = new JButton(level_name);
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
-        res.addActionListener( e -> { level_name_tag.setText(level_name);frame.getSound().playSound(4); });
+        res.addActionListener( e -> { level_name_tag.setText(level_name);if(frame.getSound().getclick()) frame.getSound().playSound(4); });
         return res;
     }
 
@@ -523,7 +529,8 @@ public class Play extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                frame.getSound().playSound(4);
+                if(frame.getSound().getclick())
+                    frame.getSound().playSound(4);
                 String mode = mode_button.getText();
                 for (int i = 0; i < possible_modes.length; i++)
                 {
@@ -622,7 +629,8 @@ public class Play extends JPanel
 
         play_button.addActionListener(e ->
                     {
-                        frame.getSound().playSound(4);
+                        if(frame.getSound().getclick())
+                            frame.getSound().playSound(4);
                         String[] player_name_list = new String[4];
                         for (int i = 0; i < 4; i++)
                         {
