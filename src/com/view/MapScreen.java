@@ -134,7 +134,7 @@ public class MapScreen extends JPanel {
                     zoomIn(previousMouseX, previousMouseY); // Passer les anciennes coordonnées de la souris
                 } else {
                     if (getWidth() * scale > baseWidth && getHeight() * scale > baseHeight) {
-                        zoomOut();
+                        zoomOut(previousMouseX, previousMouseY);
                     }
                 }
 
@@ -150,17 +150,17 @@ public class MapScreen extends JPanel {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (isDragging) {
+                if (isDragging && scale > 1 && zoomed ) {
                     int newMouseX = e.getX();
                     int newMouseY = e.getY();
-                    int deltaX = newMouseX + mouseX;
-                    int deltaY = newMouseY + mouseY;
+                    int deltaX = newMouseX - mouseX;
+                    int deltaY = newMouseY - mouseY;
                     mouseX = newMouseX;
                     mouseY = newMouseY;
 
                     // Déplacer la carte horizontalement et verticalement en fonction du mouvement de la souris
-                    mapOffsetX -= deltaX;
-                    mapOffsetY -= deltaY;
+                    mapOffsetX += deltaX;
+                    mapOffsetY += deltaY;
                     repaint();
                 }
             }
@@ -179,17 +179,17 @@ public class MapScreen extends JPanel {
         } else {
             mouseX = zoomX ;
             mouseY = zoomY ;
-            JOptionPane.showMessageDialog(new JFrame(),
-                    "Le zoom est maximal.","Instructions",JOptionPane.WARNING_MESSAGE);
         }
     }
 
     /**
      * Une fonction dézoome
      */
-    private void zoomOut() {
+    private void zoomOut(int zoomX, int zoomY ) { // Prendre les coordonnées de la souris pour dézoomer
         if ( zoomed ) {
             scale -= zoomSpeed;
+            mapOffsetX -= (int) (zoomX / scale - zoomX / (scale - zoomSpeed));
+            mapOffsetY -= (int) (zoomY / scale - zoomY / (scale - zoomSpeed));
             scale = Math.max(0.1, scale);
             if (scale <= 1.0) {
                 scale = 1.0;
