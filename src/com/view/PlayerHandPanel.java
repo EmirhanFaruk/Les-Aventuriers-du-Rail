@@ -23,8 +23,9 @@ public class PlayerHandPanel extends JPanel {
     private Game game;
     private int width, height;
     private CardLayout cardLayout = new CardLayout();
-    JScrollPane scrollPane;
-    
+    JScrollPane scrollPaneCardWagon ;
+    JScrollPane scrollPaneCardDes ;
+
     public Player getPlayer() {
         return game.getJoueurCourant();
     }
@@ -33,21 +34,32 @@ public class PlayerHandPanel extends JPanel {
         drawPlayerHands = new HashMap<>();
         drawPlayerHands2 = new HashMap<>();
         playerSplitPanes = new HashMap<>();
-        
+
         for (Player player : game.getListPlayer()) {
             DrawPlayerHand drawPlayerHand = new DrawPlayerHand(player, height, gameController, game);
             DrawPlayerHand2 drawPlayerHand2 = new DrawPlayerHand2(player, height, gameController, game);
             drawPlayerHands.put(player.getName(), drawPlayerHand);
             drawPlayerHands2.put(player.getName(), drawPlayerHand2);
+
+            //scrollPane pour les cartes destinations
+            scrollPaneCardDes = new JScrollPane(drawPlayerHand2);
+            scrollPaneCardDes.setPreferredSize(new Dimension(width, height));
+            scrollPaneCardDes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            scrollPaneCardDes.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            scrollPaneCardDes.getHorizontalScrollBar().setBackground(Color.ORANGE);
+
+            //scrollPane pour les cartes wagons
+            scrollPaneCardWagon = new JScrollPane(drawPlayerHand);
+            scrollPaneCardWagon.setPreferredSize(new Dimension(width, height));
+            scrollPaneCardWagon.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            scrollPaneCardWagon.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            scrollPaneCardWagon.getHorizontalScrollBar().setBackground(Color.ORANGE);
+
+            //playerSplitPane
             JSplitPane playerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
             playerSplitPane.setResizeWeight(0.5);
-            playerSplitPane.setLeftComponent(drawPlayerHand2);
-            scrollPane = new JScrollPane(drawPlayerHand);
-            scrollPane.setPreferredSize(new Dimension(width, height));
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-            scrollPane.getHorizontalScrollBar().setBackground(Color.ORANGE);
-            playerSplitPane.setRightComponent(scrollPane);
+            playerSplitPane.setLeftComponent(scrollPaneCardDes);
+            playerSplitPane.setRightComponent(scrollPaneCardWagon);
             playerSplitPane.setDividerLocation(width / 2);
             playerSplitPane.setEnabled(false);
             playerSplitPanes.put(player.getName(), playerSplitPane);
@@ -114,8 +126,8 @@ public class PlayerHandPanel extends JPanel {
 	
 	    private void drawPlayerHand(Graphics2D g) {
 	        int x = 15, i = 0;
-            int cardheight = this.getHeight()-scrollPane.getHorizontalScrollBar().getHeight()-5-2*hFixe; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
-            int cardwidth = (this.getHeight()-scrollPane.getHorizontalScrollBar().getHeight()-5-2*hFixe)*2; //l'aspect ratio des cartes est de 2
+            int cardheight = this.getHeight()-scrollPaneCardWagon.getHorizontalScrollBar().getHeight()-5-2*hFixe; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
+            int cardwidth = (this.getHeight()-scrollPaneCardWagon.getHorizontalScrollBar().getHeight()-5-2*hFixe)*2; //l'aspect ratio des cartes est de 2
 	        listCardWagon = new ArrayList<>();
 	        while (i < this.player.getTrainList().size()) {
 	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
