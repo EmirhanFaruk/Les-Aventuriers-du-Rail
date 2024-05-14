@@ -17,8 +17,8 @@ import java.util.Map;
 
 public class PlayerHandPanel extends JPanel {
     private HashMap<String, JSplitPane> playerSplitPanes; // Mapping joueur -> JSplitPane
-    private HashMap<String, DrawPlayerHand> drawPlayerHands;
-    private HashMap<String, DrawPlayerHand2> drawPlayerHands2;
+    private HashMap<String, DrawPlayerHandCardWagon> drawPlayerHandsWagon;
+    private HashMap<String, DrawPlayerHandCardDes> drawPlayerHandsDes;
     private int imageWidth, imageHeight;
     private Game game;
     private int width, height;
@@ -31,15 +31,15 @@ public class PlayerHandPanel extends JPanel {
     }
 
     public void initDrawPlayerHands(Game game, GameController gameController, int height) {
-        drawPlayerHands = new HashMap<>();
-        drawPlayerHands2 = new HashMap<>();
+        drawPlayerHandsWagon = new HashMap<>();
+        drawPlayerHandsDes = new HashMap<>();
         playerSplitPanes = new HashMap<>();
 
         for (Player player : game.getListPlayer()) {
-            DrawPlayerHand drawPlayerHand = new DrawPlayerHand(player, height, gameController, game);
-            DrawPlayerHand2 drawPlayerHand2 = new DrawPlayerHand2(player, height, gameController, game);
-            drawPlayerHands.put(player.getName(), drawPlayerHand);
-            drawPlayerHands2.put(player.getName(), drawPlayerHand2);
+            DrawPlayerHandCardWagon drawPlayerHand = new DrawPlayerHandCardWagon(player, height, gameController, game);
+            DrawPlayerHandCardDes drawPlayerHand2 = new DrawPlayerHandCardDes(player, height, gameController, game);
+            drawPlayerHandsWagon.put(player.getName(), drawPlayerHand);
+            drawPlayerHandsDes.put(player.getName(), drawPlayerHand2);
 
             //scrollPane pour les cartes destinations
             scrollPaneCardDes = new JScrollPane(drawPlayerHand2);
@@ -68,7 +68,7 @@ public class PlayerHandPanel extends JPanel {
 
     public void initCardLayout() {
         this.setLayout(cardLayout);
-        for (String playerName : drawPlayerHands.keySet()) {
+        for (String playerName : drawPlayerHandsWagon.keySet()) {
             JSplitPane playerSplitPane = playerSplitPanes.get(playerName);
             this.add(playerName, playerSplitPane);
         }
@@ -91,15 +91,15 @@ public class PlayerHandPanel extends JPanel {
     }
 
 
-    public class DrawPlayerHand extends JPanel {
+    public class DrawPlayerHandCardWagon extends JPanel {
     	Player player ;
     	int height ;
     	int width ;
     	int hFixe ;
     	private ArrayList< CarteWagon > listCardWagon ;
     	GameController gameController ;
-    
-    	DrawPlayerHand (Player player  , int height , GameController gameController, Game game) {
+
+    	DrawPlayerHandCardWagon (Player player  , int height , GameController gameController, Game game) {
 	        this.player = player;
 	        this.height = height;
 	        this.width = 0;
@@ -173,7 +173,7 @@ public class PlayerHandPanel extends JPanel {
     }
 
     
-    public class DrawPlayerHand2 extends JPanel {
+    public class DrawPlayerHandCardDes extends JPanel {
         Player player;
         int height;
         int width;
@@ -184,7 +184,7 @@ public class PlayerHandPanel extends JPanel {
         GameController gameController;
         Game game;
 
-        DrawPlayerHand2(Player player, int height, GameController g, Game game) {
+        DrawPlayerHandCardDes(Player player, int height, GameController g, Game game) {
             this.player = player;
             this.height = height;
             this.width = 0;
@@ -271,8 +271,8 @@ public class PlayerHandPanel extends JPanel {
 
     /* getters et setters */
 
-    public DrawPlayerHand getDrawPlayerHand(String playerName) {
-        return drawPlayerHands.get(playerName);
+    public DrawPlayerHandCardWagon getDrawPlayerHand(String playerName) {
+        return drawPlayerHandsWagon.get(playerName);
     }
 
     public Game getGame() {
