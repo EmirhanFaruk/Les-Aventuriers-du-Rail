@@ -8,7 +8,7 @@ différents paysages. Utilisez des cartes pour relier les villes et gagnez des p
 Avec des règles simples, mais une stratégie profonde, ce jeu offre une expérience captivante pour les joueurs 
 de tous niveaux.
 
-"## Règle du Jeu
+## Règle du Jeu
 Il vous faut construire un réseau ferroviaire rentable en reliant les villes sur le plateau de jeu.
 Les joueurs gagnent des points en complétant des routes entre les villes et en atteignant les
 destinations spécifiées sur leurs cartes Destination. À la fin de la partie, le joueur avec
@@ -60,6 +60,8 @@ Voici un guide pour jouer à "Aventuriers du Rail" :
 "Aventuriers du Rail" est un jeu facile à apprendre, mais offre de nombreuses possibilités stratégiques.
 Expérimentez avec différentes tactiques pour maximiser vos chances de victoire !
 
+Vous pouvez aussi zoomer sur la map avec la molette de la souris et vous déplacer en restant appuyée sur le click
+(! ATTENTION : éviter de bouger la souris lors du zoom cela peut vous créer des nausées)
 
 ## Les Modes de Jeu
 Un mode original et un mode nuke :
