@@ -258,7 +258,7 @@ public class Settings extends JPanel
 
     private JCheckBox makeMusicCheckBox()
     {
-        JCheckBox res = new JCheckBox("Music");
+        JCheckBox res = new JCheckBox("Music" , true );
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
@@ -266,7 +266,7 @@ public class Settings extends JPanel
 
     private JCheckBox makeClickSoundCheckBox()
     {
-        JCheckBox res = new JCheckBox("Click Sound");
+        JCheckBox res = new JCheckBox("Click Sound" , true );
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
