@@ -39,7 +39,7 @@ public class GameFrame extends JFrame
         this.setTitle("Tchu Tchuuu");
         this.setSize(width, height);
         this.setPreferredSize(new Dimension(width, height));
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.sound = new Sound();
 

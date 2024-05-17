@@ -1,7 +1,9 @@
 package com.model;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -10,12 +12,13 @@ import javax.sound.sampled.FloatControl;
 
 public class Sound {
     static Clip c;
-    URL soundURL[] = new URL[6];
+    ArrayList <URL> soundURL = new ArrayList<>();
     static String path = System.getProperty("user.dir");
     static String s = findSlash(path);
     private boolean music = false;
     private boolean click = false;
     static float volume = 0.5f;
+    private static final String[] sounds = { "tchu-tchu-song.wav" , "mettreRoute.wav" ,"carte-dest.wav" , "carte-wagon.wav" ,"click.wav" , "end.wav" } ;
 
 
     public Sound(){
@@ -23,46 +26,13 @@ public class Sound {
     }
 
     private void initsoundURL() {
-        java.io.File af = new java.io.File(prepath()+"tchu-tchu-song.wav");
-        try {
-            soundURL[0]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        af = new java.io.File(prepath()+"mettreRoute.wav");
-        try {
-            soundURL[1]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        af = new java.io.File(prepath()+"carte-dest.wav");
-        try {
-            soundURL[2]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        af = new java.io.File(prepath()+"carte-wagon.wav");
-        try {
-            soundURL[3]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        af = new java.io.File(prepath()+"click.wav");
-        try {
-            soundURL[4]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        af = new java.io.File(prepath()+"end.wav");
-        try {
-            soundURL[5]=af.toURI().toURL();
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (String sound : sounds) {
+            File file = new File(prepath() + sound);
+            try {
+                soundURL.add(file.toURI().toURL());
+            } catch (Exception ignored) {
+                //DEBUG : System.out.println("Le son " + sound + " est mal initialiser" );
+            }
         }
     }
 
@@ -84,12 +54,10 @@ public class Sound {
 
     public void setFile(int i){
         try {
-            AudioInputStream aud = AudioSystem.getAudioInputStream(soundURL[i]);
+            AudioInputStream aud = AudioSystem.getAudioInputStream(soundURL.get(i));
             c = AudioSystem.getClip();
             c.open(aud);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored ) { }
     }
 
     public void play(){

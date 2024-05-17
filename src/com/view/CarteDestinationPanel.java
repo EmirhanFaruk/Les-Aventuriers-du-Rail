@@ -116,12 +116,13 @@ public class CarteDestinationPanel extends JPanel {
 
     //Fonction qui montre la carte destination
     private void showCardDescription() {
-    	CarteDestination cD =  carteDestination.getDestinationsCards()[this.hoveredCardIndex];
-    	
-        if (hoveredCardIndex >= 0 && cD != null) { // Vérifie l'index et voit si la carte est nulle
-            this.gameController.descriptionCardDestination(cD, game);
-         
-        }
+        try {
+            CarteDestination cD = carteDestination.getDestinationsCards()[this.hoveredCardIndex];
+            if (hoveredCardIndex >= 0 && cD != null) { // Vérifie l'index et voit si la carte est nulle
+                this.gameController.descriptionCardDestination(cD, game);
+
+            }
+        } catch ( Exception ignored ) { }
     }
 
     private void setupMouseMotionListener() {
