@@ -12,13 +12,14 @@ import javax.sound.sampled.FloatControl;
 
 public class Sound {
     static Clip c;
-    ArrayList <URL> soundURL = new ArrayList<>();
+    ArrayList <URL> soundURLInGame = new ArrayList<>();
+    ArrayList <URL> soundURLMenu = new ArrayList<>();
     static String path = System.getProperty("user.dir");
     static String s = findSlash(path);
     private boolean music = false;
     private boolean click = false;
     static float volume = 0.5f;
-    private static final String[] sounds = { "tchu-tchu-song.wav" , "mettreRoute.wav" ,"carte-dest.wav" , "carte-wagon.wav" ,"click.wav" , "end.wav" } ;
+    private static final String[] soundsInGame = { "tchu-tchu-song.wav" , "mettreRoute.wav" ,"carte-dest.wav" , "carte-wagon.wav" ,"click.wav" , "end.wav" } ;
 
 
     public Sound(){
@@ -26,10 +27,10 @@ public class Sound {
     }
 
     private void initsoundURL() {
-        for (String sound : sounds) {
-            File file = new File(prepath() + sound);
+        for (String soundInGame : soundsInGame) {
+            File file = new File(prepath() + soundInGame);
             try {
-                soundURL.add(file.toURI().toURL());
+                soundURLInGame.add(file.toURI().toURL());
             } catch (Exception ignored) {
                 //DEBUG : System.out.println("Le son " + sound + " est mal initialiser" );
             }
@@ -52,9 +53,9 @@ public class Sound {
         return s+path+s+"ressources" + s + "Sounds" + s;
     }
 
-    public void setFile(int i){
+    public void setFileInGame(int i){
         try {
-            AudioInputStream aud = AudioSystem.getAudioInputStream(soundURL.get(i));
+            AudioInputStream aud = AudioSystem.getAudioInputStream(soundURLInGame.get(i));
             c = AudioSystem.getClip();
             c.open(aud);
         } catch (Exception ignored ) { }
@@ -69,14 +70,14 @@ public class Sound {
     }
 
     public void playMusic(){
-        setFile(0);
+        setFileInGame(0);
         setVolume(volume);
         c.start();
         c.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public void playSound(int i){
-        setFile(i);
+        setFileInGame(i);
         setVolume(volume);
         c.start();
     }
