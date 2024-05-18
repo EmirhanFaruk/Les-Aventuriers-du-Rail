@@ -82,10 +82,10 @@ public class Player {
 			this.destinationsList.add(cm.getDestinationsCards()[i]);
 			cm.getDestinationsCards()[i] = null;
 			if( !this.destinationsList.isEmpty() )this.canPlay = true;
-			if(game.getGameFrame().getSound().getclick())
-				game.getGameFrame().getSound().playSound(2);
+			if(game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound( "INGAME" ,"carte-dest.wav" );
 			return true;
 		}else {
+			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
 		
@@ -105,7 +105,7 @@ public class Player {
 			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
-		game.getGameFrame().getSound().playSound(3);
+		if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
 	}
 
 	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
@@ -116,14 +116,14 @@ public class Player {
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
-				game.getGameFrame().getSound().playSound(3);
+				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
-				game.getGameFrame().getSound().playSound(3);
+				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
 				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
@@ -138,7 +138,7 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
-				game.getGameFrame().getSound().playSound(3);
+				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav" );
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
@@ -298,7 +298,7 @@ public class Player {
     public boolean mettreRoute(Route r) {
     	if(r != null) {
     		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
-				game.getGameFrame().getSound().playSound(1);
+				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"mettreRoute.wav");
                 this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
@@ -344,7 +344,7 @@ public class Player {
 
 			//Si c'est un joueur alors on fait la demande, sinon pour les bots on fait directement le procédé
 			if(this.niveau == 0){
-
+				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
 				int choixUtilisateur = JOptionPane.showConfirmDialog(
 						game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 						"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
@@ -358,12 +358,14 @@ public class Player {
 						return true;
 
 					} else if ( ville.getIsOccuped() != null ) {
+						if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						return false;
 
 
 					} else {
+						if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
@@ -384,6 +386,7 @@ public class Player {
 			}
 
 		} else {
+			if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
 			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 			return false;

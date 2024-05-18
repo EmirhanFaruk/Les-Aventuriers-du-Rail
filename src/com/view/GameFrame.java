@@ -42,7 +42,7 @@ public class GameFrame extends JFrame
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.sound = new Sound();
-
+        if ( sound.getMusic() ) sound.playMusic("MENU" , "tchu-tchu-song.wav" );
 
         this.main = main;
         // On commence par menu
@@ -81,7 +81,9 @@ public class GameFrame extends JFrame
     public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_Colors)
     {
         main.startGame(map, mode, player_names, player_types,player_Colors);
-
+        if ( sound.getMusic() ){
+           sound.changeMusic("INGAME" , "inGame.wav");
+        }
         gameScreen = null ;
         
         //CarteManager cm = new CarteManager();

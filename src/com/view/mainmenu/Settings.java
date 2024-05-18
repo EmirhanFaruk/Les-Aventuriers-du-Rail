@@ -85,7 +85,7 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound(4);
+                    main.getFrame().getSound().playSound( "MENU" , "ChangeSizeOfTheScreen.wav");
             }
         });
         return res;
@@ -102,7 +102,7 @@ public class Settings extends JPanel
             public void actionPerformed(ActionEvent e)
             {
                 if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound(4);
+                    main.getFrame().getSound().playSound( "MENU" ,"ChangeSizeOfTheScreen.wav");
                 int index = res_box.getSelectedIndex();
                 int[] res = resolutions[index];
                 main.setAllSize(res[0], res[1]);
@@ -128,8 +128,7 @@ public class Settings extends JPanel
         fs_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound( "MENU" ,"ChangeSizeOfTheScreen.wav");
             }
         });
         fullscreen_panel.add(fs_cb);
@@ -151,8 +150,7 @@ public class Settings extends JPanel
         music_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound(4);
+                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
             }
         });
         click_cb = makeClickSoundCheckBox();
@@ -160,7 +158,7 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound(4);
+                    main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
             }
         });
 
@@ -191,8 +189,7 @@ public class Settings extends JPanel
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        if(main.getFrame().getSound().getclick())
-                            main.getFrame().getSound().playSound(4);
+                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
                         if(fs_cb.isSelected())
                         {
                             main.getDevice().setFullScreenWindow(main.getFrame());
@@ -236,6 +233,7 @@ public class Settings extends JPanel
                             main.getFrame().getSound().setMusic(true);
                         }else{
                             main.getFrame().getSound().setMusic(false);
+                            main.getFrame().getSound().stop();
                         }
                         if(click_cb.isSelected()){
                             main.getFrame().getSound().setClick(true);
@@ -243,8 +241,7 @@ public class Settings extends JPanel
                             main.getFrame().getSound().setClick(false);
                         }
 
-                        if(main.getFrame().getSound().getclick())
-                            main.getFrame().getSound().playSound(4);
+                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
 
                         main.getFrame().getSound().setVolume((float)volume_slider.getValue()/100.0f);
                     }

@@ -56,7 +56,7 @@ public class GameManagerScreen extends JPanel {
      */
     public void showEndGame(){
         if ( this.game.endGame()){
-            this.frame.getSound().playSound(5);
+            if ( this.frame.getSound().getMusic() ) this.frame.getSound().playMusic("END" ,"end.wav");
             this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
             add( frame.getEndgame_screen_s() , endGameScreen ) ;
             cardLayout.show(this , frame.getEndgame_screen_s());

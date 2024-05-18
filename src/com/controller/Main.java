@@ -56,6 +56,7 @@ public class Main implements Runnable
     public void pause() {
         if (running) {
             running = false;
+            if ( game.getGameFrame().getSound().getMusic() ) game.getGameFrame().getSound().playMusic("PAUSE" , "pause.wav");
             gameFrame.getGameScreen().getGameManagerScreen().showPause();
         } else {
             running = true;

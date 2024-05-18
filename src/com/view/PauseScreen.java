@@ -62,6 +62,7 @@ public class PauseScreen extends JPanel {
         buttonMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 gameScreen.getFrame().quitMainMenu();
             }
         });
@@ -70,7 +71,7 @@ public class PauseScreen extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameScreen.getFrame().getMain().setRunning(true);
-
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 GameManagerScreen gm = gameScreen.getFrame().getGameScreen().getGameManagerScreen() ;
                 gm.removePause();
                 gm.getCardLayout().show( gm , gameScreen.getFrame().getIngame_screen_s() );
@@ -81,6 +82,7 @@ public class PauseScreen extends JPanel {
         buttonExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 gameScreen.getFrame().quitGame();
             }
         });
