@@ -20,7 +20,7 @@ public class Sound {
     static float volume = 0.5f;
     private static final String[] soundsMenu = {  "tchu-tchu-song.wav" ,"ChangePageInTheMenu.wav" , "ChangeSizeOfTheScreen.wav" , "Colors.wav" ,
             "ModeNormal.wav" , "ModeNuke.wav" , "NormalBot.wav" , "RulesSelection.wav" , "SelectMap.wav" , "StartButtonSound.wav" ,
-            "StrongBot.wav" , "WeakBot.wav" , "Player.wav" , "None.wav" , "click.wav","popUp.wav"} ;
+            "StrongBot.wav" , "WeakBot.wav" , "Player.wav" , "None.wav" , "click.wav" , "popUp.wav" } ;
     private static final String[] soundsInGame = {"mettreRoute.wav" ,"carte-dest.wav" , "carte-wagon.wav" , "inGame.wav" , "click.wav" , "popUp.wav"} ;
     private static final String[] soundsPause = { "pause.wav" , "click.wav" } ;
     private static final String[] soundsEnd = { "end.wav" , "click.wav" } ;

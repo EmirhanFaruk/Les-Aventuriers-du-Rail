@@ -85,7 +85,7 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound( "MENU" , "ChangeSizeOfTheScreen.wav");
+                    main.getFrame().getSound().playSound( "MENU" , "click.wav");
             }
         });
         return res;
@@ -241,7 +241,7 @@ public class Settings extends JPanel
                             main.getFrame().getSound().setClick(false);
                         }
 
-                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
 
                         main.getFrame().getSound().setVolume((float)volume_slider.getValue()/100.0f);
                     }
@@ -317,6 +317,7 @@ public class Settings extends JPanel
                     Rectangle thumbBounds = getThumbBounds();
                     valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
                                            thumbBounds.y - valueLabel.getHeight());
+                    if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
                 }
             });
         }
