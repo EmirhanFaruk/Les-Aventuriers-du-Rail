@@ -59,13 +59,15 @@ public class Main implements Runnable
         if (running) {
             running = false;
             gameFrame.setCurrentCard(gameFrame.getPause_screen_s());
-            if ( game.getGameFrame().getSound().getMusic() ) game.getGameFrame().getSound().playMusic("PAUSE" , "pause.wav");
+            if ( game.getGameFrame().getSound().getMusic() ) game.getGameFrame().getSound().changeMusic("PAUSE" , "pause.wav");
             gameFrame.getGameScreen().getGameManagerScreen().showPause();
         } else {
             running = true;
             gameFrame.setCurrentCard(gameFrame.getIngame_screen_s());
+            if ( game.getGameFrame().getSound().getMusic() ) {
+                game.getGameFrame().getSound().changeMusic("INGAME" , "inGame.wav");
+            }
             gameFrame.getGameScreen().getGameManagerScreen().removePause();
-            if ( game.getGameFrame().getSound().getMusic() ) game.getGameFrame().getSound().playMusic("INGAME" , "inGame.wav");
         }
     }
 
