@@ -41,6 +41,7 @@ public class GameManagerScreen extends JPanel {
         setLayout( cardLayout );
         add( frame.getIngame_screen_s() , gameMapPanel ) ;
         cardLayout.show(this, frame.getIngame_screen_s());
+        frame.setCurrentCard(frame.getEndgame_screen_s());
     }
 
     /**
@@ -60,6 +61,7 @@ public class GameManagerScreen extends JPanel {
             this.endGameScreen = new EndGameScreen( gameScreen , width ,height ) ;
             add( frame.getEndgame_screen_s() , endGameScreen ) ;
             cardLayout.show(this , frame.getEndgame_screen_s());
+            frame.setCurrentCard(frame.getEndgame_screen_s());
             this.frame.getMain().setRunning( false );
             //DEBUG : System.err.println("la partie est terminée");
         }
@@ -75,6 +77,7 @@ public class GameManagerScreen extends JPanel {
         // DEBUG : System.err.println("Un nouveau pause ") ;
         add( frame.getPause_screen_s() , pauseScreen ) ;
         cardLayout.show(this , frame.getPause_screen_s() );
+        frame.setCurrentCard(frame.getPause_screen_s());
         this.gameMapPanel.repaint();
     }
 

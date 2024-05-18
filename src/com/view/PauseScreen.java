@@ -64,6 +64,7 @@ public class PauseScreen extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 gameScreen.getFrame().quitMainMenu();
+                if ( gameScreen.getFrame().getSound().getMusic() ) gameScreen.getFrame().getSound().changeMusic("MENU" , "tchu-tchu-song.wav");
             }
         });
 
@@ -75,6 +76,7 @@ public class PauseScreen extends JPanel {
                 GameManagerScreen gm = gameScreen.getFrame().getGameScreen().getGameManagerScreen() ;
                 gm.removePause();
                 gm.getCardLayout().show( gm , gameScreen.getFrame().getIngame_screen_s() );
+                if ( gameScreen.getFrame().getSound().getMusic()) gameScreen.getFrame().getSound().playSound("INGAME" ,"inGame.wav" );
                 //DEBUG : System.out.println("On doit revenir a la page du jeu");
             }
         });

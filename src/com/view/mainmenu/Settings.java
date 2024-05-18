@@ -231,9 +231,10 @@ public class Settings extends JPanel
                     {
                         if(music_cb.isSelected()){
                             main.getFrame().getSound().setMusic(true);
+                            main.getFrame().getSound().changeMusic("MENU" ,"tchu-tchu-song.wav");
                         }else{
                             main.getFrame().getSound().setMusic(false);
-                            main.getFrame().getSound().stop();
+                            main.getFrame().getSound().stopMusic();
                         }
                         if(click_cb.isSelected()){
                             main.getFrame().getSound().setClick(true);
