@@ -128,7 +128,7 @@ public class Settings extends JPanel
         fs_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound( "MENU" ,"ChangeSizeOfTheScreen.wav");
+                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound( "MENU" ,"click.wav");
             }
         });
         fullscreen_panel.add(fs_cb);
