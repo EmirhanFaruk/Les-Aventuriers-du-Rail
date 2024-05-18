@@ -20,6 +20,8 @@ public class GameFrame extends JFrame
     private JPanel main_panel;
     private final CardLayout cardLayout = new CardLayout();
 
+    private String currentCard;
+
     private GameScreen gameScreen ;
 
     private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , pause_screen_s = "PAUSE", endgame_screen_s = "ENDGAME";
@@ -42,7 +44,7 @@ public class GameFrame extends JFrame
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.sound = new Sound();
-
+        if ( sound.getMusic() ) sound.playMusic("MENU" , "tchu-tchu-song.wav" );
 
         this.main = main;
         // On commence par menu
@@ -62,12 +64,16 @@ public class GameFrame extends JFrame
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    try {
-                        main.pause();
-                        // DEBUG : System.err.println(main.getRunning());
-                    } catch ( Exception ignored) { }
-                }
+                try {
+                    if (currentCard.equals(ingame_screen_s) || currentCard.equals(pause_screen_s)) {
+                        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                            try {
+                                main.pause();
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                } catch ( Exception ignored ) { }
             }
 
         });
@@ -81,7 +87,9 @@ public class GameFrame extends JFrame
     public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_Colors)
     {
         main.startGame(map, mode, player_names, player_types,player_Colors);
-
+        if ( sound.getMusic() ){
+           sound.changeMusic("INGAME" , "inGame.wav");
+        }
         gameScreen = null ;
         
         //CarteManager cm = new CarteManager();
@@ -96,6 +104,7 @@ public class GameFrame extends JFrame
         setMinimumSize(null);
         gameScreen.getGameManagerScreen().make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
+        currentCard = ingame_screen_s ;
     }
 
     
@@ -112,9 +121,9 @@ public class GameFrame extends JFrame
     public void quitMainMenu()
     {
         cardLayout.show(main_panel, main_menu_screen_s);
+        currentCard = main_menu_screen_s ;
         menu.showMenu();
         main.setRunning(false);
-        sound.stop();
     }
 
     public void quitGame()
@@ -151,6 +160,10 @@ public class GameFrame extends JFrame
         }
 
         return null;
+    }
+
+    public void setCurrentCard(String currentCard) {
+        this.currentCard = currentCard;
     }
 
     public String getIngame_screen_s() {

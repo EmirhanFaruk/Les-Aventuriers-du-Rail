@@ -52,6 +52,7 @@ public class CarteDestinationPanel extends JPanel {
         // Après l'ajout du bouton au panneau
         btnPiocherCartes.addActionListener(e -> {
             activerPioche();
+            if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"click.wav" );
             // Rendre le focus au panel du game frame après avoir cliqué sur le bouton
             game.getGameFrame().requestFocusInWindow() ;
         });
