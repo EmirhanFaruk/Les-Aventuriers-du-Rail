@@ -512,6 +512,11 @@ public class Player {
         return this.score;
     }
 
+	public void addLongestWayScore()
+	{
+		this.score += 10;
+	}
+
     public int getNbrWagon() {
         return nbrWagon;
     }
