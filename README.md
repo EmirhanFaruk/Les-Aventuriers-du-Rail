@@ -65,8 +65,8 @@ Vous pouvez aussi zoomer sur la map avec la molette de la souris et vous déplac
 
 ## Les Modes de Jeu
 Un mode original et un mode nuke :
-   - Original :
-   - Nuke : 
+   - Original : un mode de jeu inspiré du jeu plateau. 
+   - Nuke : un mode ou on rajoute une carte Nuke qui permet de supprimer les routes/gares des adversaires.
 
 ## Lancer Le Jeu ##
 Tout d'abord, il faut se mettre dans la repertoire `tchu-tchu`. Puis il faut produire une repertoire out pour les fichiers de compilation. On peut le faire en utilisant la commande :
