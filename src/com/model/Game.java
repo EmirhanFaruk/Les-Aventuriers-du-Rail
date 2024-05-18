@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.LongestFinder;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.carte.CarteManager;
@@ -20,6 +21,8 @@ public class Game
     private CarteManager cm;
     private Round round;
     private GameFrame gameFrame ;
+
+    private boolean gaveBonusPoints = false;
 
     public Game(GameFrame gameFrame) {
         this.gameFrame = gameFrame ;
@@ -97,13 +100,40 @@ public class Game
      * Vérifie s'il y a un joueur qui a moins de 3 wagons.
      * @return true si nbrWagon est inférieur à 3.
      */
-    public boolean endGame( ){
+    public boolean endGame(){
         for (Player p : listPlayer){
             if ( p.getNbrWagon() <=2 ){
+                if (!gaveBonusPoints)
+                {
+                    giveLongestRouteBonus();
+                    gaveBonusPoints = true;
+                }
+
                 return true ;
             }
         }
         return cm.trainCardisEmpty();
+    }
+
+    private void giveLongestRouteBonus()
+    {
+        int max = 0, maxi = 0;
+
+        for (int i = 0;i < listPlayer.size(); i++)
+        {
+            ArrayList<Route> tempLongestWay = LongestFinder.findLongestWayAll(villes, listPlayer.get(i));
+            int tempMax = LongestFinder.wayLength(tempLongestWay);
+            if (tempMax > max)
+            {
+                max = tempMax;
+                maxi = i;
+            }
+        }
+
+        if (listPlayer.get(maxi) != null)
+        {
+            listPlayer.get(maxi).addLongestWayScore();
+        }
     }
 
     /**

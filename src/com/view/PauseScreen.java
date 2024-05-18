@@ -56,7 +56,7 @@ public class PauseScreen extends JPanel {
         JPanel resultat = new JPanel() ;
         resultat.setLayout(new GridLayout( 3 , 1 ));
         JButton buttonMenu = new JButton("MENU") ;
-        JButton buttonRestart = new JButton("CONTINUE") ;
+        JButton buttonContinue = new JButton("CONTINUE") ;
         JButton buttonExit = new JButton("EXIT") ;
 
         buttonMenu.addActionListener(new ActionListener() {
@@ -68,7 +68,7 @@ public class PauseScreen extends JPanel {
             }
         });
 
-        buttonRestart.addActionListener(new ActionListener() {
+        buttonContinue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameScreen.getFrame().getMain().setRunning(true);
@@ -76,7 +76,7 @@ public class PauseScreen extends JPanel {
                 GameManagerScreen gm = gameScreen.getFrame().getGameScreen().getGameManagerScreen() ;
                 gm.removePause();
                 gm.getCardLayout().show( gm , gameScreen.getFrame().getIngame_screen_s() );
-                if ( gameScreen.getFrame().getSound().getMusic()) gameScreen.getFrame().getSound().playSound("INGAME" ,"inGame.wav" );
+                if ( gameScreen.getFrame().getSound().getMusic()) gameScreen.getFrame().getSound().playMusic("INGAME" ,"inGame.wav" );
                 //DEBUG : System.out.println("On doit revenir a la page du jeu");
             }
         });
@@ -90,7 +90,7 @@ public class PauseScreen extends JPanel {
         });
 
         resultat.add(buttonMenu) ;
-        resultat.add(buttonRestart) ;
+        resultat.add(buttonContinue) ;
         resultat.add(buttonExit) ;
         return resultat ;
     }
