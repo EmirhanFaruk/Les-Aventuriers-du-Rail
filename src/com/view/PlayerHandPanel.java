@@ -246,18 +246,21 @@ public class PlayerHandPanel extends JPanel {
 
         private void drawPlayerHand2(Graphics2D g) {
             int x = 25, i = 0;
-            int cardheight = this.getHeight()-2*hFixe+2; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
-            int cardwidth = (this.getHeight()-2*hFixe+2)*2; //l'aspect ratio des cartes est de 2
+            int cardheight = this.getHeight()-scrollPaneCardDes.getHorizontalScrollBar().getHeight()-5-2*hFixe; // on soustrait le height du scrollpane et on enleve 2 fois hfix pour center les cartes
+            int cardwidth = (this.getHeight()-scrollPaneCardDes.getHorizontalScrollBar().getHeight()-5-2*hFixe)*2; //l'aspect ratio des cartes est de 2
             while (i < this.player.getDestinationsList().size()) {
                 BufferedImage image = CardGraphics.getCardObjectif();
                 if (image != null) {
+                    Rectangle cardArea = new Rectangle(x, hFixe, cardwidth , cardheight);
                     CarteDestination carteJ = this.player.getDestinationsList().get(i);
+                    cardAreas.put(cardArea, carteJ);
+
                     g.drawImage(image, x, hFixe,cardwidth,cardheight,null);
 
                     if (carteJ == currentHoverCard) {
                         // Appliquer une couleur jaune semi-transparente
                         g.setColor(new Color(255, 255, 0, 128)); // Jaune semi-transparent
-                        g.fillRect(x, hFixe, image.getWidth(), image.getHeight());
+                        g.fillRect(x, hFixe, cardwidth , cardheight );
                     }
 
                     x += cardwidth + 30;
@@ -265,6 +268,8 @@ public class PlayerHandPanel extends JPanel {
                 }
                 i++;
             }
+            setPreferredSize(new Dimension(width, height));
+            revalidate(); // Mettre à jour la mise en page
         }
     }
 

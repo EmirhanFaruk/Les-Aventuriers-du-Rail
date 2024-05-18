@@ -32,7 +32,7 @@ public class Game
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
-        if(music) gameFrame.getSound().playMusic();
+        if(music) gameFrame.getSound().playMusic("INGAME" , "inGame.wav");
     }
 
     private void initBoard(){

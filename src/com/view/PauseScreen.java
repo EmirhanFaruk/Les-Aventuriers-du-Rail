@@ -56,24 +56,27 @@ public class PauseScreen extends JPanel {
         JPanel resultat = new JPanel() ;
         resultat.setLayout(new GridLayout( 3 , 1 ));
         JButton buttonMenu = new JButton("MENU") ;
-        JButton buttonRestart = new JButton("CONTINUE") ;
+        JButton buttonContinue = new JButton("CONTINUE") ;
         JButton buttonExit = new JButton("EXIT") ;
 
         buttonMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 gameScreen.getFrame().quitMainMenu();
+                if ( gameScreen.getFrame().getSound().getMusic() ) gameScreen.getFrame().getSound().changeMusic("MENU" , "tchu-tchu-song.wav");
             }
         });
 
-        buttonRestart.addActionListener(new ActionListener() {
+        buttonContinue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameScreen.getFrame().getMain().setRunning(true);
-
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 GameManagerScreen gm = gameScreen.getFrame().getGameScreen().getGameManagerScreen() ;
                 gm.removePause();
                 gm.getCardLayout().show( gm , gameScreen.getFrame().getIngame_screen_s() );
+                if ( gameScreen.getFrame().getSound().getMusic()) gameScreen.getFrame().getSound().playMusic("INGAME" ,"inGame.wav" );
                 //DEBUG : System.out.println("On doit revenir a la page du jeu");
             }
         });
@@ -81,12 +84,13 @@ public class PauseScreen extends JPanel {
         buttonExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
                 gameScreen.getFrame().quitGame();
             }
         });
 
         resultat.add(buttonMenu) ;
-        resultat.add(buttonRestart) ;
+        resultat.add(buttonContinue) ;
         resultat.add(buttonExit) ;
         return resultat ;
     }
