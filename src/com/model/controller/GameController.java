@@ -161,6 +161,7 @@ public class GameController {
 	                    	 try {
 	                    		 if(source.getInitialCouleur() == Couleur.NUKE) {
 	     	                    	actionDeNuke(e, playerHandPanel, player, game);
+									 if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "tactical-nuke.wav");
 	     	                    	game.getRound().endRound(game);
 	     	                	}
 	                    	}catch ( Exception exception ){
