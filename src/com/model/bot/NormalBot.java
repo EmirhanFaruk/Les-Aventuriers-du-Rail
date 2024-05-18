@@ -3,143 +3,282 @@ package com.model.bot;
 import com.model.Game;
 import com.model.Player;
 import com.model.Round;
+import com.model.ai.GarePosFinder;
+import com.model.ai.Node;
 import com.model.config.Rail;
+import com.model.config.Route;
+import com.model.config.Ville;
 import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteManager;
-
+import com.model.config.carte.CarteWagon;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NormalBot implements BotAction{
-    @Override
-    public void drawCardWagon(Game game) {
-        //Si il peut completer une route avec 2 carte alors piocher les 2 cartes
+/**
+ * Le bot "NormalBot" est une implémentation de l'interface BotAction.
+ * Il représente un bot de la difficulté normale qui joue de manière semi-aléatoire en utilisant différentes stratégies de jeu.
+ */
+public class NormalBot implements BotAction {
 
-        //Si il peut completer une route avec 1 carte alors piocher la carte
+    /**
+     * Vérifie s'il manque seulement une carte pour compléter une route spécifique.
+     *
+     * @param route La route à vérifier.
+     * @param game  Le jeu actuel.
+     * @return {@code true} s'il ne manque qu'une carte pour compléter la route, {@code false} sinon.
+     */
+    public boolean missOneCardOnly(Route route, Game game) {
+        Player player = game.getJoueurCourant();
+        ArrayList<CarteWagon.Couleur> playerTrainList = player.getTrainList();
+        int count = 0;
 
-        //Sinon piocher 2 cartes non visible
+        for (CarteWagon.Couleur couleur : playerTrainList) {
+            if (player.compatibleColor(route, couleur)) {
+                count++;
+            }
+        }
 
+        return count + 1 == route.getLongueur();
     }
 
-    public boolean takeRail(Game game) {
-        //Variable pour avoir round
-        Round round = game.getRound();
+    /**
+     * Vérifie s'il est possible de compléter une route en ne manquant qu'une carte.
+     *
+     * @param game Le jeu actuel.
+     * @return La couleur de la carte manquante si possible, sinon {@code null}.
+     */
+    public Rail.Content canCompletePathMissingOneCard(Game game) {
+        Player player = game.getJoueurCourant();
+        ArrayList<CarteDestination> destinations = player.getDestinationsList();
 
-        //On a toSetDownWagon qui verifie que le joueur a pris ou non une route, si oui alors on arrete la fonction, sinon on rappelle la fonction
+        for (CarteDestination destination : destinations) {
+            ArrayList<Ville> villes = Node.findClosestPath(destination.getPremiereVille(), destination.getDeuxiemeVille());
+            ArrayList<Route> routes = GarePosFinder.getNeededRoutes(villes, player);
 
-        boolean toSetDownWagon = false;
-
-        //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getVilles().size();i++){
-
-            toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
-
-            //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
-            if(toSetDownWagon){
-
-                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
-                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
-                for (Rail rail : listeRail) {
-                    rail.setOccuperPar(bot);
+            for (Route route : routes) {
+                if (missOneCardOnly(route, game)) {
+                    return route.getCouleur();
                 }
+            }
+        }
+        return null;
+    }
 
-                return true;
+    /**
+     * Permet au bot de piocher une ou plusieurs cartes wagons visibles ou de la pioche.
+     *
+     * @param game Le jeu actuel.
+     */
+    @Override
+    public void drawCardWagon(Game game) {
+        Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
+        Rail.Content missingColor = canCompletePathMissingOneCard(game);
+
+        if (missingColor != null) {
+            // Trouver la position de la carte manquante dans les cartes visibles
+            int position = -1;
+            CarteWagon.Couleur[] visibleCards = game.getCarteManager().getTrainCards();
+
+            for (int i = 0; i < visibleCards.length; i++) {
+                if (visibleCards[i].ordinal() == missingColor.ordinal()) {
+                    position = i;
+                    break;
+                }
             }
 
+            if (position != -1) {
+                player.getTrainList().add(game.getCarteManager().takeWagon(position));
+                player.getTrainList().add(game.getCarteManager().drawCard());
+            } else {
+                // Chercher une carte locomotive parmi les cartes visibles
+                int positionLoc = -1;
+
+                for (int i = 0; i < visibleCards.length; i++) {
+                    if (visibleCards[i] == CarteWagon.Couleur.LOC) {
+                        positionLoc = i;
+                        break;
+                    }
+                }
+
+                if (positionLoc != -1) {
+                    player.getTrainList().add(game.getCarteManager().takeWagon(positionLoc));
+                } else {
+                    // Sinon, piocher deux cartes de la pioche
+                    player.getTrainList().add(game.getCarteManager().drawCard());
+                    player.getTrainList().add(game.getCarteManager().drawCard());
+                }
+            }
+        } else {
+            // Si aucune couleur spécifique n'est recherchée, piocher deux cartes aléatoires
+            player.getTrainList().add(game.getCarteManager().drawCard());
+            player.getTrainList().add(game.getCarteManager().drawCard());
+        }
+    }
+
+    /**
+     * Permet au bot de prendre des rails (poser des wagons) sur le plateau de jeu.
+     *
+     * @param game Le jeu actuel.
+     * @return {@code true} si le bot a réussi à poser des wagons sur une route, {@code false} sinon.
+     */
+    @Override
+    public boolean takeRail(Game game) {
+        Player player = game.getJoueurCourant();
+
+        for (Route route : game.getRoutes()) {
+            if (player.mettreRoute(route)) {
+                // Si le joueur a pu poser des wagons sur la route
+                for (Rail rail : route.getRailsRoute()) {
+                    rail.setOccuperPar(player);
+                }
+                return true;
+            }
         }
         return false;
     }
 
+    /**
+     * Permet au bot de poser une gare sur le plateau de jeu.
+     *
+     * @param game        Le jeu actuel.
+     * @param wichStation L'index de la gare à poser, qu'il ne sera pas utilisé ici.
+     * @return {@code true} si le bot a réussi à poser une gare, {@code false} sinon.
+     */
     @Override
     public boolean takeGare(Game game, int wichStation) {
-        //Meme logique que le bot intelligent
+        Player player = game.getJoueurCourant();
+        ArrayList<CarteDestination> carteDestinations = player.getDestinationsList();
 
-        return true;
+        if (player.getNbrGare() > 0) {
+            for (CarteDestination cd : carteDestinations) {
+                Ville ville1 = cd.getPremiereVille();
+                Ville ville2 = cd.getDeuxiemeVille();
+
+                Ville garePos = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, player);
+
+                if (garePos != null && !cd.getComplete()) {
+                    player.transformerEnGare(garePos, player.getTrainList().get(0));
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            // Si aucune gare n'est disponible, piocher des cartes missions
+            CarteDestination[] toAdd = takeMissionsCard(6, game);
+            for (CarteDestination cd : toAdd) {
+                player.getDestinationsList().add(cd);
+            }
+            return true;
+        }
     }
 
+    /**
+     * Permet au bot de prendre une ou des cartes missions.
+     *
+     * @param max  Le nombre maximal de points d'une carte destination/l'accumulation des cartes destination que le bot peut prendre.
+     * @param game Le jeu actuel.
+     * @return Un tableau de cartes missions prises par le bot.
+     */
     @Override
-    public CarteDestination[] takeMissionsCard(int max,Game game) {
-        //Variable pour avoir carteManager
-        CarteManager carteManager = game.getCarteManager();
+    public CarteDestination[] takeMissionsCard(int max, Game game) {
+        CarteDestination[] carteDestinations = game.getCarteManager().getDestinationsCards();
+        ArrayList<Integer> indicesAChoisir = new ArrayList<>();
 
-        //Fonction qui compare les cartes destinations pour savoir quelles cartes prendre
+        int totalPoints = 0;
 
-        //On regarde lequel des cartes mission a la plus petite route,
-        ArrayList<CarteDestination> tab = new ArrayList<>();
-        int[] tmp = new int[2];
-        //Premiere bouble qui va prendre la carte la plus petite
-        for (int i = 1; i < carteManager.getDestinationsCards().length; i++) {
-            if (carteManager.getDestinationsCards()[i].getNombrePoints() < carteManager.getDestinationsCards()[i - 1].getNombrePoints()) {
-                tmp[0] = i;
-            }
-        }
-        //Deuxieme boucle qui ajoute une deuxieme carte mission si la somme < max
-        for (int y = 0; y < carteManager.getDestinationsCards().length; y++) {
-            if ((carteManager.getDestinationsCards()[y].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && y != tmp[0])) {
-
-                tmp[1] = y;
+        for (int i = 0; i < carteDestinations.length; i++) {
+            if (carteDestinations[i].getNombrePoints() + totalPoints <= max) {
+                indicesAChoisir.add(i);
+                totalPoints += carteDestinations[i].getNombrePoints();
             }
         }
 
-        //Troisieme bouble qui regarde si la derniere carte + les cartes deja prisent soit < max
-        for (int z = 0; z < carteManager.getDestinationsCards().length; z++) {
-            if ((carteManager.getDestinationsCards()[z].getNombrePoints() + (carteManager.getDestinationsCards()[tmp[0]].getNombrePoints()) <= max && z != tmp[0] && z != tmp[1])) {
-
-                tmp[2] = z;
-            }
-        }
-
-        return carteManager.takeDestination(tmp);
-
-
+        int[] indices = indicesAChoisir.stream().mapToInt(Integer::intValue).toArray();
+        return game.getCarteManager().takeDestination(indices);
     }
 
 
+    /**
+     * Procède au premier tour du bot en ajoutant des missions et en choisissant les actions de manière optimale.
+     *
+     * @param game Le jeu en cours.
+     */
+    private void firstTurn(Game game) {
+        CarteDestination[] carteDestination = takeMissionsCard(6, game);
+
+        for (int z = 0; z < carteDestination.length; z++) {
+            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+        }
+
+        game.getJoueurCourant().setFirstTurnOver(true);
+        optimalCompleteMission(game);
+    }
+
+    /**
+     * Procède de manière optimale à compléter les missions du bot en prenant des rails, en posant des gares,
+     * ou en piochant des cartes wagons.
+     *
+     * @param game Le jeu en cours.
+     */
+    private void optimalCompleteMission(Game game) {
+        if (takeRail(game)) {
+            game.getRound().endRound(game);
+        } else {
+            if (takeGare(game, 0)) {
+                game.getRound().endRound(game);
+            } else {
+                drawCardWagon(game);
+                game.getRound().endRound(game);
+            }
+        }
+    }
+
+
+
+    /**
+     * La fonction principale du bot pour jouer son tour.
+     *
+     * @param game Le jeu actuel.
+     */
     @Override
     public void play(Game game) {
-        //Fonction principale du bot normal
-
         Random random = new Random();
-        int whatToDo = random.nextInt(4);
+        int action = random.nextInt(4);
 
-        switch (whatToDo) {
+        if (!game.getJoueurCourant().getFirstTurnOver()) {
+            firstTurn(game);
+        } else {
+            switch (action) {
+                case 0:
+                    // Piocher des cartes wagons
+                    drawCardWagon(game);
+                    break;
+                case 1:
+                    // Piocher des cartes missions
+                    CarteDestination[] newMissions = takeMissionsCard(8, game);
+                    Player currentPlayer = game.getJoueurCourant();
+                    for (CarteDestination mission : newMissions) {
+                        currentPlayer.getDestinationsList().add(mission);
+                    }
+                    break;
+                case 2:
+                    // Poser des wagons
+                    if (!takeRail(game)) {
+                        play(game);
+                    }
+                    break;
+                default:
+                    // Poser une gare
+                    if (!takeGare(game, 0)) {
+                        play(game);
+                    }
+                    break;
+            }
 
-
-            case (0):
-                /*        CARTES WAGONS        */
-
-
-                break;
-
-
-            case (1):
-                /*        CARTES MISSIONS        */
-
-                break;
-
-            case (2):
-                /*        POSER DES WAGONS       */
-
-                //On regarde si les rails ont bien était posés
-                if (takeRail(game)) {
-                    game.getRound().endRound(game);
-
-                } else {
-                    play(game);
-
-                }
-
-                break;
-
-
-            default:
-                /*        POSER UNE GARE       */
-
-
-                break;
-
+            // Fin du tour
+            game.getRound().endRound(game);
         }
+
+
+
     }
-
-
 }

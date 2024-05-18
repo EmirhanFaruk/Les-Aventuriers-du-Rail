@@ -52,6 +52,7 @@ public class CarteDestinationPanel extends JPanel {
         // Après l'ajout du bouton au panneau
         btnPiocherCartes.addActionListener(e -> {
             activerPioche();
+            if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"click.wav" );
             // Rendre le focus au panel du game frame après avoir cliqué sur le bouton
             game.getGameFrame().requestFocusInWindow() ;
         });
@@ -116,12 +117,13 @@ public class CarteDestinationPanel extends JPanel {
 
     //Fonction qui montre la carte destination
     private void showCardDescription() {
-    	CarteDestination cD =  carteDestination.getDestinationsCards()[this.hoveredCardIndex];
-    	
-        if (hoveredCardIndex >= 0 && cD != null) { // Vérifie l'index et voit si la carte est nulle
-            this.gameController.descriptionCardDestination(cD, game);
-         
-        }
+        try {
+            CarteDestination cD = carteDestination.getDestinationsCards()[this.hoveredCardIndex];
+            if (hoveredCardIndex >= 0 && cD != null) { // Vérifie l'index et voit si la carte est nulle
+                this.gameController.descriptionCardDestination(cD, game);
+
+            }
+        } catch ( Exception ignored ) { }
     }
 
     private void setupMouseMotionListener() {

@@ -25,13 +25,14 @@ public class Game
         this.gameFrame = gameFrame ;
     }
 
-    public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors )
+    public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors, boolean music )
     {
-        this.cm = new CarteManager();
+        this.cm = new CarteManager(gameFrame.getMode());
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
+        if(music) gameFrame.getSound().playMusic("INGAME" , "inGame.wav");
     }
 
     private void initBoard(){
@@ -41,7 +42,7 @@ public class Game
         // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
         for (int i = 0; i < listPlayer.size(); i++)
         {
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 10; j++)
             {
                 listPlayer.get(i).piocher(cm);
             }
@@ -102,7 +103,7 @@ public class Game
                 return true ;
             }
         }
-        return cm.trainCardisEmpty() && cm.PileCarteWagon.isEmpty();
+        return cm.trainCardisEmpty();
     }
 
     /**

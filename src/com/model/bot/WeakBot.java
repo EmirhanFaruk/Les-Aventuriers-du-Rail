@@ -11,218 +11,206 @@ import com.model.config.carte.CarteWagon;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class WeakBot implements BotAction{
+/**
+ * Le bot "WeakBot" est une implémentation de l'interface BotAction.
+ * Il représente un bot de la difficulté facile qui joue de manière aléatoire.
+ */
+public class WeakBot implements BotAction {
 
+    /**
+     * Permet au bot de piocher une ou des cartes wagons de manière aléatoire.
+     *
+     * @param game Le jeu en cours.
+     */
     @Override
     public void drawCardWagon(Game game) {
         Random random = new Random();
-        //Variable pour avoir round
+        // Variable pour accéder à la manche
         Round round = game.getRound();
-        //Variable pour avoir carteManager
+        // Variable pour accéder à la gestion des cartes
         CarteManager carteManager = game.getCarteManager();
 
-        //Si l'ia a encore des actions
-        while (round.getAction() > 0){
-
+        // Tant que le bot a encore des actions à effectuer
+        while (round.getAction() > 0) {
             int nbr = random.nextInt(2);
-            //Savoir si elle pioche ou prends une carte du board
 
-
-            if(nbr == 0){
-                //On enleve 1 action et pioche une carte
+            // Choix aléatoire d'actions : pioche ou prend une carte du board
+            if (nbr == 0) {
+                // Pioche une carte
                 game.getJoueurCourant().getTrainList().add(carteManager.drawCard());
-                round.setAction(round.getAction()-1);
-
-            }
-
-            else{
-                //Sinon elle choisit aléatoirement dans la liste de carte wagon sur le board
+                round.setAction(round.getAction() - 1);
+            } else {
+                // Choix aléatoire d'une carte wagon du board
                 int position = random.nextInt(carteManager.getTrainCards().length);
 
-                //On verifie si elle a assez d'action pour choisir la carte, car carte normale = 1 point et locomotive = 2 points, sinon elle recommence dans le while
-                if(carteManager.possibleTakeWagon(round.getAction(), position)){
+                // Vérifie si le bot a assez d'actions pour choisir la carte
+                if (carteManager.possibleTakeWagon(round.getAction(), position)) {
                     CarteWagon.Couleur carte = carteManager.takeWagon(position);
 
-                    //Si la carte pioché est une locomotive, on enleve 2 points
-                    if(carte == CarteWagon.Couleur.LOC){
-
-                        round.setAction(round.getAction()-2);
-                    }else{
-                        //Sinon on enleve 1 point
-                        round.setAction(round.getAction()-1);
-
+                    // Ajuste les actions selon la carte piochée
+                    if (carte == CarteWagon.Couleur.LOC) {
+                        round.setAction(round.getAction() - 2);
+                    } else {
+                        round.setAction(round.getAction() - 1);
                     }
-                    //Puis on l'ajoute dans la liste de carte
+
+                    // Ajoute la carte à la liste du bot
                     game.getListPlayer().get(round.getWhoIsPlaying()).getTrainList().add(carte);
-
-
                 }
-
             }
-
         }
     }
 
+    /**
+     * Permet au bot de poser des rails sur des routes disponibles.
+     *
+     * @param game Le jeu en cours.
+     * @return true si le bot réussit à prendre une route, sinon false.
+     */
     @Override
     public boolean takeRail(Game game) {
-        //On a toSetDownWagon qui verifie que le joueur a pris ou non une route, si oui alors on arrete la fonction, sinon on rappelle la fonction
-
-        //Variable pour avoir round
+        // Variable pour accéder à la manche
         Round round = game.getRound();
 
         boolean toSetDownWagon = false;
 
-        //On regarde pour toute les routes si il peut prendre la route ou non
-        for(int i = 0; i< game.getRoutes().size(); i++){
-
+        // Parcourt toutes les routes pour vérifier si le bot peut prendre une route
+        for (int i = 0; i < game.getRoutes().size(); i++) {
             toSetDownWagon = game.getListPlayer().get(round.getWhoIsPlaying()).mettreRoute(game.getRoutes().get(i));
 
-            //si il trouve une route qu'il peut prendre alors il prends la route et arrete la fonction, tout en passant au joueur suivant
-            if(toSetDownWagon){
-                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute() ;
-                int tailleRoute =  listeRail.size();
-                Player bot = game.getListPlayer().get( round.getWhoIsPlaying());
+            // Si le bot prend une route, il l'occupe et termine l'exécution
+            if (toSetDownWagon) {
+                ArrayList<Rail> listeRail = game.getRoutes().get(i).getRailsRoute();
+                int tailleRoute = listeRail.size();
+                Player bot = game.getListPlayer().get(round.getWhoIsPlaying());
 
-                for(int j = 0 ; j  < tailleRoute  ; j++) {
-                    listeRail.get( j ).setOccuperPar( bot );
+                for (int j = 0; j < tailleRoute; j++) {
+                    listeRail.get(j).setOccuperPar(bot);
                 }
-                // DEBUG : System.err.println("Le botW a poser les wagons");
 
                 return true;
             }
-
         }
         return false;
     }
 
+    /**
+     * Permet au bot de poser une gare sur une ville non occupée.
+     *
+     * @param game Le jeu en cours.
+     * @param wichStation L'identifiant de la ville où poser la gare.
+     * @return true si le bot réussit à poser une gare, sinon false.
+     */
     @Override
     public boolean takeGare(Game game, int wichStation) {
-        //Variable pour avoir round
+        // Variable pour accéder à la manche
         Round round = game.getRound();
-        //Variable du joueur
+        // Accès au joueur courant
         Player player = game.getListPlayer().get(round.getWhoIsPlaying());
 
         Random random = new Random();
 
-        //On regarde dans la liste de gare a la position "wichSation" si la gare est deja prise ou non, de plus on regarde si le bot a toujours des gares et on verifie qu'il a assez de carte a enlever
+        // Vérifie que la ville n'est pas occupée et que le bot peut poser une gare
+        if (game.getVilles().get(wichStation).getIsOccuped() == null && player.getTrainList().size() > player.nombreDeCartePourPoserUneGare() && player.getNbrGare() > 0) {
+            int card = random.nextInt(player.getTrainList().size());
 
-        if( game.getVilles().get(wichStation).getIsOccuped() == null &&  player.getTrainList().size() > player.nombreDeCartePourPoserUneGare() && player.getNbrGare() > 0 ){
-
-            int card = random.nextInt( player.getTrainList().size() ) ;
-
-            player.transformerEnGare( game.getVilles().get(wichStation) , player.getTrainList().get( card ) );
-            //DEBUG System.err.println( "Le botW " + player.getName() +" a poser une gare, le nom de la ville est " +   game.getVilles().get(wichStation).getNom() );
-
+            // Transforme la ville en gare
+            player.transformerEnGare(game.getVilles().get(wichStation), player.getTrainList().get(card));
 
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
+    /**
+     * Permet au bot de piocher des cartes missions de manière aléatoire.
+     *
+     * @param max  Pas utilisé dans la fonction pour le weak.
+     * @param game Le jeu en cours.
+     * @return Un tableau de cartes missions piochées.
+     */
     @Override
-    public CarteDestination[] takeMissionsCard(int max, Game game){
-        //Variable pour avoir carteManager
+    public CarteDestination[] takeMissionsCard(int max, Game game) {
+        // Variable pour accéder à la gestion des cartes
         CarteManager carteManager = game.getCarteManager();
 
         Random random = new Random();
 
-        //On choisit un nombre aleatoire et le joueur prends au hasard soit 1/2/3 cartes qu'on met dans un tableau
-        int nombreDeCartePris = random.nextInt(carteManager.getDestinationsCards().length -1);
-        int[] tabNombre = new int[nombreDeCartePris];
+        // Choix aléatoire du nombre de cartes à piocher (entre 1 et 3)
+        int nombreDeCartePris = random.nextInt(3) + 1;
+        int[] indicesCartes = new int[nombreDeCartePris];
 
-        //Le bot prends les "nombreDeCartePris"
-        for(int y = 0; y< nombreDeCartePris; y++){
-
-            tabNombre[y] = y;
-
+        // Génère un tableau d'indices aléatoires pour les cartes à piocher
+        for (int y = 0; y < indicesCartes.length; y++) {
+            indicesCartes[y] = random.nextInt(carteManager.getDestinationsCards().length);
         }
 
-        //Je stock les cartes destinations dans une liste
-        return carteManager.takeDestination(tabNombre);
-
-
+        // Retourne les cartes destinations piochées
+        return carteManager.takeDestination(indicesCartes);
     }
 
-
+    /**
+     * Méthode principale du WeakBot pour jouer un tour.
+     *
+     * @param game Le jeu en cours.
+     */
     @Override
     public void play(Game game) {
-        //Fonction principale du bot faible
+        // Vérifie si c'est le premier tour du bot
+        if (!game.getJoueurCourant().getFirstTurnOver()) {
+            // Pioche des cartes missions au premier tour
+            CarteDestination[] carteDestination = takeMissionsCard(0, game);
 
-        Random random = new Random();
-        int whatToDo = random.nextInt(4);
+            // Ajoute les cartes missions à la liste du bot
+            for (int z = 0; z < carteDestination.length; z++) {
+                game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+            }
 
-        switch (whatToDo){
+            // Pioche des cartes wagons
+            drawCardWagon(game);
 
+            game.getRound().endRound(game);
+        } else {
+            // Choix aléatoire des actions à effectuer
+            Random random = new Random();
+            int whatToDo = random.nextInt(4);
 
-            case(0):
-                /*        CARTES WAGONS        */
-                drawCardWagon(game);
-
-                game.getRound().endRound(game);
-
-                break;
-
-
-            case(1):
-                /*        CARTES MISSIONS        */
-
-                CarteDestination[] carteDestination = takeMissionsCard(0,game);
-
-                //Pour ensuite les ajouter dans la liste des missions du bot
-                for(int z = 0; z<carteDestination.length;z++){
-
-                    game.getListPlayer().get(game.getRound().getWhoIsPlaying()).getDestinationsList().add(carteDestination[z]);
-                }
-
-                game.getRound().endRound(game);
-
-                break;
-
-
-
-            case(2):
-                /*        POSER DES WAGONS       */
-
-                //On regarde si les rails ont bien était posés
-                if(takeRail(game)){
-
+            switch (whatToDo) {
+                case 0:
+                    // Pioche des cartes wagons
+                    drawCardWagon(game);
                     game.getRound().endRound(game);
+                    break;
 
-                }
-                else{
-                    play(game);
+                case 1:
+                    // Pioche des cartes missions
+                    CarteDestination[] carteDestination = takeMissionsCard(0, game);
+                    for (int z = 0; z < carteDestination.length; z++) {
+                        game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+                    }
+                    game.getRound().endRound(game);
+                    break;
 
-                }
+                case 2:
+                    // Pose des wagons
+                    if (takeRail(game)) {
+                        game.getRound().endRound(game);
+                    } else {
+                        play(game);
+                    }
+                    break;
 
-                break;
-
-
-            default :
-                /*        POSER UNE GARE       */
-
-                int wichStation = random.nextInt(game.getVilles().size());
-
-                if(takeGare(game,wichStation)){
-                  game.getRound().endRound(game);
-
-                }
-                else{
-                    play(game);
-                }
-
-
-                break;
-
-
-
+                default:
+                    // Pose une gare
+                    int wichStation = random.nextInt(game.getVilles().size());
+                    if (takeGare(game, wichStation)) {
+                        game.getRound().endRound(game);
+                    } else {
+                        play(game);
+                    }
+                    break;
+            }
         }
-
-
     }
-
-
-
 }
-

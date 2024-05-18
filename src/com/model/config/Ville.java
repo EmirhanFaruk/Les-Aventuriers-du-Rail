@@ -1,7 +1,6 @@
 package com.model.config;
 
 import com.model.Player;
-
 import java.util.ArrayList;
 
 /**

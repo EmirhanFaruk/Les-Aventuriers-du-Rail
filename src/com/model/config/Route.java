@@ -185,5 +185,13 @@ public class Route {
     public ArrayList<Rail> getRailsRoute() {
         return railsRoute;
     }
+    
+    public void enleverProprio() {
+    	this.proprietaire = null;
+
+    	for(int i = 0; i < this.railsRoute.size(); i++) {
+    		this.railsRoute.get(i).setOccuperPar2(null);
+    	}    	
+    }
 
 }

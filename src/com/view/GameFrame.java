@@ -1,6 +1,7 @@
 package com.view;
 
 import com.controller.Main;
+import com.model.Sound;
 import com.view.mainmenu.Menu;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class GameFrame extends JFrame
     private JPanel main_panel;
     private final CardLayout cardLayout = new CardLayout();
 
+    private String currentCard;
+
     private GameScreen gameScreen ;
 
     private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , pause_screen_s = "PAUSE", endgame_screen_s = "ENDGAME";
@@ -26,8 +29,8 @@ public class GameFrame extends JFrame
     private Menu menu;
 
     private Main main;
-
-
+    
+    private Sound sound;
 
     /**
      * Constructeur de GameView, assigner les attributs
@@ -38,9 +41,10 @@ public class GameFrame extends JFrame
         this.setTitle("Tchu Tchuuu");
         this.setSize(width, height);
         this.setPreferredSize(new Dimension(width, height));
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        this.sound = new Sound();
+        if ( sound.getMusic() ) sound.playMusic("MENU" , "tchu-tchu-song.wav" );
 
         this.main = main;
         // On commence par menu
@@ -53,35 +57,39 @@ public class GameFrame extends JFrame
         cardLayout.show(main_panel, ingame_screen_s);
 
         this.add(main_panel);
-
+        
         pack();
         setLocationRelativeTo(null);
 
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    try {
-                        main.pause();
-                        // DEBUG : System.err.println(main.getRunning());
-                    } catch ( Exception ignored) { }
-                }
+                try {
+                    if (currentCard.equals(ingame_screen_s) || currentCard.equals(pause_screen_s)) {
+                        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                            try {
+                                main.pause();
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                } catch ( Exception ignored ) { }
             }
 
         });
-
+        //sound.playMusic();
         setFocusable(true);
         requestFocusInWindow();
-
         this.setVisible(true);
-
     }
 
 
     public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_Colors)
     {
         main.startGame(map, mode, player_names, player_types,player_Colors);
-
+        if ( sound.getMusic() ){
+           sound.changeMusic("INGAME" , "inGame.wav");
+        }
         gameScreen = null ;
         
         //CarteManager cm = new CarteManager();
@@ -96,6 +104,7 @@ public class GameFrame extends JFrame
         setMinimumSize(null);
         gameScreen.getGameManagerScreen().make( main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
+        currentCard = ingame_screen_s ;
     }
 
     
@@ -112,6 +121,7 @@ public class GameFrame extends JFrame
     public void quitMainMenu()
     {
         cardLayout.show(main_panel, main_menu_screen_s);
+        currentCard = main_menu_screen_s ;
         menu.showMenu();
         main.setRunning(false);
     }
@@ -152,6 +162,10 @@ public class GameFrame extends JFrame
         return null;
     }
 
+    public void setCurrentCard(String currentCard) {
+        this.currentCard = currentCard;
+    }
+
     public String getIngame_screen_s() {
         return ingame_screen_s;
     }
@@ -166,5 +180,12 @@ public class GameFrame extends JFrame
 
     public Main getMain() {
         return main;
+    }
+    
+    public Sound getSound() {
+        return sound;
+    }
+    public String getMode() {
+        return main.getMode();
     }
 }
