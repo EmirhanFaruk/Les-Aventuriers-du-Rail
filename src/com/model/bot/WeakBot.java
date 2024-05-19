@@ -259,6 +259,12 @@ public class WeakBot implements BotAction {
 
     }
 
+    /**
+     * Permet au bot de détruire une route.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
     private boolean destroyRoute(Game game) {
         //On parcours la liste des routes
         for(Route route : game.getRoutes()){
@@ -276,6 +282,12 @@ public class WeakBot implements BotAction {
         return false;
     }
 
+    /**
+     * Permet au bot de detruire une gare.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
     private boolean destroyGare(Game game) {
 
         //On parcours la liste des villes
