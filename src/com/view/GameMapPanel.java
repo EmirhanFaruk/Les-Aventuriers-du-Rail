@@ -4,9 +4,10 @@ import com.model.Game;
 import com.model.Player;
 import com.model.config.Plateau;
 import com.model.controller.GameController;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
@@ -19,27 +20,19 @@ public class GameMapPanel extends JPanel {
     private PiochePanel pioche;
     private CarteDestinationPanel cdPanel;
     private static int tile_width , tile_height ;
+    private int[] tileCount; // Store tile count here
     private GameController gameController = new GameController();
 
+    public GameMapPanel(GameFrame frame, String map, int width, int height, Player player, Game game) {
+        this.frame = frame;
+        setSize(width, height);
+        this.height = height;
+        this.width = width;
 
-    /**
-     * Constructeur de la classe GameManagerScreen
-     * @param frame gameframe
-     * @param map le nom de la map
-     * @param width width
-     * @param height height
-     */
-    public GameMapPanel (GameFrame frame , String map , int width , int height , Player player , Game game ){
-        this.frame = frame ;
-        setSize(width , height );
-        this.height = height ;
-        this.width = width ;
-
-        int[] tileCount = getTileCount(map);
+        this.tileCount = getTileCount(map);
 
         tile_width = (int) (getWidth() * 0.7 / tileCount[0]);
         tile_height = (int) (getHeight() * 0.7 / tileCount[1]);
-
 
         this.playerHandPanel = new PlayerHandPanel() ;
         this.mapScreen = new MapScreen( map , (int) (width*0.80), (int) (height*0.75),tile_width , tile_height  , player , game, this.playerHandPanel , gameController ) ;
@@ -56,6 +49,12 @@ public class GameMapPanel extends JPanel {
         add( playerHandPanel , BorderLayout.SOUTH ) ;
         add(playerInformationBarPanel , BorderLayout.NORTH ) ;
 
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                resizeComponents();
+            }
+        });
     }
 
     private int[] getTileCount(String map) {
@@ -64,7 +63,6 @@ public class GameMapPanel extends JPanel {
 
         // 0 = heigth, 1 = weight
         int[] size = Plateau.readFile(reader,new ArrayList<>());
-
 
         return size;
 
@@ -78,8 +76,20 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
 
+    private void resizeComponents() {
+        // Use stored tile count instead of reading from the file
+        tile_width = (int) (getWidth() * 0.7 / tileCount[0]);
+        tile_height = (int) (getHeight() * 0.7 / tileCount[1]);
 
-    /* getters et setters */
+        mapScreen.resize((int) (getWidth() * 0.80), (int) (getHeight() * 0.75), tile_width, tile_height);
+        playerHandPanel.resize(getWidth(), (int) (getHeight() * 0.15));
+        pioche.resize(getWidth(), getHeight());
+        cdPanel.resize(getWidth(), getHeight());
+        playerInformationBarPanel.resize(getWidth(), (int) (getHeight() * 0.05));
+
+        revalidate();
+        repaint();
+    }
 
     public void setPlayerCourant(Player playerCourant) {
         this.playerHandPanel.setPlayer(playerCourant);
@@ -91,9 +101,11 @@ public class GameMapPanel extends JPanel {
         this.mapScreen.setPlayer( playerCourant );
     }
 
+    /* getters et setters */
     public MapScreen getMapScreen() {
         return mapScreen;
     }
+
 
     public PlayerHandPanel getPlayerHandPanel() {
         return playerHandPanel;

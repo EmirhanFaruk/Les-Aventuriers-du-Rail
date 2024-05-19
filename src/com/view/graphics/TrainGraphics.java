@@ -140,7 +140,7 @@ public class TrainGraphics {
      * @param g Graphics
      * @param rail Rail
      */
-    public static void paint (Graphics2D g , Rail rail ){
+    public static void paint (Graphics2D g , Rail rail , int width, int height ){
         BufferedImage image = getImage(rail) ;
         g.drawImage( image , rail.getX() * width , rail.getY() * height , width , height , null ) ;
     }
