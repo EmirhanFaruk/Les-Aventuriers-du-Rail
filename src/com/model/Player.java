@@ -238,7 +238,8 @@ public class Player {
 				if(r.getSaRoute() == this.getPlayerRoutes().get(i)) {
 					
 					//Debug : System.out.print("SA PASSE");
-					
+					if (game.getGameFrame().getSound().getclick())
+						game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
 					p.retirerCarteNuke(); //Retire la carte nuke de son inventaire
 					r.getSaRoute().enleverProprio(); //Enlève le proprio de la route et des rails
 					this.getPlayerRoutes().remove(i); //Enlève la route de l'inventaire du joueur

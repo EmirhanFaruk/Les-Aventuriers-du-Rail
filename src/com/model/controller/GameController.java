@@ -28,6 +28,8 @@ public class GameController {
                 // Traitement en fonction du type de l'objet cliqué
 				if ( ! zoomed ) {
 					if (clickedObject instanceof Rail) {
+						Mx = x;
+						My = y;
 						tenterAcquisitionRoute((Rail) clickedObject, joueurCourant, game.getRound(), game);
 					} else if (clickedObject instanceof Ville) {
 						Mx = x;
@@ -135,8 +137,7 @@ public class GameController {
 	 * @param game le jeu
 	 */
     public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
-		if ( player.getNiveau() == 0 ) {
-			//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
+		//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
 			if (player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
 				if (game.getGameFrame().getSound().getclick())
 					game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
@@ -163,8 +164,6 @@ public class GameController {
 								try {
 									if (source.getInitialCouleur() == Couleur.NUKE) {
 										actionDeNuke(e, playerHandPanel, player, game);
-										if (game.getGameFrame().getSound().getclick())
-											game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
 										game.getRound().endRound(game);
 									}
 								} catch (Exception exception) {
@@ -191,14 +190,13 @@ public class GameController {
 
 					}
 
-				} else {
+				} else if ( player.getNiveau() == 0 ) {
 					if (game.getGameFrame().getSound().getclick())
 						game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
 					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 							"Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
-		}
     }
 
     //Action de la Nuke pour voir ce qu'elle doit faire
@@ -265,6 +263,8 @@ public class GameController {
         //On vérifie si le joueur à une carte Nuke, si oui on retire finalement la gare de la Ville
         if(player.checkACarteNuke() && autrePlayer != null){
         	autrePlayer.retirerGareAutrePlayer(ville, player);
+			if (game.getGameFrame().getSound().getclick())
+				game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
         	return true;
         }
 
