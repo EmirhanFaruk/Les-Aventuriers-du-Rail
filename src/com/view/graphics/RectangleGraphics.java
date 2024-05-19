@@ -1,7 +1,6 @@
 package com.view.graphics;
 
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 

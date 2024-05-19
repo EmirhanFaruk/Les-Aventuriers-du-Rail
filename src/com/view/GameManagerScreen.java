@@ -8,6 +8,9 @@ import com.view.endgame.EndGameScreen;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * La classe GameManagerScreen gère l'affichage et la gestion des différents écrans de jeu, y compris la carte du jeu, l'écran de pause et l'écran de fin de jeu.
+ */
 public class GameManagerScreen extends JPanel {
     GameFrame frame ;
     private GameMapPanel gameMapPanel ;

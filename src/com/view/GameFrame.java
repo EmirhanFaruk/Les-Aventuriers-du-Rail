@@ -10,8 +10,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
-public class GameFrame extends JFrame
-{
+/**
+ * La classe GameFrame représente la fenêtre principale de l'application de jeu.
+ * Elle utilise un CardLayout pour naviguer entre différents écrans de jeu tels que le menu principal, le jeu en cours, la pause et la fin de jeu.
+ */
+public class GameFrame extends JFrame {
     public static GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 
     private double scale;
@@ -22,21 +25,24 @@ public class GameFrame extends JFrame
 
     private String currentCard;
 
-    private GameScreen gameScreen ;
+    private GameScreen gameScreen;
 
-    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME" , pause_screen_s = "PAUSE", endgame_screen_s = "ENDGAME";
+    private final String main_menu_screen_s = "MAIN MENU", ingame_screen_s = "INGAME", pause_screen_s = "PAUSE", endgame_screen_s = "ENDGAME";
 
     private Menu menu;
 
     private Main main;
-    
+
     private Sound sound;
 
     /**
-     * Constructeur de GameView, assigner les attributs
+     * Constructeur de GameFrame, initialisant les attributs et configurant l'interface utilisateur.
+     *
+     * @param width  La largeur de la fenêtre
+     * @param height La hauteur de la fenêtre
+     * @param main   L'objet principal Main de l'application
      */
-    public GameFrame(int width, int height, Main main)
-    {
+    public GameFrame(int width, int height, Main main) {
         // Les attributs de JPanel
         this.setTitle("Tchu Tchuuu");
         this.setSize(width, height);
@@ -44,7 +50,7 @@ public class GameFrame extends JFrame
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.sound = new Sound();
-        if ( sound.getMusic() ) sound.playMusic("MENU" , "tchu-tchu-song.wav" );
+        if (sound.getMusic()) sound.playMusic("MENU", "tchu-tchu-song.wav");
 
         this.main = main;
         // On commence par menu
@@ -57,7 +63,7 @@ public class GameFrame extends JFrame
         cardLayout.show(main_panel, ingame_screen_s);
 
         this.add(main_panel);
-        
+
         pack();
         setLocationRelativeTo(null);
 
@@ -73,7 +79,8 @@ public class GameFrame extends JFrame
                             }
                         }
                     }
-                } catch ( Exception ignored ) { }
+                } catch (Exception ignored) {
+                }
             }
 
         });
@@ -83,58 +90,60 @@ public class GameFrame extends JFrame
         this.setVisible(true);
     }
 
-
-    public void startGame(String map, String mode, String[] player_names, String[] player_types,Color[] player_Colors)
-    {
-        main.startGame(map, mode, player_names, player_types,player_Colors);
-        if ( sound.getMusic() ){
-           sound.changeMusic("INGAME" , "inGame.wav");
+    /**
+     * Démarre une nouvelle partie avec les paramètres spécifiés.
+     *
+     * @param map          La carte sélectionnée
+     * @param mode         Le mode de jeu
+     * @param player_names Les noms des joueurs
+     * @param player_types Les types des joueurs
+     * @param player_Colors Les couleurs des joueurs
+     */
+    public void startGame(String map, String mode, String[] player_names, String[] player_types, Color[] player_Colors) {
+        main.startGame(map, mode, player_names, player_types, player_Colors);
+        if (sound.getMusic()) {
+            sound.changeMusic("INGAME", "inGame.wav");
         }
-        gameScreen = null ;
-        
-        //CarteManager cm = new CarteManager();
-        //for(int i=0; i<5; i++)p.getTrainCard().add(cm.drawCard());
-    	//System.out.println("Setting player with " + p.getTrainCard().size() + " cards."); // Log pour le débogage*/
+        gameScreen = null;
 
-    	gameScreen = new GameScreen(this , map , getWidth() , getHeight() , main.game.getListPlayer().get(main.getGame().getRound().getWhoIsPlaying()) , main.game) ;
+        gameScreen = new GameScreen(this, map, getWidth(), getHeight(), main.game.getListPlayer().get(main.getGame().getRound().getWhoIsPlaying()), main.game);
 
-
-        main_panel.add(ingame_screen_s , gameScreen ) ;
+        main_panel.add(ingame_screen_s, gameScreen);
         setMinimumSize(getSize());
         setMinimumSize(null);
-        gameScreen.getGameManagerScreen().make( main.game.getPlateau());
+        gameScreen.getGameManagerScreen().make(main.game.getPlateau());
         cardLayout.show(main_panel, ingame_screen_s);
-        currentCard = ingame_screen_s ;
+        currentCard = ingame_screen_s;
     }
 
-    
     @Override
-    public void setSize(int width, int height)
-    {
+    public void setSize(int width, int height) {
         super.setSize(width, height);
-        if(main_panel != null)
-        {
+        if (main_panel != null) {
             main_panel.setSize(width, height);
         }
     }
 
-    public void quitMainMenu()
-    {
+    /**
+     * Retourne au menu principal.
+     */
+    public void quitMainMenu() {
         cardLayout.show(main_panel, main_menu_screen_s);
-        currentCard = main_menu_screen_s ;
+        currentCard = main_menu_screen_s;
         menu.showMenu();
         main.setRunning(false);
     }
 
-    public void quitGame()
-    {
+    /**
+     * Quitte le jeu.
+     */
+    public void quitGame() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
+    /* Getters et Setters */
 
-    /* getters et setters */
-    public GraphicsDevice getDevice()
-    {
+    public GraphicsDevice getDevice() {
         return device;
     }
 
@@ -142,20 +151,16 @@ public class GameFrame extends JFrame
         return gameScreen;
     }
 
-    public MapScreen getMapScreen()
-    {
-        if (gameScreen != null)
-        {
+    public MapScreen getMapScreen() {
+        if (gameScreen != null) {
             return gameScreen.getMapScreen();
         }
 
         return null;
     }
 
-    public GameMapPanel getGameMapPanel()
-    {
-        if (gameScreen != null)
-        {
+    public GameMapPanel getGameMapPanel() {
+        if (gameScreen != null) {
             return gameScreen.getGameMapPanel();
         }
 
@@ -181,10 +186,11 @@ public class GameFrame extends JFrame
     public Main getMain() {
         return main;
     }
-    
+
     public Sound getSound() {
         return sound;
     }
+
     public String getMode() {
         return main.getMode();
     }

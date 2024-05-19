@@ -17,6 +17,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * La classe MapScreen représente l'écran de la carte du jeu, permettant le zoom, le dézoom et le déplacement de la carte.
+ */
 public class MapScreen extends JPanel {
     ArrayList<MapGraphics> map = new ArrayList<>();
     final String mapName;

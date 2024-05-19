@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * La classe PlayerInformationBarPanel représente le panneau d'affichage des informations des joueurs,
+ * incluant le score, le nombre de wagons et de gares pour chaque joueur.
+ */
 public class PlayerInformationBarPanel extends JPanel {
     private ArrayList<Player> players;
     private Player playerCourant;

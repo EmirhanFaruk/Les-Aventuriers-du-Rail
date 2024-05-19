@@ -2,7 +2,6 @@ package com.view.mainmenu;
 
 import com.view.GameFrame;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,75 +9,67 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-public class Menu extends JPanel
-{
+/**
+ * La classe Menu représente le menu principal du jeu, permettant la navigation entre les différentes sections telles que
+ * l'accueil, les règles, les paramètres et le lancement du jeu.
+ */
+public class Menu extends JPanel {
+
     /**
-     * Home button.
+     * ActionListener pour le bouton Home.
      */
-    public class HomeButton implements ActionListener
-    {
+    public class HomeButton implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e)
-        {   
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+        public void actionPerformed(ActionEvent e) {
+            if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, home_mode);
         }
     }
 
     /**
-     * Play button.
+     * ActionListener pour le bouton Play.
      */
-    public class PlayButton implements ActionListener
-    {
+    public class PlayButton implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+        public void actionPerformed(ActionEvent e) {
+            if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, play_mode);
         }
     }
 
     /**
-     * Settings button.
+     * ActionListener pour le bouton Settings.
      */
-    public class SettingsButton implements ActionListener
-    {
+    public class SettingsButton implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+        public void actionPerformed(ActionEvent e) {
+            if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, settings_mode);
         }
     }
 
     /**
-     * Rules button action.
+     * ActionListener pour le bouton Rules.
      */
-    public class RulesButtonAction implements ActionListener
-    {
+    public class RulesButtonAction implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e)
-        {
+        public void actionPerformed(ActionEvent e) {
             cardLayout.show(main_panel, rules_mode);
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"RulesSelection.wav");
+            if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "RulesSelection.wav");
         }
     }
 
     private int width, height;
 
-
-    // Les panels principales
+    // Les panels principaux
     private JPanel button_panel;
     private JPanel main_panel;
 
-
-    // Les buttons
+    // Les boutons
     private final HomeButton hbl = new HomeButton();
     private final PlayButton pbl = new PlayButton();
     private final SettingsButton sbl = new SettingsButton();
     private final RulesButtonAction rbl = new RulesButtonAction();
-
-
 
     // Pour changer le mode
     private final CardLayout cardLayout = new CardLayout();
@@ -88,17 +79,16 @@ public class Menu extends JPanel
     private final String settings_mode = "SETTINGS";
     private final String rules_mode = "RULES";
 
-
     // Le JFrame
     private final GameFrame frame;
 
     /**
      * Constructeur de Menu.
-     * @param width largueur
-     * @param height hauteur
+     * @param width la largeur
+     * @param height la hauteur
+     * @param frame l'objet GameFrame
      */
-    public Menu(int width, int height, GameFrame frame)
-    {
+    public Menu(int width, int height, GameFrame frame) {
         this.width = width;
         this.height = height;
         this.frame = frame;
@@ -112,40 +102,34 @@ public class Menu extends JPanel
     }
 
     private void gameFrameResized(ComponentEvent e) {
-
         main_panel.repaint();
     }
 
-
     /**
-     * Produire le panel.
+     * Crée le panel principal du menu.
      */
-    private void make()
-    {
-        // Le reste: affichage
-        // En bas: home - play - settings
+    private void make() {
         this.setLayout(new BorderLayout());
 
         button_panel = makeButtonPanel();
         main_panel = makeMainPanel();
 
-
-
         this.add(button_panel, BorderLayout.SOUTH);
         this.add(main_panel);
     }
 
-    public void showMenu()
-    {
+    /**
+     * Affiche le menu principal.
+     */
+    public void showMenu() {
         cardLayout.show(main_panel, home_mode);
     }
 
     /**
-     * Produire le panel avec les buttons.
-     * @return JPanel des buttons
+     * Crée le panel avec les boutons.
+     * @return JPanel des boutons
      */
-    private JPanel makeButtonPanel()
-    {
+    private JPanel makeButtonPanel() {
         JPanel res = new JPanel();
         res.setLayout(new GridLayout(1, 3));
 
@@ -158,21 +142,17 @@ public class Menu extends JPanel
         JButton settings = new JButton("SETTINGS");
         settings.addActionListener(sbl);
 
-
         JButton quit = new JButton("QUIT");
-        quit.addActionListener(new ActionListener()
-        {
+        quit.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav" );
+            public void actionPerformed(ActionEvent e) {
+                if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "ChangePageInTheMenu.wav");
                 frame.quitGame();
             }
         });
 
         JButton[] bl = {home, rules, play, settings, quit};
-        for (JButton button : bl)
-        {
+        for (JButton button : bl) {
             button.setBorderPainted(false);
             button.setBackground(Color.BLACK);
             button.setForeground(Color.GRAY);
@@ -188,16 +168,13 @@ public class Menu extends JPanel
     }
 
     /**
-     * Produire le main panel qui sera dans le JFrame quand le mode est "menu"
-     * @return main panel
+     * Crée le panel principal qui sera affiché dans le JFrame quand le mode est "menu".
+     * @return le panel principal
      */
-    private JPanel makeMainPanel()
-    {
-        JPanel res  = new JPanel();
-        // Pour pouvoir changer le mode
+    private JPanel makeMainPanel() {
+        JPanel res = new JPanel();
         res.setLayout(cardLayout);
 
-        // Ajout des modes
         res.add(home_mode, makeHome());
         res.add(play_mode, makePlay());
         res.add(settings_mode, makeSettings());
@@ -209,34 +186,43 @@ public class Menu extends JPanel
     }
 
     /**
-     * Produire JPanel pour home: Image de menu.
+     * Crée le JPanel pour l'accueil.
      * @return JPanel de Home
      */
-    private JPanel makeHome() {return new Home(width, height);}
+    private JPanel makeHome() {
+        return new Home(width, height);
+    }
 
     /**
-     * Produire le menu de jeu ou on peut choisir un niveau et sa difficulté, et ou on peut lancer le jeu.
+     * Crée le menu de jeu où l'on peut choisir un niveau et une difficulté, et où l'on peut lancer le jeu.
      * @return JPanel de Play
      */
-    private JPanel makePlay()
-    {
+    private JPanel makePlay() {
         return new Play(this.frame);
     }
 
     /**
-     * Produire le menu des parametres ou il y a le reglage de largeur et hauteur, et aussi fullscreen
-     * @return Jpanel de Settings
+     * Crée le menu des paramètres où il y a les réglages de largeur et hauteur, et aussi le mode plein écran.
+     * @return JPanel de Settings
      */
-    private JPanel makeSettings()
-    {
+    private JPanel makeSettings() {
         return new Settings(this);
     }
 
-    private JPanel makeRules() { return new Rules(width, height); }
+    /**
+     * Crée le menu des règles.
+     * @return JPanel de Rules
+     */
+    private JPanel makeRules() {
+        return new Rules(width, height);
+    }
 
-
-    public void setAllSize(int width, int height)
-    {
+    /**
+     * Définit la taille de tous les composants.
+     * @param width la largeur
+     * @param height la hauteur
+     */
+    public void setAllSize(int width, int height) {
         this.width = width;
         this.height = height;
         frame.setSize(width, height);
@@ -246,15 +232,19 @@ public class Menu extends JPanel
         cardLayout.show(main_panel, settings_mode);
     }
 
-
-
-    public GraphicsDevice getDevice()
-    {
+    /**
+     * Obtient l'appareil graphique.
+     * @return l'appareil graphique
+     */
+    public GraphicsDevice getDevice() {
         return frame.getDevice();
     }
 
-    public GameFrame getFrame()
-    {
+    /**
+     * Obtient le frame du jeu.
+     * @return le GameFrame
+     */
+    public GameFrame getFrame() {
         return frame;
     }
 }

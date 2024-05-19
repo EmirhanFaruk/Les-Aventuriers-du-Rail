@@ -6,6 +6,9 @@ import com.model.config.Ville;
 
 import java.util.ArrayList;
 
+/**
+ * Classe LongestFinder pour trouver le plus long chemin entre deux villes.
+ */
 public class LongestFinder
 {
     /**

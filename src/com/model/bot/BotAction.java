@@ -1,10 +1,7 @@
 package com.model.bot;
 
 import com.model.Game;
-import com.model.Round;
 import com.model.config.carte.CarteDestination;
-import com.model.config.carte.CarteManager;
-import com.model.config.carte.CarteWagon;
 
 /**
  * Interface représentant les actions qu'un bot peut effectuer le jeu

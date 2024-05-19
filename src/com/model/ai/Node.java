@@ -1,7 +1,6 @@
 package com.model.ai;
 
 import com.model.Player;
-import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
 
@@ -10,6 +9,9 @@ import java.util.ArrayList;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
+/**
+ * La classe Node représente un nœud dans un graphe pour l'algorithme A*.
+ */
 public class Node
 {
     private Node parent;

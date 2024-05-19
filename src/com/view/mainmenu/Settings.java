@@ -1,23 +1,22 @@
 package com.view.mainmenu;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Settings extends JPanel
-{
+/**
+ * The Settings class provides a GUI for adjusting game settings including resolution,
+ * fullscreen mode, and sound options.
+ */
+public class Settings extends JPanel {
     private final Menu main;
 
     // Resolution
     private JComboBox<String> res_box;
     private final int[][] resolutions = {{800, 500}, {800, 600}, {1000, 800}, {1280, 720}, {1920, 1080}};
-
 
     // Fullscreen
     private JCheckBox fs_cb;
@@ -29,36 +28,46 @@ public class Settings extends JPanel
     private JLabel valueLabel;
     private int valeur_slider = 50;
 
-
-    public Settings(Menu main)
-    {
+    /**
+     * Constructs a new Settings panel.
+     *
+     * @param main The main menu object to interact with.
+     */
+    public Settings(Menu main) {
         this.main = main;
         makeSettings();
     }
 
-    private void makeSettings()
-    {
+    /**
+     * Initializes and arranges the components of the settings panel.
+     */
+    private void makeSettings() {
         this.setLayout(new GridLayout(3, 1));
-        // Maybe add only rows and put everything seperate each row?
-
         // Resolution setting
         add(makeResolutionSetting());
         // Fullscreen setting
         add(makeFullscreenSetting());
         // Sound management
         add(makeSoundSetting());
-
     }
 
-    private JPanel makeBlackBox()
-    {
+    /**
+     * Creates a black box panel used for layout spacing.
+     *
+     * @return A black JPanel.
+     */
+    private JPanel makeBlackBox() {
         JPanel blackbox = new JPanel();
         blackbox.setBackground(Color.BLACK);
         return blackbox;
     }
 
-    private JPanel makeResolutionSetting()
-    {
+    /**
+     * Creates the resolution setting panel.
+     *
+     * @return A JPanel containing resolution settings.
+     */
+    private JPanel makeResolutionSetting() {
         JPanel resolution_panel = new JPanel();
         resolution_panel.setLayout(new GridLayout(1, 3));
         this.res_box = makeResBox();
@@ -71,12 +80,14 @@ public class Settings extends JPanel
         return resolution_panel;
     }
 
-    private JComboBox<String> makeResBox()
-    {
-        // Making the ComboBox to choose the resolution
+    /**
+     * Creates the JComboBox for selecting resolutions.
+     *
+     * @return A JComboBox populated with resolution options.
+     */
+    private JComboBox<String> makeResBox() {
         JComboBox<String> res = new JComboBox<>();
-        for(int[] couple : resolutions)
-        {
+        for (int[] couple : resolutions) {
             res.addItem(couple[0] + " x " + couple[1]);
         }
         res.setBackground(Color.BLACK);
@@ -84,43 +95,45 @@ public class Settings extends JPanel
         res.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound( "MENU" , "click.wav");
+                if (main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound("MENU", "click.wav");
             }
         });
         return res;
     }
-    
 
-    private JButton makeResChooseButton()
-    {
+    /**
+     * Creates the button for applying the selected resolution.
+     *
+     * @return A JButton for applying the resolution.
+     */
+    private JButton makeResChooseButton() {
         JButton res = new JButton("Choisir cette resolution");
         res.addActionListener(
-                new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound( "MENU" ,"ChangeSizeOfTheScreen.wav");
-                int index = res_box.getSelectedIndex();
-                int[] res = resolutions[index];
-                main.setAllSize(res[0], res[1]);
-                main.getFrame().setLocationRelativeTo(null);
-            }
-        });
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (main.getFrame().getSound().getclick())
+                            main.getFrame().getSound().playSound("MENU", "ChangeSizeOfTheScreen.wav");
+                        int index = res_box.getSelectedIndex();
+                        int[] res = resolutions[index];
+                        main.setAllSize(res[0], res[1]);
+                        main.getFrame().setLocationRelativeTo(null);
+                    }
+                });
 
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
 
-
         return res;
     }
 
-
-
-    private JPanel makeFullscreenSetting()
-    {
+    /**
+     * Creates the fullscreen setting panel.
+     *
+     * @return A JPanel containing fullscreen settings.
+     */
+    private JPanel makeFullscreenSetting() {
         JPanel fullscreen_panel = new JPanel();
         fullscreen_panel.setLayout(new GridLayout(1, 3));
 
@@ -128,7 +141,8 @@ public class Settings extends JPanel
         fs_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound( "MENU" ,"click.wav");
+                if (main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound("MENU", "click.wav");
             }
         });
         fullscreen_panel.add(fs_cb);
@@ -138,8 +152,12 @@ public class Settings extends JPanel
         return fullscreen_panel;
     }
 
-    private JPanel makeSoundSetting()
-    {
+    /**
+     * Creates the sound setting panel.
+     *
+     * @return A JPanel containing sound settings.
+     */
+    private JPanel makeSoundSetting() {
         JPanel sound_panel = new JPanel();
         sound_panel.setLayout(new GridLayout(1, 3));
 
@@ -150,15 +168,16 @@ public class Settings extends JPanel
         music_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                if (main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound("MENU", "ChangePageInTheMenu.wav");
             }
         });
         click_cb = makeClickSoundCheckBox();
         click_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                if (main.getFrame().getSound().getclick())
+                    main.getFrame().getSound().playSound("MENU", "ChangePageInTheMenu.wav");
             }
         });
 
@@ -167,47 +186,49 @@ public class Settings extends JPanel
         sound_panel.add(sound_buttons);
         sound_panel.add(makeVolumeSlider());
         sound_panel.add(makeSButton());
-        volume_slider.setSize((int)(volume_slider.getSize().getWidth()*0.8),(int)(volume_slider.getSize().getHeight()*0.8));
+        volume_slider.setSize((int) (volume_slider.getSize().getWidth() * 0.8), (int) (volume_slider.getSize().getHeight() * 0.8));
 
         return sound_panel;
     }
 
-    private JCheckBox makeFSCheckBox()
-    {
+    /**
+     * Creates the fullscreen checkbox.
+     *
+     * @return A JCheckBox for fullscreen setting.
+     */
+    private JCheckBox makeFSCheckBox() {
         JCheckBox res = new JCheckBox("Fullscreen");
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
     }
 
-    private JButton makeFSButton()
-    {
+    /**
+     * Creates the button for applying fullscreen settings.
+     *
+     * @return A JButton for applying fullscreen settings.
+     */
+    private JButton makeFSButton() {
         JButton res = new JButton("Choisir cet option de fullscreen");
         res.addActionListener(
-                new ActionListener()
-                {
+                new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
-                        if(fs_cb.isSelected())
-                        {
+                    public void actionPerformed(ActionEvent e) {
+                        if (main.getFrame().getSound().getclick())
+                            main.getFrame().getSound().playSound("MENU", "ChangePageInTheMenu.wav");
+                        if (fs_cb.isSelected()) {
                             main.getDevice().setFullScreenWindow(main.getFrame());
                             main.setAllSize(main.getFrame().getWidth(), main.getFrame().getHeight());
                             fs_cb.setSelected(true);
-                        }
-                        else
-                        {
+                        } else {
                             // Si pas de fullscreen il retourne a setting de resolution.
                             main.getDevice().setFullScreenWindow(null);
                             int[] res = resolutions[res_box.getSelectedIndex()];
                             main.setAllSize(res[0], res[1]);
                         }
-                        if(music_cb.isSelected())
-                        {
+                        if (music_cb.isSelected()) {
                             main.getFrame().getSound().setMusic(true);
-                        }else
-                        {
+                        } else {
                             main.getFrame().getSound().setMusic(false);
                         }
 
@@ -217,34 +238,37 @@ public class Settings extends JPanel
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
 
-
         return res;
     }
-    private JButton makeSButton()
-    {
+
+    /**
+     * Creates the button for applying sound settings.
+     *
+     * @return A JButton for applying sound settings.
+     */
+    private JButton makeSButton() {
         JButton res = new JButton("Choisir ses options de son");
         res.addActionListener(
-                new ActionListener()
-                {
+                new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        if(music_cb.isSelected()){
+                    public void actionPerformed(ActionEvent e) {
+                        if (music_cb.isSelected()) {
                             main.getFrame().getSound().setMusic(true);
-                            main.getFrame().getSound().changeMusic("MENU" ,"tchu-tchu-song.wav");
-                        }else{
+                            main.getFrame().getSound().changeMusic("MENU", "tchu-tchu-song.wav");
+                        } else {
                             main.getFrame().getSound().setMusic(false);
                             main.getFrame().getSound().stopMusic();
                         }
-                        if(click_cb.isSelected()){
+                        if (click_cb.isSelected()) {
                             main.getFrame().getSound().setClick(true);
-                        }else{
+                        } else {
                             main.getFrame().getSound().setClick(false);
                         }
 
-                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
+                        if (main.getFrame().getSound().getclick())
+                            main.getFrame().getSound().playSound("MENU", "click.wav");
 
-                        main.getFrame().getSound().setVolume((float)volume_slider.getValue()/100.0f);
+                        main.getFrame().getSound().setVolume((float) volume_slider.getValue() / 100.0f);
                     }
                 });
 
@@ -254,26 +278,38 @@ public class Settings extends JPanel
         return res;
     }
 
-    private JCheckBox makeMusicCheckBox()
-    {
-        JCheckBox res = new JCheckBox("Music" , true );
+    /**
+     * Creates the music checkbox.
+     *
+     * @return A JCheckBox for music setting.
+     */
+    private JCheckBox makeMusicCheckBox() {
+        JCheckBox res = new JCheckBox("Music", true);
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
     }
 
-    private JCheckBox makeClickSoundCheckBox()
-    {
-        JCheckBox res = new JCheckBox("Click Sound" , true );
+    /**
+     * Creates the click sound checkbox.
+     *
+     * @return A JCheckBox for click sound setting.
+     */
+    private JCheckBox makeClickSoundCheckBox() {
+        JCheckBox res = new JCheckBox("Click Sound", true);
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
         return res;
     }
 
-    private JPanel makeVolumeSlider()
-    {   
+    /**
+     * Creates the volume slider panel.
+     *
+     * @return A JPanel containing the volume slider.
+     */
+    private JPanel makeVolumeSlider() {
         JPanel volume_panel = makeBlackBox();
-        volume_panel.setLayout(new BorderLayout(0,0));
+        volume_panel.setLayout(new BorderLayout(0, 0));
 
         volume_slider = new SliderWithValueLabel(0, 100, valeur_slider);
         volume_slider.setBackground(Color.BLACK);
@@ -284,23 +320,24 @@ public class Settings extends JPanel
         volume_slider_panel.add(volume_slider, BorderLayout.CENTER);
 
         valueLabel.setForeground(Color.GRAY);
-        // volume_slider.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-        
+
         JLabel text = new JLabel("Volume  ");
         text.setBackground(Color.BLACK);
         text.setForeground(Color.GRAY);
         text.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
-        //text.setSize(12,12);
 
         volume_panel.add(text, BorderLayout.WEST);
         volume_panel.add(makeBlackBox(), BorderLayout.EAST);
-        volume_panel.add(volume_slider_panel,BorderLayout.CENTER);
-        
+        volume_panel.add(volume_slider_panel, BorderLayout.CENTER);
+
         volume_panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        // volume_panel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+
         return volume_panel;
     }
 
+    /**
+     * SliderWithValueLabel class for displaying the slider value above the slider.
+     */
     public class SliderWithValueLabel extends JSlider {
         public SliderWithValueLabel(int min, int max, int value) {
             super(min, max, value);
@@ -309,7 +346,7 @@ public class Settings extends JPanel
             valueLabel.setPreferredSize(new Dimension(40, 20));
             valueLabel.setVisible(true);
             add(valueLabel, BorderLayout.NORTH);
-            
+
             addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -317,33 +354,39 @@ public class Settings extends JPanel
                     valueLabel.setText(Integer.toString(val));
                     Rectangle thumbBounds = getThumbBounds();
                     valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
-                                           thumbBounds.y - valueLabel.getHeight());
-                    if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
+                            thumbBounds.y - valueLabel.getHeight());
+                    if (main.getFrame().getSound().getclick())
+                        main.getFrame().getSound().playSound("MENU", "click.wav");
                 }
             });
         }
-    
+
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             Rectangle thumbBounds = getThumbBounds();
-            if(Integer.valueOf(valueLabel.getText())!= 100){
-            valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
-                                   thumbBounds.y - valueLabel.getHeight());
-            }else{
+            if (Integer.valueOf(valueLabel.getText()) != 100) {
+                valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
+                        thumbBounds.y - valueLabel.getHeight());
+            } else {
                 valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2 - 3,
-                thumbBounds.y - valueLabel.getHeight());}
+                        thumbBounds.y - valueLabel.getHeight());
+            }
         }
-    
+
         private Rectangle getThumbBounds() {
             int valuePosition = (int) ((double) (getValue() - getMinimum()) / (getMaximum() - getMinimum()) * (getWidth() - 16));
             int trackY = (getHeight() - getPreferredSize().height) / 2;
             return new Rectangle(valuePosition, trackY, 16, 16);
         }
-    
     }
+
+    /**
+     * Gets the volume slider.
+     *
+     * @return The SliderWithValueLabel for volume.
+     */
     public static SliderWithValueLabel getVolume_slider() {
         return volume_slider;
     }
-
 }

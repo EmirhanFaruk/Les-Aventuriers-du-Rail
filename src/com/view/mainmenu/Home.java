@@ -9,13 +9,19 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class Home extends JPanel
-{
+/**
+ * La classe Home représente l'écran d'accueil du menu principal du jeu, affichant une image de fond.
+ */
+public class Home extends JPanel {
     private int width, height;
     private BufferedImage home_image_file;
 
-    public Home(int width, int height)
-    {
+    /**
+     * Constructeur de la classe Home
+     * @param width la largeur du panneau
+     * @param height la hauteur du panneau
+     */
+    public Home(int width, int height) {
         this.width = width;
         this.height = height;
         makeHome();
@@ -30,45 +36,46 @@ public class Home extends JPanel
     }
 
     @Override
-    public void setSize(int width, int height)
-    {
+    public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
         makeHome();
     }
 
-    private String findSlash(String p)
-    {
-        for(int i = 0; i < p.length(); i++)
-        {
-            switch (p.charAt(i))
-            {
-                case '/' : return "/";
-                case '\\' : return "\\";
+    /**
+     * Trouve le bon slash pour le chemin en fonction du système d'exploitation
+     * @param p chemin du fichier
+     * @return le bon slash sous forme de chaîne de caractères
+     */
+    private String findSlash(String p) {
+        for (int i = 0; i < p.length(); i++) {
+            switch (p.charAt(i)) {
+                case '/':
+                    return "/";
+                case '\\':
+                    return "\\";
             }
         }
         return "/";
     }
 
-    private void setHome_image_file()
-    {
+    /**
+     * Définit le fichier image de l'écran d'accueil
+     */
+    private void setHome_image_file() {
         String path = System.getProperty("user.dir");
         String s = findSlash(path);
-        try
-        {
+        try {
             home_image_file = ImageIO.read(new File(path + s + "ressources" + s + "Main_Menu" + s + "Menu_Image.png"));
-        }
-        catch (Exception ignored)
-        {
+        } catch (Exception ignored) {
             System.out.println("Couldn't read file.");
         }
     }
 
     /**
-     * Produire JPanel pour home: Image de menu.
+     * Crée le JPanel pour l'écran d'accueil avec l'image de menu.
      */
-    public void makeHome()
-    {
+    public void makeHome() {
         // Getting home image
         setHome_image_file();
 
