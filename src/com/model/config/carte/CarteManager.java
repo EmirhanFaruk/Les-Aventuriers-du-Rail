@@ -23,7 +23,7 @@ public class CarteManager {
     private CarteDestination[] destinationsCards = new CarteDestination[3];
 
     // La pile de cartes Destination
-    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
+    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>();
 
     // Vérification du mode de Jeu
     private boolean nuke;

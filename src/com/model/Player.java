@@ -105,7 +105,7 @@ public class Player {
 
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
-		
+
 		return false;
 	}
 
@@ -113,7 +113,7 @@ public class Player {
 	 * Pioche une carte invisible pour le joueur.
 	 */
 	public void piocheCarteInvisible() {
-	    CarteManager cm = game.getCarteManager();
+		CarteManager cm = game.getCarteManager();
 
 		//Si le nombre d'action est égal a 2 alors on pioche une fois et on enleve le nombre d'action -1
 		if(game.getRound().getAction() >1){
@@ -266,8 +266,7 @@ public class Player {
                 // Si la Route correspond dans l'inventaire du joueur
                 if (r.getSaRoute() == this.getPlayerRoutes().get(i)) {
                     // son
-                    if (game.getGameFrame().getSound().getclick())
-                        game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
+                    game.playSoundClick("INGAME", "tactical-nuke.wav");
                     // Retire la carte nuke de son inventaire
                     p.retirerCarteNuke();
                     // Enlève le proprio de la route et des rails
@@ -336,7 +335,7 @@ public class Player {
     public boolean mettreRoute(Route r) {
     	if(r != null) {
     		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
-				game.playSound("INGAME" ,"mettreRoute.wav");
+				game.playSoundClick("INGAME" ,"mettreRoute.wav");
 
 				this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
@@ -383,7 +382,7 @@ public class Player {
 
 			//Si c'est un joueur alors on fait la demande, sinon pour les bots on fait directement le procédé
 			if(this.niveau == 0){
-				game.playSound("INGAME" , "popUp.wav");
+				game.playSoundClick("INGAME" , "popUp.wav");
 
 				int choixUtilisateur = JOptionPane.showConfirmDialog(
 						game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
@@ -398,14 +397,14 @@ public class Player {
 						return true;
 
 					} else if ( ville.getIsOccuped() != null ) {
-						game.playSound("INGAME" , "popUp.wav");
+						game.playSoundClick("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						return false;
 
 
 					} else {
-						game.playSound("INGAME" , "popUp.wav");
+						game.playSoundClick("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
@@ -426,7 +425,7 @@ public class Player {
 			}
 
 		} else {
-			game.playSound("INGAME", "popUp.wav");
+			game.playSoundClick("INGAME", "popUp.wav");
 			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 			return false;

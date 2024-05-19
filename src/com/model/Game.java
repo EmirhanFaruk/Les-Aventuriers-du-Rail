@@ -151,21 +151,14 @@ public class Game
         }
     }
 
-    public void playSound(String screen, String sound_name)
-    {
-        gameFrame.playSound(screen, sound_name);
-    }
+
+
+
 
     public void playSoundClick(String screen, String sound_name)
     {
         gameFrame.playSoundClick(screen, sound_name);
     }
-
-    public void playMusic(String screen, String sound_name)
-    {
-
-    }
-
 
     public void changeMusic(String screen, String sound_name)
     {
