@@ -167,22 +167,22 @@ public class Play extends JPanel {
                         button.setText(WEAKBOT);
                         break;
                     case WEAKBOT:
-                        frame.playSound("MENU" ,"NormalBot.wav");
+                        frame.playSoundClick("MENU" ,"NormalBot.wav");
                         player_type_list_tag[i].setText(NORMALBOT);
                         button.setText(NORMALBOT);
                         break;
                     case NORMALBOT:
-                        frame.playSound("MENU" ,"StrongBot.wav");
+                        frame.playSoundClick("MENU" ,"StrongBot.wav");
                         player_type_list_tag[i].setText(STRONGBOT);
                         button.setText(STRONGBOT);
                         break;
                     case STRONGBOT:
-                        frame.playSound("MENU" ,"None.wav");
+                        frame.playSoundClick("MENU" ,"None.wav");
                         player_type_list_tag[i].setText(NONE);
                         button.setText(NONE);
                         break;
                     case NONE:
-                        frame.playSound("MENU" ,"Player.wav");
+                        frame.playSoundClick("MENU" ,"Player.wav");
                         player_type_list_tag[i].setText(PLAYER);
                         button.setText(PLAYER);
                         break;
