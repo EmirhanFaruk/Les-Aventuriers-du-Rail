@@ -17,6 +17,9 @@ import com.model.config.carte.CarteManager;
 import com.model.controller.GameController;
 import com.view.graphics.CardGraphics;
 
+/**
+ * Le panneau représentant la pioche des cartes pour le joueur.
+ */
 public class PiochePanel extends JPanel {
     private GameController gameController = new GameController();
     private Player player;
@@ -27,14 +30,21 @@ public class PiochePanel extends JPanel {
     private PlayerHandPanel mainDuJoueur;
     private Game game;
 
-    
-    public PiochePanel(int width, int height, PlayerHandPanel playerHandPanel, Game game){
+    /**
+     * Constructeur de PiochePanel.
+     *
+     * @param width La largeur du panneau.
+     * @param height La hauteur du panneau.
+     * @param playerHandPanel Le panneau de la main du joueur.
+     * @param game Le jeu en cours.
+     */
+    public PiochePanel(int width, int height, PlayerHandPanel playerHandPanel, Game game) {
         setBackground(Color.orange);
         setPreferredSize(new Dimension((int) (width * 0.10), height));
         this.mainDuJoueur = playerHandPanel;
         this.player = playerHandPanel.getPlayer();
         this.game = game;
-        
+
         // Initialisation des rectangles pour les cartes visibles
         this.imagePiocheVisible = game.getCarteManager();
 
@@ -44,7 +54,12 @@ public class PiochePanel extends JPanel {
         setupMouseMotionListener();
     }
 
-    
+    /**
+     * Initialise les rectangles représentant les zones de la pioche cachée et des cartes visibles.
+     *
+     * @param width La largeur du panneau.
+     * @param height La hauteur du panneau.
+     */
     private void initRectangles(int width, int height) {
         // Définition des dimensions et positions des rectangles
         int rectWidth = width; // Exemple de largeur
@@ -54,101 +69,110 @@ public class PiochePanel extends JPanel {
 
         // Initialisation du rectangle pour la pioche cachée
         piocheHiddenBounds = new Rectangle(startX + 2, startY, rectWidth - 4, rectHeight);
-        
+
         piocheVisibleBounds = new Rectangle[3]; // Pour 3 cartes visibles
-        
+
         for (int i = 0; i < piocheVisibleBounds.length; i++) {
             startY += rectHeight + 10; // Marge entre les cartes
             piocheVisibleBounds[i] = new Rectangle(startX + 2, startY, rectWidth - 4, rectHeight);
         }
     }
-    
+
+    /**
+     * Installe l'écouteur de souris pour gérer les clics sur les cartes.
+     */
     private void setupMouseAdapter() {
-        addMouseListener(new MouseAdapter() { 	
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	if(player.getFirstTurnOver() && imagePiocheVisible.alreadyPickedACard()) {
-                    if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
-            		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                             ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
-            	}else {
-            		if(player.getCanPlay() ) {
-    	                if (piocheHiddenBounds.contains(e.getPoint())) {
-    	                    gameController.piocherCarteInvisible(player);
-    	                    mainDuJoueur.getParent().revalidate();
-    	                    mainDuJoueur.getParent().repaint();
-    	                    repaint();
-    	                } else {
-    	                    for (int i = 0; i < piocheVisibleBounds.length; i++) {
-    	                        if (piocheVisibleBounds[i].contains(e.getPoint())) {
-    	                            // Actualiser la carte visible après l'avoir piochée et la met dans la main du joueur
-    	                            if(gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))){
-    	                            	imagePiocheVisible.takeWagon(i);
-    	                                mainDuJoueur.getParent().revalidate();
-    	                                mainDuJoueur.getParent().repaint();
-    	                                repaint();
-    	                            }else{
-                                        if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
-    	                                JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-    	                                        ,"Vous ne pouvez pas choisir cette carte ! ","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
-    	                            }
-    	                            break; // Quitte la boucle si une correspondance est trouvée
-    	                        }
-    	                    }
-    	                }
-                	}else {
-                        if (player.getNiveau() == 0) { // le message s'affiche si seulement si c'est un vrai joueur
-                            if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
-                            JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-                                    , "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                if (player.getFirstTurnOver() && imagePiocheVisible.alreadyPickedACard()) {
+                    if (game.getGameFrame().getSound().getclick()) 
+                        game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                    JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                            "TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    if (player.getCanPlay()) {
+                        if (piocheHiddenBounds.contains(e.getPoint())) {
+                            gameController.piocherCarteInvisible(player);
+                            mainDuJoueur.getParent().revalidate();
+                            mainDuJoueur.getParent().repaint();
+                            repaint();
+                        } else {
+                            for (int i = 0; i < piocheVisibleBounds.length; i++) {
+                                if (piocheVisibleBounds[i].contains(e.getPoint())) {
+                                    // Actualiser la carte visible après l'avoir piochée et la mettre dans la main du joueur
+                                    if (gameController.piocherCarteVisible(player, imagePiocheVisible.showWagon(i))) {
+                                        imagePiocheVisible.takeWagon(i);
+                                        mainDuJoueur.getParent().revalidate();
+                                        mainDuJoueur.getParent().repaint();
+                                        repaint();
+                                    } else {
+                                        if (game.getGameFrame().getSound().getclick()) 
+                                            game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                                        JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                                                "Vous ne pouvez pas choisir cette carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                    break; // Quitte la boucle si une correspondance est trouvée
+                                }
+                            }
+                        }
+                    } else {
+                        if (player.getNiveau() == 0) { // Le message s'affiche si seulement si c'est un vrai joueur
+                            if (game.getGameFrame().getSound().getclick()) 
+                                game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                            JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+                                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
-            	}
+                }
             }
-             @Override
-             public void mouseExited(MouseEvent e) {
-                 if (hoveredCardIndex != -1) {
-                     hoveredCardIndex = -1;
-                     repaint();
-                 }
-             }
 
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (hoveredCardIndex != -1) {
+                    hoveredCardIndex = -1;
+                    repaint();
+                }
+            }
         });
     }
-    
+
+    /**
+     * Installe l'écouteur de souris pour gérer les mouvements de la souris.
+     */
     private void setupMouseMotionListener() {
         addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 int previousIndex = hoveredCardIndex;
                 hoveredCardIndex = -1;
-                
+
                 if (piocheHiddenBounds.contains(e.getPoint())) {
                     hoveredCardIndex = 4;
-                }       
-                
+                }
+
                 for (int i = 0; i < piocheVisibleBounds.length; i++) {
                     if (piocheVisibleBounds[i].contains(e.getPoint())) {
                         hoveredCardIndex = i;
                         break;
                     }
                 }
-                
+
                 if (hoveredCardIndex != previousIndex) {
                     repaint();
                 }
             }
         });
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         initRectangles(getWidth(), getHeight());
-        
-     // Dessin de la pioche cachée
-        BufferedImage carteCachee = CardGraphics.getCardCache(); // Supposons que cette méthode existe et renvoie l'image de la pioche cachée
+
+        // Dessin de la pioche cachée
+        BufferedImage carteCachee = CardGraphics.getCardCache();
         if (carteCachee != null) {
             g2d.drawImage(carteCachee, piocheHiddenBounds.x, piocheHiddenBounds.y, piocheHiddenBounds.width, piocheHiddenBounds.height, null);
             if (4 == hoveredCardIndex) {
@@ -161,10 +185,10 @@ public class PiochePanel extends JPanel {
         for (int i = 0; i < piocheVisibleBounds.length; i++) {
             Rectangle rect = piocheVisibleBounds[i];
             BufferedImage carteVisible = null;
-            if(imagePiocheVisible.getTrainCards()[i] != null){
+            if (imagePiocheVisible.getTrainCards()[i] != null) {
                 carteVisible = CardGraphics.getImageFromColor(imagePiocheVisible.getTrainCards()[i]);
             }
-            
+
             if (carteVisible != null) {
                 g2d.drawImage(carteVisible, rect.x, rect.y, rect.width, rect.height, null);
                 if (i == hoveredCardIndex) {
@@ -175,11 +199,14 @@ public class PiochePanel extends JPanel {
         }
     }
 
-
     /* getters et setters */
+
+    /**
+     * Définit le joueur associé à ce panneau.
+     *
+     * @param player Le joueur à associer.
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 }
-
-    

@@ -3,6 +3,9 @@ package com.view.mainmenu;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -16,6 +19,14 @@ public class Home extends JPanel
         this.width = width;
         this.height = height;
         makeHome();
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                setSize(getWidth(), getHeight());
+                repaint();
+            }
+        });
     }
 
     @Override
@@ -65,5 +76,17 @@ public class Home extends JPanel
 
         removeAll();
         add(new JLabel(new ImageIcon(scaled_home_image)));
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+
+        double scaleX = (double) getWidth() / home_image_file.getWidth();
+        double scaleY = (double) getHeight() / home_image_file.getHeight();
+
+        AffineTransform at = AffineTransform.getScaleInstance(scaleX, scaleY);
+        g2.drawRenderedImage(home_image_file, at);
     }
 }
