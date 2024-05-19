@@ -89,9 +89,9 @@ public class VilleGraphics {
      * @param g graphics2D
      * @param ville Ville
      */
-    public static void paint (Graphics2D g  , Ville ville ){
-        BufferedImage image = getImage( ville ) ;
-        g.drawImage( image , ville.getX() * width , ville.getY() * height ,  width , height , null) ;
+    public static void paint(Graphics2D g, Ville ville, int width, int height) {
+        BufferedImage image = getImage(ville);
+        g.drawImage(image, ville.getX() * width, ville.getY() * height, width, height, null);
     }
 
     /*    getters et setters     */

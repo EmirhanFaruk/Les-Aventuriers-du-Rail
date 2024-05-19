@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Menu extends JPanel
 {
@@ -102,6 +104,16 @@ public class Menu extends JPanel
         this.frame = frame;
 
         make();
+        frame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                gameFrameResized(evt);
+            }
+        });
+    }
+
+    private void gameFrameResized(ComponentEvent e) {
+
+        main_panel.repaint();
     }
 
 

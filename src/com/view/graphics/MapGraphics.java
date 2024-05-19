@@ -10,7 +10,8 @@ import java.io.File;
 
 public class MapGraphics {
     private Case aCase ;
-    final int tileWidth , tileHeight ;
+    int tileWidth;
+    int tileHeight ;
     private Plateau plateau ;
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
@@ -67,7 +68,7 @@ public class MapGraphics {
      * @return l'image de fond
      */
     public static BufferedImage backgroundImage ( String mapName ){
-        return loadImage(mapName ) ;
+        return loadImage(mapName+".png" ) ;
     }
 
     /**
@@ -75,17 +76,17 @@ public class MapGraphics {
      * @param g graphics
      */
     public void draw(Graphics2D g) {
-    	if(aCase != null) {
-    		if (aCase instanceof Ville ) {
-    			VilleGraphics.paint( g , ( Ville ) aCase ) ;
-    		} else if (aCase instanceof Rail ) {
-    			if(((Rail) aCase).getOccuper()) {
-    				TrainGraphics.paint(g, (Rail) aCase);
-    			}else {
-    				RailGraphics.paint( g, (Rail) aCase );
-    			}
-    		}
-    	}
+        if (aCase != null) {
+            if (aCase instanceof Ville) {
+                VilleGraphics.paint(g, (Ville) aCase, tileWidth, tileHeight);
+            } else if (aCase instanceof Rail) {
+                if (((Rail) aCase).getOccuper()) {
+                    TrainGraphics.paint(g, (Rail) aCase, tileWidth, tileHeight);
+                } else {
+                    RailGraphics.paint(g, (Rail) aCase, tileWidth, tileHeight);
+                }
+            }
+        }
     }
 
 
@@ -143,6 +144,10 @@ public class MapGraphics {
     }
 
     /* getteurs et setteurs */
+    public void setTileSize(int tileWidth, int tileHeight) {
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
+    }
 
     public int getHeight() {
         return tileHeight;
