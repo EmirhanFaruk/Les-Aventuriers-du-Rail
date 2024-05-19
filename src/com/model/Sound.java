@@ -81,13 +81,18 @@ public class Sound {
      * @return l'array
      */
     private ArrayList<URL> arrayMusic (String screen) {
-        return switch (screen) {
-            case "MENU" -> soundURLMenu;
-            case "INGAME" -> soundURLInGame;
-            case "PAUSE" -> soundURLPause;
-            case "END" -> soundURLEnd;
-            default -> null;
-        };
+         switch (screen) {
+             case "MENU":
+                 return soundURLMenu;
+             case "INGAME" :
+                 return soundURLInGame;
+             case "PAUSE" :
+                 return soundURLPause;
+             case "END" :
+                 return soundURLEnd;
+             default :
+                 return null;
+        }
     }
 
     /**
@@ -96,13 +101,18 @@ public class Sound {
      * @return la liste
      */
     private String[] listMusic ( String screen) {
-        return switch (screen) {
-            case "MENU" -> soundsMenu;
-            case "INGAME" -> soundsInGame;
-            case "PAUSE" -> soundsPause;
-            case "END" -> soundsEnd;
-            default -> null;
-        };
+        switch (screen) {
+            case "MENU" :
+                return soundsMenu;
+            case "INGAME" :
+                return soundsInGame;
+            case "PAUSE" :
+                return soundsPause;
+            case "END" :
+                return soundsEnd;
+            default :
+                return null;
+        }
     }
 
     /**

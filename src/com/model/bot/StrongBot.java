@@ -13,8 +13,6 @@ import com.model.config.carte.CarteWagon;
 import java.util.ArrayList;
 /**
  * Il représente un bot de la difficulté normale qui joue de manière semi-aléatoire en utilisant différentes stratégies de jeu.
- */
-/**
  * Le bot "StrongBot" est une implémentation de l'interface BotAction.
  * Ce bot est le plus sophistiqué pour prendre des décisions dans le jeu.
  * Il suit une logique calculée et optimisée pour maximiser ses chances de victoire.
@@ -24,7 +22,7 @@ public class StrongBot implements BotAction {
     /**
      * Vérifie s'il manque une seule carte pour compléter une route.
      *
-     * @param route La route à vérifier.
+     * @param route La route a vérifier.
      * @param game Le jeu en cours.
      * @return true s'il manque une seule carte pour compléter la route, sinon false.
      */
@@ -33,8 +31,8 @@ public class StrongBot implements BotAction {
         ArrayList<CarteWagon.Couleur> playerTrainList = player.getTrainList();
         int count = 0;
 
-        for (int i = 0; i < playerTrainList.size(); i++) {
-            if (player.compatibleColor(route, playerTrainList.get(i))) count++;
+        for (CarteWagon.Couleur couleur : playerTrainList) {
+            if (player.compatibleColor(route, couleur)) count++;
         }
 
         return count + 1 == route.getLongueur();
@@ -50,8 +48,8 @@ public class StrongBot implements BotAction {
         Player player = game.getJoueurCourant();
         ArrayList<CarteDestination> destination = player.getDestinationsList();
 
-        for (int i = 0; i < destination.size(); i++) {
-            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(), destination.get(i).getDeuxiemeVille());
+        for (CarteDestination carteDestination : destination) {
+            ArrayList<Ville> villes = Node.findClosestPath(carteDestination.getPremiereVille(), carteDestination.getDeuxiemeVille());
             ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes, game.getJoueurCourant());
 
             for (int z = 1; z < routesPossible.size(); z++) {
@@ -116,13 +114,13 @@ public class StrongBot implements BotAction {
     public boolean takeRail(Game game) {
         ArrayList<CarteDestination> destination = game.getJoueurCourant().getDestinationsList();
 
-        for (int i = 0; i < destination.size(); i++) {
-            ArrayList<Ville> villes = Node.findClosestPath(destination.get(i).getPremiereVille(), destination.get(i).getDeuxiemeVille());
+        for (CarteDestination carteDestination : destination) {
+            ArrayList<Ville> villes = Node.findClosestPath(carteDestination.getPremiereVille(), carteDestination.getDeuxiemeVille());
             ArrayList<Route> routesPossible = GarePosFinder.getNeededRoutes(villes, game.getJoueurCourant());
 
-            for (int z = 0; z < routesPossible.size(); z++) {
-                if (game.getJoueurCourant().mettreRoute(routesPossible.get(z))) {
-                    ArrayList<Rail> listeRail = routesPossible.get(z).getRailsRoute();
+            for (Route route : routesPossible) {
+                if (game.getJoueurCourant().mettreRoute(route)) {
+                    ArrayList<Rail> listeRail = route.getRailsRoute();
                     Player bot = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
 
                     for (Rail rail : listeRail) {
@@ -142,11 +140,11 @@ public class StrongBot implements BotAction {
      * Permet au bot de poser une gare de manière stratégique.
      *
      * @param game Le jeu en cours.
-     * @param wichStation Pas utilisé dans la fonction.
+     * @param whichStation Pas utilisé dans la fonction.
      * @return true si la gare a été posée avec succès, sinon false.
      */
     @Override
-    public boolean takeGare(Game game, int wichStation) {
+    public boolean takeGare(Game game, int whichStation) {
         ArrayList<CarteDestination> carteDestinations = game.getJoueurCourant().getDestinationsList();
         Player joueur = game.getJoueurCourant();
 
@@ -167,8 +165,8 @@ public class StrongBot implements BotAction {
         } else {
             CarteDestination[] toAdd = takeMissionsCard(6, game);
 
-            for (int i = 0; i < toAdd.length; i++) {
-                game.getJoueurCourant().getDestinationsList().add(toAdd[i]);
+            for (CarteDestination carteDestination : toAdd) {
+                game.getJoueurCourant().getDestinationsList().add(carteDestination);
             }
             return true;
         }
@@ -212,7 +210,7 @@ public class StrongBot implements BotAction {
     @Override
     public boolean useNuke(Game game) {
 
-        //On verifie que le bot a bien des nukes
+        //On vérifie que le bot a bien des nukes
         if(game.getJoueurCourant().checkACarteNuke()){
 
 
@@ -245,8 +243,8 @@ public class StrongBot implements BotAction {
     public void firstTurn(Game game) {
         CarteDestination[] carteDestination = takeMissionsCard(6, game);
 
-        for (int z = 0; z < carteDestination.length; z++) {
-            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
+        for (CarteDestination destination : carteDestination) {
+            game.getJoueurCourant().getDestinationsList().add(destination);
         }
 
         game.getJoueurCourant().setFirstTurnOver(true);
@@ -255,7 +253,7 @@ public class StrongBot implements BotAction {
 
     /**
      * Procède de manière optimale à compléter les missions du bot en prenant des rails, en posant des gares,
-     * ou en piochant des cartes wagons. Si on est dans le mode nuke alors le bot cherchera a detruire une route..
+     * ou en piochant des cartes wagons. Si on est dans le mode nuke alors le bot cherchera à détruire une route.
      *
      * @param game Le jeu en cours.
      */
@@ -268,7 +266,7 @@ public class StrongBot implements BotAction {
                 game.getRound().endRound(game);
             } else {
 
-                if(game.getGameFrame().getMain().getMode() != "NORMAL" && useNuke(game) ){
+                if(!game.getGameFrame().getMain().getMode().equals("NORMAL") && useNuke(game) ){
 
                     game.getRound().endRound(game);
 
@@ -285,7 +283,7 @@ public class StrongBot implements BotAction {
 
     /**
      * La méthode principale du StrongBot, qui gère ses actions de manière optimale
-     * en fonction de l'état du jeu et de ses objectifs stratégiques.
+     * en fonction principale du jeu et de ses objectifs stratégiques.
      *
      * @param game Le jeu en cours.
      */
@@ -297,8 +295,8 @@ public class StrongBot implements BotAction {
 
             if (allMissionIsCompleted(game)) {
                 CarteDestination[] addCard = takeMissionsCard(6, game);
-                for (int j = 0; j < addCard.length; j++) {
-                    game.getJoueurCourant().getDestinationsList().add(addCard[j]);
+                for (CarteDestination carteDestination : addCard) {
+                    game.getJoueurCourant().getDestinationsList().add(carteDestination);
                 }
                 game.getRound().endRound(game);
             } else {
