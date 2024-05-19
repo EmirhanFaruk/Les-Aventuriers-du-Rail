@@ -23,6 +23,13 @@ public class GameMapPanel extends JPanel {
     private int[] tileCount; // Store tile count here
     private GameController gameController = new GameController();
 
+    /**
+     * Constructeur de la classe GameManagerScreen
+     * @param frame gameframe
+     * @param map le nom de la map
+     * @param width width
+     * @param height height
+     */
     public GameMapPanel(GameFrame frame, String map, int width, int height, Player player, Game game) {
         this.frame = frame;
         setSize(width, height);

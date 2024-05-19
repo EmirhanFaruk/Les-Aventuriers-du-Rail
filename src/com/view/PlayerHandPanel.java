@@ -130,17 +130,23 @@ public class PlayerHandPanel extends JPanel {
             int cardwidth = (this.getHeight()-scrollPaneCardWagon.getHorizontalScrollBar().getHeight()-5-2*hFixe)*2; //l'aspect ratio des cartes est de 2
 	        listCardWagon = new ArrayList<>();
 	        while (i < this.player.getTrainList().size()) {
-	            CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
-	            CarteWagon carteWagon = new CarteWagon(couleur, x, hFixe);
-	            listCardWagon.add(carteWagon);
-	            BufferedImage image = CardGraphics.getImage(carteWagon);
-	            if (image != null) {
-	            	g.drawImage(image, x,hFixe,cardwidth,cardheight,null);
-	                x += cardwidth + 15;
-	                width = x;
-	                imageWidth = image.getWidth();
-	                imageHeight = image.getHeight();
-	            }
+                CarteWagon carteWagon ;
+                if ( player.getNiveau() == 0 ) {
+                    CarteWagon.Couleur couleur = this.player.getTrainList().get(i);
+                    carteWagon = new CarteWagon(couleur, x, hFixe);
+                    listCardWagon.add(carteWagon);
+                } else {
+                    CarteWagon.Couleur couleur = CarteWagon.Couleur.BACK ;
+                    carteWagon = new CarteWagon(couleur, x, hFixe);
+                }
+                    BufferedImage image = CardGraphics.getImage(carteWagon);
+                    if (image != null) {
+                        g.drawImage(image, x, hFixe, cardwidth, cardheight, null);
+                        x += cardwidth + 15;
+                        width = x;
+                        imageWidth = image.getWidth();
+                        imageHeight = image.getHeight();
+                    }
 	            i++;
 	        }
 	        
@@ -283,7 +289,7 @@ public class PlayerHandPanel extends JPanel {
 
                     g.drawImage(image, x, hFixe,cardwidth,cardheight,null);
 
-                    if (carteJ == currentHoverCard) {
+                    if (carteJ == currentHoverCard && player.getNiveau() == 0 ) {
                         // Appliquer une couleur jaune semi-transparente
                         g.setColor(new Color(255, 255, 0, 128)); // Jaune semi-transparent
                         g.fillRect(x, hFixe, cardwidth , cardheight );
