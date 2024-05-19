@@ -39,20 +39,20 @@ public class NormalBot implements BotAction {
      * @return {@code true} si le bot a réussi à poser des wagons sur une route, {@code false} sinon.
      */
     @Override
-    public boolean takeRail(Game game) {
-        return weakBot.takeRail(game);
+    public boolean takeLoad(Game game) {
+        return weakBot.takeLoad(game);
     }
 
     /**
      * Permet au bot de poser une gare sur le plateau de jeu.
      *
      * @param game        Le jeu actuel.
-     * @param wichStation L'index de la gare à poser, qu'il ne sera pas utilisé ici.
+     * @param whichStation L'index de la gare à poser, qu'il ne sera pas utilisé ici.
      * @return {@code true} si le bot a réussi à poser une gare, {@code false} sinon.
      */
     @Override
-    public boolean takeGare(Game game, int wichStation) {
-        return strongBot.takeGare(game,wichStation);
+    public boolean useGare(Game game, int whichStation) {
+        return strongBot.useGare(game,whichStation);
 
     }
 
@@ -97,10 +97,10 @@ public class NormalBot implements BotAction {
      * @param game Le jeu en cours.
      */
     private void optimalCompleteMission(Game game) {
-        if (takeRail(game)) {
+        if (takeLoad(game)) {
             game.getRound().endRound(game);
         } else {
-            if (takeGare(game, 0)) {
+            if (useGare(game, 0)) {
                 game.getRound().endRound(game);
             } else {
                 drawCardWagon(game);
@@ -152,13 +152,13 @@ public class NormalBot implements BotAction {
                     break;
                 case 2:
                     // Poser des wagons
-                    if (!takeRail(game)) {
+                    if (!takeLoad(game)) {
                         play(game);
                     }
                     break;
                 case 3:
                     // Poser une gare
-                    if (!takeGare(game, 0)) {
+                    if (!useGare(game, 0)) {
                         play(game);
                     }
                     break;

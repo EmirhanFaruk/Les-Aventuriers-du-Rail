@@ -70,7 +70,7 @@ public class WeakBot implements BotAction {
      * @return true si le bot réussit à prendre une route, sinon false.
      */
     @Override
-    public boolean takeRail(Game game) {
+    public boolean takeLoad(Game game) {
         // Variable pour accéder à la manche
         Round round = game.getRound();
 
@@ -104,7 +104,7 @@ public class WeakBot implements BotAction {
      * @return true si le bot réussit à poser une gare, sinon false.
      */
     @Override
-    public boolean takeGare(Game game, int wichStation) {
+    public boolean useGare(Game game, int wichStation) {
         // Variable pour accéder à la manche
         Round round = game.getRound();
         // Accès au joueur courant
@@ -364,7 +364,7 @@ public class WeakBot implements BotAction {
 
                 case 2:
                     // Pose des wagons
-                    if (takeRail(game)) {
+                    if (takeLoad(game)) {
                         round.endRound(game);
                     } else {
                         play(game);
@@ -374,7 +374,7 @@ public class WeakBot implements BotAction {
                 case 3:
                     // Pose une gare
                     int wichStation = random.nextInt(game.getVilles().size());
-                    if (takeGare(game, wichStation)) {
+                    if (useGare(game, wichStation)) {
                         round.endRound(game);
                     } else {
                         play(game);

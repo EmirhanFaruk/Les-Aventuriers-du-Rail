@@ -111,7 +111,7 @@ public class StrongBot implements BotAction {
      * @return true si le bot a réussi à prendre une route, sinon false.
      */
     @Override
-    public boolean takeRail(Game game) {
+    public boolean takeLoad(Game game) {
         ArrayList<CarteDestination> destination = game.getJoueurCourant().getDestinationsList();
 
         for (CarteDestination carteDestination : destination) {
@@ -144,7 +144,7 @@ public class StrongBot implements BotAction {
      * @return true si la gare a été posée avec succès, sinon false.
      */
     @Override
-    public boolean takeGare(Game game, int whichStation) {
+    public boolean useGare(Game game, int whichStation) {
         ArrayList<CarteDestination> carteDestinations = game.getJoueurCourant().getDestinationsList();
         Player joueur = game.getJoueurCourant();
 
@@ -258,11 +258,11 @@ public class StrongBot implements BotAction {
      * @param game Le jeu en cours.
      */
     private void optimalCompleteMission(Game game) {
-        if (takeRail(game)) {
+        if (takeLoad(game)) {
             game.getRound().endRound(game);
         } else {
 
-            if (takeGare(game, 0)) {
+            if (useGare(game, 0)) {
                 game.getRound().endRound(game);
             } else {
 
