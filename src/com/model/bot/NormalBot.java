@@ -90,24 +90,6 @@ public class NormalBot implements BotAction {
         strongBot.firstTurn(game);
     }
 
-    /**
-     * Procède de manière optimale à compléter les missions du bot en prenant des rails, en posant des gares,
-     * ou en piochant des cartes wagons.
-     *
-     * @param game Le jeu en cours.
-     */
-    private void optimalCompleteMission(Game game) {
-        if (takeLoad(game)) {
-            game.getRound().endRound(game);
-        } else {
-            if (useGare(game, 0)) {
-                game.getRound().endRound(game);
-            } else {
-                drawCardWagon(game);
-                game.getRound().endRound(game);
-            }
-        }
-    }
 
 
 

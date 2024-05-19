@@ -213,11 +213,14 @@ public class StrongBot implements BotAction {
         //On vérifie que le bot a bien des nukes
         if(game.getJoueurCourant().checkACarteNuke()){
 
+           return true;
 
 
+
+        }else{
+            return false;
         }
 
-    return false;
     }
 
     /**
