@@ -193,6 +193,16 @@ public class PlayerHandPanel extends JPanel {
             this.gameController = g;
             this.game = game;
 
+            addMouseMotionListener();
+            addMouseListener();
+
+            setBackground(Color.orange);
+        }
+
+        /**
+         * Une fonction qui ajoute un Mouse Motion Listener
+         */
+        public void addMouseMotionListener(){
             this.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
@@ -205,7 +215,9 @@ public class PlayerHandPanel extends JPanel {
                             currentHoverCard = carteHovered;
                             hoverTimer = new Timer(2000, new ActionListener() {
                                 public void actionPerformed(ActionEvent ae) {
-                                    gameController.descriptionCardDestination(currentHoverCard, game);
+                                    try {
+                                        gameController.descriptionCardDestination(currentHoverCard, game);
+                                    } catch (Exception ignored ) { }
                                 }
                             });
                             hoverTimer.setRepeats(false);
@@ -221,8 +233,22 @@ public class PlayerHandPanel extends JPanel {
                     repaint();  // Force repaint for color update
                 }
             });
+        }
 
-            setBackground(Color.orange);
+        /**
+         * Une fonction qui ajoute un Mouse Listener
+         */
+        public void addMouseListener () {
+            this.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    if (currentHoverCard != null) {
+                        currentHoverCard = null ;
+                        repaint();
+                    }
+
+                }
+            });
         }
 
         private CarteDestination getHoverCard(int x, int y) {
