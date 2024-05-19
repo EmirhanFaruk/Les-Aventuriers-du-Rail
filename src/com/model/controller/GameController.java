@@ -60,7 +60,7 @@ public class GameController {
 	}
 
 	/**
-	 * Une fonction qui tente s'il est possible d'occuper route qu'on a choisi
+	 * Ue fonction qui tente s'il est possible d'occuper route qu'on a choisi
 	 * @param r la rail
 	 * @param player le joueur
 	 * @param round le tour
@@ -153,73 +153,69 @@ public class GameController {
 	 * @param game le jeu
 	 */
     public void couleurCarteAChoisir(MouseEvent e , Player player , PlayerHandPanel playerHandPanel, Game game){
-		System.out.println("\n\n\ncouleurCarteAChoisir avec player: " + player.getName());
-		if ( player.getNiveau() == 0 ) {
-			//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
-			if (player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
-				System.out.println("player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()");
-					game.playSoundClick("INGAME", "popUp.wav");
-				JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-						, "Vous avez déjà pris une carte destination ! (Prenez en une autre ou terminer votre tour)", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				System.out.println("first else");
-				//Force le premier tour du joueur a pioché une carte destination
-				if (player.getCanPlay()) {
-					System.out.println("player can play");
-					CarteWagon source = playerHandPanel.getDrawPlayerHand(player.getName()).CardClicked(e.getX(), e.getY());
+		//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
+		if (player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
+			System.out.println("player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()");
+				game.playSoundClick("INGAME", "popUp.wav");
+			JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+					, "Vous avez déjà pris une carte destination ! (Prenez en une autre ou terminer votre tour)", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			System.out.println("first else");
+			//Force le premier tour du joueur a pioché une carte destination
+			if (player.getCanPlay()) {
+				System.out.println("player can play");
+				CarteWagon source = playerHandPanel.getDrawPlayerHand(player.getName()).CardClicked(e.getX(), e.getY());
 
-					if (source != null) {
-						System.out.println("Source not null");
-						// Si la source est une carte wagon
-						this.carteWagon = source;
+				if (source != null) {
+					System.out.println("Source not null");
+					// Si la source est une carte wagon
+					this.carteWagon = source;
 
-						try {
-							System.out.println("Inside try");
-							if (source.getInitialCouleur() != Couleur.NUKE) {
-								System.out.println("Not nuke");
-								Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
+					try {
+						System.out.println("Inside try");
+						if (source.getInitialCouleur() != Couleur.NUKE) {
+							System.out.println("Not nuke");
+							Ville ville = (Ville) playerHandPanel.getGame().getPlateau().getPlateau()[Mx][My];
 
-								if (tenterDePoserUneGare(ville, player, game)) {
+							if (tenterDePoserUneGare(ville, player, game)) {
+								game.getRound().endRound(game);
+							}
+						} else {
+							System.out.println("Nuke");
+							try {
+								System.out.println("Inside try");
+								if (source.getInitialCouleur() == Couleur.NUKE) {
+									actionDeNuke(e, playerHandPanel, player, game);
+									game.playSoundClick("INGAME", "tactical-nuke.wav");
 									game.getRound().endRound(game);
 								}
-							} else {
-								System.out.println("Nuke");
-								try {
-									System.out.println("Inside try");
-									if (source.getInitialCouleur() == Couleur.NUKE) {
-										actionDeNuke(e, playerHandPanel, player, game);
-										game.playSoundClick("INGAME", "tactical-nuke.wav");
-										game.getRound().endRound(game);
-									}
-								} catch (Exception exception) {
-									System.out.println("Inside catch");
-									if (player.getNiveau() == 0) {
-										game.playSoundClick("INGAME" , "popUp.wav");
-										JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-												, "Veuillez choisir une ville ou une rail avant la NUKE !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-										//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
-									}
+							} catch (Exception exception) {
+								System.out.println("Inside catch");
+								if (player.getNiveau() == 0) {
+									game.playSoundClick("INGAME" , "popUp.wav");
+									JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+											, "Veuillez choisir une ville ou une rail avant la NUKE !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+									//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
 								}
-							}
-
-						} catch (Exception exception) {
-							System.out.println("Inside catch");
-							if (player.getNiveau() == 0) {
-								game.playSoundClick("INGAME", "popUp.wav");
-								JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
-										, "Veuillez choisir une ville avant de choisir la carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-								//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
 							}
 						}
 
-
+					} catch (Exception exception) {
+						System.out.println("Inside catch");
+						if (player.getNiveau() == 0) {
+							game.playSoundClick("INGAME", "popUp.wav");
+							JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+									, "Veuillez choisir une ville avant de choisir la carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+							//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
+						}
 					}
 
-				} else {
-					game.playSoundClick("INGAME" , "popUp.wav");
-					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-							"Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+
 				}
+			} else if ( player.getNiveau() == 0 ) {
+				game.playSoundClick("INGAME" , "popUp.wav");
+				JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
+						"Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
     }
@@ -328,6 +324,8 @@ public class GameController {
         // On vérifie si le joueur a une carte Nuke, si oui on retire finalement la gare de la Ville
         if (player.checkACarteNuke() && autrePlayer != null) {
             autrePlayer.retirerGareAutrePlayer(ville, player);
+            if (game.getGameFrame().getSound().getclick())
+                game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
             return true;
         }
 
