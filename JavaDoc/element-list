@@ -1,0 +1,13 @@
+com.controller
+com.main
+com.model
+com.model.ai
+com.model.bot
+com.model.config
+com.model.config.carte
+com.model.controller
+com.util
+com.view
+com.view.endgame
+com.view.graphics
+com.view.mainmenu

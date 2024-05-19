@@ -35,7 +35,6 @@ public class Game {
     }
 
     /**
-<<<<<<< HEAD
      * Initialise et configure une nouvelle partie.
      *
      * @param nomMap         Le nom de la carte.
