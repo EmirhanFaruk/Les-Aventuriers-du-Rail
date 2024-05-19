@@ -76,6 +76,9 @@ public class GameMapPanel extends JPanel {
         mapScreen.makeMap( plateau );
     }
 
+    /**
+     * Une fonction qui resize tout les composant de la fenêtre
+     */
     private void resizeComponents() {
         // Use stored tile count instead of reading from the file
         tile_width = (int) (getWidth() * 0.7 / tileCount[0]);
@@ -91,6 +94,9 @@ public class GameMapPanel extends JPanel {
         repaint();
     }
 
+
+    /* getters et setters */
+
     public void setPlayerCourant(Player playerCourant) {
         this.playerHandPanel.setPlayer(playerCourant);
         this.cdPanel.setPlayer(playerCourant);
@@ -100,12 +106,9 @@ public class GameMapPanel extends JPanel {
         this.playerInformationBarPanel.setPlayerCourant(playerCourant);
         this.mapScreen.setPlayer( playerCourant );
     }
-
-    /* getters et setters */
     public MapScreen getMapScreen() {
         return mapScreen;
     }
-
 
     public PlayerHandPanel getPlayerHandPanel() {
         return playerHandPanel;
