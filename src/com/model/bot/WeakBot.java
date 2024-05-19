@@ -336,18 +336,18 @@ public class WeakBot implements BotAction {
             // Choix aléatoire des actions à effectuer et on verifie que c'est le mode nuke ou non
             Random random = new Random();
 
-            int whatToDo;
+            int action;
 
             //On regarde on est en quel mode, si on est en mode nuke, on a une action en plus
             if(game.getGameFrame().getMain().getMode() == "NORMAL"){
-                whatToDo = random.nextInt(4);
+                action = random.nextInt(4);
 
             }else{
-                whatToDo = random.nextInt(5);
+                action = random.nextInt(5);
             }
 
 
-            switch (whatToDo) {
+            switch (action) {
                 case 0:
                     // Pioche des cartes wagons
                     drawCardWagon(game);

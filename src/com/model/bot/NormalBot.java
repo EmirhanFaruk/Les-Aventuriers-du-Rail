@@ -19,49 +19,9 @@ import java.util.Random;
  */
 public class NormalBot implements BotAction {
 
-    /**
-     * Vérifie s'il manque seulement une carte pour compléter une route spécifique.
-     *
-     * @param route La route à vérifier.
-     * @param game  Le jeu actuel.
-     * @return {@code true} s'il ne manque qu'une carte pour compléter la route, {@code false} sinon.
-     */
-    public boolean missOneCardOnly(Route route, Game game) {
-        Player player = game.getJoueurCourant();
-        ArrayList<CarteWagon.Couleur> playerTrainList = player.getTrainList();
-        int count = 0;
+    private final StrongBot strongBot = new StrongBot();
+    private final WeakBot weakBot = new WeakBot();
 
-        for (CarteWagon.Couleur couleur : playerTrainList) {
-            if (player.compatibleColor(route, couleur)) {
-                count++;
-            }
-        }
-
-        return count + 1 == route.getLongueur();
-    }
-
-    /**
-     * Vérifie s'il est possible de compléter une route en ne manquant qu'une carte.
-     *
-     * @param game Le jeu actuel.
-     * @return La couleur de la carte manquante si possible, sinon {@code null}.
-     */
-    public Rail.Content canCompletePathMissingOneCard(Game game) {
-        Player player = game.getJoueurCourant();
-        ArrayList<CarteDestination> destinations = player.getDestinationsList();
-
-        for (CarteDestination destination : destinations) {
-            ArrayList<Ville> villes = Node.findClosestPath(destination.getPremiereVille(), destination.getDeuxiemeVille());
-            ArrayList<Route> routes = GarePosFinder.getNeededRoutes(villes, player);
-
-            for (Route route : routes) {
-                if (missOneCardOnly(route, game)) {
-                    return route.getCouleur();
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Permet au bot de piocher une ou plusieurs cartes wagons visibles ou de la pioche.
@@ -70,48 +30,7 @@ public class NormalBot implements BotAction {
      */
     @Override
     public void drawCardWagon(Game game) {
-        Player player = game.getListPlayer().get(game.getRound().getWhoIsPlaying());
-        Rail.Content missingColor = canCompletePathMissingOneCard(game);
-
-        if (missingColor != null) {
-            // Trouver la position de la carte manquante dans les cartes visibles
-            int position = -1;
-            CarteWagon.Couleur[] visibleCards = game.getCarteManager().getTrainCards();
-
-            for (int i = 0; i < visibleCards.length; i++) {
-                if (visibleCards[i].ordinal() == missingColor.ordinal()) {
-                    position = i;
-                    break;
-                }
-            }
-
-            if (position != -1) {
-                player.getTrainList().add(game.getCarteManager().takeWagon(position));
-                player.getTrainList().add(game.getCarteManager().drawCard());
-            } else {
-                // Chercher une carte locomotive parmi les cartes visibles
-                int positionLoc = -1;
-
-                for (int i = 0; i < visibleCards.length; i++) {
-                    if (visibleCards[i] == CarteWagon.Couleur.LOC) {
-                        positionLoc = i;
-                        break;
-                    }
-                }
-
-                if (positionLoc != -1) {
-                    player.getTrainList().add(game.getCarteManager().takeWagon(positionLoc));
-                } else {
-                    // Sinon, piocher deux cartes de la pioche
-                    player.getTrainList().add(game.getCarteManager().drawCard());
-                    player.getTrainList().add(game.getCarteManager().drawCard());
-                }
-            }
-        } else {
-            // Si aucune couleur spécifique n'est recherchée, piocher deux cartes aléatoires
-            player.getTrainList().add(game.getCarteManager().drawCard());
-            player.getTrainList().add(game.getCarteManager().drawCard());
-        }
+        strongBot.drawCardWagon(game);
     }
 
     /**
@@ -122,18 +41,7 @@ public class NormalBot implements BotAction {
      */
     @Override
     public boolean takeRail(Game game) {
-        Player player = game.getJoueurCourant();
-
-        for (Route route : game.getRoutes()) {
-            if (player.mettreRoute(route)) {
-                // Si le joueur a pu poser des wagons sur la route
-                for (Rail rail : route.getRailsRoute()) {
-                    rail.setOccuperPar(player);
-                }
-                return true;
-            }
-        }
-        return false;
+        return weakBot.takeRail(game);
     }
 
     /**
@@ -145,30 +53,7 @@ public class NormalBot implements BotAction {
      */
     @Override
     public boolean takeGare(Game game, int wichStation) {
-        Player player = game.getJoueurCourant();
-        ArrayList<CarteDestination> carteDestinations = player.getDestinationsList();
-
-        if (player.getNbrGare() > 0) {
-            for (CarteDestination cd : carteDestinations) {
-                Ville ville1 = cd.getPremiereVille();
-                Ville ville2 = cd.getDeuxiemeVille();
-
-                Ville garePos = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, player);
-
-                if (garePos != null && !cd.getComplete()) {
-                    player.transformerEnGare(garePos, player.getTrainList().get(0));
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            // Si aucune gare n'est disponible, piocher des cartes missions
-            CarteDestination[] toAdd = takeMissionsCard(6, game);
-            for (CarteDestination cd : toAdd) {
-                player.getDestinationsList().add(cd);
-            }
-            return true;
-        }
+        return strongBot.takeGare(game,wichStation);
     }
 
     /**
@@ -180,25 +65,19 @@ public class NormalBot implements BotAction {
      */
     @Override
     public CarteDestination[] takeMissionsCard(int max, Game game) {
-        CarteDestination[] carteDestinations = game.getCarteManager().getDestinationsCards();
-        ArrayList<Integer> indicesAChoisir = new ArrayList<>();
-
-        int totalPoints = 0;
-
-        for (int i = 0; i < carteDestinations.length; i++) {
-            if (carteDestinations[i].getNombrePoints() + totalPoints <= max) {
-                indicesAChoisir.add(i);
-                totalPoints += carteDestinations[i].getNombrePoints();
-            }
-        }
-
-        int[] indices = indicesAChoisir.stream().mapToInt(Integer::intValue).toArray();
-        return game.getCarteManager().takeDestination(indices);
+       return strongBot.takeMissionsCard(max,game);
     }
 
+
+    /**
+     * Permet au bot d'utiliser les cartes nuke de manière aléatoire.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
     @Override
     public boolean useNuke(Game game) {
-        return false;
+        return weakBot.useNuke(game);
     }
 
 
@@ -208,14 +87,7 @@ public class NormalBot implements BotAction {
      * @param game Le jeu en cours.
      */
     private void firstTurn(Game game) {
-        CarteDestination[] carteDestination = takeMissionsCard(6, game);
-
-        for (int z = 0; z < carteDestination.length; z++) {
-            game.getJoueurCourant().getDestinationsList().add(carteDestination[z]);
-        }
-
-        game.getJoueurCourant().setFirstTurnOver(true);
-        optimalCompleteMission(game);
+        strongBot.firstTurn(game);
     }
 
     /**
@@ -246,12 +118,25 @@ public class NormalBot implements BotAction {
      */
     @Override
     public void play(Game game) {
-        Random random = new Random();
-        int action = random.nextInt(4);
 
+        //Premier tour du bot
         if (!game.getJoueurCourant().getFirstTurnOver()) {
             firstTurn(game);
+
+
         } else {
+
+            Random random = new Random();
+
+            int action;
+
+            //On regarde on est en quel mode, si on est en mode nuke, on a une action en plus
+            if(game.getGameFrame().getMain().getMode() == "NORMAL"){
+                action = random.nextInt(4);
+
+            }else{
+                action = random.nextInt(5);
+            }
             switch (action) {
                 case 0:
                     // Piocher des cartes wagons
@@ -271,12 +156,15 @@ public class NormalBot implements BotAction {
                         play(game);
                     }
                     break;
-                default:
+                case 3:
                     // Poser une gare
                     if (!takeGare(game, 0)) {
                         play(game);
                     }
                     break;
+
+                default:
+                    //Utiliser une nuke
             }
 
             // Fin du tour

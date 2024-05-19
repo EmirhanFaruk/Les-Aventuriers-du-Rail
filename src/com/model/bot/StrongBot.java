@@ -202,9 +202,24 @@ public class StrongBot implements BotAction {
         return game.getCarteManager().takeDestination(renvoie);
     }
 
+
+    /**
+     * Permet au bot d'utiliser les cartes nuke.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
     @Override
     public boolean useNuke(Game game) {
-        return false;
+
+        //On verifie que le bot a bien des nukes
+        if(game.getJoueurCourant().checkACarteNuke()){
+
+
+
+        }
+
+    return false;
     }
 
     /**
@@ -227,7 +242,7 @@ public class StrongBot implements BotAction {
      *
      * @param game Le jeu en cours.
      */
-    private void firstTurn(Game game) {
+    public void firstTurn(Game game) {
         CarteDestination[] carteDestination = takeMissionsCard(6, game);
 
         for (int z = 0; z < carteDestination.length; z++) {
@@ -240,7 +255,7 @@ public class StrongBot implements BotAction {
 
     /**
      * Procède de manière optimale à compléter les missions du bot en prenant des rails, en posant des gares,
-     * ou en piochant des cartes wagons.
+     * ou en piochant des cartes wagons. Si on est dans le mode nuke alors le bot cherchera a detruire une route..
      *
      * @param game Le jeu en cours.
      */
@@ -248,11 +263,22 @@ public class StrongBot implements BotAction {
         if (takeRail(game)) {
             game.getRound().endRound(game);
         } else {
+
             if (takeGare(game, 0)) {
                 game.getRound().endRound(game);
             } else {
-                drawCardWagon(game);
-                game.getRound().endRound(game);
+
+                if(game.getGameFrame().getMain().getMode() != "NORMAL" && useNuke(game) && useNuke(game) ){
+
+                    game.getRound().endRound(game);
+
+                }else{
+
+                    drawCardWagon(game);
+                    game.getRound().endRound(game);
+                }
+
+
             }
         }
     }
@@ -268,6 +294,7 @@ public class StrongBot implements BotAction {
         if (!game.getJoueurCourant().getFirstTurnOver()) {
             firstTurn(game);
         } else {
+
             if (allMissionIsCompleted(game)) {
                 CarteDestination[] addCard = takeMissionsCard(6, game);
                 for (int j = 0; j < addCard.length; j++) {
