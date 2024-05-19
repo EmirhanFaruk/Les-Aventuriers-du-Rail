@@ -25,6 +25,53 @@ public class LongestFinder
     }
 
 
+
+    public static int wayLength(ArrayList<Route> way)
+    {
+        int res = 0;
+
+        for (Route route : way)
+        {
+            res += route.getLongueur();
+        }
+
+        return res;
+    }
+
+    private static boolean isLongerWay(ArrayList<Route> way1, ArrayList<Route> way2)
+    {
+        int l1 = wayLength(way1);
+        int l2 = wayLength(way2);
+
+        return l1 > l2;
+    }
+
+    /**
+     * Trouver le chemin le plus long entre deux villes de la liste des villes sur les routes pris par le joueur.
+     * @param villes la liste des villes
+     * @param player le joueur
+     * @return liste des routes qui fait le plus long chemin
+     */
+    public static ArrayList<Route> findLongestWayAll(ArrayList<Ville> villes, Player player)
+    {
+        ArrayList<Route> longest = new ArrayList<>();
+        ArrayList<Route> current;
+
+        for (Ville v1 : villes)
+        {
+            for (Ville v2 : villes)
+            {
+                current = LongestFinder.findLongestWay(v1, v2, player);
+                if (isLongerWay(current, longest))
+                {
+                    longest = current;
+                }
+            }
+        }
+
+        return longest;
+    }
+
     /**
      * Trouver le chemin le plus long entre deux villes sur les routes pris par le joueur.
      * @param v1 Ville 1
@@ -38,7 +85,6 @@ public class LongestFinder
         ArrayList<Route> currentWay = new ArrayList<>();
         ArrayList<Ville> visited = new ArrayList<>();
 
-        //System.out.println("Start of finding longest between " + v1.getNom() + " - " + v2.getNom());
         deepFirstSearch(v1, v2, visited, currentWay, res, player);
 
 
@@ -57,8 +103,6 @@ public class LongestFinder
      */
     private static void deepFirstSearch(Ville currentVille, Ville end, ArrayList<Ville> visited, ArrayList<Route> currentWay, ArrayList<Route> longestWay, Player player)
     {
-        //printWay(currentWay, currentVille, end);
-
         addDistinct(currentVille, visited);
 
         if (sameVille(currentVille, end))
@@ -67,8 +111,6 @@ public class LongestFinder
             {
                 longestWay.clear();
                 longestWay.addAll(currentWay);
-                //System.out.println("Put the most recent longest way: ");
-                //printWay(longestWay, currentVille, end);
             }
         }
         else

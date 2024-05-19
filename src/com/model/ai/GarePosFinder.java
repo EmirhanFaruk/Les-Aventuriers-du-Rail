@@ -95,7 +95,7 @@ public class GarePosFinder
      * @param player player for the A* algorithm
      * @return the list of the possible villes
      */
-    private static ArrayList<Ville> tryAllVillesDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int routeToReduce, boolean byRail, Player player)
+    private static ArrayList<Ville> tryAllVillesDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int routeToReduce, boolean byRail, Player player, boolean modeNuke)
     {
         ArrayList<Ville> res = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public class GarePosFinder
 
         for (Ville wannaBeGare : villesToTry)
         {
-            if (wannaBeGare.getIsOccuped() == null)
+            if (wannaBeGare.getIsOccuped() == null || modeNuke)
             {
                 if (tryVilleDiff(start, end, wannaBeGare, routeToReduce, byRail, player, ogLength, aWayExists))
                 {
@@ -125,6 +125,8 @@ public class GarePosFinder
 
         return res;
     }
+
+
 
     /**
      * Tries all villes to find the possible solutions(put a gare to somewhere), using trySingleVille.
@@ -194,9 +196,9 @@ public class GarePosFinder
      * @param player player
      * @return the wanted ville
      */
-    public static Ville getWantedVilleDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player)
+    public static Ville getWantedVilleDiff(Ville start, Ville end, ArrayList<Ville> villesToTry, int limit, boolean byRail, Player player, boolean modeNuke)
     {
-        ArrayList<Ville> allVilles = tryAllVillesDiff(start, end, villesToTry, limit, byRail, player);
+        ArrayList<Ville> allVilles = tryAllVillesDiff(start, end, villesToTry, limit, byRail, player, modeNuke);
 
         return getMinVille(start, end, allVilles, byRail, player);
     }

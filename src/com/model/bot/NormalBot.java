@@ -152,7 +152,8 @@ public class NormalBot implements BotAction {
                 Ville ville1 = cd.getPremiereVille();
                 Ville ville2 = cd.getDeuxiemeVille();
 
-                Ville garePos = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, player);
+
+                Ville garePos = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, player, game.isModeNuke());
 
                 if (garePos != null && !cd.getComplete()) {
                     player.transformerEnGare(garePos, player.getTrainList().get(0));

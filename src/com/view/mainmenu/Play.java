@@ -138,7 +138,7 @@ public class Play extends JPanel {
         playerName.setForeground(Color.BLACK);
         playerName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "click.wav"); // à changer pour l'écriture
+                frame.playSoundClick("MENU" ,"click.wav"); // a changer pour l'ecriture
             }
         });
         player_name_list_tag[i] = playerName;
@@ -160,30 +160,29 @@ public class Play extends JPanel {
             button.setEnabled(false);
         } else {
             button.addActionListener(e -> {
-                boolean isClick = frame.getSound().getclick();
                 switch (player_type_list_tag[i].getText()) {
                     case PLAYER:
-                        if (isClick) frame.getSound().playSound("MENU", "WeakBot.wav");
+                        frame.playSoundClick("MENU" ,"WeakBot.wav");
                         player_type_list_tag[i].setText(WEAKBOT);
                         button.setText(WEAKBOT);
                         break;
                     case WEAKBOT:
-                        if (isClick) frame.getSound().playSound("MENU", "NormalBot.wav");
+                        frame.playSound("MENU" ,"NormalBot.wav");
                         player_type_list_tag[i].setText(NORMALBOT);
                         button.setText(NORMALBOT);
                         break;
                     case NORMALBOT:
-                        if (isClick) frame.getSound().playSound("MENU", "StrongBot.wav");
+                        frame.playSound("MENU" ,"StrongBot.wav");
                         player_type_list_tag[i].setText(STRONGBOT);
                         button.setText(STRONGBOT);
                         break;
                     case STRONGBOT:
-                        if (isClick) frame.getSound().playSound("MENU", "None.wav");
+                        frame.playSound("MENU" ,"None.wav");
                         player_type_list_tag[i].setText(NONE);
                         button.setText(NONE);
                         break;
                     case NONE:
-                        if (isClick) frame.getSound().playSound("MENU", "Player.wav");
+                        frame.playSound("MENU" ,"Player.wav");
                         player_type_list_tag[i].setText(PLAYER);
                         button.setText(PLAYER);
                         break;
@@ -222,8 +221,7 @@ public class Play extends JPanel {
         red.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (frame.getSound().getclick())
-                    frame.getSound().playSound("MENU", "Colors.wav");
+                frame.playSoundClick("MENU", "Colors.wav");
                 if (selected_color[i] != red) {
                     if (selected_color[i] != null) selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
                     red.setBorder(new LineBorder(Color.WHITE, 5));
@@ -246,10 +244,12 @@ public class Play extends JPanel {
         blue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (frame.getSound().getclick())
-                    frame.getSound().playSound("MENU", "Colors.wav");
+                frame.playSoundClick("MENU", "Colors.wav");
                 if (selected_color[i] != blue) {
-                    if (selected_color[i] != null) selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    if (selected_color[i] != null)
+                    {
+                        selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    }
                     blue.setBorder(new LineBorder(Color.WHITE, 5));
                     selected_color[i] = blue;
                     player_colors[i] = Color.blue;
@@ -270,10 +270,12 @@ public class Play extends JPanel {
         green.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (frame.getSound().getclick())
-                    frame.getSound().playSound("MENU", "Colors.wav");
+                frame.playSoundClick("MENU" ,"Colors.wav");
                 if (selected_color[i] != green) {
-                    if (selected_color[i] != null) selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    if (selected_color[i] != null)
+                    {
+                        selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    }
                     green.setBorder(new LineBorder(Color.WHITE, 5));
                     selected_color[i] = green;
                     player_colors[i] = Color.green;
@@ -294,9 +296,12 @@ public class Play extends JPanel {
         yellow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "Colors.wav");
+                frame.playSoundClick("MENU" ,"Colors.wav");
                 if (selected_color[i] != yellow) {
-                    if (selected_color[i] != null) selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    if (selected_color[i] != null)
+                    {
+                        selected_color[i].setBorder(new EmptyBorder(5, 5, 5, 5));
+                    }
                     yellow.setBorder(new LineBorder(Color.WHITE, 5));
                     selected_color[i] = yellow;
                     player_colors[i] = Color.yellow;
@@ -384,9 +389,9 @@ public class Play extends JPanel {
         JButton res = new JButton(level_name);
         res.setBackground(Color.BLACK);
         res.setForeground(Color.GRAY);
-        res.addActionListener(e -> {
+        res.addActionListener( e -> {
             level_name_tag.setText(level_name);
-            if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "SelectMap.wav");
+            frame.playSoundClick("MENU" ,"SelectMap.wav");
         });
         return res;
     }
@@ -426,12 +431,10 @@ public class Play extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String mode = mode_button.getText();
-                if (frame.getSound().getclick()) {
-                    if (mode.equals("NORMAL")) {
-                        frame.getSound().playSound("MENU", "ModeNuke.wav");
-                    } else {
-                        frame.getSound().playSound("MENU", "ModeNormal.wav");
-                    }
+                if ( mode.equals("NORMAL")) {
+                    frame.playSoundClick("MENU" ,"ModeNuke.wav");
+                } else {
+                    frame.playSoundClick("MENU" ,"ModeNormal.wav");
                 }
                 for (int i = 0; i < possible_modes.length; i++) {
                     if (possible_modes[i].equals(mode)) {
@@ -514,15 +517,19 @@ public class Play extends JPanel {
                 player_type_list[i] = player_type_list_tag[i].getText();
             }
 
-            if (!differentcolors()) {
-                if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "popUp.wav");
-                JOptionPane.showMessageDialog(this, "Veuillez choisir des couleurs différentes !", "Warning", JOptionPane.WARNING_MESSAGE);
-            } else if (verifSupTwoPlayer(player_type_list)) {
-                if (frame.getSound().getclick()) frame.getSound().playSound("MENU", "popUp.wav");
-                JOptionPane.showMessageDialog(this, "Il faut plus de joueur !", "Robocop", JOptionPane.WARNING_MESSAGE);
+            if(!differentcolors()){
+                frame.playSoundClick("MENU" , "popUp.wav");
+                JOptionPane.showMessageDialog(this,"Veuillez choisir des couleurs différentes !","Warning",JOptionPane.WARNING_MESSAGE);
+            }
+            else if(verifSupTwoPlayer(player_type_list)){
+                frame.playSoundClick("MENU" , "popUp.wav");
+                JOptionPane.showMessageDialog(this,"Il faut plus de joueur !","Robocop",JOptionPane.WARNING_MESSAGE);
 
-            } else {
-                if (!level_name_tag.getText().isEmpty()) {
+            }
+            else
+            {
+                if (!level_name_tag.getText().isEmpty())
+                {
                     frame.startGame(level_name_tag.getText(), mode_button.getText(), player_name_list, player_type_list, player_colors);
                 }
             }

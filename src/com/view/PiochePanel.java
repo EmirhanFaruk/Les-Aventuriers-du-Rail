@@ -86,8 +86,7 @@ public class PiochePanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (player.getFirstTurnOver() && imagePiocheVisible.alreadyPickedACard()) {
-                    if (game.getGameFrame().getSound().getclick()) 
-                        game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                    game.playSoundClick("INGAME", "popUp.wav");
                     JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                             "TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -107,8 +106,7 @@ public class PiochePanel extends JPanel {
                                         mainDuJoueur.getParent().repaint();
                                         repaint();
                                     } else {
-                                        if (game.getGameFrame().getSound().getclick()) 
-                                            game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                                        game.playSoundClick("INGAME", "popUp.wav");
                                         JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                                                 "Vous ne pouvez pas choisir cette carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                                     }
@@ -118,8 +116,7 @@ public class PiochePanel extends JPanel {
                         }
                     } else {
                         if (player.getNiveau() == 0) { // Le message s'affiche si seulement si c'est un vrai joueur
-                            if (game.getGameFrame().getSound().getclick()) 
-                                game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+                            game.playSoundClick("INGAME", "popUp.wav");
                             JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                                     "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                         }

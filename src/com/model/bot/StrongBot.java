@@ -155,7 +155,7 @@ public class StrongBot implements BotAction {
                 Ville ville1 = cd.getPremiereVille();
                 Ville ville2 = cd.getDeuxiemeVille();
 
-                Ville toTransformInGare = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, joueur);
+                Ville toTransformInGare = GarePosFinder.getWantedVilleDiff(ville1, ville2, game.getVilles(), 1, false, joueur, game.isModeNuke());
 
                 if (toTransformInGare != null && !cd.getComplete()) {
                     joueur.transformerEnGare(toTransformInGare, joueur.getTrainList().get(0));

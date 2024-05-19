@@ -1,5 +1,6 @@
 package com.model;
 
+import com.model.ai.LongestFinder;
 import com.model.config.Plateau;
 import com.model.config.Route;
 import com.model.config.Ville;
@@ -22,6 +23,7 @@ public class Game {
     private CarteManager cm;
     private Round round;
     private GameFrame gameFrame;
+    private boolean gaveBonusPoints = false;
 
     /**
      * Constructeur de la classe Game.
@@ -33,28 +35,27 @@ public class Game {
     }
 
     /**
+<<<<<<< HEAD
      * Initialise et configure une nouvelle partie.
      *
      * @param nomMap         Le nom de la carte.
      * @param player_names   Les noms des joueurs.
      * @param player_types   Les types des joueurs.
      * @param player_colors  Les couleurs des joueurs.
-     * @param music          Indique si la musique doit être jouée.
      */
-    public void makeGame(String nomMap, String[] player_names, String[] player_types, Color[] player_colors, boolean music) {
+    public void makeGame(String nomMap, String[] player_names, String[] player_types, Color[] player_colors) {
         this.cm = new CarteManager(gameFrame.getMode());
         this.plateau = Plateau.makePlateau(nomMap, this);
         this.listPlayer = initPlayers(player_names, player_types, player_colors);
         initBoard();
         this.round = new Round();
-        if (music) gameFrame.getSound().playMusic("INGAME", "inGame.wav");
     }
 
     /**
      * Initialise le plateau de jeu et distribue les cartes aux joueurs.
      */
     private void initBoard() {
-        // Fonction qui initialise le jeu
+        //Fonction qui initialise le jeu
         cm.initPileCarteDestination(this);
 
         // Donner des cartes aux joueurs au début de la partie (chacun en reçoit 4)
@@ -117,13 +118,43 @@ public class Game {
      *
      * @return true si le nombre de wagons est inférieur ou égal à 2.
      */
-    public boolean endGame() {
-        for (Player p : listPlayer) {
-            if (p.getNbrWagon() <= 2) {
-                return true;
+    public boolean endGame(){
+        for (Player p : listPlayer){
+            if ( p.getNbrWagon() <=2 ){
+                if (!gaveBonusPoints)
+                {
+                    giveLongestRouteBonus();
+                    gaveBonusPoints = true;
+                }
+
+                return true ;
             }
         }
         return cm.trainCardisEmpty();
+    }
+
+    /**
+     * Trouver la plus longue route et donne 10 points de plus a son proprietaire
+     */
+    private void giveLongestRouteBonus()
+    {
+        int max = 0, maxi = 0;
+
+        for (int i = 0;i < listPlayer.size(); i++)
+        {
+            ArrayList<Route> tempLongestWay = LongestFinder.findLongestWayAll(villes, listPlayer.get(i));
+            int tempMax = LongestFinder.wayLength(tempLongestWay);
+            if (tempMax > max)
+            {
+                max = tempMax;
+                maxi = i;
+            }
+        }
+
+        if (listPlayer.get(maxi) != null)
+        {
+            listPlayer.get(maxi).addLongestWayScore();
+        }
     }
 
     /**
@@ -144,6 +175,45 @@ public class Game {
     }
 
     /* Getters et Setters */
+
+    /**
+     * Jouer le son dans le screen données dans les parametres en checkant le click de son.
+     * Faire appel de gameFrame.
+     * @param screen le screen dit
+     * @param sound_name le nom de son dit
+     */
+    public void playSoundClick(String screen, String sound_name)
+    {
+        gameFrame.playSoundClick(screen, sound_name);
+    }
+
+    /**
+     * Changer le chanson dans le screen données dans les parametres.
+     * Faire appel de gameFrame.
+     * @param screen le screen dit
+     * @param sound_name le nom de musique dit
+     */
+    public void changeMusic(String screen, String sound_name)
+    {
+        gameFrame.changeMusic(screen, sound_name);
+    }
+
+    /**
+     * Changer le chanson dans le screen données dans les parametres en verifiant si le sound.getMusic() est vrai.
+     * Faire appel de gameFrame.
+     * @param screen le screen dit
+     * @param sound_name le nom de musique dit
+     */
+    public void changeMusicIsMusic(String screen, String sound_name)
+    {
+        if (gameFrame.getSound().getMusic())
+        {
+            changeMusic(screen, sound_name);
+        }
+    }
+
+
+    /* getteurs et setteurs */
 
     /**
      * Retourne le plateau de jeu.
@@ -230,6 +300,16 @@ public class Game {
             return gameFrame.getGameMapPanel();
         }
         return null;
+    }
+
+    /**
+     * Renvoie si mode est egal a "NUKE".
+     *
+     * @return resultat
+     */
+    public boolean isModeNuke()
+    {
+        return getGameFrame().getMode().equals("NUKE");
     }
 
     /**

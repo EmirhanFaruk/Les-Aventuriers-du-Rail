@@ -276,7 +276,7 @@ public class Node
 
         while(!openList.isEmpty())
         {
-            // Get lowest cost node and use that node to proceed
+            // Get the lowest cost node and use that node to proceed
             Node current = Node.findLowestCost(openList);
 
             // Remove it from the open list because now it's closed
