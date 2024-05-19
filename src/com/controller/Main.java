@@ -36,7 +36,11 @@ public class Main implements Runnable
     public void restart (){
         gameFrame.startGame( this.map , this.mode , this.player_names , this.player_types , this.player_colors );
         gameFrame.setCurrentCard(gameFrame.getIngame_screen_s());
-        if ( gameFrame.getSound().getMusic()) gameFrame.getSound().changeMusic("INGAME" ,"inGame.wav" );
+
+        if ( gameFrame.getSound().getMusic())
+        {
+            gameFrame.changeMusic("INGAME" ,"inGame.wav" );
+        }
         // DEBUG : System.err.println("Une nouvelle game");
     }
 
@@ -64,9 +68,9 @@ public class Main implements Runnable
         } else {
             running = true;
             gameFrame.setCurrentCard(gameFrame.getIngame_screen_s());
-            if ( game.getGameFrame().getSound().getMusic() ) {
-                game.getGameFrame().getSound().changeMusic("INGAME" , "inGame.wav");
-            }
+
+            game.changeSoundIsMusic("INGAME" , "inGame.wav");
+
             gameFrame.getGameScreen().getGameManagerScreen().removePause();
         }
     }

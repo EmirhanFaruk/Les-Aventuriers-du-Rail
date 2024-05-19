@@ -35,10 +35,6 @@ public class Game
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
-        if(music)
-        {
-            playSound("INGAME" , "inGame.wav");
-        }
     }
 
     private void initBoard(){
@@ -158,6 +154,29 @@ public class Game
     public void playSound(String screen, String sound_name)
     {
         gameFrame.playSound(screen, sound_name);
+    }
+
+    public void playSoundClick(String screen, String sound_name)
+    {
+        gameFrame.playSoundClick(screen, sound_name);
+    }
+
+    public void playMusic(String screen, String sound_name)
+    {
+
+    }
+
+    public void changeMusic(String screen, String sound_name)
+    {
+        gameFrame.changeMusic(screen, sound_name);
+    }
+
+    public void changeMusicIsMusic(String screen, String sound_name)
+    {
+        if (gameFrame.getSound().getMusic())
+        {
+            changeMusic(screen, sound_name);
+        }
     }
 
 

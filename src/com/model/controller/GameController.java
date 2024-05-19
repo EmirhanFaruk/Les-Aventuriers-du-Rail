@@ -58,8 +58,8 @@ public class GameController {
 		System.out.println("\n\n\nTenter acquisition route de " + player.getName());
         //Empêche le joueur de faire cette action s'il a déjà pris une carte destination
     	if(player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
-			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
-   		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+			game.playSoundClick("INGAME" , "popUp.wav");
+			JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
                     ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
     	}else {
 			System.out.println("Pas encore pris une carte. CanPlay: " + player.getCanPlay() + ", action: " + round.getAction());
@@ -68,7 +68,7 @@ public class GameController {
 				System.out.println("can play");
 	    		if(round.getAction() < 2){
 					System.out.println("round.getAction() < 2");
-					if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+					game.playSoundClick("INGAME" , "popUp.wav");
 	                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                        "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
 	                return;
@@ -77,7 +77,7 @@ public class GameController {
 	            if (r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0) {
 					System.out.println("r.getSaRoute() != null &&  r.getSaRoute().getProprietaire() != null && player.getNiveau() == 0");
 	            	if(!player.checkACarteNuke()) {
-						if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+						game.playSoundClick("INGAME" , "popUp.wav");
 		                JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 		                        "Cette route a déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 	            	}
@@ -86,7 +86,7 @@ public class GameController {
 
 	            if ( player.getNiveau() == 0 ){
 					System.out.println("player.getNiveau() == 0");
-					if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+					game.playSoundClick("INGAME" , "popUp.wav");
 	                int choixUtilisateur = JOptionPane.showConfirmDialog(
 	                        game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                        "Êtes-vous sûr de vouloir poser votre rail ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
@@ -102,11 +102,11 @@ public class GameController {
 
 	                        round.endRound(game);
 	                    } else if ( r.getSaRoute().getLongueur() > player.getNbrWagon() ) {
-							if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+							game.playSoundClick("INGAME" , "popUp.wav");
                             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                                     "Vous n'avez pas assez de wagon pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
                         } else {
-							if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+							game.playSoundClick("INGAME" , "popUp.wav");
 	                        JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                                "Vous n'avez pas assez de carte pour posséder cette route. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 	                    }
@@ -126,7 +126,7 @@ public class GameController {
 	            }
 
 	    	}else {
-				if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+				game.playSoundClick("INGAME" , "popUp.wav");
 	    		JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 	                    "Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 	    	}
@@ -146,8 +146,7 @@ public class GameController {
 			//Empêche le joueur de faire cette action s'il a déjà pris une carte destination
 			if (player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()) {
 				System.out.println("player.getFirstTurnOver() && game.getCarteManager().alreadyPickedACard()");
-				if (game.getGameFrame().getSound().getclick())
-					game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+					game.playSoundClick("INGAME", "popUp.wav");
 				JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
 						, "TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 			} else {
@@ -177,15 +176,13 @@ public class GameController {
 									System.out.println("Inside try");
 									if (source.getInitialCouleur() == Couleur.NUKE) {
 										actionDeNuke(e, playerHandPanel, player, game);
-										if (game.getGameFrame().getSound().getclick())
-											game.getGameFrame().getSound().playSound("INGAME", "tactical-nuke.wav");
+										game.playSoundClick("INGAME", "tactical-nuke.wav");
 										game.getRound().endRound(game);
 									}
 								} catch (Exception exception) {
 									System.out.println("Inside catch");
 									if (player.getNiveau() == 0) {
-										if (game.getGameFrame().getSound().getclick())
-											game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+										game.playSoundClick("INGAME" , "popUp.wav");
 										JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
 												, "Veuillez choisir une ville ou une rail avant la NUKE !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 										//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
@@ -196,8 +193,7 @@ public class GameController {
 						} catch (Exception exception) {
 							System.out.println("Inside catch");
 							if (player.getNiveau() == 0) {
-								if (game.getGameFrame().getSound().getclick())
-									game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+								game.playSoundClick("INGAME", "popUp.wav");
 								JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
 										, "Veuillez choisir une ville avant de choisir la carte !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 								//DEBUG : System.err.println( "D'abord selectionner une ville" ) ;
@@ -208,8 +204,7 @@ public class GameController {
 					}
 
 				} else {
-					if (game.getGameFrame().getSound().getclick())
-						game.getGameFrame().getSound().playSound("INGAME", "popUp.wav");
+					game.playSoundClick("INGAME" , "popUp.wav");
 					JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 							"Vous devez d'abord piocher 1 carte destination au minimum !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -250,7 +245,7 @@ public class GameController {
 	private boolean tenterDeDetruireRoute(Rail rail, Player player, Game game) {
 		//On check si son action est supérieur à 2 autrement on refuse l'action
         if(game.getRound().getAction() < 2){
-			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+			game.playSoundClick("INGAME" , "popUp.wav");
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
             return false;
@@ -270,7 +265,7 @@ public class GameController {
 	private boolean tenterDeDetruireGare(Ville ville, Player player, Game game) {
 		//On check si son action est supérieur à 2 autrement on refuse l'action
         if(game.getRound().getAction() < 2){
-			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+			game.playSoundClick("INGAME" , "popUp.wav");
             JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
                     "Vous ne pouvez que piocher des cartes, IT'S YOUR CHOICE ! ", "YU-GI-OH", JOptionPane.INFORMATION_MESSAGE );
             return false;

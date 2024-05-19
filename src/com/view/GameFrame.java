@@ -132,12 +132,22 @@ public class GameFrame extends JFrame
     }
 
 
-    public void playSound(String screen, String sound_name)
+    public void playSoundClick(String screen, String sound_name)
     {
         if(sound.getclick())
         {
-            sound.playSound( screen ,sound_name );
+            playSound(screen, sound_name);
         }
+    }
+
+    public void playSound(String screen, String sound_name)
+    {
+        sound.playSound( screen ,sound_name );
+    }
+
+    public void changeMusic(String screen, String sound_name)
+    {
+        sound.changeMusic( screen ,sound_name );
     }
 
 
