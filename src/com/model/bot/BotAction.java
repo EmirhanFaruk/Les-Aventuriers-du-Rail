@@ -3,7 +3,6 @@ package com.model.bot;
 import com.model.Game;
 import com.model.config.carte.CarteDestination;
 
-
 /**
  * Interface représentant les actions qu'un bot peut effectuer le jeu
  */

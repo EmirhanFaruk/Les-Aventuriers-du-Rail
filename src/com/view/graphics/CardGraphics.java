@@ -4,11 +4,12 @@ package com.view.graphics;
 import com.model.config.carte.CarteWagon;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
+/**
+ * La classe CardGraphics gère le chargement et la fourniture des images des cartes de wagon.
+ */
 public class CardGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);

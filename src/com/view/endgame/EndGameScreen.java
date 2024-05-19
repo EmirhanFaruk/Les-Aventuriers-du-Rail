@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * La classe EndGameScreen représente l'écran de fin de jeu, affichant les scores des joueurs et offrant des options pour retourner au menu, redémarrer le jeu ou quitter.
+ */
 public class EndGameScreen extends JPanel {
     private GameScreen gameScreen ;
     private JPanel button_panel;

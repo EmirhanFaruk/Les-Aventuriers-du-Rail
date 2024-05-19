@@ -8,6 +8,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * La classe MapGraphics gère l'affichage graphique des différentes cases sur la carte du jeu.
+ */
 public class MapGraphics {
     private Case aCase ;
     int tileWidth;

@@ -3,145 +3,156 @@ package com.model.config;
 import java.util.ArrayList;
 import com.model.Player;
 import com.model.config.carte.CarteWagon.Couleur;
-import com.model.config.Rail.Content;
 
+/**
+ * La classe Route représente une route entre deux villes sur le plateau de jeu.
+ * Elle contient des informations sur les villes qu'elle relie, sa longueur, sa couleur,
+ * son propriétaire, son cousin (si elle fait partie d'une double route), et les rails qui la composent.
+ */
 public class Route {
     private Ville ville1;
     private Ville ville2;
-    private int longueur; //la longueur des rails
-    private Rail.Content couleur; //couleur de la route
-    private Player proprietaire; //joueur qui a construit la route
-    private Route cousin; // null si cette route n'est pas un de double route, l'autre route sinon
-    private int nombrePoint; //nombre de point que raporte la route
-    private ArrayList<Rail> railsRoute; //rails qui forme la route
+    private int longueur; // La longueur des rails
+    private Rail.Content couleur; // La couleur de la route
+    private Player proprietaire; // Le joueur qui a construit la route
+    private Route cousin; // null si cette route n'est pas une double route, l'autre route sinon
+    private int nombrePoint; // Le nombre de points que rapporte la route
+    private ArrayList<Rail> railsRoute; // Les rails qui forment la route
 
-
+    /**
+     * Constructeur de la classe Route.
+     *
+     * @param v1                La première ville
+     * @param v2                La deuxième ville
+     * @param nombrePointDistance Le nombre de points de distance
+     */
     public Route(Ville v1, Ville v2, int nombrePointDistance) {
-		this.ville1 = v1;
-		this.ville2 = v2;
-		this.nombrePoint = nombrePointDistance;
-	}
+        this.ville1 = v1;
+        this.ville2 = v2;
+        this.nombrePoint = nombrePointDistance;
+    }
 
-    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur)
-    {
+    /**
+     * Constructeur de la classe Route.
+     *
+     * @param ville1  La première ville
+     * @param ville2  La deuxième ville
+     * @param longueur La longueur de la route
+     * @param couleur  La couleur de la route
+     */
+    public Route(Ville ville1, Ville ville2, int longueur, Rail.Content couleur) {
         this.ville1 = ville1;
         this.ville2 = ville2;
         this.longueur = longueur;
         this.couleur = couleur;
         this.proprietaire = null;
         this.railsRoute = new ArrayList<>();
-        nombrePointsDestination(); //initialise le nombre de point que donne cette route
+        nombrePointsDestination(); // Initialise le nombre de points que donne cette route
     }
 
-    public Couleur traducteurCouleur(){
-        //Pour Carte : BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, LOC
-        if(this.getCouleur() == Content.BLEU)return Couleur.BLEU;
-        if(this.getCouleur() == Content.VIOLET)return Couleur.VIOLET;
-        if(this.getCouleur() == Content.MARRON)return Couleur.MARRON;
-        if(this.getCouleur() == Content.NOIRE)return Couleur.NOIRE;
-        if(this.getCouleur() == Content.VERT)return Couleur.VERT;
-        if(this.getCouleur() == Content.JAUNE)return Couleur.JAUNE;
-        if(this.getCouleur() == Content.BLANC)return Couleur.BLANC;
-        if(this.getCouleur() == Content.ROUGE)return Couleur.ROUGE;
-        if(this.getCouleur() == Content.JOKERETOILEE)return Couleur.JOKERETOILEE;
-        return Couleur.LOC;
+    /**
+     * Traduit la couleur de la route en couleur de carte.
+     *
+     * @return La couleur de la carte correspondant à la couleur de la route
+     */
+    public Couleur traducteurCouleur() {
+        switch (this.getCouleur()) {
+            case BLEU:
+                return Couleur.BLEU;
+            case VIOLET:
+                return Couleur.VIOLET;
+            case MARRON:
+                return Couleur.MARRON;
+            case NOIRE:
+                return Couleur.NOIRE;
+            case VERT:
+                return Couleur.VERT;
+            case JAUNE:
+                return Couleur.JAUNE;
+            case BLANC:
+                return Couleur.BLANC;
+            case ROUGE:
+                return Couleur.ROUGE;
+            case JOKERETOILEE:
+                return Couleur.JOKERETOILEE;
+            default:
+                return Couleur.LOC;
+        }
     }
 
-
-
-
-    public void nombrePointsDestination(){
-        //Fonction qui dit le nombre de point pour la destination entre 2 villes
-
-        switch (longueur){
-            //1 wagon = 1 point
-            case 1 :
+    /**
+     * Initialise le nombre de points que rapporte la route en fonction de sa longueur.
+     */
+    public void nombrePointsDestination() {
+        switch (longueur) {
+            case 1:
                 nombrePoint = 1;
                 break;
-
-            //2 wagon = 2 point
-            case 2 :
+            case 2:
                 nombrePoint = 2;
                 break;
-
-            //3 wagon = 4 point
-            case 3 :
+            case 3:
                 nombrePoint = 4;
                 break;
-
-            //4 wagon = 7 point
-            case 4 :
+            case 4:
                 nombrePoint = 7;
                 break;
-            //5 wagon = 10 point
-            case 5 :
+            case 5:
                 nombrePoint = 10;
                 break;
-
-            //6 wagon = 15 point
-            case 6 :
+            case 6:
                 nombrePoint = 15;
                 break;
-
-            //7 wagon = 15 point (exeption pour la map longue)
-            case 7 :
+            case 7:
                 nombrePoint = 20;
                 break;
-
-            default :
+            default:
                 nombrePoint = 0;
                 break;
         }
-
     }
 
-    public boolean links(Ville ville1, Ville ville2){
+    /**
+     * Vérifie si cette route relie deux villes données.
+     *
+     * @param ville1 La première ville
+     * @param ville2 La deuxième ville
+     * @return true si la route relie les deux villes, sinon false
+     */
+    public boolean links(Ville ville1, Ville ville2) {
         boolean possibility1 = ville1 == this.getVille1() && ville2 == this.getVille2();
         boolean possibility2 = ville1 == this.getVille2() && ville2 == this.getVille1();
 
         return possibility1 || possibility2;
     }
 
-    public String toString()
-    {
+    @Override
+    public String toString() {
         String res = "\n=================\n";
         res += "Route: \nVille1: " + ville1.getNom() + "\nVille2: " + ville2.getNom() + "\nLongueur: " + longueur + "\nCouleur: " + getCouleur();
-        if (proprietaire != null)
-        {
-            res += "\nProp: " + proprietaire.getName();
-        }
-        else
-        {
-            res += "\nProp: null";
-        }
-        if (cousin != null)
-        {
-            res += "\nCousin: " + cousin.getCouleur();
-        }
-        else
-        {
-            res += "\nCousin: null";
-        }
+        res += "\nProp: " + (proprietaire != null ? proprietaire.getName() : "null");
+        res += "\nCousin: " + (cousin != null ? cousin.getCouleur() : "null");
         return res;
     }
 
-
-
+    /**
+     * Réinitialise le propriétaire de la route et libère les rails associés.
+     */
     public void resetProprietaire() {
         this.proprietaire = null;
         resetRails();
     }
 
-    private void resetRails()
-    {
-        for (Rail rail : railsRoute)
-        {
+    /**
+     * Libère les rails associés à cette route.
+     */
+    private void resetRails() {
+        for (Rail rail : railsRoute) {
             rail.setOccuperPar(null);
         }
     }
 
-
-    /* getteurs et setteurs */
+    /* Getters et Setters */
 
     public Ville getVille1() {
         return ville1;
@@ -158,6 +169,7 @@ public class Route {
     public Rail.Content getCouleur() {
         return couleur;
     }
+
     public Player getProprietaire() {
         return proprietaire;
     }
@@ -170,28 +182,25 @@ public class Route {
         return nombrePoint;
     }
 
-    /**
-     * Getter for cousin
-     * @return cousin
-     */
-    public Route getCousin() { return cousin; }
+    public Route getCousin() {
+        return cousin;
+    }
 
-    /**
-     * Setter for cousin
-     * @param cousin cousin to set
-     */
-    public void setCousin(Route cousin) { this.cousin = cousin; }
+    public void setCousin(Route cousin) {
+        this.cousin = cousin;
+    }
 
     public ArrayList<Rail> getRailsRoute() {
         return railsRoute;
     }
-    
+
+    /**
+     * Retire le propriétaire de la route et libère les rails associés.
+     */
     public void enleverProprio() {
-    	this.proprietaire = null;
-
-    	for(int i = 0; i < this.railsRoute.size(); i++) {
-    		this.railsRoute.get(i).setOccuperPar2(null);
-    	}    	
+        this.proprietaire = null;
+        for (Rail rail : this.railsRoute) {
+            rail.setOccuperPar2(null);
+        }
     }
-
 }

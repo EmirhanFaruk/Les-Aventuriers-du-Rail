@@ -1,7 +1,6 @@
 package com.main;
 
 import com.controller.Main;
-import com.view.GameFrame;
 
 public class App
 {

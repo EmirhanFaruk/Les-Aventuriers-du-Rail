@@ -7,6 +7,9 @@ import com.model.config.Ville;
 
 import java.util.ArrayList;
 
+/**
+ * Classe GarePosFinder pour trouver les positions optimales pour poser des gares.
+ */
 public class GarePosFinder
 {
 

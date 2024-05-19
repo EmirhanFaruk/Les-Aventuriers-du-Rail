@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * La classe TrainGraphics gère l'affichage graphique des trains sur les rails.
+ */
 public class TrainGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);

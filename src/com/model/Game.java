@@ -3,127 +3,120 @@ package com.model;
 import com.model.ai.LongestFinder;
 import com.model.config.Plateau;
 import com.model.config.Route;
+import com.model.config.Ville;
 import com.model.config.carte.CarteManager;
 import com.view.GameFrame;
-import com.model.config.Ville;
 import com.view.GameMapPanel;
 import com.view.MapScreen;
 
-import java.util.ArrayList;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class Game
-{
+/**
+ * Classe représentant le jeu.
+ */
+public class Game {
     private Plateau plateau;
     private ArrayList<Player> listPlayer;
     private ArrayList<Ville> villes;
     private ArrayList<Route> routes;
     private CarteManager cm;
     private Round round;
-    private final GameFrame gameFrame ;
-
+    private GameFrame gameFrame;
     private boolean gaveBonusPoints = false;
 
     /**
-     * Constructeur de game
-     * @param gameFrame gameFrame pour utiliser a plusieurs places
+     * Constructeur de la classe Game.
+     *
+     * @param gameFrame La fenêtre du jeu.
      */
     public Game(GameFrame gameFrame) {
-        this.gameFrame = gameFrame ;
+        this.gameFrame = gameFrame;
     }
 
     /**
-     * Initialiser game.
-     * @param nomMap nom de map pour produire la map
-     * @param player_names nom des joueurs
-     * @param player_types type des joueurs
-     * @param player_colors couleur des joueurs
+<<<<<<< HEAD
+     * Initialise et configure une nouvelle partie.
+     *
+     * @param nomMap         Le nom de la carte.
+     * @param player_names   Les noms des joueurs.
+     * @param player_types   Les types des joueurs.
+     * @param player_colors  Les couleurs des joueurs.
      */
-    public void makeGame( String nomMap , String[] player_names , String[] player_types , Color[] player_colors )
-    {
+    public void makeGame(String nomMap, String[] player_names, String[] player_types, Color[] player_colors) {
         this.cm = new CarteManager(gameFrame.getMode());
         this.plateau = Plateau.makePlateau(nomMap, this);
-        this.listPlayer = initPlayers(player_names,player_types,player_colors);
+        this.listPlayer = initPlayers(player_names, player_types, player_colors);
         initBoard();
         this.round = new Round();
     }
 
     /**
-     * Initialiser la pile de carte destination et faire piocher des cartes wagons aux joueurs.
+     * Initialise le plateau de jeu et distribue les cartes aux joueurs.
      */
-    private void initBoard(){
+    private void initBoard() {
         //Fonction qui initialise le jeu
         cm.initPileCarteDestination(this);
 
-        // Donner des cartes aux joueurs au debut de la partie (chacun en reçoit 4)
-        for (int i = 0; i < listPlayer.size(); i++)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                listPlayer.get(i).piocher(cm);
+        // Donner des cartes aux joueurs au début de la partie (chacun en reçoit 4)
+        for (Player player : listPlayer) {
+            for (int j = 0; j < 10; j++) {
+                player.piocher(cm);
             }
         }
-
     }
 
     /**
-     * Initialiser les joueurs
-     * @param player_names nom des joueurs
-     * @param player_types type des joueurs
-     * @param player_colors couleurs des joueurs
-     * @return arraylist des joueurs produits par les parametres
+     * Initialise les joueurs.
+     *
+     * @param player_names  Les noms des joueurs.
+     * @param player_types  Les types des joueurs.
+     * @param player_colors Les couleurs des joueurs.
+     * @return              La liste des joueurs initialisée.
      */
-    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types ,Color[] player_colors){
+    private ArrayList<Player> initPlayers(String[] player_names, String[] player_types, Color[] player_colors) {
         ArrayList<Player> playerlist = new ArrayList<>();
 
-        for(int i = 0; i< player_types.length;i++){
-
-            switch (player_types[i]){
-
-                case "PLAYER" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],0,this));
+        for (int i = 0; i < player_types.length; i++) {
+            switch (player_types[i]) {
+                case "PLAYER":
+                    playerlist.add(new Player(colorToString(player_colors[i]), player_names[i], 0, this));
                     break;
-
-                case "WEAK" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],1,this));
+                case "WEAK":
+                    playerlist.add(new Player(colorToString(player_colors[i]), player_names[i], 1, this));
                     break;
-
-                case "NORMAL" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],2,this));
+                case "NORMAL":
+                    playerlist.add(new Player(colorToString(player_colors[i]), player_names[i], 2, this));
                     break;
-
-                case "STRONG" :
-                    playerlist.add(new Player(colorToString(player_colors[i]),player_names[i],3,this));
+                case "STRONG":
+                    playerlist.add(new Player(colorToString(player_colors[i]), player_names[i], 3, this));
                     break;
-
-                default: break;
-
+                default:
+                    break;
             }
-
-
-
         }
 
         return playerlist;
     }
 
     /**
-     * Convertir le couleur à string.
-     * @param c couleur donné
-     * @return l'équivalence de couleur en string
+     * Convertit une couleur en chaîne de caractères.
+     *
+     * @param c La couleur.
+     * @return  La chaîne de caractères représentant la couleur.
      */
-    private String colorToString(Color c){
-        if(c.equals(Color.red)) return "ROUGE";
-        if(c.equals(Color.blue)) return "BLEU";
-        if(c.equals(Color.green)) return "VERT";
-        if(c.equals(Color.yellow)) return "JAUNE";
+    private String colorToString(Color c) {
+        if (c.equals(Color.red)) return "ROUGE";
+        if (c.equals(Color.blue)) return "BLEU";
+        if (c.equals(Color.green)) return "VERT";
+        if (c.equals(Color.yellow)) return "JAUNE";
         return "Error";
     }
 
-
     /**
      * Vérifie s'il y a un joueur qui a moins de 3 wagons.
-     * @return true si nbrWagon est inférieur à 3.
+     *
+     * @return true si le nombre de wagons est inférieur ou égal à 2.
      */
     public boolean endGame(){
         for (Player p : listPlayer){
@@ -165,11 +158,12 @@ public class Game
     }
 
     /**
-     * Une fonction qui met a jour le jeu
-     * @param deltaTime le temps
+     * Met à jour le jeu.
+     *
+     * @param deltaTime Le temps écoulé depuis la dernière mise à jour.
      */
-    public void updateGame( double deltaTime ) {
-        //game loop
+    public void updateGame(double deltaTime) {
+        // game loop
         if (!round.roundFinished()) {
             round.round(this, deltaTime);
         }
@@ -180,6 +174,7 @@ public class Game
         }
     }
 
+    /* Getters et Setters */
 
     /**
      * Jouer le son dans le screen données dans les parametres en checkant le click de son.
@@ -221,87 +216,95 @@ public class Game
     /* getteurs et setteurs */
 
     /**
-     * Renvoyer plateau.
-     * @return plateau
+     * Retourne le plateau de jeu.
+     *
+     * @return Le plateau de jeu.
      */
     public Plateau getPlateau() {
         return plateau;
     }
 
     /**
-     * Renvoyer villes.
-     * @return villes
+     * Retourne la liste des villes.
+     *
+     * @return La liste des villes.
      */
     public ArrayList<Ville> getVilles() {
         return villes;
     }
 
     /**
-     * Set villes a celle de parametres.
-     * @param villes villes données
+     * Définit la liste des villes.
+     *
+     * @param villes La nouvelle liste des villes.
      */
-    public void setVilles(ArrayList<Ville> villes) { this.villes = villes; }
+    public void setVilles(ArrayList<Ville> villes) {
+        this.villes = villes;
+    }
 
     /**
-     * Renvoyer routes.
-     * @return routes
+     * Retourne la liste des routes.
+     *
+     * @return La liste des routes.
      */
     public ArrayList<Route> getRoutes() {
         return routes;
     }
 
     /**
-     * Set routes a celle de parametres.
-     * @param routes routes données
+     * Définit la liste des routes.
+     *
+     * @param routes La nouvelle liste des routes.
      */
-    public void setRoutes(ArrayList<Route> routes) { this.routes = routes; }
+    public void setRoutes(ArrayList<Route> routes) {
+        this.routes = routes;
+    }
 
     /**
-     * Renvoyer listPlayer.
-     * @return listPlayer
+     * Retourne la liste des joueurs.
+     *
+     * @return La liste des joueurs.
      */
     public ArrayList<Player> getListPlayer() {
         return listPlayer;
     }
 
     /**
-     * Renvoyer gameFrame.
-     * @return gameFrame
+     * Retourne la fenêtre du jeu.
+     *
+     * @return La fenêtre du jeu.
      */
     public GameFrame getGameFrame() {
         return gameFrame;
     }
 
     /**
-     * Renvoyer MapScreen depuis gameFrame.
-     * @return MapScreen
+     * Retourne l'écran de la carte du jeu.
+     *
+     * @return L'écran de la carte du jeu.
      */
-    public MapScreen getMapScreen()
-    {
-        if (gameFrame != null)
-        {
+    public MapScreen getMapScreen() {
+        if (gameFrame != null) {
             return gameFrame.getMapScreen();
         }
-
         return null;
     }
 
     /**
-     * Renvoyer gameMapPanel depuis gameFrame.
-     * @return gameMapPanel
+     * Retourne le panneau de la carte du jeu.
+     *
+     * @return Le panneau de la carte du jeu.
      */
-    public GameMapPanel getGameMapPanel()
-    {
-        if (gameFrame != null)
-        {
+    public GameMapPanel getGameMapPanel() {
+        if (gameFrame != null) {
             return gameFrame.getGameMapPanel();
         }
-
         return null;
     }
 
     /**
-     * Renvoyer si mode est egal a "NUKE".
+     * Renvoie si mode est egal a "NUKE".
+     *
      * @return resultat
      */
     public boolean isModeNuke()
@@ -310,26 +313,29 @@ public class Game
     }
 
     /**
-     * Getter pour carte manager.
-     * @return carte manager
+     * Retourne le gestionnaire de cartes.
+     *
+     * @return Le gestionnaire de cartes.
      */
     public CarteManager getCarteManager() {
-    	return this.cm;
+        return this.cm;
     }
 
     /**
-     * Getter pour round.
-     * @return round
+     * Retourne le round en cours.
+     *
+     * @return Le round en cours.
      */
     public Round getRound() {
         return this.round;
     }
 
     /**
-     * Renvoyer joueur courant.
-     * @return joueur courant
+     * Retourne le joueur courant.
+     *
+     * @return Le joueur courant.
      */
-    public Player getJoueurCourant(){
+    public Player getJoueurCourant() {
         return listPlayer.get(round.getWhoIsPlaying());
     }
 }

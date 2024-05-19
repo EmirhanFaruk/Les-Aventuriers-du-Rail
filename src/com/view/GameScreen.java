@@ -6,6 +6,9 @@ import com.model.Game;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * La classe GameScreen représente l'écran principal du jeu, incluant le gestionnaire d'écran du jeu.
+ */
 public class GameScreen extends JPanel {
 
     private GameFrame frame;

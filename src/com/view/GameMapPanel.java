@@ -11,6 +11,9 @@ import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
+/**
+ * La classe GameMapPanel représente le panneau principal du jeu, incluant la carte, la pioche, les cartes de destination et les informations du joueur.
+ */
 public class GameMapPanel extends JPanel {
     private final int height, width;
     GameFrame frame ;

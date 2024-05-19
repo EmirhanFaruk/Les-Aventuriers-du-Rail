@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * La classe ScoreBoardScreen représente le tableau des scores à la fin du jeu, affichant les détails de chaque joueur.
+ */
 public class ScoreBoardScreen extends JPanel{
     private ArrayList<Player> players ;
 

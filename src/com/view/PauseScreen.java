@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * La classe PauseScreen représente l'écran de pause du jeu, permettant de continuer, retourner au menu principal ou quitter le jeu.
+ */
 public class PauseScreen extends JPanel {
     private GameScreen gameScreen ;
     private JPanel titlePanel ;

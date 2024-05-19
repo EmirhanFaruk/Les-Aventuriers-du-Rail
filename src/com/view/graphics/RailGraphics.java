@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * La classe RailGraphics gère l'affichage graphique des rails sur la carte du jeu.
+ */
 public class RailGraphics {
     private static final String path = System.getProperty("user.dir");
     private static final String s = findSlash(path);
