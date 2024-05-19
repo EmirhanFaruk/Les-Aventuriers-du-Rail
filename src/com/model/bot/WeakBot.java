@@ -150,6 +150,11 @@ public class WeakBot implements BotAction {
         return carteManager.takeDestination(indicesCartes);
     }
 
+    @Override
+    public boolean useNuke(Game game) {
+        return false;
+    }
+
     /**
      * Méthode principale du WeakBot pour jouer un tour.
      *

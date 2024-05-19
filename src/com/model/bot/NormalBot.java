@@ -196,6 +196,11 @@ public class NormalBot implements BotAction {
         return game.getCarteManager().takeDestination(indices);
     }
 
+    @Override
+    public boolean useNuke(Game game) {
+        return false;
+    }
+
 
     /**
      * Procède au premier tour du bot en ajoutant des missions et en choisissant les actions de manière optimale.

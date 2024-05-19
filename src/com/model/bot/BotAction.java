@@ -44,6 +44,14 @@ public interface BotAction {
      */
     CarteDestination[] takeMissionsCard(int max, Game game);
 
+
+    /**
+     * La qui permet aux bots d'utiliser les cartes nuke
+     *
+     * @param game Le jeu actuel dans lequel le bot évolue.
+     */
+    boolean useNuke(Game game);
+
     /**
      * La fonction principale du bot pour jouer son tour.
      *

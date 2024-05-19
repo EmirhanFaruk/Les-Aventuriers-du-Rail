@@ -202,6 +202,11 @@ public class StrongBot implements BotAction {
         return game.getCarteManager().takeDestination(renvoie);
     }
 
+    @Override
+    public boolean useNuke(Game game) {
+        return false;
+    }
+
     /**
      * Vérifie si toutes les missions du bot sont complétées.
      *
