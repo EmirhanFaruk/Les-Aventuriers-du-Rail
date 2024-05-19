@@ -94,8 +94,11 @@ public class Ville extends Case {
         return routes;
     }
 
-	@Override
-	public boolean estUneCaseGare() {
-		return true;
-	}
+
+    @Override
+    public boolean estUneCaseGare() {
+
+        return isOccuped != null;
+
+    }
 }

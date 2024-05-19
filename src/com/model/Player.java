@@ -252,6 +252,30 @@ public class Player {
 		
 		return false;
 	}
+
+	public boolean retirerRouteAutreJoueurBot(Route r, Player p) {
+
+		//Si le joueur n'est pas null
+		if(this != null) {
+			for(int i = 0; i < this.getPlayerRoutes().size(); i++) {
+				//Si la Route correspond dans l'inventaire du joueur
+				if(r == this.getPlayerRoutes().get(i)) {
+
+					//Debug : System.out.print("SA PASSE");
+
+					p.retirerCarteNuke(); //Retire la carte nuke de son inventaire
+					r.enleverProprio(); //Enlève le proprio de la route et des rails
+					this.getPlayerRoutes().remove(i); //Enlève la route de l'inventaire du joueur
+
+					//Debug : System.out.println(r.getSaRoute().getProprietaire());
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 	
 	//Méthode pour retirer la gare d'un autre joueur
 	public void retirerGareAutrePlayer(Ville ville, Player player) {
@@ -272,7 +296,7 @@ public class Player {
 	}
 	
 	//Méthode pour retirer la carte nuke de l'inventaire d'un joueur
-	private void retirerCarteNuke() {
+	public void retirerCarteNuke() {
 		for(int i = 0; i < this.trainList.size(); i++) {
 			if(this.trainList.get(i) == Couleur.NUKE) {
 				this.trainList.remove(i);
