@@ -20,7 +20,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {   
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, home_mode);
         }
     }
@@ -33,7 +33,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, play_mode);
         }
     }
@@ -46,7 +46,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, settings_mode);
         }
     }
@@ -60,7 +60,7 @@ public class Menu extends JPanel
         public void actionPerformed(ActionEvent e)
         {
             cardLayout.show(main_panel, rules_mode);
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"RulesSelection.wav");
+            frame.playSoundClick("MENU" ,"RulesSelection.wav");
         }
     }
 
@@ -165,7 +165,7 @@ public class Menu extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav" );
+                frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav" );
                 frame.quitGame();
             }
         });
