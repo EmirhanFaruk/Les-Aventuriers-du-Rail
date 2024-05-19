@@ -128,13 +128,13 @@ public class StrongBot implements BotAction {
                     for (Rail rail : listeRail) {
                         rail.setOccuperPar(bot);
                     }
-                    System.err.println("takeRail True");
+                    //DEBUG :System.err.println("takeRail True");
                     return true;
                 }
             }
         }
 
-        System.out.println("takeRail False");
+        //DEBUG :System.out.println("takeRail False");
         return false;
     }
 
@@ -159,7 +159,7 @@ public class StrongBot implements BotAction {
 
                 if (toTransformInGare != null && !cd.getComplete()) {
                     joueur.transformerEnGare(toTransformInGare, joueur.getTrainList().get(0));
-                    System.err.println("takeGare true");
+                    //DEBUG : System.err.println("takeGare true");
                     return true;
                 }
             }

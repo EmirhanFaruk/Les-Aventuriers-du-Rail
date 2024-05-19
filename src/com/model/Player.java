@@ -80,12 +80,19 @@ public class Player {
 		if(cm.getDestinationsCards()[i] != null) {
 			//donne la carte destination et mets à null pour remplacer
 			this.destinationsList.add(cm.getDestinationsCards()[i]);
+
 			cm.getDestinationsCards()[i] = null;
+
 			if( !this.destinationsList.isEmpty() )this.canPlay = true;
+
+
 			if(game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound( "INGAME" ,"carte-dest.wav" );
+
+
 			return true;
 		}else {
 			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
 		

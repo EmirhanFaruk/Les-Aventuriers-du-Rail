@@ -14,13 +14,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class MapScreen extends JPanel {
     ArrayList<MapGraphics> map = new ArrayList<>();
     final String mapName;
-    final int width, height;
-    final int tileWidth, tileHeight;
+    int width, height;
+    int tileWidth, tileHeight;
+    private BufferedImage backgroundImage;
     private Player player;
     GameController gameController;
     private Game game ;
@@ -60,6 +62,11 @@ public class MapScreen extends JPanel {
         this.baseWidth = width;
         this.baseHeight = height;
         this.zoomSpeedMax = zoomMax() ;
+        backgroundImage = MapGraphics.backgroundImage(mapName);
+
+        setPreferredSize(new Dimension(width, height));
+        setLayout(null);
+
         mouseListener();
         mouseMotionListener();
         mouseWheelListener() ;
@@ -167,6 +174,22 @@ public class MapScreen extends JPanel {
         });
     }
 
+    public void resize(int newWidth, int newHeight, int newTileWidth, int newTileHeight) {
+        this.width = newWidth;
+        this.height = newHeight;
+        this.tileWidth = newTileWidth;
+        this.tileHeight = newTileHeight;
+
+        setPreferredSize(new Dimension(newWidth, newHeight));
+
+        for (MapGraphics mg : map) {
+            mg.setTileSize(newTileWidth, newTileHeight);
+        }
+
+        revalidate();
+        repaint();
+    }
+
     /**
      * Une fonction zoom
      */
@@ -240,18 +263,22 @@ public class MapScreen extends JPanel {
         tx.translate(-mouseX, -mouseY);
         g2.transform(tx);
 
-        g.drawImage( MapGraphics.backgroundImage( mapName ), 0 ,0 , width , height , null ) ;
+
+        // Calculate the scaling factors
+        double scaleX = (double) getWidth() / backgroundImage.getWidth();
+        double scaleY = (double) getHeight() / backgroundImage.getHeight();
+
+        // Apply the scaling transformation
+        AffineTransform at = AffineTransform.getScaleInstance(scaleX, scaleY);
+        g2.drawRenderedImage(backgroundImage, at);
+
         // Everything to draw goes here using g2
         for (MapGraphics m : map)
         {
             m.draw( g2 );
-        }
-
-        // Draw ville names
-        for (MapGraphics m : map)
-        {
             drawVilleNames(g2, m);
         }
+
         g2.dispose();
     }
 
@@ -264,6 +291,10 @@ public class MapScreen extends JPanel {
     }
 
     /* getters et setters */
+    public String getMapName() {
+        return mapName;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
