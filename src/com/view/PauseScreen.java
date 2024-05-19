@@ -63,8 +63,8 @@ public class PauseScreen extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("PAUSE" ,"click.wav" );
-                gameScreen.getFrame().quitMainMenu();
                 if ( gameScreen.getFrame().getSound().getMusic() ) gameScreen.getFrame().getSound().changeMusic("MENU" , "tchu-tchu-song.wav");
+                gameScreen.getFrame().quitMainMenu();
             }
         });
 
