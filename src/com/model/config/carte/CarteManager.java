@@ -17,13 +17,13 @@ import static com.model.config.carte.CarteWagon.Couleur.*;
 public class CarteManager {
 
     // Le tableau des cartes Wagon du jeu
-    private CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[3];
+    private final CarteWagon.Couleur[] trainCards = new CarteWagon.Couleur[3];
 
     // Le tableau des cartes Destination du jeu
-    private CarteDestination[] destinationsCards = new CarteDestination[3];
+    private final CarteDestination[] destinationsCards = new CarteDestination[3];
 
     // La pile de cartes Destination
-    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>(46);
+    public ArrayList<CarteDestination> PileCarteDestination = new ArrayList<>();
 
     // Vérification du mode de Jeu
     private boolean nuke;
@@ -51,56 +51,25 @@ public class CarteManager {
      * @param game L'objet jeu (Game) à partir duquel les routes et villes sont obtenues.
      */
     public void initPileCarteDestination(Game game) {
-        ArrayList<Route> gameRoutes = game.getRoutes();
-        for (Route route : gameRoutes) {
-            // Les cartes destinations à courte distance (une route).
-            PileCarteDestination.add(new CarteDestination(route));
-        }
-        // Crée 21 cartes de destinations supplémentaires.
-        for (int i = 0; i < 21; i++) {
-            Random random = new Random();
-            int villesSize = game.getVilles().size();
-            Ville v1 = game.getVilles().get(random.nextInt(villesSize));
-            Ville v2 = game.getVilles().get(random.nextInt(villesSize));
 
-            while (v2.getNom().equals(v1.getNom())) {
-                v2 = game.getVilles().get(random.nextInt(villesSize));
+        for (int i = 0; i < game.getVilles().size(); i++)
+        {
+            for (int j = i + 1; j < game.getVilles().size(); j++)
+            {
+                Ville v1 = game.getVilles().get(i);
+                Ville v2 = game.getVilles().get(j);
+                int points = nombrePointDistance(v1, v2);
+                CarteDestination toAdd = new CarteDestination(v1, v2, points);
+                PileCarteDestination.add(toAdd);
             }
-
-            while (carteDestExistante(v1, v2)) {
-                v1 = game.getVilles().get(random.nextInt(villesSize));
-                v2 = game.getVilles().get(random.nextInt(villesSize));
-                while (v2.getNom().equals(v1.getNom())) {
-                    v2 = game.getVilles().get(random.nextInt(villesSize));
-                }
-            }
-            PileCarteDestination.add(new CarteDestination(v1, v2, nombrePointDistance(v1, v2)));
         }
 
         Collections.shuffle(PileCarteDestination);
         for (int i = 0; i < destinationsCards.length; i++) {
-            destinationsCards[i] = PileCarteDestination.remove(0);
+            destinationsCards[i] = getDestination();
         }
     }
 
-    /**
-     * Vérifie si une carte de destination existe déjà pour les villes spécifiées.
-     *
-     * @param v1 La première ville.
-     * @param v2 La deuxième ville.
-     * @return true si une carte de destination existe déjà, sinon false.
-     */
-    private boolean carteDestExistante(Ville v1, Ville v2) {
-        String nomV1 = v1.getNom();
-        String nomV2 = v2.getNom();
-        for (CarteDestination carte : PileCarteDestination) {
-            if ((carte.getPremiereVille().getNom().equals(nomV1) && carte.getDeuxiemeVille().getNom().equals(nomV2)) ||
-                    (carte.getPremiereVille().getNom().equals(nomV2) && carte.getDeuxiemeVille().getNom().equals(nomV1))) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * Vérifie si une action est possible pour prendre une carte de wagon.
@@ -177,11 +146,22 @@ public class CarteManager {
         // Fonction qui permet de prendre des cartes de destination à des positions données.
         CarteDestination[] renvoie = new CarteDestination[position.length];
         for (int i = 0; i < position.length; i++) {
-            renvoie[i] = destinationsCards[position[i]];
-            destinationsCards[position[i]] = null;
+            renvoie[i] = piocheCD(position[i]);
         }
         rerollDestination();
         return renvoie;
+    }
+
+    /**
+     * Renvoyer une carte destination et remplir sa place avec une autre cd depuis la pioche.
+     * @param index index de carte
+     * @return carte donné par index
+     */
+    private CarteDestination piocheCD(int index)
+    {
+        CarteDestination res = destinationsCards[index];
+        destinationsCards[index] = getDestination();
+        return res;
     }
 
     /**
@@ -204,23 +184,23 @@ public class CarteManager {
     public CarteWagon.Couleur drawCard() {
         Random random = new Random();
         int pioche = random.nextInt(120);
-        if (pioche >= 0 && pioche <= 11) {
+        if (pioche <= 11) {
             return BLEU;
-        } else if (pioche >= 12 && pioche <= 23) {
+        } else if (pioche <= 23) {
             return VIOLET;
-        } else if (pioche >= 24 && pioche <= 35) {
+        } else if (pioche <= 35) {
             return MARRON;
-        } else if (pioche >= 36 && pioche <= 47) {
+        } else if (pioche <= 47) {
             return NOIRE;
-        } else if (pioche >= 48 && pioche <= 59) {
+        } else if (pioche <= 59) {
             return VERT;
-        } else if (pioche >= 60 && pioche <= 71) {
+        } else if (pioche <= 71) {
             return JAUNE;
-        } else if (pioche >= 72 && pioche <= 83) {
+        } else if (pioche <= 83) {
             return BLANC;
-        } else if (pioche >= 84 && pioche <= 95) {
+        } else if (pioche <= 95) {
             return ROUGE;
-        } else if ((pioche >= 96 && pioche <= 107) && nuke) {
+        } else if ((pioche <= 107) && nuke) {
             return NUKE;
         } else {
             return LOC;

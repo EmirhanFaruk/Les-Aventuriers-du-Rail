@@ -84,8 +84,7 @@ public class Settings extends JPanel
         res.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound( "MENU" , "click.wav");
+                main.getFrame().playSoundClick( "MENU" , "click.wav");
             }
         });
         return res;
@@ -101,8 +100,7 @@ public class Settings extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound( "MENU" ,"ChangeSizeOfTheScreen.wav");
+                main.getFrame().playSoundClick( "MENU" ,"ChangeSizeOfTheScreen.wav");
                 int index = res_box.getSelectedIndex();
                 int[] res = resolutions[index];
                 main.setAllSize(res[0], res[1]);
@@ -128,7 +126,7 @@ public class Settings extends JPanel
         fs_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound( "MENU" ,"click.wav");
+                main.getFrame().playSoundClick( "MENU" ,"click.wav");
             }
         });
         fullscreen_panel.add(fs_cb);
@@ -150,15 +148,14 @@ public class Settings extends JPanel
         music_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                main.getFrame().playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             }
         });
         click_cb = makeClickSoundCheckBox();
         click_cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(main.getFrame().getSound().getclick())
-                    main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                main.getFrame().playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             }
         });
 
@@ -189,7 +186,7 @@ public class Settings extends JPanel
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+                        main.getFrame().playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
                         if(fs_cb.isSelected())
                         {
                             main.getDevice().setFullScreenWindow(main.getFrame());
@@ -231,7 +228,7 @@ public class Settings extends JPanel
                     {
                         if(music_cb.isSelected()){
                             main.getFrame().getSound().setMusic(true);
-                            main.getFrame().getSound().changeMusic("MENU" ,"tchu-tchu-song.wav");
+                            main.getFrame().changeMusic("MENU" ,"tchu-tchu-song.wav");
                         }else{
                             main.getFrame().getSound().setMusic(false);
                             main.getFrame().getSound().stopMusic();
@@ -242,7 +239,7 @@ public class Settings extends JPanel
                             main.getFrame().getSound().setClick(false);
                         }
 
-                        if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
+                        main.getFrame().playSoundClick("MENU" ,"click.wav");
 
                         main.getFrame().getSound().setVolume((float)volume_slider.getValue()/100.0f);
                     }
@@ -318,7 +315,7 @@ public class Settings extends JPanel
                     Rectangle thumbBounds = getThumbBounds();
                     valueLabel.setLocation(thumbBounds.x + thumbBounds.width / 2 - valueLabel.getWidth() / 2,
                                            thumbBounds.y - valueLabel.getHeight());
-                    if(main.getFrame().getSound().getclick()) main.getFrame().getSound().playSound("MENU" ,"click.wav");
+                    main.getFrame().playSoundClick("MENU" ,"click.wav");
                 }
             });
         }

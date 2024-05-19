@@ -36,7 +36,8 @@ public class Main implements Runnable
     public void restart (){
         gameFrame.startGame( this.map , this.mode , this.player_names , this.player_types , this.player_colors );
         gameFrame.setCurrentCard(gameFrame.getIngame_screen_s());
-        if ( gameFrame.getSound().getMusic()) gameFrame.getSound().changeMusic("INGAME" ,"inGame.wav" );
+
+        gameFrame.changeMusicIsMusic("INGAME" ,"inGame.wav" );
         // DEBUG : System.err.println("Une nouvelle game");
     }
 
@@ -48,7 +49,7 @@ public class Main implements Runnable
         this.player_names = player_names ;
         this.player_types = player_types ;
         this.player_colors = player_colors ;
-        game.makeGame(map,player_names,player_types,player_colors,gameFrame.getSound().getMusic());
+        game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
 
@@ -59,14 +60,14 @@ public class Main implements Runnable
         if (running) {
             running = false;
             gameFrame.setCurrentCard(gameFrame.getPause_screen_s());
-            if ( game.getGameFrame().getSound().getMusic() ) game.getGameFrame().getSound().changeMusic("PAUSE" , "pause.wav");
+            game.getGameFrame().changeMusicIsMusic("PAUSE" , "pause.wav");
             gameFrame.getGameScreen().getGameManagerScreen().showPause();
         } else {
             running = true;
             gameFrame.setCurrentCard(gameFrame.getIngame_screen_s());
-            if ( game.getGameFrame().getSound().getMusic() ) {
-                game.getGameFrame().getSound().changeMusic("INGAME" , "inGame.wav");
-            }
+
+            game.changeMusicIsMusic("INGAME" , "inGame.wav");
+
             gameFrame.getGameScreen().getGameManagerScreen().removePause();
         }
     }

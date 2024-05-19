@@ -50,7 +50,6 @@ public class Round {
     }
 
     public void endRound(Game game) {
-
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         
