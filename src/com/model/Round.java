@@ -50,7 +50,7 @@ public class Round {
     }
 
     public void endRound(Game game) {
-
+        System.out.println("\n\n\n\n=================================\n\n\n\nFin de tour de " + game.getJoueurCourant().getName() + "\n\n\n\n");
         //Fonction qui finit le tour du bot
         setEndTurn(true);
         
