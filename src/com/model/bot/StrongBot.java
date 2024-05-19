@@ -268,7 +268,7 @@ public class StrongBot implements BotAction {
                 game.getRound().endRound(game);
             } else {
 
-                if(game.getGameFrame().getMain().getMode() != "NORMAL" && useNuke(game) && useNuke(game) ){
+                if(game.getGameFrame().getMain().getMode() != "NORMAL" && useNuke(game) ){
 
                     game.getRound().endRound(game);
 
