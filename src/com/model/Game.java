@@ -35,7 +35,10 @@ public class Game
         this.listPlayer = initPlayers(player_names,player_types,player_colors);
         initBoard();
         this.round = new Round();
-        if(music) gameFrame.getSound().playMusic("INGAME" , "inGame.wav");
+        if(music)
+        {
+            playSound("INGAME" , "inGame.wav");
+        }
     }
 
     private void initBoard(){
@@ -150,6 +153,11 @@ public class Game
             // DEBUG : System.err.println("la partie est terminée");
             this.gameFrame.getGameScreen().getGameManagerScreen().showEndGame();
         }
+    }
+
+    public void playSound(String screen, String sound_name)
+    {
+        gameFrame.playSound(screen, sound_name);
     }
 
 

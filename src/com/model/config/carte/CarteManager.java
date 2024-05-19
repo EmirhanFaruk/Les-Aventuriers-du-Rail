@@ -177,11 +177,22 @@ public class CarteManager {
         // Fonction qui permet de prendre des cartes de destination à des positions données.
         CarteDestination[] renvoie = new CarteDestination[position.length];
         for (int i = 0; i < position.length; i++) {
-            renvoie[i] = destinationsCards[position[i]];
-            destinationsCards[position[i]] = null;
+            renvoie[i] = piocheCD(position[i]);
         }
         rerollDestination();
         return renvoie;
+    }
+
+    /**
+     * Renvoyer une carte destination et remplir sa place avec une autre cd depuis la pioche.
+     * @param index index de carte
+     * @return carte donné par index
+     */
+    private CarteDestination piocheCD(int index)
+    {
+        CarteDestination res = destinationsCards[index];
+        destinationsCards[index] = getDestination();
+        return res;
     }
 
     /**

@@ -132,6 +132,15 @@ public class GameFrame extends JFrame
     }
 
 
+    public void playSound(String screen, String sound_name)
+    {
+        if(sound.getclick())
+        {
+            sound.playSound( screen ,sound_name );
+        }
+    }
+
+
     /* getters et setters */
     public GraphicsDevice getDevice()
     {
