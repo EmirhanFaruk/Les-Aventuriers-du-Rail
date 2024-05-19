@@ -273,7 +273,6 @@ public class WeakBot implements BotAction {
             if(route.getProprietaire() != null && route.getProprietaire() != game.getJoueurCourant()){
 
                 game.getJoueurCourant().retirerRouteAutreJoueurBot(route,route.getProprietaire());
-                game.getJoueurCourant().retirerCarteNuke();
                 return true;
 
             }

@@ -92,6 +92,8 @@ public class CardGraphics {
                 
             case NUKE: 
             	return CardNuke;
+            case  BACK:
+                return CardInvisible ;
         }
         
         return null ;

@@ -75,23 +75,43 @@ public class Player {
 		return 0 ;
 	}
 	
+	/**
+	 * Pioche une carte de destination pour le joueur.
+	 *
+	 * @param cm  Le gestionnaire de cartes (CarteManager).
+	 * @param i   L'index de la carte de destination à piocher.
+	 * @return    true si la pioche a réussi, sinon false.
+	 */
 	public boolean piocheCarteDestination(CarteManager cm, int i) {
 		//vérifie s'il ne possède pas déjà la carte destination
 		if(cm.getDestinationsCards()[i] != null) {
 			//donne la carte destination et mets à null pour remplacer
 			this.destinationsList.add(cm.getDestinationsCards()[i]);
+
 			cm.getDestinationsCards()[i] = null;
-			if( !this.destinationsList.isEmpty() )this.canPlay = true;
-			if(game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound( "INGAME" ,"carte-dest.wav" );
+
+			if( !this.destinationsList.isEmpty() )
+			{
+				this.canPlay = true;
+			}
+
+
+			game.playSoundClick("INGAME", "carte-dest.wav");
+
+
 			return true;
 		}else {
-			if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+			game.playSoundClick("INGAME", "popUp.wav");
+
 			JOptionPane.showMessageDialog(new JFrame(),"Vous avez déjà pioché cette carte !","Instructions",JOptionPane.WARNING_MESSAGE);
 		}
-		
+
 		return false;
 	}
 
+	/**
+	 * Pioche une carte invisible pour le joueur.
+	 */
 	public void piocheCarteInvisible() {
 		CarteManager cm = game.getCarteManager();
 
@@ -105,25 +125,30 @@ public class Player {
 			insertCarte(cm.drawCard());
 			game.getRound().endRound(game);
 		}
-		if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
+		game.playSoundClick("INGAME" ,"carte-wagon.wav");
 	}
 
+	/**
+	 * Pioche une carte visible de type CarteWagon pour le joueur.
+	 *
+	 * @param carte  La couleur de la carte visible à piocher.
+	 * @return       true si la pioche a réussi, sinon false.
+	 */
 	public boolean piocheCarteVisible(CarteWagon.Couleur carte) {
-
 		//On regarde si le joueur a 2 actions ou non
 		if(game.getRound().getAction() > 1){
 
 			//Si oui alors on regarde si c'est une carte locomotive ou non
 			if(carte == Couleur.LOC){
 				//Si c'est une locomotive on fini le tour du joueur
-				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
+				game.playSoundClick("INGAME" ,"carte-wagon.wav");
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 			else{
 				//Sinon on enleve une action au joueur
-				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav");
+				game.playSoundClick("INGAME" ,"carte-wagon.wav");
 				insertCarte(carte);
 				game.getRound().setAction(game.getRound().getAction() - 1);
 				return true;
@@ -138,14 +163,13 @@ public class Player {
 			}
 			else{
 				//Sinon on pioche la carte et on passe au joueur suivant
-				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"carte-wagon.wav" );
+				game.playSoundClick("INGAME" ,"carte-wagon.wav");
 				insertCarte(carte);
 				game.getRound().endRound(game);
 				return true;
 			}
 		}
 	}
-
 
 
 	private void insertCarte(Couleur carte)
@@ -228,82 +252,96 @@ public class Player {
 
 	}
 	
-	//Méthode pour retirer la route d'un autre joueur
-	public boolean retirerRouteAutreJoueur(Rail r, Player p) {
-		
-		//Si le joueur n'est pas null
-		if(this != null) {			
-			for(int i = 0; i < this.getPlayerRoutes().size(); i++) {	
-				//Si la Route correspond dans l'inventaire du joueur
-				if(r.getSaRoute() == this.getPlayerRoutes().get(i)) {
-					
-					//Debug : System.out.print("SA PASSE");
-					
-					p.retirerCarteNuke(); //Retire la carte nuke de son inventaire
-					r.getSaRoute().enleverProprio(); //Enlève le proprio de la route et des rails
-					this.getPlayerRoutes().remove(i); //Enlève la route de l'inventaire du joueur
-					
-					//Debug : System.out.println(r.getSaRoute().getProprietaire());
-					
-					return true;
-				}				
-			}			
-		}
-		
-		return false;
-	}
 
 	public boolean retirerRouteAutreJoueurBot(Route r, Player p) {
-
-		//Si le joueur n'est pas null
-		if(this != null) {
-			for(int i = 0; i < this.getPlayerRoutes().size(); i++) {
-				//Si la Route correspond dans l'inventaire du joueur
-				if(r == this.getPlayerRoutes().get(i)) {
-
-					//Debug : System.out.print("SA PASSE");
-
-					p.retirerCarteNuke(); //Retire la carte nuke de son inventaire
-					r.enleverProprio(); //Enlève le proprio de la route et des rails
-					this.getPlayerRoutes().remove(i); //Enlève la route de l'inventaire du joueur
-
-					//Debug : System.out.println(r.getSaRoute().getProprietaire());
-
+		// Si le joueur n'est pas null
+		if (this != null) {
+			for (int i = 0; i < this.getPlayerRoutes().size(); i++) {
+				// Si la Route correspond dans l'inventaire du joueur
+				if (r == this.getPlayerRoutes().get(i)) {
+					// son
+					game.playSoundClick("INGAME", "tactical-nuke.wav");
+					// Retire la carte nuke de son inventaire
+					p.retirerCarteNuke();
+					// Enlève le proprio de la route et des rails
+					r.enleverProprio();
+					// Enlève la route de l'inventaire du joueur
+					this.getPlayerRoutes().remove(i);
 					return true;
 				}
 			}
 		}
-
 		return false;
 	}
 	
-	//Méthode pour retirer la gare d'un autre joueur
-	public void retirerGareAutrePlayer(Ville ville, Player player) {
-		ville.setIsOccuped(null); //Enlève le proprio de la ville
-		player.retirerCarteNuke(); //Retire la carte nuke de l'inventaire
-		this.nbrGare += 1;  //Rajoute une Gare dispo
-	}
+
+    /**
+     * Retire une route d'un autre joueur.
+     *
+     * @param r  La route à retirer.
+     * @param p  Le joueur qui effectue l'action de retrait.
+     * @return   true si la route a été retirée avec succès, sinon false.
+     */
+    public boolean retirerRouteAutreJoueur(Rail r, Player p) {
+        // Si le joueur n'est pas null
+        if (this != null) {
+            for (int i = 0; i < this.getPlayerRoutes().size(); i++) {
+                // Si la Route correspond dans l'inventaire du joueur
+                if (r.getSaRoute() == this.getPlayerRoutes().get(i)) {
+                    // son
+                    game.playSoundClick("INGAME", "tactical-nuke.wav");
+                    // Retire la carte nuke de son inventaire
+                    p.retirerCarteNuke();
+                    // Enlève le proprio de la route et des rails
+                    r.getSaRoute().enleverProprio();
+                    // Enlève la route de l'inventaire du joueur
+                    this.getPlayerRoutes().remove(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
-	public boolean checkACarteNuke() {
-		for(int i = 0; i < this.trainList.size(); i++) {
-			if(this.trainList.get(i) == Couleur.NUKE) {
-				return true;
-			}
-		}
-		
-		return false;	
-	}
-	
-	//Méthode pour retirer la carte nuke de l'inventaire d'un joueur
-	public void retirerCarteNuke() {
-		for(int i = 0; i < this.trainList.size(); i++) {
-			if(this.trainList.get(i) == Couleur.NUKE) {
-				this.trainList.remove(i);
-				return;
-			}
-		}
-	}
+    /**
+     * Retire la gare d'un autre joueur.
+     *
+     * @param ville   La ville dont la gare doit être retirée.
+     * @param player  Le joueur qui effectue l'action de retrait.
+     */
+    public void retirerGareAutrePlayer(Ville ville, Player player) {
+        ville.setIsOccuped(null); // Enlève le proprio de la ville
+        player.retirerCarteNuke(); // Retire la carte nuke de l'inventaire
+        this.nbrGare += 1; // Rajoute une gare disponible
+    }
+
+
+    /**
+     * Vérifie si le joueur possède une carte nuke.
+     *
+     * @return  true si le joueur possède une carte nuke, sinon false.
+     */
+    public boolean checkACarteNuke() {
+        for (Couleur couleur : this.trainList) {
+            if (couleur == Couleur.NUKE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retire une carte nuke de l'inventaire du joueur.
+     */
+    private void retirerCarteNuke() {
+        for (int i = 0; i < this.trainList.size(); i++) {
+            if (this.trainList.get(i) == Couleur.NUKE) {
+                this.trainList.remove(i);
+                return;
+            }
+        }
+    }
 
 
     public void retirerLesCartes(Couleur color, int carteAEnlever) {
@@ -322,8 +360,9 @@ public class Player {
     public boolean mettreRoute(Route r) {
     	if(r != null) {
     		if (r.getLongueur() <= this.carteDuJoueur(r) && r.getProprietaire() == null  && r.getLongueur() <= this.nbrWagon ) {
-				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" ,"mettreRoute.wav");
-                this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
+				game.playSoundClick("INGAME" ,"mettreRoute.wav");
+
+				this.retirerLesCartes(r.traducteurCouleur(), r.getLongueur());
                 r.setProprietaire(this); // Met à jour le propriétaire de la route.
                 //DEBUG : System.out.println("nombre de wagon : "  + this.trainList.size());
 				this.score += r.getNombrePoint();
@@ -368,7 +407,8 @@ public class Player {
 
 			//Si c'est un joueur alors on fait la demande, sinon pour les bots on fait directement le procédé
 			if(this.niveau == 0){
-				if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+				game.playSoundClick("INGAME" , "popUp.wav");
+
 				int choixUtilisateur = JOptionPane.showConfirmDialog(
 						game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 						"Êtes-vous sûr de vouloir poser votre gare ici ?", "CONFIRMATION", JOptionPane.YES_NO_OPTION);
@@ -382,14 +422,14 @@ public class Player {
 						return true;
 
 					} else if ( ville.getIsOccuped() != null ) {
-						if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+						game.playSoundClick("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Cette ville possède déja un propriétaire. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						return false;
 
 
 					} else {
-						if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+						game.playSoundClick("INGAME" , "popUp.wav");
 						JOptionPane.showMessageDialog(game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 								"Vous n'avez pas assez de carte pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
 						// DEBUG : System.out.println("JE N'AI PAS ASSEZ DE VOTE wuwuwuwu");
@@ -410,7 +450,7 @@ public class Player {
 			}
 
 		} else {
-			if ( game.getGameFrame().getSound().getclick()) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
+			game.playSoundClick("INGAME", "popUp.wav");
 			JOptionPane.showMessageDialog(  game.getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
 					"Vous n'avez plus assez de gare pour pour posséder cette ville. ", "INFORMATION", JOptionPane.INFORMATION_MESSAGE );
 			return false;
@@ -535,6 +575,11 @@ public class Player {
     public int getScore() {
         return this.score;
     }
+
+	public void addLongestWayScore()
+	{
+		this.score += 10;
+	}
 
     public int getNbrWagon() {
         return nbrWagon;

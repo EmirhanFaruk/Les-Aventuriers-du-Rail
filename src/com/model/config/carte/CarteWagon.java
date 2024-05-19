@@ -11,7 +11,7 @@ public class CarteWagon extends JPanel {
      * Énumération représentant les différentes couleurs de cartes de wagon disponibles dans le jeu.
      */
     public enum Couleur {
-        BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, NUKE, LOC, JOKERETOILEE
+        BLEU, VIOLET, MARRON, NOIRE, VERT, JAUNE, BLANC, ROUGE, NUKE, LOC, JOKERETOILEE , BACK
     }
 
     // Couleur initiale de la carte de wagon.

@@ -34,7 +34,8 @@ public class EndGameScreen extends JPanel {
         buttonMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("END" ,"click.wav" );
+                gameScreen.getFrame().playSoundClick("END" ,"click.wav" );
+                gameScreen.getFrame().changeMusicIsMusic("MENU" , "tchu-tchu-song.wav");
                 gameScreen.getFrame().quitMainMenu();
             }
         });
@@ -42,7 +43,7 @@ public class EndGameScreen extends JPanel {
         buttonRestart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("END" ,"click.wav" );
+                gameScreen.getFrame().playSoundClick("END" ,"click.wav" );
                 gameScreen.getFrame().getMain().restart();
             }
         });
@@ -50,7 +51,7 @@ public class EndGameScreen extends JPanel {
         buttonExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if ( gameScreen.getFrame().getSound().getclick()) gameScreen.getFrame().getSound().playSound("END" ,"click.wav" );
+                gameScreen.getFrame().playSoundClick("END" ,"click.wav" );
                 gameScreen.getFrame().quitGame();
             }
         });

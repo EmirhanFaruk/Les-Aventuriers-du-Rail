@@ -44,7 +44,7 @@ public class GameFrame extends JFrame
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.sound = new Sound();
-        if ( sound.getMusic() ) sound.playMusic("MENU" , "tchu-tchu-song.wav" );
+        playMusicIsMusic("MENU" , "tchu-tchu-song.wav" );
 
         this.main = main;
         // On commence par menu
@@ -77,7 +77,7 @@ public class GameFrame extends JFrame
             }
 
         });
-        //sound.playMusic();
+
         setFocusable(true);
         requestFocusInWindow();
         this.setVisible(true);
@@ -129,6 +129,47 @@ public class GameFrame extends JFrame
     public void quitGame()
     {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+
+    public void playSoundClick(String screen, String sound_name)
+    {
+        if(sound.getclick())
+        {
+            playSound(screen, sound_name);
+        }
+    }
+
+    public void playSound(String screen, String sound_name)
+    {
+        sound.playSound( screen ,sound_name );
+    }
+
+
+    public void playMusic(String screen, String sound_name)
+    {
+        sound.playMusic(screen, sound_name);
+    }
+
+    public void playMusicIsMusic(String screen, String sound_name)
+    {
+        if (getSound().getMusic())
+        {
+            playMusic(screen, sound_name);
+        }
+    }
+
+    public void changeMusic(String screen, String sound_name)
+    {
+        sound.changeMusic( screen ,sound_name );
+    }
+
+    public void changeMusicIsMusic(String screen, String sound_name)
+    {
+        if (getSound().getMusic())
+        {
+            changeMusic(screen, sound_name);
+        }
     }
 
 

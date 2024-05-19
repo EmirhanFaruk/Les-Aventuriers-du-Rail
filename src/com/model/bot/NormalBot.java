@@ -2,7 +2,6 @@ package com.model.bot;
 
 import com.model.Game;
 import com.model.Player;
-import com.model.Round;
 import com.model.ai.GarePosFinder;
 import com.model.ai.Node;
 import com.model.config.Rail;
@@ -54,6 +53,7 @@ public class NormalBot implements BotAction {
     @Override
     public boolean takeGare(Game game, int wichStation) {
         return strongBot.takeGare(game,wichStation);
+
     }
 
     /**

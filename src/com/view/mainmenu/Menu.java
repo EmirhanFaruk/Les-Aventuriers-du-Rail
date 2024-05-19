@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Menu extends JPanel
 {
@@ -18,7 +20,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {   
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, home_mode);
         }
     }
@@ -31,7 +33,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, play_mode);
         }
     }
@@ -44,7 +46,7 @@ public class Menu extends JPanel
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav");
+            frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav");
             cardLayout.show(main_panel, settings_mode);
         }
     }
@@ -58,7 +60,7 @@ public class Menu extends JPanel
         public void actionPerformed(ActionEvent e)
         {
             cardLayout.show(main_panel, rules_mode);
-            if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"RulesSelection.wav");
+            frame.playSoundClick("MENU" ,"RulesSelection.wav");
         }
     }
 
@@ -102,6 +104,16 @@ public class Menu extends JPanel
         this.frame = frame;
 
         make();
+        frame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent evt) {
+                gameFrameResized(evt);
+            }
+        });
+    }
+
+    private void gameFrameResized(ComponentEvent e) {
+
+        main_panel.repaint();
     }
 
 
@@ -153,7 +165,7 @@ public class Menu extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if(frame.getSound().getclick()) frame.getSound().playSound("MENU" ,"ChangePageInTheMenu.wav" );
+                frame.playSoundClick("MENU" ,"ChangePageInTheMenu.wav" );
                 frame.quitGame();
             }
         });

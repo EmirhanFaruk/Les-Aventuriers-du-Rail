@@ -158,13 +158,13 @@ public class RailGraphics {
      * @param g Graphics
      * @param rail Rail
      */
-    public static void paint(Graphics2D g, Rail rail) {
+    public static void paint(Graphics2D g, Rail rail , int width, int height ) {
         BufferedImage image = getImage(rail);
         try {
             assert image != null;
             g.drawImage(image, rail.getX() * width, rail.getY() * height , width , height , null);
             if (rail.getOccuper()) {
-                TrainGraphics.paint(g, rail);
+                TrainGraphics.paint(g, rail , width , height);
             }
         } catch ( Exception ignored ) {
             // System.err.println("Hav fun debugging lmao");
