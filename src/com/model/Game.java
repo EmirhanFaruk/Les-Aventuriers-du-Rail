@@ -206,6 +206,11 @@ public class Game
         return null;
     }
 
+    public boolean isModeNuke()
+    {
+        return getGameFrame().getMode().equals("NUKE");
+    }
+
     public CarteManager getCarteManager() {
     	return this.cm;
     }
