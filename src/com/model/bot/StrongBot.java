@@ -11,6 +11,8 @@ import com.model.config.carte.CarteDestination;
 import com.model.config.carte.CarteWagon;
 
 import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * Il représente un bot de la difficulté normale qui joue de manière semi-aléatoire en utilisant différentes stratégies de jeu.
  * Le bot "StrongBot" est une implémentation de l'interface BotAction.
@@ -202,26 +204,156 @@ public class StrongBot implements BotAction {
 
 
     /**
-     * Permet au bot d'utiliser les cartes nuke.
+     * Permet au bot de detruire une gare.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
+    private boolean destroyGare(Game game) {
+
+        //On parcours la liste des villes
+        for(Ville ville : game.getVilles()){
+
+            //On regarde quelle gare est occupé et n'appartenant pas au bot, puis on rase la gare et on retire la carte nuke au bot
+            if(ville.getIsOccuped() != null && ville.getIsOccuped() != game.getJoueurCourant()){
+
+                game.getJoueurCourant().retirerGareAutrePlayer(ville,ville.getIsOccuped());
+                return true;
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Permet au bot de détruire une route.
+     *
+     * @param game Le jeu en cours.
+     * @return Un boolean pour dire si l'action a bien était fait.
+     */
+    private boolean destroyRoute(Game game) {
+        //On parcours la liste des routes
+        for(Route route : game.getRoutes()){
+
+            //On regarde quelle gare est occupé et n'appartenant pas au bot, puis on rase la gare et on retire la carte nuke au bot
+            if(route.getProprietaire() != null && route.getProprietaire() != game.getJoueurCourant()){
+
+                game.getJoueurCourant().retirerRouteAutreJoueurBot(route,route.getProprietaire());
+                return true;
+
+            }
+
+        }
+        return false;
+    }
+
+
+    /**
+     * Permet de verifier s'il y a bien au moins une gare de prise.
+     *
+     * @param game Lejeu en cours.
+     * @return Renvoie un boolean pour dire s'il y a bien au moins une gare.
+     */
+    private boolean checkGares(Game game){
+
+        //Variable qui repésente la liste des villes dans la partie
+        ArrayList<Ville> villes = game.getVilles();
+
+        //On parcours la liste des villes
+        for (Ville ville : villes) {
+
+            //On regarde qu'il ya une gare et qu'elle appartient pas au bot
+            if (ville.estUneCaseGare() && ville.getIsOccuped() != game.getJoueurCourant()) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
+     * Permet de verifier s'il y a bien au moins une route de prise.
+     *
+     * @param game Lejeu en cours.
+     * @return Renvoie un boolean pour dire s'il y a bien au moins une gare.
+     */
+    private boolean checkRoutes(Game game){
+
+        //Variable qui repésente la liste des villes dans la partie
+        ArrayList<Ville> villes = game.getVilles();
+
+        //On parcours la liste des villes
+        for (Ville ville : villes) {
+
+            //On regarde qu'il ya une gare et qu'elle appartient pas au bot
+            if (ville.estUneCaseGare() && ville.getIsOccuped() != game.getJoueurCourant()) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
+     * Permet au bot d'utiliser les cartes nuke de manière aléatoire.
      *
      * @param game Le jeu en cours.
      * @return Un boolean pour dire si l'action a bien était fait.
      */
     @Override
-    public boolean useNuke(Game game) {
+       public boolean useNuke(Game game) {
 
-        //On vérifie que le bot a bien des nukes
-        if(game.getJoueurCourant().checkACarteNuke()){
+            //On verifie que le bot a bien des cartes nuke
+            if(game.getJoueurCourant().checkACarteNuke()){
 
-           return true;
+                //On verifie qu'il y a bien des routes et des gares prises et n'appartenant pas au bot
+                if(checkGares(game) && checkRoutes(game)){
+
+                    Random random = new Random();
 
 
+                    //On voit si le bot va detruire une gare ou une route
+                    switch (random.nextInt(2)){
 
-        }else{
-            return false;
+                        //Si c'est 0, alors il détruit une gare
+                        case(0):
+
+                            return destroyGare(game);
+
+                        //Sinon il détruit une route
+                        default:
+
+                            return destroyRoute(game);
+
+
+                    }
+
+                }
+                //On verifie sinon si il y a au moins une gare
+                if(checkGares(game)){
+
+                    return destroyGare(game);
+
+                }
+
+                //On verifie sinon si y il a au moins une route
+                if(checkRoutes(game)){
+
+                    return destroyRoute(game);
+                }
+
+                return false;
+
+
+                //sinon il n'a pas fait d'action
+            }else{
+                return false;
+
+            }
+
         }
-
-    }
 
     /**
      * Vérifie si toutes les missions du bot sont complétées.
