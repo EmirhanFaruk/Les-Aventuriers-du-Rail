@@ -69,7 +69,7 @@ public class PiochePanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
             	if(player.getFirstTurnOver() && imagePiocheVisible.alreadyPickedACard()) {
                     if (game.getGameFrame().getSound().getclick() ) game.getGameFrame().getSound().playSound("INGAME" , "popUp.wav");
-            		 JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
+                    JOptionPane.showMessageDialog( player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel()
                              ,"TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !","INFORMATION", JOptionPane.INFORMATION_MESSAGE ) ;
             	}else {
             		if(player.getCanPlay() ) {
