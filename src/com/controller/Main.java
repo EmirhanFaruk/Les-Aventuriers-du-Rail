@@ -49,7 +49,7 @@ public class Main implements Runnable
         this.player_names = player_names ;
         this.player_types = player_types ;
         this.player_colors = player_colors ;
-        game.makeGame(map,player_names,player_types,player_colors,gameFrame.getSound().getMusic());
+        game.makeGame(map,player_names,player_types,player_colors);
         startGame_thread();
     }
 
