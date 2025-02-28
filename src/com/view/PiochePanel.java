@@ -88,7 +88,7 @@ public class PiochePanel extends JPanel {
                 if (player.getFirstTurnOver() && imagePiocheVisible.alreadyPickedACard()) {
                     game.playSoundClick("INGAME", "popUp.wav");
                     JOptionPane.showMessageDialog(player.getGame().getGameFrame().getGameScreen().getGameManagerScreen().getGameMapPanel(),
-                            "TU CROIS M'AVOIR SALE FOU T'AS DEJA PRIS UNE CARTE DESTINATION !", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
+                            "Vous avez deja pris une carte de destination, veuillez clicker sur 'passer son tour'.", "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     if (player.getCanPlay()) {
                         if (piocheHiddenBounds.contains(e.getPoint())) {
